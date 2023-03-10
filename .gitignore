@@ -6,3 +6,6 @@ obj/Debug/net6.0-windows/OxLibrary.pdb
 obj/Debug/net6.0-windows/refint/OxLibrary.dll
 bin/Debug/net6.0-windows/OxLibrary.dll
 bin/Debug/net6.0-windows/OxLibrary.pdb
+bin/Debug/net6.0-windows
+obj/Debug/net6.0-windows
+obj
