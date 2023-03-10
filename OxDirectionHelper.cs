@@ -1,0 +1,85 @@
+﻿using OxLibrary.Panels;
+
+namespace OxLibrary
+{
+    public static class OxDirectionHelper
+    {
+        public static OxDirection GetDirection(OxDock dock) =>
+            dock switch
+            {
+                OxDock.Left => OxDirection.Left,
+                OxDock.Right => OxDirection.Right,
+                OxDock.Top => OxDirection.Top,
+                OxDock.Bottom => OxDirection.Bottom,
+                _ => OxDirection.None,
+            };
+
+        public static OxDirection GetDirection(OxBorder border, Point position)
+        {
+            OxDirection direction = GetDirection(border.OxDock);
+            int error = border.GetSize() * 2;
+
+            switch (border.OxDock)
+            {
+                case OxDock.Left:
+                case OxDock.Right:
+                    if (position.Y < error)
+                        direction |= OxDirection.Top;
+                    else
+                    if (position.Y > border.Height - error)
+                        direction |= OxDirection.Bottom;
+                    break;
+                case OxDock.Top:
+                case OxDock.Bottom:
+                    if (position.X < error)
+                        direction |= OxDirection.Left;
+                    else
+                    if (position.X > border.Width - error)
+                        direction |= OxDirection.Right;
+                    break;
+            }
+
+            return direction;
+        }
+
+        public static bool IsLeft(OxDirection direction) => direction == OxDirection.Left;
+        public static bool IsTop(OxDirection direction) => direction == OxDirection.Top;
+        public static bool IsRight(OxDirection direction) => direction == OxDirection.Right;
+        public static bool IsBottom(OxDirection direction) => direction == OxDirection.Bottom;
+
+        public static bool ContainsLeft(OxDirection direction) => (direction & OxDirection.Left) != 0;
+        public static bool ContainsTop(OxDirection direction) => (direction & OxDirection.Top) != 0;
+        public static bool ContainsRight(OxDirection direction) => (direction & OxDirection.Right) != 0;
+        public static bool ContainsBottom(OxDirection direction) => (direction & OxDirection.Bottom) != 0;
+
+        public static bool IsLeftTop(OxDirection direction) =>
+            ContainsLeft(direction)
+            && ContainsTop(direction)
+            && !ContainsRight(direction)
+            && !ContainsBottom(direction);
+
+        public static bool IsLeftBottom(OxDirection direction) =>
+            ContainsLeft(direction)
+            && !ContainsTop(direction)
+            && !ContainsRight(direction)
+            && ContainsBottom(direction);
+
+        public static bool IsRightTop(OxDirection direction) =>
+            !ContainsLeft(direction)
+            && ContainsTop(direction)
+            && ContainsRight(direction)
+            && !ContainsBottom(direction);
+
+        public static bool IsRightBottom(OxDirection direction) =>
+            !ContainsLeft(direction)
+            && !ContainsTop(direction)
+            && ContainsRight(direction)
+            && ContainsBottom(direction);
+
+        public static bool IsHorizontal(OxDirection direction) =>
+            IsLeft(direction) || IsRight(direction);
+
+        public static bool IsVertical(OxDirection direction) =>
+            IsTop(direction) || IsBottom(direction);
+    }
+}

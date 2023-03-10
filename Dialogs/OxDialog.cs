@@ -1,0 +1,83 @@
+﻿namespace OxLibrary.Dialogs
+{
+    public delegate string GetEmptyMandatoryFieldName();
+
+    public class OxDialog : OxForm
+    {
+        protected override void SetUpForm()
+        {
+            base.SetUpForm();
+            MinimizeBox = false;
+            MaximizeBox = false;
+            KeyPreview = true;
+            KeyUp += KeyUpHandler;
+        }
+
+        public override bool Sizable => false;
+
+        public new OxDialogMainPanel MainPanel
+        {
+            get => (OxDialogMainPanel)base.MainPanel;
+            set => base.MainPanel = value;
+        }
+
+        public OxDialogButton DialogButtons
+        {
+            get => MainPanel.DialogButtons;
+            set => MainPanel.DialogButtons = value;
+        }
+
+        protected override OxFormMainPanel CreateMainPanel() =>
+            new OxDialogMainPanel(this);
+
+        private void KeyUpHandler(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+                DialogResult = DialogResult.Cancel;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+
+            e.Cancel = DialogResult switch
+            {
+                DialogResult.OK or
+                DialogResult.Yes or
+                DialogResult.Continue 
+                    => 
+                        !CanOKClose(),
+                DialogResult.Cancel => !CanCancelClose(),
+                _ => 
+                    false,
+            };
+        }
+
+        public GetEmptyMandatoryFieldName? GetEmptyMandatoryFieldName;
+
+        private bool CheckMandatoryFields()
+        {
+            string? emptyMandatoryField = GetEmptyMandatoryFieldName?.Invoke();
+
+            if (emptyMandatoryField == null)
+                emptyMandatoryField = EmptyMandatoryField();
+
+            if (emptyMandatoryField == string.Empty)
+                return true;
+
+            OxMessage.ShowError($"{emptyMandatoryField} is mandatory");
+            return false;
+        }
+
+        protected virtual string EmptyMandatoryField() =>
+            string.Empty;
+
+        public override bool CanMaximize => false;
+        public override bool CanMinimize => false;
+
+        public virtual bool CanOKClose() =>
+            CheckMandatoryFields();
+
+        public virtual bool CanCancelClose() => true;
+    }
+}

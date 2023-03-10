@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <Compile Update="Panels\OxBorder.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\OxButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\OxButtonEdit.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Panels\OxCard.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\OxCheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\OxCheckComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Panels\OxClickFrame.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\OxComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\OxDataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Dialogs\OxDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Dialogs\OxDialogMainPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Dialogs\OxForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Dialogs\OxFormMainPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Panels\OxFrame.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Panels\OxFrameWithHeader.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Panels\OxFunctionsPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Panels\OxHeader.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\OxIconButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\OxLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\OxListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Panels\OxLoadingPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Dialogs\OxMessage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Dialogs\OxMessageMainPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Panels\OxPane.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Panels\OxPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Panels\OxPanelLayouter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Panels\OxPanelViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Controls\OxPicture.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\OxPictureContainer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Panels\OxSidePanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\OxSpinEdit.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\OxTaggedButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\OxTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\OxTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Panels\OxUnderlinedPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="OxIcons.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

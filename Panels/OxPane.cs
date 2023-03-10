@@ -1,0 +1,235 @@
+﻿namespace OxLibrary.Panels
+{
+    public class OxPane : Panel, IOxPane
+    {
+        private int savedWidth = 0;
+        private int savedHeight = 0;
+        private readonly OxColorHelper colors;
+
+        private bool sizeRecalcing = false;
+
+        protected bool SizeRecalcing => sizeRecalcing;
+
+        public void StartSizeRecalcing() =>
+            sizeRecalcing = true;
+
+        public void EndSizeRecalcing() =>
+            sizeRecalcing = false;
+
+        protected virtual int GetCalcedHeight() =>
+            savedHeight == 0 ? Height : savedHeight;
+
+        protected virtual int GetCalcedWidth() =>
+            savedWidth == 0 ? Width : savedWidth;
+
+        public Color BaseColor
+        {
+            get => colors.BaseColor;
+            set
+            {
+                colors.BaseColor = value;
+                PrepareColors();
+                Update();
+            }
+        }
+
+        protected bool IsVariableWidth =>
+            Parent == null
+            || Dock == DockStyle.Left
+            || Dock == DockStyle.Right
+            || Dock == DockStyle.None;
+
+        protected bool IsVariableHeight =>
+            Parent == null
+            || Dock == DockStyle.Top
+            || Dock == DockStyle.Bottom
+            || Dock == DockStyle.None;
+
+        protected void RecalcSize()
+        {
+            if (sizeRecalcing)
+                return;
+
+            int calcedWidth = CalcedWidth;
+            int calcedHeight = CalcedHeight;
+
+            StartSizeRecalcing();
+
+            try
+            {
+                if (IsVariableWidth && Width != calcedWidth)
+                    SetWidth(calcedWidth);
+
+                if (IsVariableHeight && Height != calcedHeight)
+                    SetHeight(calcedHeight);
+            }
+            finally
+            {
+                EndSizeRecalcing();
+            }
+        }
+
+        protected virtual void SetHeight(int value) => Height = value;
+
+        protected virtual void SetWidth(int value) => Width = value;
+
+        protected virtual void PrepareColors()
+        {
+            BackColor = Colors.Lighter(Enabled || !useDisabledStyles ? 7 : 8);
+            ForeColor = Colors.Darker(7);
+        }
+
+        private bool useDisabledStyles = true;
+
+        public bool UseDisabledStyles
+        {
+            get => useDisabledStyles;
+            set => SetUseDisabledStyles(value);
+        }
+
+        protected virtual void SetUseDisabledStyles(bool value) =>
+            useDisabledStyles = value;
+
+        protected static void SetPaneBaseColor(OxPane pane, Color color)
+        {
+            if (pane != null)
+                pane.BaseColor = color;
+        }
+
+        protected static void SetControlBackColor(Control? control, Color color)
+        {
+            if (control != null)
+                control.BackColor = color;
+        }
+
+        protected virtual void PrepareInnerControls() { }
+
+        public OxPane() : this(Size.Empty) { }
+        public OxPane(Size contentSize)
+        {
+            colors = new OxColorHelper(DefaultColor);
+            Initialized = false;
+            StartSizeRecalcing();
+            try
+            {
+                DoubleBuffered = true;
+                PrepareInnerControls();
+                PrepareColors();
+                RecalcSize();
+                SetHandlers();
+                ReAlign();
+                AfterCreated();
+            }
+            finally
+            {
+                EndSizeRecalcing();
+            }
+
+            Initialized = true;
+
+            if (!contentSize.Equals(Size.Empty))
+                SetContentSize(contentSize);
+        }
+
+        protected virtual void SetHandlers() { }
+
+        private void RecalcSizeHandler(object? sender, EventArgs e)
+        {
+            if (Initialized && !sizeRecalcing && (IsVariableHeight || IsVariableWidth))
+                RecalcSize();
+        }
+
+        public int CalcedWidth => GetCalcedWidth();
+        public int CalcedHeight => GetCalcedHeight();
+
+        protected void ApplyRecalcSizeHandler(Control control, bool forSizeChange = true, bool forVisibleChange = true)
+        {
+            if (control == null)
+                return;
+
+            if (forVisibleChange)
+                control.VisibleChanged += RecalcSizeHandler;
+
+            if (forSizeChange)
+                control.SizeChanged += RecalcSizeHandler;
+        }
+
+        protected virtual void AfterCreated() { }
+
+        public int SavedWidth => savedWidth;
+        public int SavedHeight => savedHeight;
+
+        protected bool Initialized { get; set; } = false;
+
+        public virtual void SetContentSize(int width, int height)
+        {
+            savedWidth = width;
+            savedHeight = height;
+            RecalcSize();
+        }
+
+        public void SetContentSize(Size size) =>
+            SetContentSize(size.Width, size.Height);
+
+        public virtual void ReAlignControls() { }
+
+        public void ReAlign()
+        {
+            ReAlignControls();
+            SendToBack();
+        }
+
+        protected override void OnDockChanged(EventArgs e)
+        {
+            base.OnDockChanged(e);
+            ReAlign();
+        }
+
+        private void ContentColorChanged(object? sender, EventArgs e)
+        {
+            if (sender is OxColorHelper colorHelper)
+                BaseColor = colorHelper.BaseColor;
+
+            PrepareColors();
+        }
+
+        public new bool Enabled
+        {
+            get => base.Enabled;
+            set => SetEnabled(value);
+        }
+
+        protected virtual void SetEnabled(bool value)
+        {
+            if (base.Enabled != value)
+            {
+                base.Enabled = value;
+                PrepareColors();
+            }
+        }
+
+        public OxColorHelper Colors => colors;
+        public virtual Color DefaultColor => Color.FromArgb(142, 142, 138);
+
+        public new string? Text
+        {
+            get => GetText();
+            set => SetText(value);
+        }
+
+        protected virtual void SetText(string? value) =>
+            base.Text = value;
+
+        protected virtual string? GetText() =>
+            base.Text;
+
+        public new bool Visible
+        {
+            get => base.Visible;
+            set => SetVisible(value);
+        }
+
+        protected virtual void SetVisible(bool value) =>
+            base.Visible = value;
+    }
+}
