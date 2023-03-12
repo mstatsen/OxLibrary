@@ -12,15 +12,46 @@ namespace OxLibrary.Panels
 
             LoadingLabel = new OxLabel()
             {
-                Text = "-   -   -  Loading  -   -   -",
                 AutoSize = false,
                 Parent = this,
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleCenter
             };
 
+            SetLoadingText(3);
             FontSize = 22;
             Margins.SetSize(OxSize.Small);
+            Progress<int> Step = new(step => SetLoadingText(step));
+            Waiter = new OxStepWaiter(Step, StepCalcer);
+        }
+
+        private bool spaceIncrese = false;
+        private int spaceCount = 3;
+        private readonly OxStepWaiter Waiter;
+
+        private int StepCalcer()
+        {
+            if (spaceCount == 3)
+                spaceIncrese = false;
+            else
+            if (spaceCount == 0)
+                spaceIncrese = true;
+
+            if (spaceIncrese)
+                spaceCount++;
+            else spaceCount--;
+
+            return spaceCount;
+        }
+
+        private void SetLoadingText(int step)
+        {
+            string spaces = "";
+
+            for (int i = 0; i < step; i++)
+                spaces += " ";
+
+            LoadingLabel.Text = string.Format("-{0}-{0}-{0}Loading{0}-{0}-{0}-", spaces);
         }
 
         public bool UseParentColor { get; set; } = true;
@@ -36,6 +67,13 @@ namespace OxLibrary.Panels
             PrepareColors();
             base.SetVisible(true);
             Locked = locked;
+
+
+            if (!Waiter.Enabled)
+            {
+                spaceCount = 3;
+                Waiter.Start();
+            }
 
             BringToFront();
             Parent?.Update();
@@ -57,6 +95,7 @@ namespace OxLibrary.Panels
             {
                 Parent?.ResumeLayout();
             }
+            Waiter.Stop();
         }
 
 

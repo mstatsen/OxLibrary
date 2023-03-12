@@ -8,18 +8,20 @@
         private readonly OxPaneDictionary columnsPanels = new();
         private readonly OxPaneList columns = new();
         private readonly OxPaneList placedPanels = new();
-        private readonly OxLoadingPanel loadingPanel = new() { FontSize = 18 };
+        //private readonly OxLoadingPanel loadingPanel = new() { FontSize = 18 };
 
         public bool IsEmpty => placedPanels.Count == 0;
 
-        protected void StartLoading(bool locked = false)
+        /*protected void StartLoading(bool locked = false)
         {
             if (!loadingPanel.Locked)
                 ContentContainer.Visible = false;
 
             loadingPanel.StartLoading(locked);
         }
+        */
 
+        /*
         protected void EndLoading(bool unlock = false)
         {
             if (unlock)
@@ -30,13 +32,16 @@
             if (!loadingPanel.Locked)
                 ContentContainer.Visible = true;
         }
+        */
 
         protected override void PrepareInnerControls()
         {
             base.PrepareInnerControls();
             CreateColumnsPanels();
+            /*
             loadingPanel.Parent = ContentContainer.Parent;
             loadingPanel.BringToFront();
+            */
         }
 
         private void CreateColumnsPanels()
@@ -135,7 +140,7 @@
             if (oldCalcColumnsCount == CalcedColumnCount)
                 return;
 
-            StartLoading();
+            //StartLoading();
 
             try
             {
@@ -149,7 +154,7 @@
             }
             finally
             {
-                EndLoading();
+                //EndLoading();
             }
 
             SetVisibleChangedHandlerToPanels();
