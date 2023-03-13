@@ -66,7 +66,7 @@ namespace OxLibrary.Panels
         }
 
         public OxTaggedButton? CurrentButton =>
-            Buttons.Find((b) => b.Tag.Equals(currentPage));
+            Buttons.Find(b => b.Tag.Equals(currentPage));
 
         private void SetCurrentPage(int value)
         {

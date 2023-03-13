@@ -45,7 +45,7 @@
             {
                 List<T> checkedItems = new();
 
-                foreach (OxCheckData<T> checkedItem in FindAll((c) => c.Checked))
+                foreach (OxCheckData<T> checkedItem in FindAll(c => c.Checked))
                     checkedItems.Add(checkedItem.Data);
 
                 return checkedItems;
@@ -59,12 +59,12 @@
 
         public T? Item(OxCheckData<T>? checkItem)
         {
-            OxCheckData<T>? item = Find((c) => c.Equals(checkItem));
+            OxCheckData<T>? item = Find(c => c.Equals(checkItem));
             return item != null ? item.Data : default;
         }
 
         public OxCheckData<T>? CheckItem(T? item) =>
-            Find((c) => item != null && item.Equals(c.Data));
+            Find(c => item != null && item.Equals(c.Data));
 
         public OxCheckData<T> Add(T item) =>
             Add(new OxCheckData<T>(item));
