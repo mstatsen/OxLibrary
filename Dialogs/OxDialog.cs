@@ -4,6 +4,13 @@
 
     public class OxDialog : OxForm
     {
+        public OxDialog() : base()
+        {
+            Sizeble = false;
+            CanMaximize = false;
+            CanMinimize = false;
+        }
+
         protected override void SetUpForm()
         {
             base.SetUpForm();
@@ -12,8 +19,6 @@
             KeyPreview = true;
             KeyUp += KeyUpHandler;
         }
-
-        public override bool Sizable => false;
 
         public new OxDialogMainPanel MainPanel
         {
@@ -44,10 +49,10 @@
             {
                 DialogResult.OK or
                 DialogResult.Yes or
-                DialogResult.Continue 
-                    => 
-                        !CanOKClose(),
-                DialogResult.Cancel => !CanCancelClose(),
+                DialogResult.Continue => 
+                    !CanOKClose(),
+                DialogResult.Cancel => 
+                    !CanCancelClose(),
                 _ => 
                     false,
             };
@@ -71,9 +76,6 @@
 
         protected virtual string EmptyMandatoryField() =>
             string.Empty;
-
-        public override bool CanMaximize => false;
-        public override bool CanMinimize => false;
 
         public virtual bool CanOKClose() =>
             CheckMandatoryFields();

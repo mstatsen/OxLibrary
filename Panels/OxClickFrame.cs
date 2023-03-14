@@ -6,6 +6,8 @@
         private bool freezeHovered = false;
         public bool HandHoverCursor = false;
 
+        public GetColor? GetHoveredColor;
+
         protected bool Hovered => hovered;
 
         public bool FreezeHovered
@@ -53,7 +55,9 @@
             ContentContainer.BaseColor =
                 Enabled || !UseDisabledStyles
                     ? hovered || FreezeHovered
-                        ? Colors.Darker(2)
+                        ? GetHoveredColor != null
+                            ? GetHoveredColor.Invoke()
+                            : Colors.Darker(2)
                         : ContentContainer.BaseColor
                     : Colors.Darker();
             Paddings.Color = ContentContainer.BackColor;

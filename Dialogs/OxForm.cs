@@ -32,7 +32,6 @@
             );
         }
 
-
         public virtual Size WantedMinimumSize => new(640, 480);
 
         protected virtual OxFormMainPanel CreateMainPanel() => new(this);
@@ -59,13 +58,44 @@
 
         public void SetContentSize(int width, int height) =>
             MainPanel.SetContentSize(width, height);
+        
         public void SetContentSize(Size size) =>
             MainPanel.SetContentSize(size);
 
-        public virtual bool CanMaximize => true;
-        public virtual bool CanMinimize => true;
+        private bool canMaximize = true;
+        private bool canMinimize = true;
 
-        public virtual bool Sizable => true;
+        public bool CanMaximize
+        {
+            get => canMaximize;
+            set
+            {
+                canMaximize = value;
+                MainPanel.SetTitleButtonsVisible();
+            }
+        }
+
+        public bool CanMinimize
+        {
+            get => canMinimize;
+            set
+            {
+                canMinimize = value;
+                MainPanel.SetTitleButtonsVisible();
+            }
+        }
+
+
+        private bool sizeble = true;
+        public bool Sizeble 
+        { 
+            get => sizeble;
+            set
+            {
+                sizeble = value;
+                MainPanel.SetMarginsSize();
+            }
+        }
 
         public virtual Bitmap? FormIcon => null;
 

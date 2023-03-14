@@ -30,7 +30,7 @@ namespace OxLibrary.Dialogs
             {
                 dialogButtons = value;
 
-                foreach (KeyValuePair<OxDialogButton, OxButton> item in buttonsDictionary)
+                foreach (var item in buttonsDictionary)
                     item.Value.Visible = (dialogButtons & item.Key) == item.Key;
 
                 PlaceButtons();
@@ -92,7 +92,7 @@ namespace OxLibrary.Dialogs
             OxButton button = (OxButton)sender;
             OxDialogButton dialogButton = OxDialogButton.OK;
 
-            foreach (KeyValuePair<OxDialogButton, OxButton> item in buttonsDictionary)
+            foreach (var item in buttonsDictionary)
                 if (item.Value == button)
                     dialogButton = item.Key;
 
@@ -103,7 +103,7 @@ namespace OxLibrary.Dialogs
         {
             rightOffset = Footer.Width - rightOffset - DialogButtonStartSpace;
 
-            foreach (KeyValuePair<OxDialogButton, OxButton> item in buttonsDictionary)
+            foreach (var item in buttonsDictionary)
                 if ((dialogButtons & item.Key) == item.Key)
                 {
                     item.Value.Left = rightOffset - OxDialogButtonsHelper.Width(item.Key);
@@ -120,7 +120,7 @@ namespace OxLibrary.Dialogs
             base.PrepareColors();
             Footer.BaseColor = BaseColor;
 
-            foreach (KeyValuePair<OxDialogButton, OxButton> item in buttonsDictionary)
+            foreach (var item in buttonsDictionary)
                 item.Value.BaseColor = BaseColor;
         }
 

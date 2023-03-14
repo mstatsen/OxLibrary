@@ -1,19 +1,18 @@
-﻿using System;
-using System.Drawing;
-
-namespace OxLibrary
+﻿namespace OxLibrary
 {
+    public delegate Color GetColor();
+
     public class OxColorHelper
     {
         private const int Default_Grouth = 15;
 
-        private int ColorPart(int colorPart) =>
+        private static int ColorPart(int colorPart) =>
             colorPart < 0 ? 0 : colorPart > 255 ? 255 : colorPart;
 
         private Color GrouthColor(Color color, int grouth) =>
             GrouthColor(color, grouth, grouth, grouth);
 
-        private Color GrouthColor(Color color, int grouthRed, int grouthGreen, int grouthBlue) =>
+        private static Color GrouthColor(Color color, int grouthRed, int grouthGreen, int grouthBlue) =>
             Color.FromArgb(
                 color.A,
                 ColorPart(color.R + grouthRed),

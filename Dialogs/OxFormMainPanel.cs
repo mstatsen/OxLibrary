@@ -33,7 +33,7 @@ namespace OxLibrary.Dialogs
                 Form.Icon = Icon.FromHandle(Form.FormIcon.GetHicon());
         }
 
-        private void SetTitleButtonsVisible()
+        internal void SetTitleButtonsVisible()
         {
             minimizeButton.Visible = Form.CanMinimize;
             restoreButton.Visible = Form.CanMaximize;
@@ -44,6 +44,7 @@ namespace OxLibrary.Dialogs
             base.PrepareInnerControls();
 
             closeButton.Click += CloseButtonClickHandler;
+            closeButton.GetHoveredColor += CloseButtonHoveredColor;
             restoreButton.Click += RestoreButtonClickHandler;
             minimizeButton.Click += MinimizeButtonClickHandler;
 
@@ -56,6 +57,9 @@ namespace OxLibrary.Dialogs
             Header.AddToolButton(minimizeButton);
 
         }
+
+        private Color CloseButtonHoveredColor() =>
+            Color.Red;
 
         private readonly OxIconButton closeButton = new(OxIcons.close, 28)
         {
@@ -133,8 +137,8 @@ namespace OxLibrary.Dialogs
             }
         }
 
-        private void SetMarginsSize() => 
-            Margins.SetSize(Form.Sizable ? OxSize.Small : OxSize.None);
+        internal void SetMarginsSize() => 
+            Margins.SetSize(Form.Sizeble ? OxSize.Small : OxSize.None);
 
         protected override void OnLocationChanged(EventArgs e)
         {
@@ -205,7 +209,7 @@ namespace OxLibrary.Dialogs
 
         private void ResizeHandler(object? sender, MouseEventArgs e)
         {
-            if (!Form.Sizable)
+            if (!Form.Sizeble)
                 return;
 
             if (ResizeProcessing)

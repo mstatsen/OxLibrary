@@ -168,7 +168,7 @@ namespace OxLibrary.Controls
         {
             get
             {
-                foreach (KeyValuePair<OxToolbarAction, OxButton> action in Actions)
+                foreach (var action in Actions)
                     if (OxToolbarActionHelper.ActionForExistItems(action.Key))
                         return action.Value.Enabled;
 
@@ -176,7 +176,7 @@ namespace OxLibrary.Controls
             }
             set
             {
-                foreach (KeyValuePair<OxToolbarAction, OxButton> action in Actions)
+                foreach (var action in Actions)
                     if (OxToolbarActionHelper.ActionForExistItems(action.Key))
                         action.Value.Enabled = value;
             }
@@ -210,7 +210,7 @@ namespace OxLibrary.Controls
 
         private OxToolbarAction GetActionByButton(OxButton button)
         {
-            foreach (KeyValuePair<OxToolbarAction, OxButton> item in Actions)
+            foreach (var item in Actions)
                 if (item.Value == button)
                     return item.Key;
 
