@@ -189,7 +189,12 @@
             return null;
         }
 
-        public void ExecuteDefault() =>
-            Default()?.PerformClick();
+        public bool ExecuteDefault()
+        {
+            OxClickFrame? defultButton = Default();
+            defultButton?.PerformClick();
+            return defultButton != null;
+        }
     }
+
 }

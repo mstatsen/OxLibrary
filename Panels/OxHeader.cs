@@ -81,8 +81,15 @@ namespace OxLibrary.Panels
             label.Parent = ContentContainer;
         }
 
-        private void LabelDoubleClickHandler(object? sender, EventArgs e) =>
-            ToolBar.ExecuteDefault();
+        private void LabelDoubleClickHandler(object? sender, EventArgs e)
+        {
+            if (ToolBar.ExecuteDefault())
+                return;
+
+            if (Parent?.Parent?.Parent is OxSidePanel sidePanel && sidePanel.Expanded)
+                sidePanel.Collapse();
+
+        }
 
         protected override void PrepareColors()
         {

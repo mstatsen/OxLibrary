@@ -155,8 +155,8 @@ namespace OxLibrary.Controls
         protected override void ApplyBordersColor() => 
             BorderColor = Colors.Lighter(4);
 
-        public void ExecuteDefault() => 
-            Buttons?.ExecuteDefault();
+        public bool ExecuteDefault() =>
+            Buttons != null && Buttons.ExecuteDefault();
 
         protected override void OnSizeChanged(EventArgs e)
         {
