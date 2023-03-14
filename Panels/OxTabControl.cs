@@ -55,8 +55,8 @@ namespace OxLibrary.Panels
             if (sender == null)
                 return;
 
-            OxDock dock = ((OxBorder)sender).OxDock;
-            Margins[dock].SetSize(Borders[dock].Visible ? 0 : Borders[dock].GetSize());
+            OxBorder border = (OxBorder)sender;
+            Margins[border.OxDock].SetSize(border.Visible ? 0 : border.GetSize());
         }
 
         public bool Active =>

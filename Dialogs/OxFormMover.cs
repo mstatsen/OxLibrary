@@ -38,28 +38,28 @@ namespace OxLibrary.Dialogs
 
         private void MoveHandler(object? sender, MouseEventArgs e)
         {
-            if (Processing && !LastMousePosition.Equals(e.Location))
-            {
-                if (Form.CanMaximize)
-                    switch (Form.WindowState)
-                    {
-                        case FormWindowState.Maximized when LastMousePosition.Y != e.Y:
-                            Form.MainPanel.SetFormState(FormWindowState.Normal);
-                            break;
-                        case FormWindowState.Normal when Form.PointToScreen(e.Location).Y < 20:
-                            Form.MainPanel.SetFormState(FormWindowState.Maximized);
-                            break;
-                    }
+            if (!Processing || LastMousePosition.Equals(e.Location))
+                return;
 
-                int deltaX = e.X - LastMousePosition.X;
-                int deltaY = e.Y - LastMousePosition.Y;
-                LastMousePosition.X = e.X - deltaX;
-                LastMousePosition.Y = e.Y - deltaY;
+            if (Form.CanMaximize)
+                switch (Form.WindowState)
+                {
+                    case FormWindowState.Maximized when LastMousePosition.Y != e.Y:
+                        Form.MainPanel.SetFormState(FormWindowState.Normal);
+                        break;
+                    case FormWindowState.Normal when Form.PointToScreen(e.Location).Y < 20:
+                        Form.MainPanel.SetFormState(FormWindowState.Maximized);
+                        break;
+                }
 
-                if (Form.WindowState == FormWindowState.Normal)
-                    MoveForm(Form.PointToScreen(new Point(deltaX, deltaY)));
-                else Processing = false;
-            }
+            int deltaX = e.X - LastMousePosition.X;
+            int deltaY = e.Y - LastMousePosition.Y;
+            LastMousePosition.X = e.X - deltaX;
+            LastMousePosition.Y = e.Y - deltaY;
+
+            if (Form.WindowState == FormWindowState.Normal)
+                MoveForm(Form.PointToScreen(new Point(deltaX, deltaY)));
+            else Processing = false;
         }
 
         private void MoveForm(Point FinishPosition)

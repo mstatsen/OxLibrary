@@ -15,6 +15,14 @@
             Initialized = true;
         }
 
+        protected override void OnLocationChanged(EventArgs e)
+        {
+            base.OnLocationChanged(e);
+
+            if (MainPanel != null)
+                MainPanel.SetMarginsSize();
+        }
+
         protected virtual void SetUpForm()
         {
             FormBorderStyle = FormBorderStyle.None;

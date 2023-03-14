@@ -17,12 +17,13 @@ namespace OxLibrary.Dialogs
             Header.SetContentSize(Width, 34);
             SetIcon();
             SetRestoreButtonIcon();
-            Borders.SetSize(OxSize.Medium);
+            Borders.SetSize(OxSize.Small);
             Header.Label.Font = new Font(Header.Label.Font.FontFamily, Header.Label.Font.Size + 1, FontStyle.Bold);
             SetContentSize(Width, Height);
             SetMarginsSize();
             formMover = new OxFormMover(Form, Header.Label);
             Anchor = AnchorStyles.Left | AnchorStyles.Top;
+            BlurredBorder = true;
         }
 
         private void SetIcon()
@@ -76,7 +77,7 @@ namespace OxLibrary.Dialogs
         };
 
         private Bitmap GetRestoreIcon() =>
-            Form != null && Form.WindowState == FormWindowState.Maximized
+            Form != null && FormIsMaximized
                 ? OxIcons.restore
                 : OxIcons.maximize;
 
@@ -138,7 +139,7 @@ namespace OxLibrary.Dialogs
         }
 
         internal void SetMarginsSize() => 
-            Margins.SetSize(Form.Sizeble ? OxSize.Small : OxSize.None);
+            Margins.SetSize(Form.Sizeble ? OxSize.Medium : OxSize.None);
 
         protected override void OnLocationChanged(EventArgs e)
         {
@@ -149,6 +150,7 @@ namespace OxLibrary.Dialogs
 
             Form.Left += Left;
             Form.Top += Top;
+            SetMarginsSize();
         }
 
         protected override void SetHandlers()

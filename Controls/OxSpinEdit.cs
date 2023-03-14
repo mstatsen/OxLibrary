@@ -148,7 +148,6 @@ namespace OxLibrary.Controls
             TextBox.TextChanged += TextChangedHandler;
             TextBox.MouseWheel += TextBoxMouseWheelHandler;
             TextBox.KeyDown += TextBoxKeyDownHandler;
-            TextBox.KeyUp += TextBoxKeyUpHandler;
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -157,29 +156,16 @@ namespace OxLibrary.Controls
             TextBoxKeyDownHandler(this, e);
         }
 
-        protected override void OnKeyUp(KeyEventArgs e)
-        {
-            base.OnKeyUp(e);
-            TextBoxKeyUpHandler(this, e);
-        }
-
-        bool CTRLPressed = false;
-
         private void IncreaseValue(int increase)
         {
             if (TextBox.ReadOnly)
                 return;
 
-            Value += increase * (CTRLPressed ? 10 : 1);
+            Value += increase * (ModifierKeys.HasFlag(Keys.Control) ? 10 : 1);
         }
-
-        private void TextBoxKeyUpHandler(object? sender, KeyEventArgs e) =>
-            CTRLPressed = !e.Control && CTRLPressed;
 
         private void TextBoxKeyDownHandler(object? sender, KeyEventArgs e)
         {
-            CTRLPressed = e.Control;
-
             switch (e.KeyData)
             {
                 case Keys.Up:
