@@ -85,10 +85,6 @@ namespace OxLibrary.Panels
         {
             if (ToolBar.ExecuteDefault())
                 return;
-
-            if (Parent?.Parent?.Parent is OxSidePanel sidePanel && sidePanel.Expanded)
-                sidePanel.Collapse();
-
         }
 
         protected override void PrepareColors()

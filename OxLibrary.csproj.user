@@ -101,9 +101,6 @@
     <Compile Update="Panels\OxPanelViewer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Panels\OxSidePanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Update="Panels\OxUnderlinedPanel.cs">
       <SubType>Component</SubType>
     </Compile>
