@@ -4,13 +4,39 @@ namespace OxLibrary.Panels
 {
     public class OxSidePanel : OxFrame
     {
+        private bool pinned = false;
+
+        public bool Pinnded
+        {
+            get => pinned;
+            set 
+            {
+                pinned = value;
+                SetMouseHandlers();
+            }
+        }
+
         protected override void PrepareInnerControls()
         {
             base.PrepareInnerControls();
             BorderVisible = false;
             Sider.Parent = this;
             SiderButton.Parent = Sider;
-            SiderButton.Click += ExpandHandler;
+        }
+
+        private void MouseEnterHandler(object? sender, EventArgs e)
+        {
+            if (!Expanded)
+                Expanded = true;
+        }
+
+        private void MouseLeaveHandler(object? sender, EventArgs e)
+        {
+            if (!Expanded)
+                return;
+
+            if (!ClientRectangle.Contains(PointToClient(MousePosition)))
+                Expanded = false;
         }
 
         private readonly OxPanel Sider = new(new Size(16, 1));
@@ -109,10 +135,46 @@ namespace OxLibrary.Panels
             else OnAfterCollapse?.Invoke(this, EventArgs.Empty);
         }
 
+        private void SetMouseHandler(OxBorders borders)
+        {
+            foreach (OxBorder border in borders.Borders.Values)
+                SetMouseHandler(border);
+        }
+
+        private void SetMouseHandler(Control control)
+        {
+            if (pinned)
+            {
+                control.MouseEnter -= MouseEnterHandler;
+                control.MouseLeave -= MouseLeaveHandler;
+            }
+            else
+            {
+                control.MouseEnter += MouseEnterHandler;
+                control.MouseLeave += MouseLeaveHandler;
+            }
+        }
+
+        private void SetMouseHandlers()
+        {
+            SetMouseHandler(this);
+            SetMouseHandler(ContentContainer);
+            SetMouseHandler(SiderButton);
+            SetMouseHandler(SiderButton.Picture);
+            SetMouseHandler(SiderButton.Margins);
+            SetMouseHandler(SiderButton.Borders);
+            SetMouseHandler(SiderButton.Paddings);
+            SetMouseHandler(Margins);
+            SetMouseHandler(Borders);
+            SetMouseHandler(Paddings);
+        }
+
         protected override void SetHandlers()
         {
             base.SetHandlers();
             ApplyRecalcSizeHandler(ContentContainer, false, true);
+            SiderButton.Click += ExpandHandler;
+            SetMouseHandlers();
         }
 
         public bool Expanded

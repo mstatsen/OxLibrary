@@ -32,7 +32,6 @@ namespace OxLibrary.Panels
 
         public OxFrameWithHeader(Size contentSize) : base(contentSize) { }
 
-
         protected override void PrepareColors()
         {
             base.PrepareColors();
@@ -47,12 +46,8 @@ namespace OxLibrary.Panels
 
         protected virtual void ToolBarButtonVisibleChangeHandler(object? sender, EventArgs e) { }
 
-        protected override int GetCalcedHeight()
-        {
-            int calcedHeight = base.GetCalcedHeight();
-            calcedHeight += Header.CalcedHeight;
-            return calcedHeight;
-        }
+        protected override int GetCalcedHeight() => 
+            base.GetCalcedHeight() + Header.CalcedHeight;
 
         public override void ReAlignControls()
         {

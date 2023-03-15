@@ -20,16 +20,16 @@
         protected override void AfterCreated()
         {
             base.AfterCreated();
-            picture.Dock = DockStyle.Left;
-            picture.Width = 16;
+            Picture.Dock = DockStyle.Left;
+            Picture.Width = 16;
             HiddenBorder = false;
         }
 
         protected override void SetIcon(Bitmap? value)
         {
             base.SetIcon(value);
-            picture.Visible = value != null;
-            Label.TextAlign = picture.Visible ? ContentAlignment.MiddleLeft : ContentAlignment.MiddleCenter;
+            Picture.Visible = value != null;
+            Label.TextAlign = Picture.Visible ? ContentAlignment.MiddleLeft : ContentAlignment.MiddleCenter;
         }
 
         protected override void PrepareInnerControls()
@@ -94,7 +94,7 @@
             CalcLabelWidth();
         }
 
-        private int RealPictureWidth => picture.Visible ? picture.Width : 0;
+        private int RealPictureWidth => Picture.Visible ? Picture.Width : 0;
         private int RealLabelWidth => Label.Visible ? Label.Width : 0;
 
         public new int Width
