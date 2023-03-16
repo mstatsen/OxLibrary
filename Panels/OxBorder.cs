@@ -68,26 +68,21 @@ namespace OxLibrary.Panels
         public void SetSize(OxSize size) =>
             SetSize((int)size);
 
-        public OxBorder(Control parentControl, OxDock dock, int size)
+        public OxBorder(Control parentControl, OxDock dock, int size, bool visible)
         {
+            Visible = visible;
             Parent = parentControl;
             OxDock = dock;
             ReAlign();
             SetSize(size);
         }
 
-        public OxBorder(
-            Control parentControl,
-            OxDock dock,
-            Color backColor,
-            int size = (int)OxSize.Small) : this(parentControl, dock, size)
+        public OxBorder(Control parentControl, OxDock dock, Color backColor, int size = (int)OxSize.Small, bool visible = true) 
+            : this(parentControl, dock, size, visible)
             => BackColor = backColor;
 
-        public OxBorder(
-            Control parentControl,
-            OxDock dock,
-            Color backColor,
-            OxSize size) : this(parentControl, dock, backColor, (int)size)
+        public OxBorder(Control parentControl, OxDock dock, Color backColor, OxSize size, bool visible = true) 
+            : this(parentControl, dock, backColor, (int)size, visible)
         { }
 
         public static OxBorder NewLeft(Control parentControl, Color backColor, int size) =>
@@ -113,6 +108,12 @@ namespace OxLibrary.Panels
 
         public static OxBorder NewBottom(Control parentControl, Color backColor, OxSize size = OxSize.Small) =>
             NewBottom(parentControl, backColor, (int)size);
+
+        public static OxBorder New(Control parentControl, DockStyle dock, Color backColor, int size, bool visible = true) =>
+            new(parentControl, OxDockHelper.Dock(dock), backColor, size, visible);
+
+        public static OxBorder New(Control parentControl, DockStyle dock, Color backColor, OxSize size = OxSize.Small, bool visible = true) =>
+            New(parentControl, dock, backColor, (int)size, visible);
 
         public static Dictionary<OxDock, OxBorder> NewFull(Control parentControl, Color backColor, int size) =>
             new()

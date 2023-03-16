@@ -69,7 +69,7 @@ namespace OxLibrary.Panels
 
         protected override void OnControlAdded(ControlEventArgs e)
         {
-            if (Initialized)
+            if (Initialized && e.Control is not OxBorder)
                 ContentContainer.Controls.Add(e.Control);
             else
                 base.OnControlAdded(e);

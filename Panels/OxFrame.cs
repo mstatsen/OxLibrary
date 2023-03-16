@@ -108,13 +108,16 @@
         private void ApplyMarginsColor() =>
             Margins.Color = GetMarginsColor();
 
-        protected virtual void ParentChangedHandler(object? sender, EventArgs e) =>
+        protected override void OnParentChanged(EventArgs e)
+        {
+            base.OnParentChanged(e);
             ApplyMarginsColor();
+        }
+
 
         protected override void SetHandlers()
         {
             base.SetHandlers();
-            ParentChanged += ParentChangedHandler;
             margins.SizeChanged += BorderSizeEventHandler;
             borders.SizeChanged += BorderSizeEventHandler;
         }
