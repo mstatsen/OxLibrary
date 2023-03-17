@@ -8,7 +8,18 @@
 
         public GetColor? GetHoveredColor;
 
-        protected bool Hovered => hovered;
+        public bool Hovered
+        {
+            get => hovered;
+            set
+            {
+                hovered = value;
+                PrepareColors();
+                HoveredChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        public EventHandler? HoveredChanged;
 
         public bool FreezeHovered
         {
@@ -80,12 +91,10 @@
             if (hovered)
                 return;
             
-            hovered = true;
+            Hovered = true;
 
             if (HandHoverCursor)
                 Cursor = Cursors.Hand;
-
-            PrepareColors();
         }
 
         protected override Cursor DefaultCursor => Enabled ? Cursors.Default : Cursors.No;
@@ -95,12 +104,10 @@
             if (!hovered)
                 return;
 
-            hovered = false;
+            Hovered = false;
 
             if (HandHoverCursor)
                 Cursor = Cursors.Default;
-
-            PrepareColors();
         }
 
         protected override void SetHandlers()

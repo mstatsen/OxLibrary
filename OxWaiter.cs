@@ -6,13 +6,32 @@
         private readonly Func<int> Function;
 
         public bool Ready;
-        public bool Enabled;
+        private bool enabled = false;
+        public bool Enabled 
+        { 
+            get => enabled;
+            set
+            {
+                enabled = value;
+
+                if (enabled)
+                    Start();
+                else
+                    Stop();
+            }
+        }
 
         public OxWaiter(Func<int> function) =>
             Function = function;
 
         public void Start()
         {
+            if (enabled && thread != null && thread.IsAlive)
+            {
+                Ready = true;
+                return;
+            }
+
             thread = new(Waitfunction);
             thread.Start();
         }
@@ -20,15 +39,15 @@
         public void Stop()
         {
             Ready = false;
-            Enabled = false;
+            enabled = false;
         }
 
         public void Waitfunction()
         {
             Ready = true;
-            Enabled = true;
+            enabled = true;
 
-            while (true)
+            while (enabled)
             {
                 Ready = true;
                 Thread.Sleep(400);
@@ -38,13 +57,9 @@
                     Function.Invoke();
                     Ready = false;
                 }
-
-                if (!Enabled)
-                    break;
             }
         }
     }
-
 
     public class OxStepWaiter
     {
