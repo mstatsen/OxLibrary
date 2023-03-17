@@ -43,15 +43,10 @@
         {
             base.SetHandlers();
             SetHoverHandlers(Label);
-            Label.Click += LabelClick;
-            ForeColorChanged += ForeColorChangedHandler;
+            Label.Click += (s, e) => PerformClick();
+            ForeColorChanged += (s, e) => Label.ForeColor = ForeColor;
         }
 
-        private void ForeColorChangedHandler(object? sender, EventArgs e) => 
-            Label.ForeColor = ForeColor;
-
-        private void LabelClick(object? sender, EventArgs e) => 
-            PerformClick();
 
         public override void ReAlignControls()
         {

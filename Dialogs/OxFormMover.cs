@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
-
-namespace OxLibrary.Dialogs
+﻿namespace OxLibrary.Dialogs
 {
     public class OxFormMover
     {
@@ -18,7 +13,7 @@ namespace OxLibrary.Dialogs
         {
             Mover.MouseMove += MoveHandler;
             Mover.MouseDown += MouseDownHandler;
-            Mover.MouseUp += MouseUpHandler;
+            Mover.MouseUp += (s, e) => Processing = false;
         }
 
         private OxForm Form { get; }
@@ -26,9 +21,6 @@ namespace OxLibrary.Dialogs
         public bool Processing { get; set; }
 
         private Point LastMousePosition = new();
-
-        private void MouseUpHandler(object? sender, MouseEventArgs e) =>
-            Processing = false;
 
         private void MouseDownHandler(object? sender, MouseEventArgs e)
         {

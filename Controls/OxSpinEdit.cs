@@ -21,9 +21,9 @@ namespace OxLibrary.Controls
         {
             base.PrepareInnerControls();
             DecreaseButton.Parent = this;
-            DecreaseButton.Click += DecreaseHandler;
             IncreaseButton.Parent = this;
-            IncreaseButton.Click += IncreaseHandler;
+            DecreaseButton.Click += (s, e) => Value -= Step;
+            IncreaseButton.Click += (s, e) => Value += Step;
             PrepareTextBox();
         }
 
@@ -130,12 +130,6 @@ namespace OxLibrary.Controls
                 Value = maximum;
         }
 
-        private void IncreaseHandler(object? sender, EventArgs e) =>
-            Value += Step;
-
-        private void DecreaseHandler(object? sender, EventArgs e) =>
-            Value -= Step;
-
         private void PrepareTextBox()
         {
             TextBox.Parent = ContentContainer;
@@ -145,8 +139,8 @@ namespace OxLibrary.Controls
         protected override void SetHandlers()
         {
             base.SetHandlers();
-            TextBox.TextChanged += TextChangedHandler;
-            TextBox.MouseWheel += TextBoxMouseWheelHandler;
+            TextBox.TextChanged += (s, e) => SetValue(TextBox.Text);
+            TextBox.MouseWheel += (s, e) => IncreaseValue(e.Delta > 0 ? Step : -Step);
             TextBox.KeyDown += TextBoxKeyDownHandler;
         }
 
@@ -164,21 +158,14 @@ namespace OxLibrary.Controls
             Value += increase * (ModifierKeys.HasFlag(Keys.Control) ? 10 : 1);
         }
 
-        private void TextBoxKeyDownHandler(object? sender, KeyEventArgs e)
-        {
-            switch (e.KeyData)
-            {
-                case Keys.Up:
-                    IncreaseValue(Step);
-                    break;
-                case Keys.Down:
-                    IncreaseValue(-Step);
-                    break;
-            }
-        }
-
-        private void TextBoxMouseWheelHandler(object? sender, MouseEventArgs e) => 
-            IncreaseValue(e.Delta > 0 ? Step : -Step);
+        private void TextBoxKeyDownHandler(object? sender, KeyEventArgs e) => 
+            IncreaseValue(e.KeyData switch
+                {
+                    Keys.Up => Step,
+                    Keys.Down => -Step,
+                    _ => 0
+                }
+            );
 
         protected override void PrepareColors()
         {
@@ -187,9 +174,6 @@ namespace OxLibrary.Controls
             IncreaseButton.BaseColor = Colors.BaseColor;
             TextBox.BackColor = Colors.Lighter(7);
         }
-
-        private void TextChangedHandler(object? sender, EventArgs e) =>
-            SetValue(TextBox.Text);
 
         private void SetValue(string text)
         {

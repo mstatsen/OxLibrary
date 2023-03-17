@@ -35,11 +35,14 @@
         protected override OxFormMainPanel CreateMainPanel() =>
             new OxDialogMainPanel(this);
 
-        private void KeyUpHandler(object? sender, KeyEventArgs e)
+        protected override void OnKeyUp(KeyEventArgs e)
         {
+            base.OnKeyUp(e);
+
             if (e.KeyCode == Keys.Escape)
                 DialogResult = DialogResult.Cancel;
         }
+
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {

@@ -94,7 +94,7 @@ namespace OxLibrary.Controls
         {
             picture.Parent = this;
             picture.Dock = DockStyle.None;
-            picture.Click += PictureClick;
+            picture.Click += (s, e) => InvokeOnClick(this, null);
             SetPictureSize(Height);
         }
 
@@ -126,16 +126,10 @@ namespace OxLibrary.Controls
             SetImage(picture.Image);
         }
 
-        private void HoverMouseLeaveHandler(object? sender, EventArgs e) => 
-            OnMouseLeave(e);
-
-        private void HoverMouseEnterHandler(object? sender, EventArgs e) => 
-            OnMouseEnter(e);
-
         private void SetHoverHandlers(Control control)
         {
-            control.MouseEnter += HoverMouseEnterHandler;
-            control.MouseLeave += HoverMouseLeaveHandler;
+            control.MouseEnter += (s, e) => OnMouseEnter(e);
+            control.MouseLeave += (s, e) => OnMouseLeave(e);
         }
 
         public Image? Image
@@ -165,9 +159,6 @@ namespace OxLibrary.Controls
             EnabledBitmap = bitmapCalcer.FullBitmap;
             SetPictureImage();
         }
-
-        private void PictureClick(object? sender, EventArgs e) => 
-            InvokeOnClick(this, null);
 
         private static Bitmap? GetGrayScale(Bitmap? bitmap)
         {

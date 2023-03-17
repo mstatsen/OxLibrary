@@ -15,13 +15,10 @@ namespace OxLibrary.Panels
             contentPanel.ContentContainer.Parent = this;
             SetContentSize(ContentPanel.CalcedWidth, contentPanel.CalcedHeight);
             MainPanel.Paddings.SetSize(OxSize.Large);
-            contentPanel.Colors.BaseColorChanged += ColorChangeHandler;
+            contentPanel.Colors.BaseColorChanged += (s, e) => MainPanel.BaseColor = ContentPanel.BaseColor;
         }
 
         public List<OxIconButton> ButtonsWithBorders { get; }
-
-        private void ColorChangeHandler(object? sender, EventArgs e) =>
-            MainPanel.BaseColor = ContentPanel.BaseColor;
 
         private readonly OxPanel ContentPanel;
 

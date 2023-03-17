@@ -34,15 +34,11 @@ namespace OxLibrary.Panels
         protected override void SetHandlers()
         {
             base.SetHandlers();
-            Click += ClickHander;
+            Click += (s, e) => TabControl.ActivePage = Page;
 
             foreach (OxDock dock in OxDockHelper.All())
                 Borders[dock].VisibleChanged += BorderVisibleChanged;
         }
-
-        private void ClickHander(object? sender, EventArgs e) =>
-            TabControl.ActivePage = Page;
-
 
         protected override void AfterCreated()
         {

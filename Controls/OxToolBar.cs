@@ -192,7 +192,13 @@ namespace OxLibrary.Controls
                 BeginGroup = beginGroup,
                 Dock = dockStyle
             };
-            button.Click += ButtonClickHandler;
+            button.Click += (s, e) => ToolbarActionClick?.Invoke(s,
+                new ToolbarActionEventArgs(
+                    s == null
+                        ? OxToolbarAction.Empty
+                        : GetActionByButton((OxButton)s)
+                )
+            );
             button.SetContentSize(OxToolbarActionHelper.Width(action), button.Height);
             Actions.Add(action, button);
             Buttons.Add(button);
@@ -216,15 +222,6 @@ namespace OxLibrary.Controls
 
             return OxToolbarAction.Empty;
         }
-
-        private void ButtonClickHandler(object? sender, EventArgs e) =>
-            ToolbarActionClick?.Invoke(sender, 
-                new ToolbarActionEventArgs(
-                    sender == null 
-                        ? OxToolbarAction.Empty 
-                        : GetActionByButton((OxButton)sender)
-                )
-            );
     }
 
     public class OxHeaderToolBar : OxToolBar

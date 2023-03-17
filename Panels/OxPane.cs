@@ -185,14 +185,6 @@
             ReAlign();
         }
 
-        private void ContentColorChanged(object? sender, EventArgs e)
-        {
-            if (sender is OxColorHelper colorHelper)
-                BaseColor = colorHelper.BaseColor;
-
-            PrepareColors();
-        }
-
         public new bool Enabled
         {
             get => base.Enabled;

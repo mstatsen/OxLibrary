@@ -250,13 +250,9 @@ namespace OxLibrary.Panels
                 HandHoverCursor = true
             };
             button.SetContentSize(PageButtonWidth, PageButtonWidth);
-            button.Click += PageButtonClickHandler;
+            button.Click += (s, e) => CurrentPage = s != null ? ((OxTaggedButton)s).Tag : 0;
             Buttons.Add(button);
         }
-
-        private void PageButtonClickHandler(object? sender, EventArgs e) =>
-            CurrentPage = sender != null ? ((OxTaggedButton)sender).Tag : 0;
-
 
         private static OxButton CreateNavigateButton(Bitmap icon)
         {
@@ -292,18 +288,6 @@ namespace OxLibrary.Panels
             return button;
         }
 
-        private void LastButtonClickHandler(object? sender, EventArgs e) =>
-            CurrentPage = PageCount;
-
-        private void FirstButtonClickHandler(object? sender, EventArgs e) =>
-            CurrentPage = 1;
-
-        private void PrevButtonClickHandler(object? sender, EventArgs e) =>
-            CurrentPage--;
-
-        private void NextButtonClickHandler(object? sender, EventArgs e) =>
-            CurrentPage++;
-
         public OxPaginator() : base()
         {
             Borders.VerticalOx = OxSize.Small;
@@ -318,10 +302,10 @@ namespace OxLibrary.Panels
             buttonsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             SetButtonsPanelLeft();
 
-            PrepareNavigateButton(FirstButton, FirstButtonClickHandler);
-            PrepareNavigateButton(PrevButton, PrevButtonClickHandler);
-            PrepareNavigateButton(NextButton, NextButtonClickHandler);
-            PrepareNavigateButton(LastButton, LastButtonClickHandler);
+            PrepareNavigateButton(FirstButton, (s, e) => CurrentPage = 1);
+            PrepareNavigateButton(PrevButton, (s, e) => CurrentPage--);
+            PrepareNavigateButton(NextButton, (s, e) => CurrentPage++);
+            PrepareNavigateButton(LastButton, (s, e) => CurrentPage = PageCount);
             PrepareFakeButton(FakePrevButton, ContentAlignment.BottomRight);
             PrepareFakeButton(FakeNextButton, ContentAlignment.BottomLeft);
         }

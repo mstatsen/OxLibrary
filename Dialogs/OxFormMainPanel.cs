@@ -12,7 +12,7 @@ namespace OxLibrary.Dialogs
         public OxFormMainPanel(OxForm form) : base()
         {
             Form = form;
-            Form.SizeChanged += FormSizeChanged;
+            Form.SizeChanged += (s, e) => SetRestoreButtonIcon();
             SetTitleButtonsVisible();
             Header.SetContentSize(Width, 34);
             SetIcon();
@@ -45,9 +45,9 @@ namespace OxLibrary.Dialogs
             base.PrepareInnerControls();
 
             closeButton.Click += CloseButtonClickHandler;
-            closeButton.GetHoveredColor += CloseButtonHoveredColor;
-            restoreButton.Click += RestoreButtonClickHandler;
-            minimizeButton.Click += MinimizeButtonClickHandler;
+            closeButton.GetHoveredColor += () => Color.Red;
+            restoreButton.Click += (s, e) => SetFormState(FormIsMaximized ? FormWindowState.Normal : FormWindowState.Maximized);
+            minimizeButton.Click += (s, e) => SetFormState(FormWindowState.Minimized);
 
             closeButton.SetContentSize(36, 28);
             restoreButton.SetContentSize(36, 28);
@@ -58,9 +58,6 @@ namespace OxLibrary.Dialogs
             Header.AddToolButton(minimizeButton);
 
         }
-
-        private Color CloseButtonHoveredColor() =>
-            Color.Red;
 
         private readonly OxIconButton closeButton = new(OxIcons.close, 28)
         {
@@ -91,16 +88,6 @@ namespace OxLibrary.Dialogs
             Form.WindowState = state;
             ContentContainer.Visible = true;
         }
-
-        private void MinimizeButtonClickHandler(object? sender, EventArgs e) =>
-            SetFormState(FormWindowState.Minimized);
-
-        private void RestoreButtonClickHandler(object? sender, EventArgs e) =>
-            SetFormState(
-                FormIsMaximized
-                ? FormWindowState.Normal
-                : FormWindowState.Maximized
-            );
 
         private void CloseButtonClickHandler(object? sender, EventArgs e)
         {
@@ -160,16 +147,13 @@ namespace OxLibrary.Dialogs
             foreach (OxBorder border in Margins.Borders.Values)
             {
                 border.MouseDown += ResizerMouseDown;
-                border.MouseUp += ResizerMouseUp;
+                border.MouseUp += (s, e) => LastDirection = OxDirection.None;
                 border.MouseMove += ResizeHandler;
-                border.MouseLeave += ClearCursorHandler;
+                border.MouseLeave += (s, e) => Cursor = Cursors.Default;
             }
 
-            ContentContainer.VisibleChanged += ContentContainerVisibleChangedHandler;
+            ContentContainer.VisibleChanged += (s, e) => Update();
         }
-
-        private void ContentContainerVisibleChangedHandler(object? sender, EventArgs e) =>
-            Update();
 
         private void ResizerMouseDown(object? sender, MouseEventArgs e)
         {
@@ -181,12 +165,6 @@ namespace OxLibrary.Dialogs
             LastMousePosition = border.PointToScreen(e.Location);
             LastDirection = OxDirectionHelper.GetDirection(border, e.Location);
         }
-
-        private void ResizerMouseUp(object? sender, MouseEventArgs e) =>
-            LastDirection = OxDirection.None;
-
-        private void FormSizeChanged(object? sender, EventArgs e) =>
-            SetRestoreButtonIcon();
 
         private void SetSizerCursor(OxDirection direction)
         {
@@ -290,8 +268,5 @@ namespace OxLibrary.Dialogs
             Form.ResumeLayout();
             ResizeProcessing = false;
         }
-
-        private void ClearCursorHandler(object? sender, EventArgs e) =>
-            Cursor = Cursors.Default;
     }
 }

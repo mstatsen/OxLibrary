@@ -40,7 +40,7 @@ namespace OxLibrary.Panels
         public OxHeader(string title) : base(new Size(DefaultTitleWidth, DefaultTitleHeight))
         {
             label.Text = title;
-            label.DoubleClick += LabelDoubleClickHandler;
+            label.DoubleClick += (s, e) => ToolBar.ExecuteDefault();
             Paddings.LeftOx = OxSize.Large;
             ReAlign();
         }
@@ -79,12 +79,6 @@ namespace OxLibrary.Panels
             icon.Parent = ContentContainer;
             ToolBar.Parent = ContentContainer;
             label.Parent = ContentContainer;
-        }
-
-        private void LabelDoubleClickHandler(object? sender, EventArgs e)
-        {
-            if (ToolBar.ExecuteDefault())
-                return;
         }
 
         protected override void PrepareColors()

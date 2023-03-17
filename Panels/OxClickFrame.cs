@@ -63,14 +63,11 @@
             Paddings.Color = ContentContainer.BackColor;
         }
 
-        private void ChildClickHandler(object? sender, EventArgs e) =>
-            PerformClick();
-
         public void PerformClick() =>
             InvokeOnClick(this, null);
 
         protected void SetClickHandler(Control control) =>
-            control.Click += ChildClickHandler;
+            control.Click += (s, e) => PerformClick();
 
         protected void SetHoverHandlers(Control control)
         {

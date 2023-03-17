@@ -19,7 +19,7 @@ namespace OxLibrary.Panels
             base.PrepareInnerControls();
             paddings = new OxBorders(this);
             contentContainer.Parent = this;
-            contentContainer.Colors.BaseColorChanged += ContentContainerBaseColorChangedHandler;
+            contentContainer.Colors.BaseColorChanged += (s, e) => Paddings.Color = BackColor;
         }
 
         protected override void SetHandlers()
@@ -63,9 +63,6 @@ namespace OxLibrary.Panels
             base.SetUseDisabledStyles(value);
             ContentContainer.UseDisabledStyles = value;
         }
-
-        private void ContentContainerBaseColorChangedHandler(object? sender, EventArgs e) =>
-            Paddings.Color = BackColor;
 
         protected override void OnControlAdded(ControlEventArgs e)
         {
