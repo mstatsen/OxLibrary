@@ -17,7 +17,6 @@
             MinimizeBox = false;
             MaximizeBox = false;
             KeyPreview = true;
-            KeyUp += KeyUpHandler;
         }
 
         public new OxDialogMainPanel MainPanel
@@ -39,7 +38,7 @@
         {
             base.OnKeyUp(e);
 
-            if (e.KeyCode == Keys.Escape)
+            if (!e.Handled && e.KeyCode == Keys.Escape)
                 DialogResult = DialogResult.Cancel;
         }
 
