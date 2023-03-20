@@ -36,9 +36,6 @@ namespace OxLibrary.Controls
 
         private void PlaceButtons()
         {
-            if (buttons == null)
-                return;
-
             OxClickFrame? lastButton = null;
 
             foreach (OxClickFrame button in buttons)
@@ -91,9 +88,6 @@ namespace OxLibrary.Controls
 
         private void ClearButtons() 
         {
-            if (buttons == null)
-                return;
-
             foreach (OxClickFrame button in buttons)
             {
                 button.VisibleChanged -= ButtonVisibleChangedHandler;
@@ -105,10 +99,6 @@ namespace OxLibrary.Controls
         {
             ClearButtons();
             buttons = buttonList;
-
-            if (buttons == null)
-                return;
-
             PlaceButtons();
         }
 
@@ -119,7 +109,7 @@ namespace OxLibrary.Controls
             Paddings.TopOx = OxSize.Medium;
             Paddings.BottomOx = OxSize.Large;
 
-            if (buttons?.Last?.CalcedHeight > ContentContainer.CalcedHeight)
+            if (buttons.Last?.CalcedHeight > ContentContainer.CalcedHeight)
             {
                 Paddings.TopOx = OxSize.Small;
                 Paddings.BottomOx = OxSize.Small;
@@ -138,25 +128,23 @@ namespace OxLibrary.Controls
         {
             base.PrepareColors();
 
-            if (buttons != null)
-                foreach (OxClickFrame button in buttons)
-                    button.BaseColor = BaseColor;
+            foreach (OxClickFrame button in buttons)
+                button.BaseColor = BaseColor;
         }
 
         protected override void SetEnabled(bool value)
         {
             base.SetEnabled(value);
 
-            if (buttons != null)
-                foreach (OxClickFrame button in buttons)
-                    button.Enabled = value;
+            foreach (OxClickFrame button in buttons)
+                button.Enabled = value;
         }
 
         protected override void ApplyBordersColor() => 
             BorderColor = Colors.Lighter(4);
 
         public bool ExecuteDefault() =>
-            Buttons != null && Buttons.ExecuteDefault();
+            Buttons.ExecuteDefault();
 
         protected override void OnSizeChanged(EventArgs e)
         {

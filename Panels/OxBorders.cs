@@ -123,6 +123,7 @@
             Borders[dock].CalcedSize;
 
         public OxBorder this[OxDock dock] => Borders[dock];
+
         public BorderSizeEventHandler? SizeChanged;
 
         public Color Color
