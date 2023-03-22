@@ -22,10 +22,20 @@
             e.Graphics.FillRectangle(new SolidBrush(BrushColor), e.Bounds);
 
             if (DrawStrings && e.Index > -1)
-                e.Graphics.DrawString(Items[e.Index].ToString(),
+            {
+                object item = Items[e.Index];
+                string? itemString =
+                    item is bool boolItem 
+                    ? boolItem
+                        ? "Yes" 
+                        : "No" 
+                    : item.ToString();
+
+                e.Graphics.DrawString(itemString,
                     e.Font ?? new Font("Calibri Light", 10),
                     new SolidBrush(Color.Black),
                     new Point(e.Bounds.X, e.Bounds.Y));
+            }
         }
 
         protected override void OnDropDownStyleChanged(EventArgs e)

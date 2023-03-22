@@ -9,7 +9,7 @@
         private static int ColorPart(int colorPart) =>
             colorPart < 0 ? 0 : colorPart > 255 ? 255 : colorPart;
 
-        private Color GrouthColor(Color color, int grouth) =>
+        private static Color GrouthColor(Color color, int grouth) =>
             GrouthColor(color, grouth, grouth, grouth);
 
         private static Color GrouthColor(Color color, int grouthRed, int grouthGreen, int grouthBlue) =>

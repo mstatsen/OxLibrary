@@ -18,7 +18,7 @@ namespace OxLibrary.Panels
 
     public delegate void OxPaginatorEventHandler(object sender, OxPaginatorEventArgs e);
 
-    public class OxPaginator : OxFrame
+    public class OxPaginator : OxUnderlinedPanel
     {
         private const int PageButtonWidth = 24;
         private const int NavigateButtonWidth = PageButtonWidth * 2;
@@ -288,11 +288,7 @@ namespace OxLibrary.Panels
             return button;
         }
 
-        public OxPaginator() : base()
-        {
-            Borders.VerticalOx = OxSize.Small;
-            Borders.HorizontalOx = OxSize.None;
-        }
+        public OxPaginator() : base(Size.Empty) { }
 
         protected override void PrepareInnerControls()
         {
