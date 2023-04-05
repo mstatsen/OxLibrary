@@ -42,6 +42,8 @@
         public OxClickFrame() : base() { }
         public OxClickFrame(Size contentSize) : base(contentSize) { }
 
+        public bool ReadOnly { get; set; } = false;
+
         protected override void AfterCreated()
         {
             base.AfterCreated();
@@ -53,7 +55,7 @@
         {
             base.ApplyBordersColor();
 
-            if (hovered)
+            if (hovered && !ReadOnly)
                 BorderColor = Colors.Darker(4);
             else
             if (HiddenBorder)
@@ -64,13 +66,13 @@
         {
             base.PrepareColors();
             ContentContainer.BaseColor =
-                Enabled || !UseDisabledStyles
+                (Enabled && !ReadOnly) || !UseDisabledStyles
                     ? hovered || FreezeHovered
                         ? GetHoveredColor != null
                             ? GetHoveredColor.Invoke()
                             : Colors.Darker(2)
                         : ContentContainer.BaseColor
-                    : Colors.Darker();
+                    : Colors.Darker(ReadOnly ? 0 : 1);
             Paddings.Color = ContentContainer.BackColor;
         }
 
