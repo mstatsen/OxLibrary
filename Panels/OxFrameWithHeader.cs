@@ -63,18 +63,20 @@ namespace OxLibrary.Panels
         {
             base.PrepareDialog(dialog);
 
-            if (Header.Buttons.Count > 0)
-            {
-                Header.ToolBar.Parent = dialog.MainPanel.Header;
-                Header.ToolBar.BringToFront();
-                Header.ToolBar.BaseColor = dialog.MainPanel.Header.BaseColor;
+            if (Header.Buttons.Count <= 0)
+                return;
 
-                foreach (OxIconButton button in Header.Buttons)
-                    if (!button.HiddenBorder)
-                    {
-                        dialog.ButtonsWithBorders.Add(button);
-                        button.HiddenBorder = true;
-                    }
+            Header.ToolBar.Parent = dialog.MainPanel.Header;
+            Header.ToolBar.BringToFront();
+            Header.ToolBar.BaseColor = dialog.MainPanel.Header.BaseColor;
+
+            foreach (OxIconButton button in Header.Buttons)
+            {
+                if (button.HiddenBorder)
+                    continue;
+
+                dialog.ButtonsWithBorders.Add(button);
+                button.HiddenBorder = true;
             }
         }
 
