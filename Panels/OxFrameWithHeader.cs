@@ -70,7 +70,7 @@ namespace OxLibrary.Panels
             Header.ToolBar.BringToFront();
             Header.ToolBar.BaseColor = dialog.MainPanel.Header.BaseColor;
 
-            foreach (OxIconButton button in Header.Buttons)
+            foreach (OxIconButton button in Header.Buttons.Cast<OxIconButton>())
             {
                 if (button.HiddenBorder)
                     continue;
@@ -88,7 +88,7 @@ namespace OxLibrary.Panels
             {
                 Header.ToolBar.Parent = Header;
 
-                foreach (OxIconButton button in Header.ToolBar.Buttons)
+                foreach (OxIconButton button in Header.ToolBar.Buttons.Cast<OxIconButton>())
                     if (!dialog.ButtonsWithBorders.Contains(button))
                         button.HiddenBorder = false;
             }

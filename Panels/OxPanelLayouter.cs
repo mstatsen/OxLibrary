@@ -368,7 +368,7 @@
 
             foreach (OxPaneList panelsList in columnsPanels.Values)
             {
-                foreach (OxPanel panel in panelsList)
+                foreach (OxPanel panel in panelsList.Cast<OxPanel>())
                 {
                     panel.SizeChanged -= SizeChangeHandler;
                     panel.Visible = false;

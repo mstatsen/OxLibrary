@@ -65,9 +65,7 @@
         private bool CheckMandatoryFields()
         {
             string? emptyMandatoryField = GetEmptyMandatoryFieldName?.Invoke();
-
-            if (emptyMandatoryField == null)
-                emptyMandatoryField = EmptyMandatoryField();
+            emptyMandatoryField ??= EmptyMandatoryField();
 
             if (emptyMandatoryField == string.Empty)
                 return true;

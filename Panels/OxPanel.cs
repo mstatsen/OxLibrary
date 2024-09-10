@@ -97,10 +97,7 @@ namespace OxLibrary.Panels
         public DialogResult ShowAsDialog(OxDialogButton buttons = OxDialogButton.OK)
         {
             DialogResult result = AsDialog(buttons).ShowDialog();
-
-            if (PanelViewer != null)
-                PanelViewer.Dispose();
-
+            PanelViewer?.Dispose();
             PanelViewer = null;
             return result;
         }
