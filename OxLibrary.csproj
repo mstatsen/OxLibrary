@@ -9,6 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Update="Controls\OxColorComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Update="OxIcons.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
