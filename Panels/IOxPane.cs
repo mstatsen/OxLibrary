@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace OxLibrary.Panels
+﻿namespace OxLibrary.Panels
 {
     public interface IOxPane
     {

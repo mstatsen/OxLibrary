@@ -10,15 +10,17 @@
             Items.Add("Silver");
             Items.Add("DarkBlue");
             Items.Add("Blue");
-            Items.Add("LightBlue");
-            Items.Add("Violet");
-            Items.Add("Pink");
-            Items.Add("DarkGreen");
+            Items.Add("DeepSkyBlue");
+            Items.Add("BlueViolet");
+            Items.Add("HotPink");
+            Items.Add("SeaGreen");
             Items.Add("Green");
             Items.Add("LightGreen");
+            Items.Add("Olive");
+            Items.Add("Gold");
             Items.Add("Yellow");
-            Items.Add("Brown");
-            Items.Add("DarkRed");
+            Items.Add("SaddleBrown");
+            Items.Add("FireBrick");
             Items.Add("Red");
             Items.Add("Orange");
         }

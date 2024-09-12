@@ -1,7 +1,4 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
-
-namespace OxLibrary.Controls
+﻿namespace OxLibrary.Controls
 {
     public class OxListBox : ListBox
     {

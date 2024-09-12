@@ -1,6 +1,4 @@
-﻿using System.Windows.Forms;
-
-namespace OxLibrary.Controls
+﻿namespace OxLibrary.Controls
 {
     public class OxLabel : Label
     {

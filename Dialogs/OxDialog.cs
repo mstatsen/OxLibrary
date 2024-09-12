@@ -42,7 +42,6 @@
                 DialogResult = DialogResult.Cancel;
         }
 
-
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);

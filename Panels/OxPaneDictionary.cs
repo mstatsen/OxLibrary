@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace OxLibrary.Panels
+﻿namespace OxLibrary.Panels
 {
     public class OxPaneDictionary : Dictionary<IOxPane, OxPaneList>
     {

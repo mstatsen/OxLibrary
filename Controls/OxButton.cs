@@ -38,7 +38,6 @@
             Label.Parent = ContentContainer;
         }
 
-
         protected override void SetHandlers()
         {
             base.SetHandlers();
@@ -46,7 +45,6 @@
             Label.Click += (s, e) => PerformClick();
             ForeColorChanged += (s, e) => Label.ForeColor = ForeColor;
         }
-
 
         public override void ReAlignControls()
         {

@@ -31,7 +31,6 @@ namespace OxLibrary.Panels
         protected void BorderSizeEventHandler(object sender, BorderEventArgs e) =>
             RecalcSize();
 
-
         public OxBorders Paddings => paddings;
         public OxPane ContentContainer => contentContainer;
 

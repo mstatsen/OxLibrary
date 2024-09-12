@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Diagnostics.Eventing.Reader;
 
 namespace OxLibrary.Panels
 {
@@ -10,22 +8,7 @@ namespace OxLibrary.Panels
 
         public override void ReAlignControls()
         {
-            switch (OxDock)
-            {
-                case OxDock.Left:
-                    Dock = DockStyle.Left;
-                    break;
-                case OxDock.Right:
-                    Dock = DockStyle.Right;
-                    break;
-                case OxDock.Top:
-                    Dock = DockStyle.Top;
-                    break;
-                case OxDock.Bottom:
-                    Dock = DockStyle.Bottom;
-                    break;
-            }
-
+            Dock = OxDockHelper.Dock(OxDock);
             SendToBack();
         }
 
@@ -34,21 +17,10 @@ namespace OxLibrary.Panels
             if (GetSize() == size)
                 return false;
 
-            switch (OxDock)
-            {
-                case OxDock.Left:
-                    Width = size;
-                    break;
-                case OxDock.Right:
-                    Width = size;
-                    break;
-                case OxDock.Top:
-                    Height = size;
-                    break;
-                case OxDock.Bottom:
-                    Height = size;
-                    break;
-            }
+            if (OxDockHelper.IsVertical(OxDock))
+                Height = size;
+            else
+                Width = size;
 
             return true;
         }
@@ -56,10 +28,8 @@ namespace OxLibrary.Panels
         public int GetSize() =>
             OxDock switch
             {
-                OxDock.Left => Width,
-                OxDock.Right => Width,
-                OxDock.Top => Height,
-                OxDock.Bottom => Height,
+                OxDock.Left or OxDock.Right => Width,
+                OxDock.Top or OxDock.Bottom => Height,
                 _ => 0,
             };
 

@@ -1,5 +1,4 @@
 ﻿using OxLibrary.Dialogs;
-using System.Windows.Forms;
 
 namespace OxLibrary.Panels
 {

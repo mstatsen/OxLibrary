@@ -98,7 +98,6 @@
                 page.Dock = DockStyle.Fill;
 
             pages.Add(page);
-
             CreateTabButton(page);
             ReAlignTabButtons();
             ActivePage = page;
@@ -115,16 +114,20 @@
 
         private void PrepareTabButtonsColor()
         {
-            if (TabButtons != null)
-                foreach (OxTabButton button in TabButtons.Values)
-                    button.BaseColor = button.Active ? Colors.Darker(2) : BaseColor;
+            if (TabButtons == null)
+                return;
+
+            foreach (OxTabButton button in TabButtons.Values)
+                button.BaseColor = button.Active ? Colors.Darker(2) : BaseColor;
         }
 
         private void SetTabButtonsVisualParameters()
         {
-            if (TabButtons != null)
-                foreach (OxTabButton button in TabButtons.Values)
-                    button.SetVisualParameters();
+            if (TabButtons == null)
+                return;
+
+            foreach (OxTabButton button in TabButtons.Values)
+                button.SetVisualParameters();
         }
 
         protected override void OnFontChanged(EventArgs e)
@@ -141,22 +144,24 @@
 
         private void SetTabButtonsFont()
         {
-            if (TabButtons != null)
-                foreach (OxTabButton button in TabButtons.Values)
-                {
-                    button.Font = new Font(Font.FontFamily, Font.Size, Font.Style);
-                    button.ForeColor = ForeColor;
-                }
+            if (TabButtons == null)
+                return;
+            
+            foreach (OxTabButton button in TabButtons.Values)
+            {
+                button.Font = new Font(Font.FontFamily, Font.Size, Font.Style);
+                button.ForeColor = ForeColor;
+            }
         }
 
         private void CreateTabButton(IOxPane page)
         {
-            if (!TabButtons.TryGetValue(page, out _))
-            {
-                OxTabButton button = new(page, this);
-                button.SetPosition();
-                TabButtons.Add(page, button);
-            }
+            if (TabButtons.TryGetValue(page, out _))
+                return;
+
+            OxTabButton button = new(page, this);
+            button.SetPosition();
+            TabButtons.Add(page, button);
         }
 
         private void SetActivePage(IOxPane? value)
@@ -204,9 +209,11 @@
 
         private void ReAlignTabButtons()
         {
-            if (TabButtons != null)
-                foreach (OxTabButton button in TabButtons.Values)
-                    button.BringToFront();
+            if (TabButtons == null)
+                return;
+
+            foreach (OxTabButton button in TabButtons.Values)
+                button.BringToFront();
         }
 
         protected override void OnSizeChanged(EventArgs e)

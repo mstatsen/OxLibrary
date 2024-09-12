@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
-
-namespace OxLibrary.Controls
+﻿namespace OxLibrary.Controls
 {
     public class OxCheckBox : CheckBox
     {
@@ -29,6 +26,5 @@ namespace OxLibrary.Controls
 
             base.OnClick(e);
         }
-
     }
 }

@@ -114,7 +114,6 @@
             ApplyMarginsColor();
         }
 
-
         protected override void SetHandlers()
         {
             base.SetHandlers();
