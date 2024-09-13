@@ -52,8 +52,8 @@ namespace OxLibrary.Controls
                 Filter = PictureFilesFilter
             };
 
-            return dialog.ShowDialog() == DialogResult.OK
-                ? dialog.FileName
+            return dialog.ShowDialog() == DialogResult.OK 
+                ? dialog.FileName 
                 : string.Empty;
         }
 
