@@ -7,24 +7,40 @@ namespace OxLibrary.Dialogs
     {
         public OxForm Form { get; internal set; }
 
-        private readonly OxFormMover formMover;
+        private OxFormMover formMover = default!;
 
         public OxFormMainPanel(OxForm form) : base()
         {
             Form = form;
             Form.SizeChanged += (s, e) => SetRestoreButtonIcon();
             SetTitleButtonsVisible();
-            Header.SetContentSize(Width, 34);
+            SetHeaderContentSize();
             SetIcon();
             SetRestoreButtonIcon();
-            Borders.SetSize(OxSize.Small);
-            Header.Label.Font = new Font(Header.Label.Font.FontFamily, Header.Label.Font.Size + 1, FontStyle.Bold);
+            SetBordersSize();
+            SetHeaderFont();
             SetContentSize(Width, Height);
             SetMarginsSize();
-            formMover = new OxFormMover(Form, Header.Label);
-            Anchor = AnchorStyles.Left | AnchorStyles.Top;
+            CreateFormMover();
+            SetAnchors();
             BlurredBorder = true;
         }
+
+        private void SetHeaderFont() => 
+            Header.Label.Font = 
+                new Font(Header.Label.Font.FontFamily, Header.Label.Font.Size + 1, FontStyle.Bold);
+
+        private void SetAnchors() => 
+            Anchor = AnchorStyles.Left | AnchorStyles.Top;
+
+        private void SetBordersSize() => 
+            Borders.SetSize(OxSize.Small);
+
+        private void CreateFormMover() => 
+            formMover = new OxFormMover(Form, Header.Label);
+
+        private void SetHeaderContentSize() => 
+            Header.SetContentSize(Width, 34);
 
         private void SetIcon()
         {

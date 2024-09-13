@@ -173,7 +173,7 @@
                 DeactivatePage?.Invoke(this, new OxTabControlEventArgs(oldPage, value));
 
             foreach (IOxPane page in Pages)
-                if (page != value && page.Visible)
+                if (page != value)
                     page.Visible = false;
 
             activePage = value;
