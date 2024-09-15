@@ -19,6 +19,15 @@
             }
         }
 
+        private bool fixBorderColor = false;
+
+        public bool FixBorderColor
+        {
+            get => fixBorderColor;
+            set => SetFixBorderColor(value);
+        }
+
+
         public EventHandler? HoveredChanged;
 
         public bool FreezeHovered
@@ -39,6 +48,12 @@
             PrepareColors();
         }
 
+        private void SetFixBorderColor(bool value)
+        {
+            fixBorderColor = value;
+            PrepareColors();
+        }
+
         public OxClickFrame() : base() { }
         public OxClickFrame(Size contentSize) : base(contentSize) { }
 
@@ -55,8 +70,8 @@
         {
             base.ApplyBordersColor();
 
-            if (hovered && !ReadOnly)
-                BorderColor = Colors.Darker(4);
+            if ((fixBorderColor || hovered) && !ReadOnly)
+                BorderColor = Colors.Darker(3);
             else
             if (HiddenBorder)
                 BorderColor = Colors.Lighter(7);

@@ -51,7 +51,8 @@ namespace OxLibrary.Controls
             new(icon, 14)
             {
                 Dock = dock,
-                HiddenBorder = false
+                HiddenBorder = false,
+                FixBorderColor = true
             };
 
         public int Value 
