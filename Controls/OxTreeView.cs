@@ -88,6 +88,22 @@
         private Brush SelectedBrush = default!;
         private Pen StandardPen = default!;
         private Pen SelectedPen = default!;
+
+        private bool loading = false;
+        public bool Loading 
+        { 
+            get => loading;
+            set
+            {
+                if (loading != value)
+                {
+                    loading = value;
+
+                    if (!loading)
+                        Invalidate();
+                }
+            }
+        }
     }
 
     public class CountedTreeNode : TreeNode
@@ -104,7 +120,7 @@
                 int oldCount = count;
                 count = value;
 
-                if (oldCount != count)
+                if (TreeView != null && oldCount != count && !((OxTreeView)TreeView).Loading)
                     TreeView?.Invalidate();
             }
         }
