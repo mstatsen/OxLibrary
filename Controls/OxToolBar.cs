@@ -2,15 +2,6 @@
 
 namespace OxLibrary.Controls
 {
-    public class ToolbarActionEventArgs : EventArgs
-    {
-        public OxToolbarAction Action { get; internal set; }
-        public ToolbarActionEventArgs(OxToolbarAction action) : base() =>
-            Action = action;
-    }
-
-    public delegate void ToolbarActionClick(object? sender, ToolbarActionEventArgs EventArgs);
-
     public class OxToolBar : OxFrame
     {
         private const int DefaultToolBarHeight = 28;
@@ -20,7 +11,7 @@ namespace OxLibrary.Controls
             UseDisabledStyles = false;
 
         public readonly Dictionary<OxToolbarAction, OxButton> Actions = new();
-        public ToolbarActionClick? ToolbarActionClick;
+        public OxActionClick<OxToolbarAction>? ToolbarActionClick;
 
         public void RecalcWidth() => 
             SetContentSize(buttons.Width(), SavedHeight);
@@ -181,7 +172,7 @@ namespace OxLibrary.Controls
                 Dock = dockStyle
             };
             button.Click += (s, e) => ToolbarActionClick?.Invoke(s,
-                new ToolbarActionEventArgs(
+                new OxActionEventArgs<OxToolbarAction>(
                     s == null
                         ? OxToolbarAction.Empty
                         : GetActionByButton((OxButton)s)

@@ -103,7 +103,7 @@
             control.MouseLeave += MouseLeaveHandler;
         }
 
-        private void MouseEnterHandler(object? sender, EventArgs e)
+        protected virtual void MouseEnterHandler(object? sender, EventArgs e)
         {
             if (hovered)
                 return;
@@ -116,7 +116,7 @@
 
         protected override Cursor DefaultCursor => Enabled ? Cursors.Default : Cursors.No;
 
-        private void MouseLeaveHandler(object? sender, EventArgs e)
+        protected virtual void MouseLeaveHandler(object? sender, EventArgs e)
         {
             if (!hovered)
                 return;
