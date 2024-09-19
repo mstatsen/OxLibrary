@@ -97,7 +97,7 @@
         protected void SetClickHandler(Control control) =>
             control.Click += (s, e) => PerformClick();
 
-        protected void SetHoverHandlers(Control control)
+        public void SetHoverHandlers(Control control)
         {
             control.MouseEnter += MouseEnterHandler;
             control.MouseLeave += MouseLeaveHandler;
@@ -144,6 +144,12 @@
                 SetClickHandler(border);
                 SetHoverHandlers(border);
             }
+
+            foreach (OxBorder border in Margins.Borders.Values)
+            {
+                SetClickHandler(border);
+                SetHoverHandlers(border);
+            }
         }
 
         private bool hiddenBorder;
@@ -166,5 +172,24 @@
 
         public bool Default { get; set; }
         public bool BeginGroup { get; set; }
+        protected readonly ToolTip ToolTip = new() 
+        {
+            AutomaticDelay = 100,
+            ShowAlways = true
+        };
+
+        public string ToolTipText
+        { 
+            get => ToolTip.GetToolTip(this);
+            set => SetToolTipText(value);
+        }
+
+        public int ToolTipDelay 
+        {
+            get => ToolTip.AutomaticDelay;
+            set => ToolTip.AutomaticDelay = value;
+        }
+        protected virtual void SetToolTipText(string value) =>
+            ToolTip.SetToolTip(this, value);
     }
 }

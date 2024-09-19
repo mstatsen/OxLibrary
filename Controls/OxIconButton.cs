@@ -63,5 +63,12 @@ namespace OxLibrary.Controls
             Picture.Enabled = value;
             PrepareColors();
         }
+
+        protected override void SetToolTipText(string value)
+        {
+            base.SetToolTipText(value);
+            ToolTip.SetToolTip(Picture, value);
+            ToolTip.SetToolTip(Picture.Picture, value);
+        }
     }
 }

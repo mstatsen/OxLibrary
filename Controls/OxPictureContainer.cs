@@ -1,11 +1,11 @@
 ﻿using OxLibrary.Panels;
+using System.Drawing.Imaging;
 
 namespace OxLibrary.Controls
 {
     public class OxPictureActionEventArgs : OxActionEventArgs<OxPictureAction>
     {
         public OxPictureActionEventArgs(OxPictureAction action) : base(action) { }
-
     }
 
     public class OxPictureContainer : OxClickFrame
@@ -28,25 +28,46 @@ namespace OxLibrary.Controls
         { 
             Visible = false,
             BackColor = Color.Transparent,
-            Dock = DockStyle.Right
+            Dock = DockStyle.Bottom
         };
-        public OxActionClick<OxPictureAction>? PictureActionClick;
 
         private void PlaceButtons()
         {
-            int left = 0;
-            int top = 0;
+            buttonsParent.SizeChanged -= ButtonsParentSizeChanged;
 
+            try
+            {
+                if (Image == null)
+                {
+                    buttonsParent.Visible = false;
+                    return;
+                }
+
+                buttonsParent.Height = OxPictureActionHelper.DefaultHeight;
+                RecalcButtonsSize();
+            }
+            finally
+            {
+                buttonsParent.SizeChanged += ButtonsParentSizeChanged;
+            }
+        }
+
+        private void RecalcButtonsSize()
+        {
+            if (Image == null)
+                return;
+
+            int calcedWidth;
             foreach (OxClickFrame button in Buttons)
             {
-                button.Top = 0;
-                button.Left = left;
-                button.Margins.LeftOx = OxSize.Small;
-                top += button.Height;
+                calcedWidth = (buttonsParent.Width / Buttons.Count) 
+                        - (int)OxPictureActionHelper.ButtonMargin * Buttons.Count
+                        + (int)OxSize.Small;
+                button.SetContentSize(
+                    calcedWidth,
+                    OxPictureActionHelper.DefaultHeight
+                );
             }
-
-            buttonsParent.Height = OxPictureActionHelper.DefaultHeight+ 2;
-            
         }
 
         private void CreateButtons()
@@ -54,38 +75,78 @@ namespace OxLibrary.Controls
             if (Buttons.Count > 0)
                 return;
 
-            foreach (OxPictureAction action in Enum.GetValues(typeof(OxPictureAction)))
+            foreach (OxPictureAction action in OxPictureActionHelper.List)
                 AddButton(action);
+
+            buttonsParent.SizeChanged += ButtonsParentSizeChanged;
+            
+            if (Buttons.Count > 0)
+                Buttons.First()!.Margins.RightOx = OxPictureActionHelper.ButtonMargin;
+            
         }
+
+        private void ButtonsParentSizeChanged(object? sender, EventArgs e) => 
+            RecalcButtonsSize();
 
         public OxClickFrame AddButton(OxPictureAction action)
         {
-            OxIconButton button = new(OxPictureActionHelper.Icon(action), 24)
+            OxIconButton button = new(
+                OxPictureActionHelper.Icon(action), OxPictureActionHelper.DefaultHeight)
             {
-                Parent = buttonsParent
+                Parent = buttonsParent,
+                Dock = DockStyle.Left,
             };
 
-            button.Click += (s, e) => PictureActionClick?.Invoke(s,
-                new OxActionEventArgs<OxPictureAction>(
-                    s == null
-                        ? OxPictureAction.Clear
-                        : GetActionByButton((OxButton)s)
-                )
-            );
-            button.SetContentSize(OxPictureActionHelper.DefaultWidth, OxPictureActionHelper.DefaultHeight);
+            button.Margins.LeftOx = OxPictureActionHelper.ButtonMargin;
+            button.Click += ButtonClick;
             Actions.Add(action, button);
             Buttons.Add(button);
+            button.MouseEnter += MouseEnterHandler;
+            button.MouseLeave += MouseLeaveHandler;
+            button.ToolTipText = OxPictureActionHelper.Text(action);
             return button;
         }
 
-        private OxPictureAction GetActionByButton(OxButton button)
+        private void ButtonClick(object? sender, EventArgs e)
         {
-            foreach (var item in Actions)
-                if (item.Value == button)
-                    return item.Key;
+            OxPictureAction action = OxPictureAction.Clear;
 
-            return OxPictureAction.Clear;
+            foreach (KeyValuePair<OxPictureAction, OxClickFrame> item in Actions)
+                if (item.Value == sender)
+                    action = item.Key;
+
+            switch (action)
+            {
+                case OxPictureAction.Clear:
+                    ClearImage();
+                    break;
+                case OxPictureAction.Download:
+                    DownloadImage();
+                    break;
+                case OxPictureAction.Replace:
+                    ReplaceImage();
+                    break;
+            }
         }
+
+        private void DownloadImage()
+        {
+            if (Image == null)
+                return;
+
+            SaveFileDialog dialog = new()
+            { 
+                FileName = "Unknown",
+                Filter = "PNG picture |  *.png; "
+            };
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+                if (dialog.FileName != string.Empty)
+                    Image.Save(dialog.FileName, ImageFormat.Png);
+        }
+
+        private void ClearImage() => 
+            Image = null;
 
         public override void ReAlignControls()
         {
@@ -143,7 +204,9 @@ namespace OxLibrary.Controls
                 : string.Empty;
         }
 
-        private void ClickHandler(object? sender, EventArgs e)
+        private void ClickHandler(object? sender, EventArgs e) => ReplaceImage();
+
+        private void ReplaceImage()
         {
             string fileName = SelectPictureFile();
 
@@ -159,22 +222,37 @@ namespace OxLibrary.Controls
             SetClickHandler(picture);
             SetHoverHandlers(label);
             SetHoverHandlers(picture);
+            SetHoverHandlers(buttonsParent);
+            picture.SizeChanged += Picture_SizeChanged;
         }
+
+        private void Picture_SizeChanged(object? sender, EventArgs e) =>
+            RecalcButtonsSize();
 
         protected override void MouseEnterHandler(object? sender, EventArgs e)
         {
-            if (sender == buttonsParent)
+            if (Hovered)
                 return;
 
             base.MouseEnterHandler(sender, e);
 
-            buttonsParent.Visible = true;
+            if (!IsHovered)
+                return;
+
+            buttonsParent.Visible = picture.Visible;
             ReAlignControls();
         }
 
         protected override void MouseLeaveHandler(object? sender, EventArgs e)
         {
+            if (!Hovered)
+                return;
+
             base.MouseLeaveHandler(sender, e);
+
+            if (buttonsParent.IsHovered)
+                return;
+            buttonsParent.Visible = false;
             ReAlignControls();
         }
 
@@ -183,7 +261,7 @@ namespace OxLibrary.Controls
             base.PrepareColors();
             label.ForeColor = hovered ? Color.Gray : Color.Silver;
             picture.BaseColor = BaseColor;
-            buttonsParent.BaseColor = Color.Transparent;
+            buttonsParent.BackColor = Color.Transparent;
         }
 
         public Image? Image
@@ -195,6 +273,7 @@ namespace OxLibrary.Controls
                 label.Visible = sourceImage == null;
                 picture.Visible = sourceImage != null;
                 picture.Image = sourceImage;
+                PlaceButtons();
                 ReAlignControls();
             }
         }

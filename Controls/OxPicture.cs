@@ -31,6 +31,7 @@ namespace OxLibrary.Controls
         private Bitmap? DisabledBitmap;
 
         private readonly OxPictureBox picture = new();
+        public PictureBox Picture => picture;
 
         public OxPicture()
         {

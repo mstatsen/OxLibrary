@@ -46,5 +46,18 @@ namespace OxLibrary
                 form.Height
             );
         }
+
+        public static Control? GetControlUnderMouse(Control topControl) => 
+            GetControlUnderMouse(topControl, Cursor.Position);
+
+        private static Control? GetControlUnderMouse(Control topControl, Point desktopPoint)
+        {
+            Point thisPoint = topControl.PointToClient(desktopPoint);
+            Control foundControl = topControl.GetChildAtPoint(thisPoint);
+
+            return (foundControl != null) && foundControl.HasChildren 
+                ? GetControlUnderMouse(foundControl, desktopPoint) 
+                : foundControl;
+        }
     }
 }

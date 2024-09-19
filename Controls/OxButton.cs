@@ -77,7 +77,9 @@
             Label.AutoSize = true;
             int calcedLabelWidth = Label.Width;
             Label.AutoSize = false;
-            calcedLabelWidth = calcedLabelWidth + RealPictureWidth < SavedWidth ? calcedLabelWidth : SavedWidth - RealPictureWidth;
+            calcedLabelWidth = calcedLabelWidth + RealPictureWidth < SavedWidth 
+                ? calcedLabelWidth 
+                : SavedWidth - RealPictureWidth;
             Label.Width = Math.Max(calcedLabelWidth, 0);
         }
 
@@ -90,19 +92,13 @@
         private int RealPictureWidth => Picture.Visible ? Picture.Width : 0;
         private int RealLabelWidth => Label.Visible ? Label.Width : 0;
 
-        public new int Width
+        protected override void SetWidth(int value)
         {
-            get => base.Width;
-            set 
-            {
-                base.Width = value;
-                CalcLabelWidth();
-                RecalcPaddings();
-                base.Width = value;
-            }
+            Width = value;
+            CalcLabelWidth();
+            RecalcPaddings();
+            Width = value;
         }
-
-        protected override void SetWidth(int value) => Width = value;
 
         protected override int GetCalcedWidth() => 
             base.GetCalcedWidth() 

@@ -34,5 +34,6 @@
         event EventHandler? VisibleChanged;
         int Width { get; set; }
         int Height { get; set; }
+        bool IsHovered { get; }
     }
 }

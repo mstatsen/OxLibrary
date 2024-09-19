@@ -224,5 +224,19 @@
 
         protected virtual void SetVisible(bool value) =>
             base.Visible = value;
+
+        public bool IsHovered
+        {
+            get 
+            {
+                Point thisPoint = this.PointToClient(Cursor.Position);
+
+                return (thisPoint.X >= 0) && 
+                    (thisPoint.X <= Width) && 
+                    (thisPoint.Y >= 0) && 
+                    (thisPoint.Y <= Height);
+
+            }
+        }
     }
 }
