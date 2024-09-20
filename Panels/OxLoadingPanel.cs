@@ -10,15 +10,14 @@ namespace OxLibrary.Panels
             Borders.SetSize(OxSize.Small);
             Dock = DockStyle.Fill;
 
-            LoadingLabel = new OxLabel()
+            LoadingLabel = new OxLabel
             {
                 AutoSize = false,
                 Parent = this,
                 Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.MiddleCenter
+                TextAlign = ContentAlignment.MiddleCenter,
+                Text = "- - - Loading - - -"
             };
-
-            LoadingLabel.Text = "- - - Loading - - -";
             FontSize = 22;
             Margins.SetSize(OxSize.Small);
         }

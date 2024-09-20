@@ -18,9 +18,7 @@
         protected override void OnLocationChanged(EventArgs e)
         {
             base.OnLocationChanged(e);
-
-            if (MainPanel != null)
-                MainPanel.SetMarginsSize();
+            MainPanel?.SetMarginsSize();
         }
 
         protected virtual void SetUpForm()
