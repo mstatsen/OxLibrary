@@ -98,6 +98,7 @@ namespace OxLibrary.Controls
             };
 
             button.Margins.LeftOx = OxPictureActionHelper.ButtonMargin;
+            button.Margins.TopOx = OxSize.Small;
             button.Click += ButtonClick;
             Actions.Add(action, button);
             Buttons.Add(button);
