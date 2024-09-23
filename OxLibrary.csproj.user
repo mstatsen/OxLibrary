@@ -115,7 +115,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="OxIcons.resx">
+    <EmbeddedResource Update="Properties\Resources.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

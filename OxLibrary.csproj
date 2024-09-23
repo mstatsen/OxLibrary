@@ -9,21 +9,31 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Flags\**" />
+    <EmbeddedResource Remove="Flags\**" />
+    <None Remove="Flags\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Controls\OxColorComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Update="OxIcons.Designer.cs">
+    <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>OxIcons.resx</DependentUpon>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="OxIcons.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>OxIcons.Designer.cs</LastGenOutput>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>

@@ -40,12 +40,12 @@
         public static Bitmap? Icon(OxDialogButton button) =>
             button switch
             {
-                OxDialogButton.Cancel => OxIcons.close,
+                OxDialogButton.Cancel => OxIcons.Close,
                 OxDialogButton.OK or
                 OxDialogButton.Apply => 
-                    OxIcons.tick,
+                    OxIcons.Tick,
                 OxDialogButton.ApplyForAll =>
-                    OxIcons.double_tick,
+                    OxIcons.DoubleTick,
                 _ => 
                     null,
             };

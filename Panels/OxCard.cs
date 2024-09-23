@@ -97,7 +97,7 @@ namespace OxLibrary.Panels
             return calcedHeight;
         }
 
-        private readonly OxIconButton ExpandButton = new(OxIcons.up, 20)
+        private readonly OxIconButton ExpandButton = new(OxIcons.Up, 20)
         {
             Default = true
         };
@@ -115,7 +115,7 @@ namespace OxLibrary.Panels
         }
 
         private Bitmap ExpandButtonIcon =>
-            expanded ? OxIcons.up : OxIcons.down;
+            expanded ? OxIcons.Up : OxIcons.Down;
 
         protected override void PrepareInnerControls()
         {

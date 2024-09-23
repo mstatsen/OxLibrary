@@ -82,8 +82,8 @@
             }
         }
 
-        private readonly Bitmap expandedIcon = new(OxIcons.down, new Size(22, 22));
-        private readonly Bitmap collapsedIcon = new(OxIcons.right, new Size(18, 18));
+        private readonly Bitmap expandedIcon = new(OxIcons.Down, new Size(22, 22));
+        private readonly Bitmap collapsedIcon = new(OxIcons.Right, new Size(18, 18));
         private Brush StandardBrush = default!;
         private Brush SelectedBrush = default!;
         private Pen StandardPen = default!;

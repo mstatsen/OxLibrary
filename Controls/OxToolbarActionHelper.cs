@@ -5,14 +5,14 @@
         public static Bitmap? Icon(OxToolbarAction action) => 
             action switch
             {
-                OxToolbarAction.New => OxIcons.plus_thick,
-                OxToolbarAction.Edit => OxIcons.pencil,
-                OxToolbarAction.Copy => OxIcons.copy,
-                OxToolbarAction.Delete => OxIcons.trash,
-                OxToolbarAction.Update => OxIcons.batch_edit,
-                OxToolbarAction.Save => OxIcons.save,
-                OxToolbarAction.Export => OxIcons.export,
-                OxToolbarAction.Settings => OxIcons.settings,
+                OxToolbarAction.New => OxIcons.PlusThick,
+                OxToolbarAction.Edit => OxIcons.Pencil,
+                OxToolbarAction.Copy => OxIcons.Copy,
+                OxToolbarAction.Delete => OxIcons.Trash,
+                OxToolbarAction.Update => OxIcons.Batch_edit,
+                OxToolbarAction.Save => OxIcons.Save,
+                OxToolbarAction.Export => OxIcons.Export,
+                OxToolbarAction.Settings => OxIcons.Settings,
                 _ => null
             };
 

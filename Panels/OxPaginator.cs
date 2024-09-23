@@ -24,10 +24,10 @@ namespace OxLibrary.Panels
             Font = new Font(Styles.FontFamily, Styles.DefaultFontSize, FontStyle.Bold | FontStyle.Italic)
         };
 
-        private readonly OxButton PrevButton = CreateNavigateButton(OxIcons.left);
-        private readonly OxButton NextButton = CreateNavigateButton(OxIcons.right);
-        private readonly OxButton FirstButton = CreateNavigateButton(OxIcons.first);
-        private readonly OxButton LastButton = CreateNavigateButton(OxIcons.last);
+        private readonly OxButton PrevButton = CreateNavigateButton(OxIcons.Left);
+        private readonly OxButton NextButton = CreateNavigateButton(OxIcons.Right);
+        private readonly OxButton FirstButton = CreateNavigateButton(OxIcons.First);
+        private readonly OxButton LastButton = CreateNavigateButton(OxIcons.Last);
         private readonly OxPane FakeNextButton = new();
         private readonly OxPane FakePrevButton = new();
 

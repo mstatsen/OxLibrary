@@ -5,9 +5,9 @@
         public static Bitmap? Icon(OxPictureAction action) =>
             action switch
             {
-                OxPictureAction.Replace => OxIcons.pencil,
-                OxPictureAction.Download => OxIcons.down,
-                OxPictureAction.Clear => OxIcons.eraser,
+                OxPictureAction.Replace => OxIcons.Pencil,
+                OxPictureAction.Download => OxIcons.Down,
+                OxPictureAction.Clear => OxIcons.Eraser,
                 _ => null
             };
 

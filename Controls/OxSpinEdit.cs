@@ -14,8 +14,8 @@ namespace OxLibrary.Controls
             Dock = DockStyle.Fill,
             BorderStyle = BorderStyle.None
         };
-        private readonly OxIconButton DecreaseButton = CreateButton(OxIcons.minus, DockStyle.Left);
-        private readonly OxIconButton IncreaseButton = CreateButton(OxIcons.plus, DockStyle.Right);
+        private readonly OxIconButton DecreaseButton = CreateButton(OxIcons.Minus, DockStyle.Left);
+        private readonly OxIconButton IncreaseButton = CreateButton(OxIcons.Plus, DockStyle.Right);
 
         protected override void PrepareInnerControls()
         {

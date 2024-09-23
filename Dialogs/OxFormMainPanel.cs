@@ -75,24 +75,24 @@ namespace OxLibrary.Dialogs
 
         }
 
-        private readonly OxIconButton closeButton = new(OxIcons.close, 28)
+        private readonly OxIconButton closeButton = new(OxIcons.Close, 28)
         {
             IconPadding = 5
         };
-        private readonly OxIconButton restoreButton = new(OxIcons.restore, 28)
+        private readonly OxIconButton restoreButton = new(OxIcons.Restore, 28)
         {
             IconPadding = 5,
             Default = true
         };
-        private readonly OxIconButton minimizeButton = new(OxIcons.minimize, 28)
+        private readonly OxIconButton minimizeButton = new(OxIcons.Minimize, 28)
         {
             IconPadding = 5
         };
 
         private Bitmap GetRestoreIcon() =>
             Form != null && FormIsMaximized
-                ? OxIcons.restore
-                : OxIcons.maximize;
+                ? OxIcons.Restore
+                : OxIcons.Maximize;
 
         private void SetRestoreButtonIcon() =>
             restoreButton.Icon = GetRestoreIcon();

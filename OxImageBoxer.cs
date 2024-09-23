@@ -4,7 +4,7 @@
     {
         public static Bitmap BoxingImage(Bitmap? image, Size boxSize) =>
             image == null
-                ? OxIcons.close
+                ? OxIcons.Close
                 : OxBitmapCalcer.Zip(image, boxSize);
     }
 }
