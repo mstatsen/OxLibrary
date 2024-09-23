@@ -17,6 +17,9 @@
     <Compile Update="Controls\OxComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Update="Controls\OxCountryComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Update="Controls\OxDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>

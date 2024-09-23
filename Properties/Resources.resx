@@ -121,7 +121,7 @@
   <data name="close" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\close.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="arrow-right" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="go" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\arrow-right.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="batch_edit" type="System.Resources.ResXFileRef, System.Windows.Forms">

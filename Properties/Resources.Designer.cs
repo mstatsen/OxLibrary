@@ -63,16 +63,6 @@ namespace OxLibrary.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] arrow_right {
-            get {
-                object obj = ResourceManager.GetObject("arrow-right", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] batch_edit {
             get {
                 object obj = ResourceManager.GetObject("batch_edit", resourceCulture);
@@ -2486,6 +2476,16 @@ namespace OxLibrary.Properties {
         internal static byte[] flag_Zimbabwe {
             get {
                 object obj = ResourceManager.GetObject("flag_Zimbabwe", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] go {
+            get {
+                object obj = ResourceManager.GetObject("go", resourceCulture);
                 return ((byte[])(obj));
             }
         }

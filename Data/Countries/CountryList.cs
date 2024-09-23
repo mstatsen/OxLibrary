@@ -1,4 +1,5 @@
-﻿namespace OxLibrary.Data.Countries
+﻿
+namespace OxLibrary.Data.Countries
 {
     public static class CountryList
     {
@@ -1850,6 +1851,13 @@
                 }
             );
         }
+
+        public static Country? GetCountry(CountryField field, object value) => 
+            value switch
+            {
+                null => null,
+                _ => Countries.Find((c) => value.Equals(c[field]))
+            };
 
         public static List<Country> Countries => countries;
         private static readonly List<Country> countries = new();
