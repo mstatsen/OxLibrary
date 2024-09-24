@@ -23,8 +23,8 @@ namespace OxLibrary.Controls
 
         public OxCheckData<T>? SelectedCheckItem
         {
-            get => (OxCheckData<T>?)base.SelectedItem;
-            set => base.SelectedItem = value;
+            get => (OxCheckData<T>?)SelectedItemObject;
+            set => SelectedItemObject = value;
         }
 
         public new T SelectedItem
