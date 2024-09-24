@@ -59,21 +59,40 @@ namespace OxLibrary.Dialogs
         protected override void PrepareInnerControls()
         {
             base.PrepareInnerControls();
+            SetButtonsHandlers();
+            SetButtonsSize();
+            PlaceButtons();
+        }
 
-            closeButton.Click += CloseButtonClickHandler;
-            closeButton.GetHoveredColor += () => Color.Red;
-            restoreButton.Click += (s, e) => SetFormState(FormIsMaximized ? FormWindowState.Normal : FormWindowState.Maximized);
-            minimizeButton.Click += (s, e) => SetFormState(FormWindowState.Minimized);
-
-            closeButton.SetContentSize(36, 28);
-            restoreButton.SetContentSize(36, 28);
-            minimizeButton.SetContentSize(36, 28);
-
+        private void PlaceButtons()
+        {
             Header.AddToolButton(closeButton);
             Header.AddToolButton(restoreButton);
             Header.AddToolButton(minimizeButton);
-
         }
+
+        private void SetButtonsSize()
+        {
+            closeButton.SetContentSize(36, 28);
+            restoreButton.SetContentSize(36, 28);
+            minimizeButton.SetContentSize(36, 28);
+        }
+
+        private void SetButtonsHandlers()
+        {
+            closeButton.Click += CloseButtonClickHandler;
+            closeButton.GetHoveredColor += CloseButtonGetHoveredColorHandler;
+            restoreButton.Click += RestoreButtonClickHandler;
+            minimizeButton.Click += MinimizeButtonClickHandler;
+        }
+
+        private Color CloseButtonGetHoveredColorHandler() => Color.Red;
+
+        private void MinimizeButtonClickHandler(object? sender, EventArgs e) => 
+            SetFormState(FormWindowState.Minimized);
+
+        private void RestoreButtonClickHandler(object? sender, EventArgs e) => 
+            SetFormState(FormIsMaximized ? FormWindowState.Normal : FormWindowState.Maximized);
 
         private readonly OxIconButton closeButton = new(OxIcons.Close, 28)
         {

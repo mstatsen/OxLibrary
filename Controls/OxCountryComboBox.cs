@@ -2,7 +2,7 @@
 
 namespace OxLibrary.Controls
 {
-    public class OxCountryComboBox : OxComboBox<Country>
+    public class OxCountryComboBox : OxPicturedComboBox<Country>
     {
         public OxCountryComboBox() { }
 
@@ -29,24 +29,7 @@ namespace OxLibrary.Controls
                 Items.Add(country);
         }
 
-        private static readonly int FlagSize = 24;
-        private static readonly int FlagSpace = 2;
-        private static readonly int FlagLeft = 2;
-
-        protected override Point GetTextStartPosition(Rectangle bounds) => 
-            new(bounds.X + FlagLeft + FlagSize + FlagSpace, bounds.Y);
-
-        protected override void OnDrawItem(DrawItemEventArgs e)
-        {
-            base.OnDrawItem(e);
-
-            if (DrawStrings && e.Index > -1)
-                e.Graphics.DrawImage(
-                    OxImageBoxer.BoxingImage(TItems[e.Index].Flag, new Size(FlagSize, FlagSize)),
-                    e.Bounds.X + FlagLeft,
-                    e.Bounds.Y - 2
-                );
-
-        }
+        protected override Bitmap? OnGetPicture(Country item) => 
+            base.OnGetPicture(item) ?? item.Flag;
     }
 }
