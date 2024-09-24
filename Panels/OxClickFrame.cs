@@ -174,7 +174,8 @@
         public bool BeginGroup { get; set; }
         protected readonly ToolTip ToolTip = new() 
         {
-            AutomaticDelay = 100,
+            AutomaticDelay = 500,
+            InitialDelay = 100,
             ShowAlways = true
         };
 
@@ -184,11 +185,6 @@
             set => SetToolTipText(value);
         }
 
-        public int ToolTipDelay 
-        {
-            get => ToolTip.AutomaticDelay;
-            set => ToolTip.AutomaticDelay = value;
-        }
         protected virtual void SetToolTipText(string value) =>
             ToolTip.SetToolTip(this, value);
     }
