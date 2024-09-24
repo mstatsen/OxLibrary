@@ -2,7 +2,7 @@
 
 namespace OxLibrary.Controls
 {
-    public class OxCheckComboBox<T> : OxComboBox
+    public class OxCheckComboBox<T> : OxComboBox<T>
     {
         public event EventHandler? CheckChanged;
 

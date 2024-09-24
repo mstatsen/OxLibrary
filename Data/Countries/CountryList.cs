@@ -1827,6 +1827,21 @@ namespace OxLibrary.Data.Countries
                 location: CountryLocation.Africa,
                 flag: Flags.Zimbabwe,
                 fullName: "Republic of Zimbabwe");
+            countries.Sort(new CountryComparer());
+        }
+
+        private class CountryComparer : Comparer<Country>
+        {
+            public override int Compare(Country? x, Country? y)
+            {
+                if (x == null)
+                    return -1;
+
+                if (y == null)
+                    return 1;
+
+                return x.Name.CompareTo(y.Name);
+            }
         }
 
         private static void AddCountry(string name, string alpha2, string alpha3, int iso, CountryLocation location, Bitmap? flag = null,

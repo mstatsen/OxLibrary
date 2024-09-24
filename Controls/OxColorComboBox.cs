@@ -1,6 +1,6 @@
 ﻿namespace OxLibrary.Controls
 {
-    public class OxColorComboBox : OxComboBox
+    public class OxColorComboBox : OxComboBox<string>
     {
         public OxColorComboBox() : base()
         {
@@ -29,7 +29,7 @@
         {
             if (e.Index > -1)
             {
-                string? colorName = Items[e.Index].ToString();
+                string? colorName = TItems[e.Index].ToString();
 
                 try
                 { 
