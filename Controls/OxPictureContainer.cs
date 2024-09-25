@@ -163,7 +163,8 @@ namespace OxLibrary.Controls
             Visible = false,
             Stretch = true,
             PicturePadding = 0,
-            Cursor = Cursors.Hand
+            Cursor = Cursors.Hand,
+            AlwaysEnabled = true
         };
         private Image? sourceImage;
 
@@ -277,6 +278,18 @@ namespace OxLibrary.Controls
                 PlaceButtons();
                 ReAlignControls();
             }
+        }
+
+        protected override void SetReadOnly(bool value) 
+        {
+            base.SetReadOnly(value);
+            label.ReadOnly = false;
+        }
+
+        protected override void OnEnabledChanged(EventArgs e)
+        {
+            base.OnEnabledChanged(e);
+            label.Enabled = Enabled;
         }
     }
 }

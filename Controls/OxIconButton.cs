@@ -57,10 +57,10 @@ namespace OxLibrary.Controls
             SetClickHandler(Picture);
         }
 
-        protected override void SetEnabled(bool value)
+        protected override void OnEnabledChanged(EventArgs e)
         {
-            base.SetEnabled(value);
-            Picture.Enabled = value;
+            base.OnEnabledChanged(e);
+            Picture.Enabled = Enabled;
             PrepareColors();
         }
 

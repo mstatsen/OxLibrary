@@ -123,12 +123,12 @@ namespace OxLibrary.Controls
                 button.BaseColor = BaseColor;
         }
 
-        protected override void SetEnabled(bool value)
-        {
-            base.SetEnabled(value);
+        protected override void OnEnabledChanged(EventArgs e)
+        { 
+            base.OnEnabledChanged(e);
 
             foreach (OxClickFrame button in buttons)
-                button.Enabled = value;
+                button.Enabled = Enabled;
         }
 
         protected override void ApplyBordersColor() => 

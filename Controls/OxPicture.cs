@@ -9,6 +9,8 @@ namespace OxLibrary.Controls
             public OxPictureBox() => DoubleBuffered = true;
         }
 
+        public bool AlwaysEnabled { get; set; } = false;
+
         private Bitmap? enabledBitmap;
         private Bitmap? EnabledBitmap 
         {
@@ -184,14 +186,21 @@ namespace OxLibrary.Controls
             return result;
         }
 
-        protected override void SetEnabled(bool value)
+
+        protected override void OnEnabledChanged(EventArgs e)
         {
-            base.SetEnabled(value);
-            picture.Enabled = value;
+            base.OnEnabledChanged(e);
+            picture.Enabled = Enabled;
             SetPictureImage();
         }
 
+        public bool ReadOnly 
+        { 
+            get => !Enabled; 
+            set => Enabled = !value; 
+        }
+
         private void SetPictureImage() => 
-            picture.Image = Enabled ? EnabledBitmap : DisabledBitmap;
+            picture.Image = AlwaysEnabled || Enabled ? EnabledBitmap : DisabledBitmap;
     }
 }

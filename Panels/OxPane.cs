@@ -186,19 +186,10 @@
             ReAlign();
         }
 
-        public new bool Enabled
+        protected override void OnEnabledChanged(EventArgs e)
         {
-            get => base.Enabled;
-            set => SetEnabled(value);
-        }
-
-        protected virtual void SetEnabled(bool value)
-        {
-            if (base.Enabled != value)
-            {
-                base.Enabled = value;
-                PrepareColors();
-            }
+            base.OnEnabledChanged(e);
+            PrepareColors();
         }
 
         public OxColorHelper Colors => colors;

@@ -36,10 +36,10 @@
             set => SetFreezeHovered(value);
         }
 
-        protected override void SetEnabled(bool value)
+        protected override void OnEnabledChanged(EventArgs e)
         {
-            base.SetEnabled(value);
-            HiddenBorder = !value;
+            base.OnEnabledChanged(e);
+            HiddenBorder = !Enabled;
         }
 
         private void SetFreezeHovered(bool value)
@@ -57,7 +57,16 @@
         public OxClickFrame() : base() { }
         public OxClickFrame(Size contentSize) : base(contentSize) { }
 
-        public bool ReadOnly { get; set; } = false;
+        private bool readOnly = false;
+
+        public bool ReadOnly 
+        { 
+            get => readOnly;
+            set => SetReadOnly(value);
+        }
+
+        protected virtual void SetReadOnly(bool value) => 
+            readOnly = value;
 
         protected override void AfterCreated()
         {
