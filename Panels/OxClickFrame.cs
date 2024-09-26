@@ -36,12 +36,6 @@
             set => SetFreezeHovered(value);
         }
 
-        protected override void OnEnabledChanged(EventArgs e)
-        {
-            base.OnEnabledChanged(e);
-            HiddenBorder = !Enabled;
-        }
-
         private void SetFreezeHovered(bool value)
         {
             freezeHovered = value;
@@ -82,7 +76,7 @@
             if ((fixBorderColor || hovered) && !ReadOnly)
                 BorderColor = Colors.Darker(3);
             else
-            if (HiddenBorder)
+            if (HiddenBorder || !Enabled)
                 BorderColor = Colors.Lighter(7);
         }
 

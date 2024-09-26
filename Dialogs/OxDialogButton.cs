@@ -7,7 +7,9 @@
         Yes = 2,
         Apply = 4,
         ApplyForAll = 8,
-        No = 16,
-        Cancel = 32
+        Save = 16,
+        No = 32,
+        Discard = 64,
+        Cancel = 128,
     }
 }

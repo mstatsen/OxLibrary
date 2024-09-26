@@ -7,14 +7,17 @@ namespace OxLibrary.Dialogs
         private readonly OxLabel label = new()
         {
             Dock = DockStyle.Fill,
-            TextAlign = ContentAlignment.MiddleCenter,
+            TextAlign = ContentAlignment.MiddleLeft,
             AutoSize = false,
-            Font = new Font(Styles.FontFamily, Styles.DefaultFontSize + 1.25f, FontStyle.Regular),
+            Font = new Font(Styles.FontFamily, Styles.DefaultFontSize + 1.15f, FontStyle.Regular),
             ForeColor = Color.FromArgb(60, 55, 54)
         };
 
-        public OxMessageMainPanel(OxForm form) : base(form) =>
+        public OxMessageMainPanel(OxForm form) : base(form)
+        {
+            Paddings.SetSize(24);
             SetContentSize(240, 120);
+        }
 
         protected override void PrepareInnerControls()
         {

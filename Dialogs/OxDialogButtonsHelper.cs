@@ -5,12 +5,20 @@
         public static DialogResult Result(OxDialogButton button) =>
             button switch
             {
-                OxDialogButton.OK => DialogResult.OK,
-                OxDialogButton.Apply => DialogResult.OK,
-                OxDialogButton.ApplyForAll => DialogResult.Continue,
-                OxDialogButton.Cancel => DialogResult.Cancel,
-                OxDialogButton.Yes => DialogResult.Yes,
-                OxDialogButton.No => DialogResult.No,
+                OxDialogButton.OK or
+                OxDialogButton.Apply or
+                OxDialogButton.Save => 
+                    DialogResult.OK,
+                OxDialogButton.ApplyForAll => 
+                    DialogResult.Continue,
+                OxDialogButton.Cancel => 
+                    DialogResult.Cancel,
+                OxDialogButton.Yes => 
+                    DialogResult.Yes,
+                OxDialogButton.No or
+                OxDialogButton.Discard => 
+                    DialogResult.No,
+               
                 _ => DialogResult.None,
             };
 
@@ -34,15 +42,19 @@
                 OxDialogButton.No => "No",
                 OxDialogButton.Apply => "Apply",
                 OxDialogButton.ApplyForAll => "Apply for all",
+                OxDialogButton.Save => "Save",
+                OxDialogButton.Discard => "Discard",
                 _ => string.Empty,
             };
 
         public static Bitmap? Icon(OxDialogButton button) =>
             button switch
             {
-                OxDialogButton.Cancel => OxIcons.Close,
+                OxDialogButton.Cancel => 
+                    OxIcons.Close,
                 OxDialogButton.OK or
-                OxDialogButton.Apply => 
+                OxDialogButton.Apply or
+                OxDialogButton.Save => 
                     OxIcons.Tick,
                 OxDialogButton.ApplyForAll =>
                     OxIcons.DoubleTick,

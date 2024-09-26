@@ -1,6 +1,4 @@
-﻿using System.Windows.Forms;
-
-namespace OxLibrary.Dialogs
+﻿namespace OxLibrary.Dialogs
 {
     public class OxMessage : OxDialog
     {
@@ -31,39 +29,41 @@ namespace OxLibrary.Dialogs
             messageForm.Dispose();
         }
 
-        public static void ShowError(string Error)
+        public static void ShowError(string Error, OxDialogButton buttons = OxDialogButton.OK)
         {
             OxMessage messageForm = new()
             {
                 Text = "Error",
                 Message = Error,
-                DialogButtons = OxDialogButton.OK
+                DialogButtons = buttons
             };
             messageForm.MainPanel.BaseColor = new OxColorHelper(messageForm.MainPanel.BaseColor).Redder(2);
             messageForm.ShowDialog();
             messageForm.Dispose();
         }
 
-        public static DialogResult ShowWarning(string Warning)
+        public static DialogResult ShowWarning(string Warning, 
+            OxDialogButton buttons = OxDialogButton.Yes | OxDialogButton.No | OxDialogButton.Cancel)
         {
             OxMessage messageForm = new()
             {
                 Text = "Warning",
                 Message = Warning,
-                DialogButtons = OxDialogButton.Yes | OxDialogButton.No | OxDialogButton.Cancel
+                DialogButtons = buttons
             };
 
             messageForm.MainPanel.BaseColor = new OxColorHelper(messageForm.MainPanel.BaseColor).Browner(2);
             return messageForm.ShowDialog();
         }
 
-        public static DialogResult ShowConfirm(string Confirm)
+        public static DialogResult ShowConfirm(string Confirm, 
+            OxDialogButton buttons = OxDialogButton.Yes | OxDialogButton.No)
         {
             OxMessage messageForm = new()
             {
                 Text = "Warning",
                 Message = Confirm,
-                DialogButtons = OxDialogButton.Yes | OxDialogButton.No
+                DialogButtons = buttons
             };
 
             messageForm.MainPanel.BaseColor = new OxColorHelper(messageForm.MainPanel.BaseColor).Browner(2);

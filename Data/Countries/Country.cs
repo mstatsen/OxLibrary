@@ -21,7 +21,7 @@
 
         public string Alpha2 { get; set; } = string.Empty;
         public string Alpha3 { get; set; } = string.Empty;
-        public string ISO { get; set; } = "0";
+        public string ISO { get; set; } = "000";
         public CountryLocation Location { get; set; } = CountryLocation.Other;
         public Bitmap? Flag { get; set; }
 
