@@ -75,11 +75,19 @@ namespace OxLibrary.Panels
 
         public OxPanelViewer AsDialog(OxDialogButton buttons = OxDialogButton.OK)
         {
-            PanelViewer = new OxPanelViewer(this, buttons);
+            string? dialogCaption = Text;
+            PrepareDialogCaption(out dialogCaption);
+            PanelViewer = new OxPanelViewer(this, buttons)
+            { 
+                Text = dialogCaption
+            };
             PanelViewer.ButtonsWithBorders.Clear();
             PrepareDialog(PanelViewer);
             return PanelViewer;
         }
+
+        protected virtual void PrepareDialogCaption(out string? dialogCaption) => 
+            dialogCaption = Text;
 
         protected virtual void PrepareDialog(OxPanelViewer dialog) { }
 

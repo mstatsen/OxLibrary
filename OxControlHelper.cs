@@ -11,8 +11,9 @@ namespace OxLibrary
                     * control.Font.FontFamily.GetCellAscent(control.Font.Style)
                     / control.Font.FontFamily.GetLineSpacing(control.Font.Style));
 
-        public static Control? AlignByBaseLine(Control baseControl,
-            Control aligningControl)
+        public static T? AlignByBaseLine<T>(Control baseControl,
+            T aligningControl)
+            where T : Control
         {
             if (aligningControl == null)
                 return null;
@@ -33,7 +34,7 @@ namespace OxLibrary
                         + GetBaseLine(baseControl)
                         - GetBaseLine(aligningControl)
                         + addPoints;
-            return aligningControl;
+            return (T)aligningControl;
         }
 
         public static void CenterForm(OxForm form)
