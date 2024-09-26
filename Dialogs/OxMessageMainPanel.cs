@@ -45,7 +45,8 @@ namespace OxLibrary.Dialogs
 
                 SetContentSize(
                     Math.Max(calcedWidth + 160, SavedWidth),
-                    Math.Max(calcedWidth / 2, SavedHeight));
+                    Math.Max(calcedWidth / 2, SavedHeight)
+                );
 
                 rightPosition = (Width - calcedWidth) / 2 - DialogButtonSpace;
             }

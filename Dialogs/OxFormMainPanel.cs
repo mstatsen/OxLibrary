@@ -12,7 +12,7 @@ namespace OxLibrary.Dialogs
         public OxFormMainPanel(OxForm form) : base()
         {
             Form = form;
-            Form.SizeChanged += (s, e) => SetRestoreButtonIcon();
+            Form.SizeChanged += FormSizeChanged;
             SetTitleButtonsVisible();
             SetHeaderContentSize();
             SetIcon();
@@ -25,6 +25,8 @@ namespace OxLibrary.Dialogs
             SetAnchors();
             BlurredBorder = true;
         }
+
+        private void FormSizeChanged(object? sender, EventArgs e) => SetRestoreButtonIcon();
 
         private void SetHeaderFont() => 
             Header.Label.Font = 
@@ -119,9 +121,16 @@ namespace OxLibrary.Dialogs
         public void SetFormState(FormWindowState state)
         {
             ContentContainer.Visible = false;
-            Form.SetUpSizes();
-            Form.WindowState = state;
-            ContentContainer.Visible = true;
+
+            try
+            {
+                Form.SetUpSizes();
+                Form.WindowState = state;
+            }
+            finally
+            {
+                ContentContainer.Visible = true;
+            }
         }
 
         private void CloseButtonClickHandler(object? sender, EventArgs e)
@@ -179,44 +188,40 @@ namespace OxLibrary.Dialogs
         {
             base.SetHandlers();
 
-            foreach (OxBorder border in Margins.Borders.Values)
-            {
-                border.MouseDown += ResizerMouseDown;
-                border.MouseUp += (s, e) => LastDirection = OxDirection.None;
-                border.MouseMove += ResizeHandler;
-                border.MouseLeave += (s, e) => Cursor = Cursors.Default;
-            }
+            foreach (OxBorder margin in Margins.Borders.Values)
+                SetMarginHandlers(margin);
 
-            ContentContainer.VisibleChanged += (s, e) => Update();
+            ContentContainer.VisibleChanged += ContentContainerVisibleChanged;
         }
+
+        private void SetMarginHandlers(OxBorder margin)
+        {
+            margin.MouseDown += ResizerMouseDown;
+            margin.MouseUp += MarginMouseUpHandler;
+            margin.MouseMove += ResizeHandler;
+            margin.MouseLeave += MarginMouseLeaveHandler;
+        }
+
+        private void MarginMouseLeaveHandler(object? sender, EventArgs e) =>
+            Cursor = Cursors.Default;
+
+        private void MarginMouseUpHandler(object? sender, MouseEventArgs e) =>
+            LastDirection = OxDirection.None;
+
+        private void ContentContainerVisibleChanged(object? sender, EventArgs e) => 
+            Update();
 
         private void ResizerMouseDown(object? sender, MouseEventArgs e)
         {
-            OxBorder? border = (OxBorder?)sender;
-
-            if (border == null)
+            if (sender is not OxBorder border)
                 return;
 
             LastMousePosition = border.PointToScreen(e.Location);
             LastDirection = OxDirectionHelper.GetDirection(border, e.Location);
         }
 
-        private void SetSizerCursor(OxDirection direction)
-        {
-            if (OxDirectionHelper.IsHorizontal(direction))
-                Cursor = Cursors.SizeWE;
-            else
-            if (OxDirectionHelper.IsVertical(direction))
-                Cursor = Cursors.SizeNS;
-            else
-            if (OxDirectionHelper.IsLeftTop(direction)
-                || OxDirectionHelper.IsRightBottom(direction))
-                Cursor = Cursors.SizeNWSE;
-            else
-            if (OxDirectionHelper.IsRightTop(direction)
-                || OxDirectionHelper.IsLeftBottom(direction))
-                Cursor = Cursors.SizeNESW;
-        }
+        private void SetSizerCursor(OxDirection direction) => 
+            Cursor = OxDirectionHelper.GetSizerCursor(direction);
 
         private Point LastMousePosition = new(-1, -1);
         private OxDirection LastDirection = OxDirection.None;

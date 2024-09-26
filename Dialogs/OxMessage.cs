@@ -24,6 +24,7 @@
                 Message = Info,
                 DialogButtons = OxDialogButton.OK
             };
+
             messageForm.MainPanel.BaseColor = new OxColorHelper(messageForm.MainPanel.BaseColor).Bluer(2);
             messageForm.ShowDialog();
             messageForm.Dispose();

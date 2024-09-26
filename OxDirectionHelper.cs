@@ -81,5 +81,24 @@ namespace OxLibrary
 
         public static bool IsVertical(OxDirection direction) =>
             IsTop(direction) || IsBottom(direction);
+
+        public static Cursor GetSizerCursor(OxDirection direction)
+        {
+            if (IsHorizontal(direction))
+                return Cursors.SizeWE;
+            
+            if (IsVertical(direction))
+                return Cursors.SizeNS;
+            
+            if (IsLeftTop(direction)
+                || IsRightBottom(direction))
+                return Cursors.SizeNWSE;
+            
+            if (IsRightTop(direction)
+                || IsLeftBottom(direction))
+                return Cursors.SizeNESW;
+
+            return default!;
+        }
     }
 }
