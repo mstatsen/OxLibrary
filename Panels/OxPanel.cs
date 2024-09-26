@@ -75,8 +75,7 @@ namespace OxLibrary.Panels
 
         public OxPanelViewer AsDialog(OxDialogButton buttons = OxDialogButton.OK)
         {
-            string? dialogCaption = Text;
-            PrepareDialogCaption(out dialogCaption);
+            PrepareDialogCaption(out string? dialogCaption);
             PanelViewer = new OxPanelViewer(this, buttons)
             { 
                 Text = dialogCaption
