@@ -16,7 +16,7 @@
             set => MainPanel.Message = value;
         }
 
-        public static void ShowInfo(string Info)
+        public static void ShowInfo(string Info, Control owner)
         {
             OxMessage messageForm = new()
             {
@@ -26,11 +26,11 @@
             };
 
             messageForm.MainPanel.BaseColor = new OxColorHelper(messageForm.MainPanel.BaseColor).Bluer(2);
-            messageForm.ShowDialog();
+            messageForm.ShowDialog(owner);
             messageForm.Dispose();
         }
 
-        public static void ShowError(string Error, OxDialogButton buttons = OxDialogButton.OK)
+        public static void ShowError(string Error, Control owner, OxDialogButton buttons = OxDialogButton.OK)
         {
             OxMessage messageForm = new()
             {
@@ -39,11 +39,11 @@
                 DialogButtons = buttons
             };
             messageForm.MainPanel.BaseColor = new OxColorHelper(messageForm.MainPanel.BaseColor).Redder(2);
-            messageForm.ShowDialog();
+            messageForm.ShowDialog(owner);
             messageForm.Dispose();
         }
 
-        public static DialogResult ShowWarning(string Warning, 
+        public static DialogResult ShowWarning(string Warning, Control owner, 
             OxDialogButton buttons = OxDialogButton.Yes | OxDialogButton.No | OxDialogButton.Cancel)
         {
             OxMessage messageForm = new()
@@ -54,10 +54,10 @@
             };
 
             messageForm.MainPanel.BaseColor = new OxColorHelper(messageForm.MainPanel.BaseColor).Browner(2);
-            return messageForm.ShowDialog();
+            return messageForm.ShowDialog(owner);
         }
 
-        public static DialogResult ShowConfirm(string Confirm, 
+        public static DialogResult ShowConfirm(string Confirm, Control owner, 
             OxDialogButton buttons = OxDialogButton.Yes | OxDialogButton.No)
         {
             OxMessage messageForm = new()
@@ -68,10 +68,10 @@
             };
 
             messageForm.MainPanel.BaseColor = new OxColorHelper(messageForm.MainPanel.BaseColor).Browner(2);
-            return messageForm.ShowDialog();
+            return messageForm.ShowDialog(owner);
         }
 
-        public static bool Confirmation(string Confirm) =>
-            ShowConfirm(Confirm) == DialogResult.Yes;
+        public static bool Confirmation(string Confirm, Control owner) =>
+            ShowConfirm(Confirm, owner) == DialogResult.Yes;
     }
 }

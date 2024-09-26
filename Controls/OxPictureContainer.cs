@@ -141,7 +141,7 @@ namespace OxLibrary.Controls
                 Filter = "PNG picture |  *.png; "
             };
 
-            if (dialog.ShowDialog() == DialogResult.OK)
+            if (dialog.ShowDialog(this) == DialogResult.OK)
                 if (dialog.FileName != string.Empty)
                     Image.Save(dialog.FileName, ImageFormat.Png);
         }
@@ -194,14 +194,14 @@ namespace OxLibrary.Controls
                 "| " +
                 "*.jpg; *.jpeg; *.jpe; *.jfif; *.png; *.gif; *.bmp;";
 
-        private static string SelectPictureFile()
+        private string SelectPictureFile()
         {
             OpenFileDialog dialog = new()
             {
                 Filter = PictureFilesFilter
             };
 
-            return dialog.ShowDialog() == DialogResult.OK 
+            return dialog.ShowDialog(this) == DialogResult.OK
                 ? dialog.FileName 
                 : string.Empty;
         }

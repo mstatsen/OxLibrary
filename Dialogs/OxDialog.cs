@@ -69,7 +69,7 @@
             if (emptyMandatoryField == string.Empty)
                 return true;
 
-            OxMessage.ShowError($"{emptyMandatoryField} is mandatory");
+            OxMessage.ShowError($"{emptyMandatoryField} is mandatory", this);
             return false;
         }
 
