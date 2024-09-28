@@ -290,6 +290,9 @@ namespace OxLibrary.Controls
         {
             base.OnEnabledChanged(e);
             label.Enabled = Enabled;
+
+            if (!Enabled)
+                buttonsParent.Visible = false;
         }
     }
 }

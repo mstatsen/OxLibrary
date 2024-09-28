@@ -69,6 +69,7 @@ namespace OxLibrary.Controls
                 if (TextBox.Text != value.ToString())
                 {
                     TextBox.Text = value.ToString();
+                    Text = TextBox.Text;
                     CheckValue();
                     LastValue = value;
                     ValueChanged?.Invoke(this, EventArgs.Empty);
