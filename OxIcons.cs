@@ -30,6 +30,7 @@
         public static Bitmap Go => GetBitmap("go");
         public static Bitmap Last => GetBitmap("last");
         public static Bitmap Left => GetBitmap("left");
+        public static Bitmap Key => GetBitmap("key");
         public static Bitmap Maximize => GetBitmap("maximize");
         public static Bitmap Minimize => GetBitmap("minimize");
         public static Bitmap Minus => GetBitmap("minus");
