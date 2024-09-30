@@ -12,6 +12,7 @@
                 OxToolbarAction.Update => OxIcons.Batch_edit,
                 OxToolbarAction.Save => OxIcons.Save,
                 OxToolbarAction.Export => OxIcons.Export,
+                OxToolbarAction.ExportSelected => OxIcons.Export,
                 OxToolbarAction.Settings => OxIcons.Settings,
                 _ => null
             };
@@ -20,7 +21,8 @@
             action == OxToolbarAction.Edit
             || action == OxToolbarAction.Copy
             || action == OxToolbarAction.Delete
-            || action == OxToolbarAction.Update;
+            || action == OxToolbarAction.Update
+            || action == OxToolbarAction.ExportSelected;
 
         public static string Text(OxToolbarAction action) => 
             action switch
@@ -32,6 +34,7 @@
                 OxToolbarAction.Update => "Batch Update",
                 OxToolbarAction.Save => "Save",
                 OxToolbarAction.Export => "Export",
+                OxToolbarAction.ExportSelected => "Export Selected",
                 OxToolbarAction.Settings => "Settings",
                 _ => string.Empty,
             };

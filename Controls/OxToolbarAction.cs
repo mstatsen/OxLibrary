@@ -10,6 +10,7 @@
         Update,
         Save,
         Export,
+        ExportSelected,
         Settings
     }
 }
