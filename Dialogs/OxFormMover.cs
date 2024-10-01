@@ -33,16 +33,7 @@
             if (!Processing || LastMousePosition.Equals(e.Location))
                 return;
 
-            if (Form.CanMaximize)
-                switch (Form.WindowState)
-                {
-                    case FormWindowState.Maximized when LastMousePosition.Y != e.Y:
-                        Form.MainPanel.SetFormState(FormWindowState.Normal);
-                        break;
-                    case FormWindowState.Normal when Form.PointToScreen(e.Location).Y < 20:
-                        Form.MainPanel.SetFormState(FormWindowState.Maximized);
-                        break;
-                }
+            SetFormState(e);
 
             int deltaX = e.X - LastMousePosition.X;
             int deltaY = e.Y - LastMousePosition.Y;
@@ -52,6 +43,22 @@
             if (Form.WindowState == FormWindowState.Normal)
                 MoveForm(Form.PointToScreen(new Point(deltaX, deltaY)));
             else Processing = false;
+        }
+
+        private void SetFormState(MouseEventArgs e)
+        {
+            if (!Form.CanMaximize)
+                return;
+
+            switch (Form.WindowState)
+            {
+                case FormWindowState.Maximized when LastMousePosition.Y != e.Y:
+                    Form.MainPanel.SetFormState(FormWindowState.Normal);
+                    break;
+                case FormWindowState.Normal when Form.PointToScreen(e.Location).Y < 20:
+                    Form.MainPanel.SetFormState(FormWindowState.Maximized);
+                    break;
+            }
         }
 
         private void MoveForm(Point FinishPosition)
