@@ -28,8 +28,10 @@
         public static Bitmap Eye => GetBitmap("eye");
         public static Bitmap First => GetBitmap("first");
         public static Bitmap Go => GetBitmap("go");
+        public static Bitmap Install => GetBitmap("install");
         public static Bitmap Last => GetBitmap("last");
         public static Bitmap Left => GetBitmap("left");
+        public static Bitmap LinkedItems => GetBitmap("linkedItems");
         public static Bitmap Key => GetBitmap("key");
         public static Bitmap Maximize => GetBitmap("maximize");
         public static Bitmap Minimize => GetBitmap("minimize");
@@ -42,6 +44,7 @@
         public static Bitmap Right => GetBitmap("right");
         public static Bitmap Save => GetBitmap("save");
         public static Bitmap Settings => GetBitmap("settings");
+        public static Bitmap Share => GetBitmap("share");
         public static Bitmap Tick => GetBitmap("tick");
         public static Bitmap Trash => GetBitmap("trash");
         public static Bitmap Unpin => GetBitmap("unpin");

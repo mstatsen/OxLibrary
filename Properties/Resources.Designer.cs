@@ -2493,6 +2493,16 @@ namespace OxLibrary.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] install {
+            get {
+                object obj = ResourceManager.GetObject("install", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] key {
             get {
                 object obj = ResourceManager.GetObject("key", resourceCulture);
@@ -2516,6 +2526,16 @@ namespace OxLibrary.Properties {
         internal static byte[] left {
             get {
                 object obj = ResourceManager.GetObject("left", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] linkedItems {
+            get {
+                object obj = ResourceManager.GetObject("linkedItems", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -2626,6 +2646,16 @@ namespace OxLibrary.Properties {
         internal static byte[] settings {
             get {
                 object obj = ResourceManager.GetObject("settings", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] share {
+            get {
+                object obj = ResourceManager.GetObject("share", resourceCulture);
                 return ((byte[])(obj));
             }
         }
