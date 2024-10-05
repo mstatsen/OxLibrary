@@ -25,7 +25,7 @@
                 DialogButtons = OxDialogButton.OK
             };
 
-            messageForm.MainPanel.BaseColor = new OxColorHelper(messageForm.MainPanel.BaseColor).Bluer(2);
+            messageForm.MainPanel.BaseColor = messageForm.MainPanel.Colors.Bluer(2);
             messageForm.ShowDialog(owner);
             messageForm.Dispose();
         }
@@ -38,7 +38,7 @@
                 Message = Error,
                 DialogButtons = buttons
             };
-            messageForm.MainPanel.BaseColor = new OxColorHelper(messageForm.MainPanel.BaseColor).Redder(2);
+            messageForm.MainPanel.BaseColor = messageForm.MainPanel.Colors.Redder(2);
             messageForm.ShowDialog(owner);
             messageForm.Dispose();
         }
@@ -53,7 +53,7 @@
                 DialogButtons = buttons
             };
 
-            messageForm.MainPanel.BaseColor = new OxColorHelper(messageForm.MainPanel.BaseColor).Browner(2);
+            messageForm.MainPanel.BaseColor = messageForm.MainPanel.Colors.Browner(2);
             return messageForm.ShowDialog(owner);
         }
 
@@ -67,7 +67,7 @@
                 DialogButtons = buttons
             };
 
-            messageForm.MainPanel.BaseColor = new OxColorHelper(messageForm.MainPanel.BaseColor).Browner(2);
+            messageForm.MainPanel.BaseColor = messageForm.MainPanel.Colors.Browner(2);
             return messageForm.ShowDialog(owner);
         }
 

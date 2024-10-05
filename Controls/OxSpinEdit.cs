@@ -7,6 +7,8 @@ namespace OxLibrary.Controls
         private int minimum;
         private int maximum;
         private int LastValue = 0;
+
+        public bool ShowStepButtons { get; set; } = true;
         private readonly OxTextBox TextBox = new()
         {
             Top = 0,
@@ -47,7 +49,7 @@ namespace OxLibrary.Controls
             Margins.ReAlign();
         }
 
-        private static OxIconButton CreateButton(Bitmap icon, DockStyle dock) => 
+        private static OxIconButton CreateButton(Bitmap icon, DockStyle dock) =>
             new(icon, 14)
             {
                 Dock = dock,
@@ -55,7 +57,7 @@ namespace OxLibrary.Controls
                 FixBorderColor = true
             };
 
-        public int Value 
+        public int Value
         {
             get
             {
@@ -81,11 +83,11 @@ namespace OxLibrary.Controls
 
         private void EnableButtons()
         {
-            DecreaseButton.Visible = !TextBox.ReadOnly && (Value > minimum);
-            IncreaseButton.Visible = !TextBox.ReadOnly && (Value < maximum);
+            DecreaseButton.Visible = ShowStepButtons && !TextBox.ReadOnly && (Value > minimum);
+            IncreaseButton.Visible = ShowStepButtons && !TextBox.ReadOnly && (Value < maximum);
 
-            Borders[OxDock.Left].Visible = TextBox.ReadOnly || (Value <= minimum);
-            Borders[OxDock.Right].Visible = TextBox.ReadOnly || (Value >= maximum);
+            Borders[OxDock.Left].Visible = !ShowStepButtons || TextBox.ReadOnly || (Value <= minimum);
+            Borders[OxDock.Right].Visible = !ShowStepButtons || TextBox.ReadOnly || (Value >= maximum);
         }
 
         public int Minimum

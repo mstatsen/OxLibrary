@@ -18,6 +18,7 @@
         }
 
         public static Bitmap Batch_edit => GetBitmap("batch_edit");
+        public static Bitmap BronzeTrophy => GetBitmap("bronzeTrophy");
         public static Bitmap Close => GetBitmap("close");
         public static Bitmap Copy => GetBitmap("copy");
         public static Bitmap Cross => GetBitmap("cross");
@@ -28,6 +29,7 @@
         public static Bitmap Eye => GetBitmap("eye");
         public static Bitmap First => GetBitmap("first");
         public static Bitmap Go => GetBitmap("go");
+        public static Bitmap GoldTrophy => GetBitmap("goldTrophy");
         public static Bitmap Install => GetBitmap("install");
         public static Bitmap Last => GetBitmap("last");
         public static Bitmap Left => GetBitmap("left");
@@ -38,6 +40,7 @@
         public static Bitmap Minus => GetBitmap("minus");
         public static Bitmap Pencil => GetBitmap("pencil");
         public static Bitmap Pin => GetBitmap("pin");
+        public static Bitmap PlatinumTrophy => GetBitmap("platinumTrophy");
         public static Bitmap Plus => GetBitmap("plus");
         public static Bitmap PlusThick => GetBitmap("plus-thick");
         public static Bitmap Restore => GetBitmap("restore");
@@ -45,6 +48,7 @@
         public static Bitmap Save => GetBitmap("save");
         public static Bitmap Settings => GetBitmap("settings");
         public static Bitmap Share => GetBitmap("share");
+        public static Bitmap SilverTrophy => GetBitmap("silverTrophy");
         public static Bitmap Tick => GetBitmap("tick");
         public static Bitmap Trash => GetBitmap("trash");
         public static Bitmap Unpin => GetBitmap("unpin");

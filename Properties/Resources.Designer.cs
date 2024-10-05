@@ -73,6 +73,16 @@ namespace OxLibrary.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] bronzeTrophy {
+            get {
+                object obj = ResourceManager.GetObject("bronzeTrophy", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] close {
             get {
                 object obj = ResourceManager.GetObject("close", resourceCulture);
@@ -2493,6 +2503,16 @@ namespace OxLibrary.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] goldTrophy {
+            get {
+                object obj = ResourceManager.GetObject("goldTrophy", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] install {
             get {
                 object obj = ResourceManager.GetObject("install", resourceCulture);
@@ -2593,6 +2613,16 @@ namespace OxLibrary.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] platinumTrophy {
+            get {
+                object obj = ResourceManager.GetObject("platinumTrophy", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] plus {
             get {
                 object obj = ResourceManager.GetObject("plus", resourceCulture);
@@ -2656,6 +2686,16 @@ namespace OxLibrary.Properties {
         internal static byte[] share {
             get {
                 object obj = ResourceManager.GetObject("share", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] silverTrophy {
+            get {
+                object obj = ResourceManager.GetObject("silverTrophy", resourceCulture);
                 return ((byte[])(obj));
             }
         }
