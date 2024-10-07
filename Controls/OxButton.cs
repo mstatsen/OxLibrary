@@ -115,5 +115,11 @@
                 RecalcPaddings();
             }
         }
+
+        protected override void SetToolTipText(string value)
+        {
+            base.SetToolTipText(value);
+            ToolTip.SetToolTip(Label, value);
+        }
     }
 }

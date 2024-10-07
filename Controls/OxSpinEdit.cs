@@ -189,6 +189,8 @@ namespace OxLibrary.Controls
                 && newValue <= maximum)
                 Value = newValue;
             else TextBox.Text = LastValue.ToString();
+
+            ValueChanged?.Invoke(this, EventArgs.Empty);
         }
 
         protected override void ApplyBordersColor() =>
