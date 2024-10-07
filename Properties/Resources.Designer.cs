@@ -2673,6 +2673,16 @@ namespace OxLibrary.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] select {
+            get {
+                object obj = ResourceManager.GetObject("select", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] settings {
             get {
                 object obj = ResourceManager.GetObject("settings", resourceCulture);
@@ -2696,6 +2706,16 @@ namespace OxLibrary.Properties {
         internal static byte[] silverTrophy {
             get {
                 object obj = ResourceManager.GetObject("silverTrophy", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] synchronize {
+            get {
+                object obj = ResourceManager.GetObject("synchronize", resourceCulture);
                 return ((byte[])(obj));
             }
         }

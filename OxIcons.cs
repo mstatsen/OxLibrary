@@ -46,9 +46,11 @@
         public static Bitmap Restore => GetBitmap("restore");
         public static Bitmap Right => GetBitmap("right");
         public static Bitmap Save => GetBitmap("save");
+        public static Bitmap Select => GetBitmap("select");
         public static Bitmap Settings => GetBitmap("settings");
         public static Bitmap Share => GetBitmap("share");
         public static Bitmap SilverTrophy => GetBitmap("silverTrophy");
+        public static Bitmap Synchronize => GetBitmap("synchronize");
         public static Bitmap Tick => GetBitmap("tick");
         public static Bitmap Trash => GetBitmap("trash");
         public static Bitmap Unpin => GetBitmap("unpin");
