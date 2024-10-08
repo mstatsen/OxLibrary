@@ -931,4 +931,7 @@
   <data name="synchronize" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\synchronize.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="not_equal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\not_equal.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

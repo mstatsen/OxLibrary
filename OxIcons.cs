@@ -38,6 +38,7 @@
         public static Bitmap Maximize => GetBitmap("maximize");
         public static Bitmap Minimize => GetBitmap("minimize");
         public static Bitmap Minus => GetBitmap("minus");
+        public static Bitmap NotEqual => GetBitmap("not_equal");
         public static Bitmap Pencil => GetBitmap("pencil");
         public static Bitmap Pin => GetBitmap("pin");
         public static Bitmap PlatinumTrophy => GetBitmap("platinumTrophy");

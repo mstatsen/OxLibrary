@@ -2593,6 +2593,16 @@ namespace OxLibrary.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] not_equal {
+            get {
+                object obj = ResourceManager.GetObject("not_equal", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] pencil {
             get {
                 object obj = ResourceManager.GetObject("pencil", resourceCulture);
