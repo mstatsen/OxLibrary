@@ -35,7 +35,7 @@ namespace OxLibrary.Panels
         protected override void PrepareColors()
         {
             base.PrepareColors();
-            Header.BaseColor = PanelViewer == null ? BaseColor : Colors.Darker(1);
+            Header.BaseColor = PanelViewer == null ? BaseColor : Colors.Darker();
         }
 
         protected override void SetBordersColor(Color value)

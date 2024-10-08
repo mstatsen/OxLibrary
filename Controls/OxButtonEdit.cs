@@ -65,7 +65,7 @@ namespace OxLibrary.Controls
         {
             base.PrepareColors();
             TextBox.BackColor = Colors.Lighter(6);
-            Button.BaseColor = Colors.Darker(1);
+            Button.BaseColor = Colors.Darker();
         }
 
         public bool IsEmpty => 

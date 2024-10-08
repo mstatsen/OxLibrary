@@ -17,6 +17,8 @@ namespace OxLibrary.Dialogs
         {
             Paddings.SetSize(24);
             SetContentSize(240, 120);
+            Header.SetContentSize(Header.SavedWidth, 30);
+            DialogButtonStartSpace = 24;
         }
 
         protected override void PrepareInnerControls()
@@ -33,7 +35,7 @@ namespace OxLibrary.Dialogs
             set => label.Text = value;
         }
 
-        protected override void PlaceButtons(int rightPosition = -1)
+        protected override void PlaceButtons()
         {
             if (Form != null)
             {
@@ -47,11 +49,11 @@ namespace OxLibrary.Dialogs
                     Math.Max(calcedWidth + 160, SavedWidth),
                     Math.Max(calcedWidth / 2, SavedHeight)
                 );
-
-                rightPosition = (Width - calcedWidth) / 2 - DialogButtonSpace;
             }
 
-            base.PlaceButtons(rightPosition);
+            base.PlaceButtons();
         }
+
+        protected override int FooterButtonHeight => 34;
     }
 }

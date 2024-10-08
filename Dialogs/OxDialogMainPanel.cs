@@ -5,7 +5,6 @@ namespace OxLibrary.Dialogs
 {
     public class OxDialogMainPanel : OxFormMainPanel
     {
-        public const int DialogButtonHeight = 32;
         public int DialogButtonSpace = 6;
         public int DialogButtonStartSpace = 10;
         protected readonly Dictionary<OxDialogButton, OxButton> buttonsDictionary = new();
@@ -40,7 +39,7 @@ namespace OxLibrary.Dialogs
         public OxDialogMainPanel(OxForm form) : base(form) =>
             SetContentSize(480, 360);
 
-        public readonly OxFrame Footer = new(new Size(300, 42));
+        public readonly OxFrame Footer = new();
 
         public DialogResult DialogResult { get; private set; }
 
@@ -58,13 +57,16 @@ namespace OxLibrary.Dialogs
             )
             {
                 Parent = Footer,
-                Top = (Footer.Height - DialogButtonHeight) / 2,
+                Top = FooterButtonVerticalMargin,
                 Font = new Font(Styles.FontFamily, Styles.DefaultFontSize + 0.5f, FontStyle.Bold),
-                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right,
+                Anchor = AnchorStyles.Top | AnchorStyles.Right,
                 Visible = (dialogButtons & dialogButton) == dialogButton
             };
 
-            button.SetContentSize(OxDialogButtonsHelper.Width(dialogButton), DialogButtonHeight - 2);
+            button.SetContentSize(
+                OxDialogButtonsHelper.Width(dialogButton), 
+                FooterButtonHeight - FooterButtonVerticalMargin * 2
+            );
             button.Click += DialogButtonClickHandler;
             buttonsDictionary.Add(dialogButton, button);
         }
@@ -79,10 +81,15 @@ namespace OxLibrary.Dialogs
                 CreateButton(button);
 
             PlaceButtons();
+            Footer.SetContentSize(Footer.SavedWidth, FooterButtonHeight);
             Footer.Borders[OxDock.Left].Visible = false;
             Footer.Borders[OxDock.Right].Visible = false;
             Footer.Borders[OxDock.Bottom].Visible = false;
         }
+
+        protected virtual int FooterButtonHeight => 36;
+
+        protected virtual int FooterButtonVerticalMargin => 4;
 
         private void DialogButtonClickHandler(object? sender, EventArgs e)
         {
@@ -99,15 +106,18 @@ namespace OxLibrary.Dialogs
             Form.DialogResult = OxDialogButtonsHelper.Result(dialogButton);
         }
 
-        protected virtual void PlaceButtons(int rightOffset = 0)
+        protected virtual void PlaceButtons()
         {
-            rightOffset = Footer.Width - rightOffset - DialogButtonStartSpace;
+            int rightOffset = Footer.Width - DialogButtonStartSpace;
 
             foreach (var item in buttonsDictionary)
                 if ((dialogButtons & item.Key) == item.Key)
                 {
                     item.Value.Left = rightOffset - OxDialogButtonsHelper.Width(item.Key);
-                    item.Value.Width = OxDialogButtonsHelper.Width(item.Key);
+                    item.Value.SetContentSize(
+                        OxDialogButtonsHelper.Width(item.Key),
+                        FooterButtonHeight - FooterButtonVerticalMargin * 2
+                    );
                     rightOffset = item.Value.Left - DialogButtonSpace;
                 }
         }
@@ -118,6 +128,7 @@ namespace OxLibrary.Dialogs
         protected override void PrepareColors()
         {
             base.PrepareColors();
+
             Footer.BaseColor = BaseColor;
 
             foreach (var item in buttonsDictionary)

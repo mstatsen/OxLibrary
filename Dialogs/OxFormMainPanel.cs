@@ -44,7 +44,7 @@ namespace OxLibrary.Dialogs
         private void SetHeaderContentSize() => 
             Header.SetContentSize(Width, 34);
 
-        private void SetIcon()
+        public void SetIcon()
         {
             Header.Icon = Form.FormIcon;
 
@@ -143,7 +143,7 @@ namespace OxLibrary.Dialogs
         {
             base.PrepareColors();
             BorderColor = BaseColor;
-            Header.BaseColor = Colors.Darker(1);
+            Header.BaseColor = Colors.Darker();
             Header.UnderlineColor = BaseColor;
         }
 

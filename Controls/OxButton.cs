@@ -15,6 +15,7 @@
         {
             SetContentSize(DefaultWidth, DefaultHeight);
             Text = text;
+            MinimumSize = Size.Empty;
         }
 
         protected override void AfterCreated()

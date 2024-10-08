@@ -50,16 +50,18 @@
         public static Bitmap? Icon(OxDialogButton button) =>
             button switch
             {
-                OxDialogButton.Cancel => 
+                OxDialogButton.Cancel or
+                OxDialogButton.No or
+                OxDialogButton.Discard =>
                     OxIcons.Close,
                 OxDialogButton.OK or
+                OxDialogButton.Yes or
                 OxDialogButton.Apply or
-                OxDialogButton.Save => 
+                OxDialogButton.Save =>
                     OxIcons.Tick,
                 OxDialogButton.ApplyForAll =>
                     OxIcons.DoubleTick,
-                _ => 
-                    null,
+                _ => null,
             };
 
         public static int Width(OxDialogButton button) =>

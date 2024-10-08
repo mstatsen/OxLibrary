@@ -25,11 +25,13 @@
         public static Bitmap DoubleTick => GetBitmap("double_tick");
         public static Bitmap Down => GetBitmap("down");
         public static Bitmap Eraser => GetBitmap("eraser");
+        public static Bitmap Error => GetBitmap("error");
         public static Bitmap Export => GetBitmap("export");
         public static Bitmap Eye => GetBitmap("eye");
         public static Bitmap First => GetBitmap("first");
         public static Bitmap Go => GetBitmap("go");
         public static Bitmap GoldTrophy => GetBitmap("goldTrophy");
+        public static Bitmap Info => GetBitmap("info");
         public static Bitmap Install => GetBitmap("install");
         public static Bitmap Last => GetBitmap("last");
         public static Bitmap Left => GetBitmap("left");
@@ -45,6 +47,7 @@
         public static Bitmap Plus => GetBitmap("plus");
         public static Bitmap PlusThick => GetBitmap("plus-thick");
         public static Bitmap Restore => GetBitmap("restore");
+        public static Bitmap Question => GetBitmap("question");
         public static Bitmap Right => GetBitmap("right");
         public static Bitmap Save => GetBitmap("save");
         public static Bitmap Select => GetBitmap("select");
@@ -56,5 +59,6 @@
         public static Bitmap Trash => GetBitmap("trash");
         public static Bitmap Unpin => GetBitmap("unpin");
         public static Bitmap Up => GetBitmap("up");
+        public static Bitmap Warning => GetBitmap("warning");
     }
 }
