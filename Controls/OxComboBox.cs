@@ -106,7 +106,7 @@
                 Point textStartPosition = GetTextStartPosition(e.Bounds);
 
                 e.Graphics.DrawString(itemString,
-                    e.Font ?? new Font("Calibri Light", 10),
+                    e.Font ?? Styles.Font(10),
                     new SolidBrush(Color.Black),
                     new Point(textStartPosition.X, textStartPosition.Y));
 

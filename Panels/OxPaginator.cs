@@ -21,7 +21,7 @@ namespace OxLibrary.Panels
             Dock = DockStyle.Right,
             Width = 120,
             TextAlign = ContentAlignment.MiddleRight,
-            Font = new Font(Styles.FontFamily, Styles.DefaultFontSize, FontStyle.Bold | FontStyle.Italic)
+            Font = Styles.Font(FontStyle.Bold | FontStyle.Italic)
         };
 
         private readonly OxButton PrevButton = CreateNavigateButton(OxIcons.Left);
@@ -266,7 +266,7 @@ namespace OxLibrary.Panels
                 Text = "...",
                 AutoSize = false,
                 TextAlign = textAlign,
-                Font = new Font(Styles.DefaultFont, FontStyle.Bold)
+                Font = Styles.Font(FontStyle.Bold)
             };
 
             return button;

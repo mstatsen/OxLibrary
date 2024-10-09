@@ -9,7 +9,7 @@ namespace OxLibrary.Dialogs
             Dock = DockStyle.Fill,
             TextAlign = ContentAlignment.MiddleLeft,
             AutoSize = false,
-            Font = new Font(Styles.FontFamily, Styles.DefaultFontSize + 1.15f, FontStyle.Regular),
+            Font = Styles.Font(Styles.DefaultFontSize + 1.15f),
             ForeColor = Color.FromArgb(60, 55, 54)
         };
 

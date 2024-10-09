@@ -58,7 +58,7 @@ namespace OxLibrary.Dialogs
             {
                 Parent = Footer,
                 Top = FooterButtonVerticalMargin,
-                Font = new Font(Styles.FontFamily, Styles.DefaultFontSize + 0.5f, FontStyle.Bold),
+                Font = Styles.Font(Styles.DefaultFontSize + 0.5f, FontStyle.Bold),
                 Anchor = AnchorStyles.Top | AnchorStyles.Right,
                 Visible = (dialogButtons & dialogButton) == dialogButton
             };

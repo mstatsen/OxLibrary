@@ -178,7 +178,7 @@ namespace OxLibrary.Controls
         {
             base.PrepareInnerControls();
             label.Parent = ContentContainer;
-            label.Font = new Font(Font.FontFamily, Font.Size + 1, FontStyle.Italic);
+            label.Font = Styles.Font(Font.Size + 1, FontStyle.Italic);
             picture.Parent = this;
             buttonsParent.Parent = this;
         }

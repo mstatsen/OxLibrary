@@ -33,7 +33,7 @@
                 TextRenderer.MeasureText(Items[e.Index].ToString(), e.Font).Height) / 2;
             e.Graphics.DrawString(
                 Items[e.Index].ToString(),
-                e.Font ?? new Font("Calibri Light", 10),
+                e.Font ?? Styles.Font(10),
                 Enabled ? Brushes.Black : Brushes.Silver,
                 textBounds, 
                 StringFormat.GenericDefault);
