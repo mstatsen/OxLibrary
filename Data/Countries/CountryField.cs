@@ -9,6 +9,7 @@
         Alpha3,
         ISO,
         Location,
-        Flag
+        Flag,
+        IsPSN
     }
 }

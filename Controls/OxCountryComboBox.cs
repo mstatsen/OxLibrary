@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Data.Countries;
+using System.Text.Json.Serialization.Metadata;
 
 namespace OxLibrary.Controls
 {
@@ -21,11 +22,19 @@ namespace OxLibrary.Controls
             }
         }
 
-        public void LoadCounties()
+        public void LoadCountries()
         {
             Items.Clear();
 
             foreach (Country country in CountryList.Countries)
+                Items.Add(country);
+        }
+
+        public void LoadCountries(CountryField field, object value)
+        {
+            Items.Clear();
+
+            foreach (Country country in CountryList.GetCountries(field, value))
                 Items.Add(country);
         }
 

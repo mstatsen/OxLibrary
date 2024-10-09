@@ -24,6 +24,7 @@
         public string ISO { get; set; } = "000";
         public CountryLocation Location { get; set; } = CountryLocation.Other;
         public Bitmap? Flag { get; set; }
+        public bool IsPSN { get; set; }
 
         public object? this[CountryField field]
         {
@@ -38,6 +39,7 @@
                     CountryField.ISO => ISO,
                     CountryField.Location => Location,
                     CountryField.Flag => Flag,
+                    CountryField.IsPSN => IsPSN,
                     _ => null,
                 };
             set
@@ -70,13 +72,13 @@
                     case CountryField.Flag:
                         Flag = value is Bitmap bitmap ? bitmap : null;
                         break;
+                    case CountryField.IsPSN:
+                        IsPSN = bool.Parse(stringValue);
+                        break;
                 }
             }
         }
 
-        public override string ToString()
-        {
-            return Name;
-        }
+        public override string ToString() => Name;
     }
 }

@@ -89,7 +89,8 @@ namespace OxLibrary.Data.Countries
                 iso: 032,
                 location: CountryLocation.SouthAmerica,
                 flag: Flags.Argentina,
-                fullName: "Argentine Republic");
+                fullName: "Argentine Republic",
+                isPsn: true);
             AddCountry(
                 name: "Armenia",
                 alpha2: "AM",
@@ -113,7 +114,8 @@ namespace OxLibrary.Data.Countries
                 iso: 036,
                 location: CountryLocation.Australia,
                 flag: Flags.Austalia,
-                fullName: "Commonwealth of Australia");
+                fullName: "Commonwealth of Australia",
+                isPsn: true);
             AddCountry(
                 name: "Austria",
                 alpha2: "AT",
@@ -121,7 +123,8 @@ namespace OxLibrary.Data.Countries
                 iso: 040,
                 location: CountryLocation.Europe,
                 flag: Flags.Austria,
-                fullName: "Republic of Austria");
+                fullName: "Republic of Austria",
+                isPsn: true);
             AddCountry(
                 name: "Azerbaijan",
                 alpha2: "AZ",
@@ -145,7 +148,8 @@ namespace OxLibrary.Data.Countries
                 iso: 048,
                 location: CountryLocation.Asia,
                 flag: Flags.Bahrain,
-                fullName: "Kingdom of Bahrain");
+                fullName: "Kingdom of Bahrain",
+                isPsn: true);
             AddCountry(
                 name: "Bangladesh",
                 alpha2: "BD",
@@ -177,7 +181,8 @@ namespace OxLibrary.Data.Countries
                 iso: 056,
                 location: CountryLocation.Europe,
                 flag: Flags.Belgium,
-                fullName: "Kingdom of Belgium");
+                fullName: "Kingdom of Belgium",
+                isPsn: true);
             AddCountry(
                 name: "Belize",
                 alpha2: "BZ",
@@ -255,7 +260,8 @@ namespace OxLibrary.Data.Countries
                 iso: 076,
                 location: CountryLocation.SouthAmerica,
                 flag: Flags.Brazil,
-                fullName: "Federative Republic of Brazil");
+                fullName: "Federative Republic of Brazil",
+                isPsn: true);
             AddCountry(
                 name: "Brunei",
                 alpha2: "BN",
@@ -271,7 +277,8 @@ namespace OxLibrary.Data.Countries
                 iso: 100,
                 location: CountryLocation.Europe,
                 flag: Flags.Bulgaria,
-                fullName: "Republic of Bulgaria");
+                fullName: "Republic of Bulgaria",
+                isPsn: true);
             AddCountry(
                 name: "Burkina Faso",
                 alpha2: "BF",
@@ -319,7 +326,8 @@ namespace OxLibrary.Data.Countries
                 alpha3: "CAN",
                 iso: 124,
                 location: CountryLocation.NorthAmerica,
-                flag: Flags.Canada);
+                flag: Flags.Canada,
+                isPsn: true);
             AddCountry(
                 name: "Cape Verde",
                 alpha2: "CV",
@@ -359,7 +367,8 @@ namespace OxLibrary.Data.Countries
                 iso: 152,
                 location: CountryLocation.SouthAmerica,
                 flag: Flags.Chile,
-                fullName: "Republic of Chile");
+                fullName: "Republic of Chile",
+                isPsn: true);
             AddCountry(
                 name: "China",
                 alpha2: "CN",
@@ -368,7 +377,8 @@ namespace OxLibrary.Data.Countries
                 location: CountryLocation.Asia,
                 flag: Flags.China,
                 fullName: "People's Republic of China",
-                shortName: "PRC");
+                shortName: "PRC",
+                isPsn: true);
             AddCountry(
                 name: "Colombia",
                 alpha2: "CO",
@@ -376,7 +386,8 @@ namespace OxLibrary.Data.Countries
                 iso: 170,
                 location: CountryLocation.SouthAmerica,
                 flag: Flags.Colombia,
-                fullName: "Republic of Colombia");
+                fullName: "Republic of Colombia",
+                isPsn: true);
             AddCountry(
                 name: "Comoros",
                 alpha2: "KM",
@@ -407,7 +418,8 @@ namespace OxLibrary.Data.Countries
                 iso: 188,
                 location: CountryLocation.NorthAmerica,
                 flag: Flags.CostaRica,
-                fullName: "Republic of Costa Rica");
+                fullName: "Republic of Costa Rica",
+                isPsn: true);
             AddCountry(
                 name: "Cote d'Ivoire",
                 alpha2: "CI",
@@ -423,7 +435,8 @@ namespace OxLibrary.Data.Countries
                 iso: 191,
                 location: CountryLocation.Europe,
                 flag: Flags.Croatian,
-                fullName: "Republic of Croatia");
+                fullName: "Republic of Croatia",
+                isPsn: true);
             AddCountry(
                 name: "Cuba",
                 alpha2: "CU",
@@ -447,7 +460,8 @@ namespace OxLibrary.Data.Countries
                 iso: 196,
                 location: CountryLocation.Asia,
                 flag: Flags.Cyprus,
-                fullName: "Republic of Cyprus");
+                fullName: "Republic of Cyprus",
+                isPsn: true);
             AddCountry(
                 name: "Czechia",
                 alpha2: "CZ",
@@ -456,7 +470,8 @@ namespace OxLibrary.Data.Countries
                 location: CountryLocation.Europe,
                 flag: Flags.CzechRepublic,
                 shortName: string.Empty,
-                fullName: "Czech Republic");
+                fullName: "Czech Republic",
+                isPsn: true);
             AddCountry(
                 name: "North Korea",
                 alpha2: "KP",
@@ -481,7 +496,8 @@ namespace OxLibrary.Data.Countries
                 alpha3: "DNK",
                 iso: 208,
                 location: CountryLocation.Europe,
-                flag: Flags.Denmark);
+                flag: Flags.Denmark,
+                isPsn: true);
             AddCountry(
                 name: "Djibouti",
                 alpha2: "DJ",
@@ -512,7 +528,8 @@ namespace OxLibrary.Data.Countries
                 iso: 218,
                 location: CountryLocation.SouthAmerica,
                 flag: Flags.Ecuador,
-                fullName: "Republic of Ecuador");
+                fullName: "Republic of Ecuador",
+                isPsn: true);
             AddCountry(
                 name: "Egypt",
                 alpha2: "EG",
@@ -529,7 +546,8 @@ namespace OxLibrary.Data.Countries
                 location: CountryLocation.NorthAmerica,
                 flag: Flags.ElSalvador,
                 fullName: "Republic of El Salvador",
-                shortName: "Salvador");
+                shortName: "Salvador",
+                isPsn: true);
             AddCountry(
                 name: "Equatorial Guinea",
                 alpha2: "GQ",
@@ -605,7 +623,8 @@ namespace OxLibrary.Data.Countries
                 iso: 246,
                 location: CountryLocation.Europe,
                 flag: Flags.Finland,
-                fullName: "Republic of Finland");
+                fullName: "Republic of Finland",
+                isPsn: true);
             AddCountry(
                 name: "France",
                 alpha2: "FR",
@@ -613,7 +632,8 @@ namespace OxLibrary.Data.Countries
                 iso: 250,
                 location: CountryLocation.Europe,
                 flag: Flags.France,
-                fullName: "French Republic");
+                fullName: "French Republic",
+                isPsn: true);
             AddCountry(
                 name: "Gabon",
                 alpha2: "GB",
@@ -645,7 +665,8 @@ namespace OxLibrary.Data.Countries
                 location: CountryLocation.Europe,
                 flag: Flags.Germany,
                 fullName: "Federal Republic of Germany",
-                shortName: "FRG");
+                shortName: "FRG",
+                isPsn: true);
             AddCountry(
                 name: "Ghana",
                 alpha2: "GH",
@@ -668,7 +689,8 @@ namespace OxLibrary.Data.Countries
                 iso: 300,
                 location: CountryLocation.Europe,
                 flag: Flags.Greece,
-                fullName: "Hellenic Republic");
+                fullName: "Hellenic Republic",
+                isPsn: true);
             AddCountry(
                 name: "Greenland",
                 alpha2: "GL",
@@ -704,7 +726,8 @@ namespace OxLibrary.Data.Countries
                 iso: 320,
                 location: CountryLocation.NorthAmerica,
                 flag: Flags.Guatemala,
-                fullName: "Republic of Guatemala");
+                fullName: "Republic of Guatemala",
+                isPsn: true);
             AddCountry(
                 name: "Guernsey",
                 alpha2: "GG",
@@ -759,28 +782,32 @@ namespace OxLibrary.Data.Countries
                 iso: 340,
                 location: CountryLocation.NorthAmerica,
                 flag: Flags.Honduras,
-                fullName: "Republic of Honduras");
+                fullName: "Republic of Honduras",
+                isPsn: true);
             AddCountry(
                 name: "Hong Kong",
                 alpha2: "HK",
                 alpha3: "HKG",
                 iso: 344,
                 location: CountryLocation.Asia,
-                flag: Flags.HongKong);
+                flag: Flags.HongKong,
+                isPsn: true);
             AddCountry(
                 name: "Hungary",
                 alpha2: "HU",
                 alpha3: "HUN",
                 iso: 348,
                 location: CountryLocation.Europe,
-                flag: Flags.Hungary);
+                flag: Flags.Hungary,
+                isPsn: true);
             AddCountry(
                 name: "Iceland",
                 alpha2: "IS",
                 alpha3: "ISL",
                 iso: 352,
                 location: CountryLocation.Europe,
-                flag: Flags.Iceland);
+                flag: Flags.Iceland,
+                isPsn: true);
             AddCountry(
                 name: "India",
                 alpha2: "IN",
@@ -788,7 +815,8 @@ namespace OxLibrary.Data.Countries
                 iso: 356,
                 location: CountryLocation.Asia,
                 flag: Flags.India,
-                fullName: "Republic of India");
+                fullName: "Republic of India",
+                isPsn: true);
             AddCountry(
                 name: "Indonesia",
                 alpha2: "ID",
@@ -796,7 +824,8 @@ namespace OxLibrary.Data.Countries
                 iso: 360,
                 location: CountryLocation.Asia,
                 flag: Flags.Indonesia,
-                fullName: "Republic of Indonesia");
+                fullName: "Republic of Indonesia",
+                isPsn: true);
             AddCountry(
                 name: "Iran",
                 alpha2: "IR",
@@ -820,7 +849,8 @@ namespace OxLibrary.Data.Countries
                 alpha3: "IRL",
                 iso: 372,
                 location: CountryLocation.Europe,
-                flag: Flags.Ireland);
+                flag: Flags.Ireland,
+                isPsn: true);
             AddCountry(
                 name: "Isle of Man",
                 alpha2: "IM",
@@ -836,7 +866,8 @@ namespace OxLibrary.Data.Countries
                 iso: 376,
                 location: CountryLocation.Asia,
                 flag: Flags.Israel,
-                fullName: "State of Israel");
+                fullName: "State of Israel",
+                isPsn: true);
             AddCountry(
                 name: "Italy",
                 alpha2: "IT",
@@ -844,7 +875,8 @@ namespace OxLibrary.Data.Countries
                 iso: 380,
                 location: CountryLocation.Asia,
                 flag: Flags.Italy,
-                fullName: "Italian Republic");
+                fullName: "Italian Republic",
+                isPsn: true);
             AddCountry(
                 name: "Jamaica",
                 alpha2: "JM",
@@ -858,7 +890,8 @@ namespace OxLibrary.Data.Countries
                 alpha3: "JPN",
                 iso: 392,
                 location: CountryLocation.Asia,
-                flag: Flags.Japan);
+                flag: Flags.Japan,
+                isPsn: true);
             AddCountry(
                 name: "Jersey",
                 alpha2: "JP",
@@ -907,7 +940,8 @@ namespace OxLibrary.Data.Countries
                 location: CountryLocation.Asia,
                 flag: Flags.Korea,
                 fullName: "Republic of Korea",
-                shortName: "ROK");
+                shortName: "ROK",
+                isPsn: true);
             AddCountry(
                 name: "Kuwait",
                 alpha2: "KW",
@@ -915,7 +949,8 @@ namespace OxLibrary.Data.Countries
                 iso: 411,
                 location: CountryLocation.Asia,
                 flag: Flags.Kuwait,
-                fullName: "State of Kuwait");
+                fullName: "State of Kuwait",
+                isPsn: true);
             AddCountry(
                 name: "Kyrgyzstan",
                 alpha2: "KG",
@@ -948,7 +983,8 @@ namespace OxLibrary.Data.Countries
                 iso: 422,
                 location: CountryLocation.Asia,
                 flag: Flags.Lebanon,
-                fullName: "Republic of Lebanon");
+                fullName: "Republic of Lebanon",
+                isPsn: true);
             AddCountry(
                 name: "Lesotho",
                 alpha2: "LS",
@@ -997,7 +1033,8 @@ namespace OxLibrary.Data.Countries
                 iso: 442,
                 location: CountryLocation.Europe,
                 flag: Flags.Luxembourg,
-                fullName: "Grand Duchy of Luxembourg");
+                fullName: "Grand Duchy of Luxembourg",
+                isPsn: true);
             AddCountry(
                 name: "Macao",
                 alpha2: "MO",
@@ -1035,7 +1072,8 @@ namespace OxLibrary.Data.Countries
                 alpha3: "MYS",
                 iso: 458,
                 location: CountryLocation.Asia,
-                flag: Flags.Malaysia);
+                flag: Flags.Malaysia,
+                isPsn: true);
             AddCountry(
                 name: "Maldives",
                 alpha2: "MV",
@@ -1059,7 +1097,8 @@ namespace OxLibrary.Data.Countries
                 iso: 470,
                 location: CountryLocation.Europe,
                 flag: Flags.Malta,
-                fullName: "Republic of Malta");
+                fullName: "Republic of Malta",
+                isPsn: true);
             AddCountry(
                 name: "Marshall Islands",
                 alpha2: "MH",
@@ -1108,7 +1147,8 @@ namespace OxLibrary.Data.Countries
                 iso: 484,
                 location: CountryLocation.NorthAmerica,
                 flag: Flags.Mexico,
-                fullName: "United Mexican States");
+                fullName: "United Mexican States",
+                isPsn: true);
             AddCountry(
                 name: "Micronesia",
                 alpha2: "FM",
@@ -1201,7 +1241,8 @@ namespace OxLibrary.Data.Countries
                 alpha3: "NLD",
                 iso: 528,
                 location: CountryLocation.Europe,
-                flag: Flags.Netherlands);
+                flag: Flags.Netherlands,
+                isPsn: true);
             AddCountry(
                 name: "New Caledonia",
                 alpha2: "NC",
@@ -1215,7 +1256,8 @@ namespace OxLibrary.Data.Countries
                 alpha3: "NZL",
                 iso: 554,
                 location: CountryLocation.Australia,
-                flag: Flags.NewZealand);
+                flag: Flags.NewZealand,
+                isPsn: true);
             AddCountry(
                 name: "Nicaragua",
                 alpha2: "NI",
@@ -1223,7 +1265,8 @@ namespace OxLibrary.Data.Countries
                 iso: 558,
                 location: CountryLocation.Africa,
                 flag: Flags.Nicaragua,
-                fullName: "Republic of Nicaragua");
+                fullName: "Republic of Nicaragua",
+                isPsn: true);
             AddCountry(
                 name: "Niger",
                 alpha2: "NE",
@@ -1270,7 +1313,8 @@ namespace OxLibrary.Data.Countries
                 iso: 578,
                 location: CountryLocation.Europe,
                 flag: Flags.Norway,
-                fullName: "Kingdom of Norway");
+                fullName: "Kingdom of Norway",
+                isPsn: true);
             AddCountry(
                 name: "Oman",
                 alpha2: "OM",
@@ -1278,7 +1322,8 @@ namespace OxLibrary.Data.Countries
                 iso: 512,
                 location: CountryLocation.Asia,
                 flag: Flags.Oman,
-                fullName: "Sultanate of Oman");
+                fullName: "Sultanate of Oman",
+                isPsn: true);
             AddCountry(
                 name: "Pakistan",
                 alpha2: "PK",
@@ -1310,7 +1355,8 @@ namespace OxLibrary.Data.Countries
                 iso: 591,
                 location: CountryLocation.NorthAmerica,
                 flag: Flags.Panama,
-                fullName: "Republic of Panama");
+                fullName: "Republic of Panama",
+                isPsn: true);
             AddCountry(
                 name: "Papua New Guinea",
                 alpha2: "PG",
@@ -1327,7 +1373,8 @@ namespace OxLibrary.Data.Countries
                 iso: 600,
                 location: CountryLocation.SouthAmerica,
                 flag: Flags.Paraguay,
-                fullName: "Republic of Paraguay");
+                fullName: "Republic of Paraguay",
+                isPsn: true);
             AddCountry(
                 name: "Peru",
                 alpha2: "PE",
@@ -1335,7 +1382,8 @@ namespace OxLibrary.Data.Countries
                 iso: 604,
                 location: CountryLocation.SouthAmerica,
                 flag: Flags.Peru,
-                fullName: "Republic of Peru");
+                fullName: "Republic of Peru",
+                isPsn: true);
             AddCountry(
                 name: "Philippines",
                 alpha2: "PH",
@@ -1343,7 +1391,8 @@ namespace OxLibrary.Data.Countries
                 iso: 608,
                 location: CountryLocation.Asia,
                 flag: Flags.Philippines,
-                fullName: "Republic of the Philippines");
+                fullName: "Republic of the Philippines",
+                isPsn: true);
             AddCountry(
                 name: "Poland",
                 alpha2: "PL",
@@ -1351,7 +1400,8 @@ namespace OxLibrary.Data.Countries
                 iso: 616,
                 location: CountryLocation.Europe,
                 flag: Flags.Poland,
-                fullName: "Republic of Poland");
+                fullName: "Republic of Poland",
+                isPsn: true);
             AddCountry(
                 name: "Portugal",
                 alpha2: "PT",
@@ -1359,7 +1409,8 @@ namespace OxLibrary.Data.Countries
                 iso: 620,
                 location: CountryLocation.Europe,
                 flag: Flags.Portugal,
-                fullName: "Portuguese Republic");
+                fullName: "Portuguese Republic",
+                isPsn: true);
             AddCountry(
                 name: "Puerto Rico",
                 alpha2: "PR",
@@ -1376,14 +1427,16 @@ namespace OxLibrary.Data.Countries
                 iso: 634,
                 location: CountryLocation.Asia,
                 flag: Flags.Qatar,
-                fullName: "State of Qatar");
+                fullName: "State of Qatar",
+                isPsn: true);
             AddCountry(
                 name: "Romania",
                 alpha2: "RO",
                 alpha3: "ROU",
                 iso: 642,
                 location: CountryLocation.Europe,
-                flag: Flags.Romania);
+                flag: Flags.Romania,
+                isPsn: true);
             AddCountry(
                 name: "Russia",
                 alpha2: "RU",
@@ -1392,7 +1445,8 @@ namespace OxLibrary.Data.Countries
                 location: CountryLocation.Europe,
                 flag: Flags.Russia,
                 fullName: "Russian Federation",
-                shortName: "RF");
+                shortName: "RF",
+                isPsn: true);
             AddCountry(
                 name: "Rwanda",
                 alpha2: "RW",
@@ -1472,7 +1526,8 @@ namespace OxLibrary.Data.Countries
                 location: CountryLocation.Asia,
                 flag: Flags.SaudiArabia,
                 fullName: "Kingdom of Saudi Arabia",
-                shortName: "KSA");
+                shortName: "KSA",
+                isPsn: true);
             AddCountry(
                 name: "Senegal",
                 alpha2: "SN",
@@ -1512,7 +1567,8 @@ namespace OxLibrary.Data.Countries
                 iso: 702,
                 location: CountryLocation.Asia,
                 flag: Flags.Singapore,
-                fullName: "Republic of Singapore");
+                fullName: "Republic of Singapore",
+                isPsn: true);
             AddCountry(
                 name: "Slovakia",
                 alpha2: "SK",
@@ -1520,7 +1576,8 @@ namespace OxLibrary.Data.Countries
                 iso: 703,
                 location: CountryLocation.Europe,
                 flag: Flags.Slovakia,
-                fullName: "Slovak Republic");
+                fullName: "Slovak Republic",
+                isPsn: true);
             AddCountry(
                 name: "Slovenia",
                 alpha2: "SI",
@@ -1528,7 +1585,8 @@ namespace OxLibrary.Data.Countries
                 iso: 705,
                 location: CountryLocation.Europe,
                 flag: Flags.Slovenia,
-                fullName: "Republic of Slovenia");
+                fullName: "Republic of Slovenia",
+                isPsn: true);
             AddCountry(
                 name: "Solomons",
                 alpha2: "SB",
@@ -1553,7 +1611,8 @@ namespace OxLibrary.Data.Countries
                 location: CountryLocation.Africa,
                 flag: Flags.SouthAfrica,
                 fullName: "Republic of South Africa",
-                shortName: "RSA");
+                shortName: "RSA",
+                isPsn: true);
             AddCountry(
                 name: "South Ossetia",
                 alpha2: "OS",
@@ -1577,7 +1636,8 @@ namespace OxLibrary.Data.Countries
                 iso: 724,
                 location: CountryLocation.Europe,
                 flag: Flags.Spain,
-                fullName: "Kingdom of Spain");
+                fullName: "Kingdom of Spain",
+                isPsn: true);
             AddCountry(
                 name: "Sri Lanka",
                 alpha2: "LK",
@@ -1609,7 +1669,8 @@ namespace OxLibrary.Data.Countries
                 iso: 752,
                 location: CountryLocation.Europe,
                 flag: Flags.Sweden,
-                fullName: "Kingdom of Sweden");
+                fullName: "Kingdom of Sweden",
+                isPsn: true);
             AddCountry(
                 name: "Switzerland",
                 alpha2: "CH",
@@ -1617,7 +1678,8 @@ namespace OxLibrary.Data.Countries
                 iso: 756,
                 location: CountryLocation.Europe,
                 flag: Flags.Switzerland,
-                fullName: "Swiss Confederation");
+                fullName: "Swiss Confederation",
+                isPsn: true);
             AddCountry(
                 name: "Syrya",
                 alpha2: "SY",
@@ -1634,7 +1696,8 @@ namespace OxLibrary.Data.Countries
                 location: CountryLocation.Asia,
                 flag: Flags.Taiwan,
                 fullName: "Republic of China",
-                shortName: "ROC");
+                shortName: "ROC",
+                isPsn: true);
             AddCountry(
                 name: "Tajikistan",
                 alpha2: "TJ",
@@ -1658,7 +1721,8 @@ namespace OxLibrary.Data.Countries
                 iso: 764,
                 location: CountryLocation.Asia,
                 flag: Flags.Thailand,
-                fullName: "Kingdom of Thailand");
+                fullName: "Kingdom of Thailand",
+                isPsn: true);
             AddCountry(
                 name: "East Timor",
                 alpha2: "TL",
@@ -1706,7 +1770,8 @@ namespace OxLibrary.Data.Countries
                 iso: 792,
                 location: CountryLocation.Asia,
                 flag: Flags.Turkey,
-                fullName: "Republic of Türkiye");
+                fullName: "Republic of Türkiye",
+                isPsn: true);
             AddCountry(
                 name: "Turkmenistan",
                 alpha2: "TM",
@@ -1735,7 +1800,8 @@ namespace OxLibrary.Data.Countries
                 alpha3: "UKR",
                 iso: 804,
                 location: CountryLocation.Europe,
-                flag: Flags.Ukraine);
+                flag: Flags.Ukraine,
+                isPsn: true);
             AddCountry(
                 name: "Emirates",
                 alpha2: "AE",
@@ -1744,7 +1810,8 @@ namespace OxLibrary.Data.Countries
                 location: CountryLocation.Asia,
                 flag: Flags.UnitedArabEmirates,
                 fullName: "United Arab Emirates",
-                shortName: "UAE");
+                shortName: "UAE",
+                isPsn: true);
             AddCountry(
                 name: "United Kingdom",
                 alpha2: "GB",
@@ -1753,7 +1820,8 @@ namespace OxLibrary.Data.Countries
                 location: CountryLocation.Europe,
                 flag: Flags.UnitedKingdom,
                 fullName: "United Kingdom of Great Britain and Northern Ireland",
-                shortName: "UK");
+                shortName: "UK",
+                isPsn: true);
             AddCountry(
                 name: "United States",
                 alpha2: "US",
@@ -1762,7 +1830,8 @@ namespace OxLibrary.Data.Countries
                 location: CountryLocation.NorthAmerica,
                 flag: Flags.UnitedStates,
                 fullName: "United States of America",
-                shortName: "USA");
+                shortName: "USA",
+                isPsn: true);
             AddCountry(
                 name: "Uruguay",
                 alpha2: "UY",
@@ -1770,7 +1839,8 @@ namespace OxLibrary.Data.Countries
                 iso: 858,
                 location: CountryLocation.SouthAmerica,
                 flag: Flags.Uruguay,
-                fullName: "Oriental Republic of Uruguay");
+                fullName: "Oriental Republic of Uruguay",
+                isPsn: true);
             AddCountry(
                 name: "Uzbekistan",
                 alpha2: "UZ",
@@ -1845,7 +1915,7 @@ namespace OxLibrary.Data.Countries
         }
 
         private static void AddCountry(string name, string alpha2, string alpha3, int iso, CountryLocation location, Bitmap? flag = null,
-            string? shortName = null, string? fullName = null)
+            string? shortName = null, string? fullName = null, bool isPsn= false)
         {
             string strIso = iso.ToString();
 
@@ -1863,6 +1933,7 @@ namespace OxLibrary.Data.Countries
                     Flag = flag,
                     ShortName = shortName ?? string.Empty,
                     FullName = fullName ?? string.Empty,
+                    IsPSN = isPsn
                 }
             );
         }
@@ -1875,6 +1946,10 @@ namespace OxLibrary.Data.Countries
             };
 
         public static List<Country> Countries => countries;
+
+        public static List<Country> GetCountries(CountryField field, object value) =>
+            countries.FindAll(c => value.Equals(c[field]));
+
         private static readonly List<Country> countries = new();
     }
 }
