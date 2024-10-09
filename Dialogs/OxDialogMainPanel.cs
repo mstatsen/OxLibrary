@@ -1,5 +1,6 @@
 ﻿using OxLibrary.Controls;
 using OxLibrary.Panels;
+using System.Windows.Forms.VisualStyles;
 
 namespace OxLibrary.Dialogs
 {
@@ -8,7 +9,9 @@ namespace OxLibrary.Dialogs
         public int DialogButtonSpace = 6;
         public int DialogButtonStartSpace = 10;
         protected readonly Dictionary<OxDialogButton, OxButton> buttonsDictionary = new();
-        public void SetButtonText(OxDialogButton dialogButton, string text)
+        protected virtual HorizontalAlign FooterButtonsAlign => HorizontalAlign.Right;
+
+        public void SetFooterButtonText(OxDialogButton dialogButton, string text)
         {
             if (buttonsDictionary.TryGetValue(dialogButton, out var button))
                 button.Text = text;
@@ -108,18 +111,40 @@ namespace OxLibrary.Dialogs
 
         protected virtual void PlaceButtons()
         {
-            int rightOffset = Footer.Width - DialogButtonStartSpace;
+            Dictionary<OxDialogButton, OxButton> realButtons = new();
+
+            int fullButtonsWidth = 0;
 
             foreach (var item in buttonsDictionary)
                 if ((dialogButtons & item.Key) == item.Key)
                 {
-                    item.Value.Left = rightOffset - OxDialogButtonsHelper.Width(item.Key);
-                    item.Value.SetContentSize(
-                        OxDialogButtonsHelper.Width(item.Key),
-                        FooterButtonHeight - FooterButtonVerticalMargin * 2
-                    );
-                    rightOffset = item.Value.Left - DialogButtonSpace;
+                    realButtons.Add(item.Key, item.Value);
+                    fullButtonsWidth += OxDialogButtonsHelper.Width(item.Key) + DialogButtonSpace;
                 }
+
+            fullButtonsWidth -= DialogButtonSpace;
+
+            int rightOffset =
+                FooterButtonsAlign switch
+                {
+                    HorizontalAlign.Left => fullButtonsWidth,
+                    HorizontalAlign.Center => Footer.Width - ((Footer.Width - fullButtonsWidth) / 2),
+                    _ => Footer.Width - DialogButtonStartSpace
+                };
+
+            int buttonIndex = 0;
+
+            foreach (var item in realButtons)
+            {
+                item.Value.Left = rightOffset - OxDialogButtonsHelper.Width(item.Key);
+                item.Value.SetContentSize(
+                    OxDialogButtonsHelper.Width(item.Key),
+                    FooterButtonHeight - FooterButtonVerticalMargin * 2
+                );
+                rightOffset = item.Value.Left - DialogButtonSpace;
+
+                buttonIndex++;
+            }
         }
 
         protected override int GetCalcedHeight() =>
