@@ -9,11 +9,10 @@ namespace OxLibrary.Controls
             ReadOnly = true
         };
 
-        public readonly OxButton Button = 
-            new ("...", null)
+        public readonly OxIconButton Button = 
+            new (OxIcons.Elipsis, 16)
             {
                 Dock = DockStyle.Right,
-                Text = "...",
                 Cursor = Cursors.Default
             };
 
@@ -32,6 +31,7 @@ namespace OxLibrary.Controls
             Button.BaseColor = BaseColor;
             Button.SetContentSize(TextBox.Height - 4, TextBox.Height);
             Button.Borders.LeftOx = OxSize.None;
+            Button.FixBorderColor = true;
         }
 
         public event EventHandler OnButtonClick
@@ -66,6 +66,9 @@ namespace OxLibrary.Controls
             base.PrepareColors();
             TextBox.BackColor = Colors.Lighter(6);
             Button.BaseColor = Colors.Darker();
+
+            if (TextBox.Focused)
+                Button.BorderColor = Color.LightBlue;
         }
 
         public bool IsEmpty => 

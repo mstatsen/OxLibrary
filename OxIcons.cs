@@ -24,6 +24,7 @@
         public static Bitmap Cross => GetBitmap("cross");
         public static Bitmap DoubleTick => GetBitmap("double_tick");
         public static Bitmap Down => GetBitmap("down");
+        public static Bitmap Elipsis => GetBitmap("elipsis");
         public static Bitmap Eraser => GetBitmap("eraser");
         public static Bitmap Error => GetBitmap("error");
         public static Bitmap Export => GetBitmap("export");
