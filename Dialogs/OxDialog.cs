@@ -1,4 +1,5 @@
-﻿namespace OxLibrary.Dialogs
+﻿
+namespace OxLibrary.Dialogs
 {
     public delegate string GetEmptyMandatoryFieldName();
 
@@ -42,6 +43,23 @@
                 DialogResult = DialogResult.Cancel;
         }
 
+        public void SetKeyUpHandler(Control control) =>
+            control.KeyUp += DialogControlKeyUpHandler;
+
+        private void DialogControlKeyUpHandler(object? sender, KeyEventArgs e)
+        {
+            if (!e.Handled)
+            {
+                if (e.KeyCode == Keys.Enter)
+                    DialogResult = DialogResult.OK;
+                else
+                if (e.KeyCode == Keys.Escape)
+                    DialogResult = DialogResult.Cancel;
+            }
+        }
+
+        public Control? FirstFocusControl { get; set; }
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
@@ -80,5 +98,11 @@
             CheckMandatoryFields();
 
         public virtual bool CanCancelClose() => true;
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            FirstFocusControl?.Focus();
+        }
     }
 }

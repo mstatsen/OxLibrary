@@ -83,5 +83,15 @@
 
         public static bool Confirmation(string Confirm, Control owner) =>
             ShowConfirm(Confirm, owner) == DialogResult.Yes;
+
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
+            base.OnKeyUp(e);
+
+            if (!e.Handled
+                && (MessageType == MessageType.Error || MessageType == MessageType.Info)
+                && (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Space))
+                DialogResult = DialogResult.OK;
+        }
     }
 }
