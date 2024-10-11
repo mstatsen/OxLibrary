@@ -949,4 +949,25 @@
   <data name="elipsis" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\elipsis.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="dlc" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\dlc.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="dualshock" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\dualshock.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="installation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\installation.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="link" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\link.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="related" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\related.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tag" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tag.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="series" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\series.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

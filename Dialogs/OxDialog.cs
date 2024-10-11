@@ -10,6 +10,7 @@ namespace OxLibrary.Dialogs
             Sizeble = false;
             CanMaximize = false;
             CanMinimize = false;
+            ShowInTaskbar = false;
         }
 
         protected override void SetUpForm()

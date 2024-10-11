@@ -29,7 +29,7 @@ namespace OxLibrary.Controls
         {
             Button.Parent = this;
             Button.BaseColor = BaseColor;
-            Button.SetContentSize(TextBox.Height - 4, TextBox.Height);
+            Button.SetContentSize(Math.Min(26, TextBox.Height - 4), TextBox.Height);
             Button.Borders.LeftOx = OxSize.None;
             Button.FixBorderColor = true;
         }
@@ -50,12 +50,14 @@ namespace OxLibrary.Controls
         {
             TextBox.Parent = this;
             TextBox.Dock = DockStyle.Fill;
+            TextBox.Multiline = true;
+            TextBox.WordWrap = true;
         }
 
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
-            int calcedButtonWidth = Height - 6;
+            int calcedButtonWidth = Math.Min(22, TextBox.Height - 4);
             Button.SetContentSize(calcedButtonWidth, Height - 2);
             Button.Width = calcedButtonWidth;
             Button.ReAlign();
