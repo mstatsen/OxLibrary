@@ -7,7 +7,7 @@ namespace OxLibrary.Panels
         public IOxPane Page { get; internal set; }
         public OxTabControl TabControl { get; internal set; }
 
-        public OxTabButton(IOxPane page, OxTabControl tabControl) : base(page.Text, null)
+        public OxTabButton(IOxPane page, OxTabControl tabControl, Bitmap? icon = null) : base(page.Text, icon)
         {
             TabControl = tabControl;
             Page = page;

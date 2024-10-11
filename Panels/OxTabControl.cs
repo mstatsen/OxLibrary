@@ -98,7 +98,7 @@
                 page.Dock = DockStyle.Fill;
 
             pages.Add(page);
-            CreateTabButton(page);
+            CreateTabButton(page, page is IOxWithIcon iconedPage ? iconedPage.Icon : null);
             ReAlignTabButtons();
             ActivePage = page;
             PrepareTabButtonsColor();
@@ -154,12 +154,12 @@
             }
         }
 
-        private void CreateTabButton(IOxPane page)
+        private void CreateTabButton(IOxPane page, Bitmap? icon = null)
         {
             if (TabButtons.TryGetValue(page, out _))
                 return;
 
-            OxTabButton button = new(page, this);
+            OxTabButton button = new(page, this, icon);
             button.SetPosition();
             TabButtons.Add(page, button);
         }

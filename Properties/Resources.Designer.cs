@@ -63,6 +63,16 @@ namespace OxLibrary.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] account {
+            get {
+                object obj = ResourceManager.GetObject("account", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] batch_edit {
             get {
                 object obj = ResourceManager.GetObject("batch_edit", resourceCulture);
@@ -86,6 +96,16 @@ namespace OxLibrary.Properties {
         internal static byte[] close {
             get {
                 object obj = ResourceManager.GetObject("close", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] console {
+            get {
+                object obj = ResourceManager.GetObject("console", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -2533,6 +2553,26 @@ namespace OxLibrary.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] folder {
+            get {
+                object obj = ResourceManager.GetObject("folder", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] game {
+            get {
+                object obj = ResourceManager.GetObject("game", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] go {
             get {
                 object obj = ResourceManager.GetObject("go", resourceCulture);
@@ -2816,6 +2856,16 @@ namespace OxLibrary.Properties {
         internal static byte[] silverTrophy {
             get {
                 object obj = ResourceManager.GetObject("silverTrophy", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] storage {
+            get {
+                object obj = ResourceManager.GetObject("storage", resourceCulture);
                 return ((byte[])(obj));
             }
         }
