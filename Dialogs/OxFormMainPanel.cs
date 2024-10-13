@@ -40,8 +40,11 @@ namespace OxLibrary.Dialogs
         private void CreateFormMover() => 
             formMover = new OxFormMover(Form, Header.Label);
 
-        public void SetHeaderContentSize(int height) => 
+        public void SetHeaderContentSize(int height)
+        {
             Header.SetContentSize(Width, height);
+            SetButtonsSize();
+        }
 
         public void SetIcon()
         {
@@ -74,9 +77,8 @@ namespace OxLibrary.Dialogs
 
         private void SetButtonsSize()
         {
-            closeButton.SetContentSize(36, 28);
-            restoreButton.SetContentSize(36, 28);
-            minimizeButton.SetContentSize(36, 28);
+            foreach (OxClickFrame button in Header.Buttons)
+                button.SetContentSize(36, 28);
         }
 
         private void SetButtonsHandlers()
