@@ -9,16 +9,16 @@
         {
             DoubleBuffered = true;
             AutoSize = true;
-            SetUpForm();
             MainPanel = CreateMainPanel();
             PlaceMainPanel();
+            SetUpForm();
             Initialized = true;
         }
 
         protected override void OnLocationChanged(EventArgs e)
         {
             base.OnLocationChanged(e);
-            MainPanel?.SetMarginsSize();
+            MainPanel.SetMarginsSize();
         }
 
         protected virtual void SetUpForm()
@@ -26,6 +26,12 @@
             FormBorderStyle = FormBorderStyle.None;
             SetUpSizes();
             StartPosition = FormStartPosition.CenterParent;
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            MainPanel.SetIcon();
         }
 
         public void SetUpSizes()

@@ -15,7 +15,6 @@ namespace OxLibrary.Dialogs
             Form.SizeChanged += FormSizeChanged;
             SetTitleButtonsVisible();
             SetHeaderContentSize();
-            SetIcon();
             SetRestoreButtonIcon();
             SetBordersSize();
             SetHeaderFont();
@@ -48,8 +47,8 @@ namespace OxLibrary.Dialogs
         {
             Header.Icon = Form.FormIcon;
 
-            if (Form.FormIcon != null)
-                Form.Icon = Icon.FromHandle(Form.FormIcon.GetHicon());
+            if (Form.FormIcon is Bitmap bitmap)
+                Form.Icon = System.Drawing.Icon.FromHandle(bitmap.GetHicon());
         }
 
         internal void SetTitleButtonsVisible()

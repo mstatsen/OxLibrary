@@ -61,13 +61,8 @@ namespace OxLibrary.Panels
             set => label.TextAlign = value;
         }
 
-        public Image? Icon
-        {
-            get => icon.Image;
-            set => SetIcon(value);
-        }
-
-        private void SetIcon(Image? value)
+        protected override Bitmap? GetIcon() => (Bitmap?)icon.Image;
+        protected override void SetIcon(Bitmap? value)
         {
             icon.Image = value;
             icon.Visible = icon.Image != null;

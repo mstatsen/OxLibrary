@@ -29,13 +29,9 @@ namespace OxLibrary.Controls
             Picture.BaseColor = ContentContainer.BaseColor;
         }
 
-        public Bitmap? Icon
-        {
-            get => (Bitmap?)Picture.Image;
-            set => SetIcon(value);
-        }
+        protected override Bitmap? GetIcon() => (Bitmap?)Picture.Image;
 
-        protected virtual void SetIcon(Bitmap? value) => 
+        protected override void SetIcon(Bitmap? value) => 
             Picture.Image = value;
 
         public int IconPadding

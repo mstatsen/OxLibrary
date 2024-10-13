@@ -18,8 +18,9 @@ namespace OxLibrary.Panels
             contentPanel.Colors.BaseColorChanged += (s, e) => MainPanel.BaseColor = ContentPanel.BaseColor;
         }
 
-        public List<OxIconButton> ButtonsWithBorders { get; }
+        public override Bitmap? FormIcon => ContentPanel.Icon;
 
+        public List<OxIconButton> ButtonsWithBorders { get; }
         private readonly OxPanel ContentPanel;
 
         protected override void OnFormClosed(FormClosedEventArgs e)

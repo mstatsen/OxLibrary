@@ -89,7 +89,7 @@
         public int ActivePageIndex =>
             ActivePage != null ? Pages.IndexOf(ActivePage) : -1;
 
-        public void AddPage(IOxPane page)
+        public void AddPage(IOxPane page, Bitmap? icon = null)
         {
             page.Visible = false;
             page.Parent = this;
@@ -98,7 +98,7 @@
                 page.Dock = DockStyle.Fill;
 
             pages.Add(page);
-            CreateTabButton(page, page is IOxWithIcon iconedPage ? iconedPage.Icon : null);
+            CreateTabButton(page, icon ?? (page is IOxWithIcon iconedPage ? iconedPage.Icon : null));
             ReAlignTabButtons();
             ActivePage = page;
             PrepareTabButtonsColor();

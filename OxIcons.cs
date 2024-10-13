@@ -33,9 +33,11 @@
         public static Bitmap Error => GetBitmap("error");
         public static Bitmap Export => GetBitmap("export");
         public static Bitmap Eye => GetBitmap("eye");
+        public static Bitmap Field => GetBitmap("field");
         public static Bitmap First => GetBitmap("first");
         public static Bitmap Folder => GetBitmap("folder");
         public static Bitmap Game => GetBitmap("game");
+        public static Bitmap General => GetBitmap("general");
         public static Bitmap Go => GetBitmap("go");
         public static Bitmap GoldTrophy => GetBitmap("goldTrophy");
         public static Bitmap Info => GetBitmap("info");
@@ -56,6 +58,7 @@
         public static Bitmap Plus => GetBitmap("plus");
         public static Bitmap PlusThick => GetBitmap("plus-thick");
         public static Bitmap Related => GetBitmap("related");
+        public static Bitmap Replace => GetBitmap("replace");
         public static Bitmap Restore => GetBitmap("restore");
         public static Bitmap Question => GetBitmap("question");
         public static Bitmap Right => GetBitmap("right");

@@ -2,7 +2,7 @@
 
 namespace OxLibrary.Panels
 {
-    public class OxPanel : OxPane, IOxPanel
+    public class OxPanel : OxPane, IOxPanel, IOxWithIcon
     {
         private OxBorders paddings = default!;
         private readonly OxPane contentContainer = new()
@@ -33,6 +33,15 @@ namespace OxLibrary.Panels
 
         public OxBorders Paddings => paddings;
         public OxPane ContentContainer => contentContainer;
+
+        public Bitmap? Icon
+        {
+            get => GetIcon();
+            set => SetIcon(value);
+        }
+
+        protected virtual void SetIcon(Bitmap? value) { }
+        protected virtual Bitmap? GetIcon() => null;
 
         public override void ReAlignControls()
         {
