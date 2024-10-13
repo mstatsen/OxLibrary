@@ -14,8 +14,8 @@ namespace OxLibrary.Dialogs
             Form = form;
             Form.SizeChanged += FormSizeChanged;
             SetTitleButtonsVisible();
-            SetHeaderContentSize();
-            SetRestoreButtonIcon();
+            SetHeaderContentSize(34);
+            SetRestoreButtonIconAndTooltip();
             SetBordersSize();
             SetHeaderFont();
             SetContentSize(Width, Height);
@@ -25,7 +25,7 @@ namespace OxLibrary.Dialogs
             BlurredBorder = true;
         }
 
-        private void FormSizeChanged(object? sender, EventArgs e) => SetRestoreButtonIcon();
+        private void FormSizeChanged(object? sender, EventArgs e) => SetRestoreButtonIconAndTooltip();
 
         private void SetHeaderFont() => 
             Header.Label.Font = 
@@ -40,8 +40,8 @@ namespace OxLibrary.Dialogs
         private void CreateFormMover() => 
             formMover = new OxFormMover(Form, Header.Label);
 
-        private void SetHeaderContentSize() => 
-            Header.SetContentSize(Width, 34);
+        public void SetHeaderContentSize(int height) => 
+            Header.SetContentSize(Width, height);
 
         public void SetIcon()
         {
@@ -97,16 +97,19 @@ namespace OxLibrary.Dialogs
 
         private readonly OxIconButton closeButton = new(OxIcons.Close, 28)
         {
-            IconPadding = 5
+            IconPadding = 5,
+            ToolTipText = "Close"
         };
         private readonly OxIconButton restoreButton = new(OxIcons.Restore, 28)
         {
             IconPadding = 5,
+            ToolTipText = "Restore window",
             Default = true
         };
         private readonly OxIconButton minimizeButton = new(OxIcons.Minimize, 28)
         {
-            IconPadding = 5
+            IconPadding = 5,
+            ToolTipText = "Minimize window"
         };
 
         private Bitmap GetRestoreIcon() =>
@@ -114,8 +117,16 @@ namespace OxLibrary.Dialogs
                 ? OxIcons.Restore
                 : OxIcons.Maximize;
 
-        private void SetRestoreButtonIcon() =>
+        private string GetRestoreToopTip() =>
+            Form != null && FormIsMaximized
+                ? "Restore window"
+                : "Maximize window";
+
+        private void SetRestoreButtonIconAndTooltip()
+        {
             restoreButton.Icon = GetRestoreIcon();
+            restoreButton.ToolTipText = GetRestoreToopTip();
+        }
 
         public void SetFormState(FormWindowState state)
         {
