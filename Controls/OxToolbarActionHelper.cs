@@ -2,7 +2,7 @@
 {
     public static class OxToolbarActionHelper
     {
-        public static Bitmap? Icon(OxToolbarAction action) => 
+        public static Bitmap? Icon(OxToolbarAction action) =>
             action switch
             {
                 OxToolbarAction.New => OxIcons.PlusThick,
@@ -24,7 +24,7 @@
             || action == OxToolbarAction.Update
             || action == OxToolbarAction.ExportSelected;
 
-        public static string Text(OxToolbarAction action) => 
+        public static string Text(OxToolbarAction action) =>
             action switch
             {
                 OxToolbarAction.New => "New",
