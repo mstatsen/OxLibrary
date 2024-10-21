@@ -18,17 +18,28 @@ namespace OxLibrary.Panels
             CollapseOtherAccordions();
         }
 
+        private bool AccordionProcess = false;
+
         private void CollapseOtherAccordions()
         {
-            if (!accordion || !expanded)
+            if (!accordion || !expanded || Parent == null || AccordionProcess)
                 return;
 
-            if (Parent == null)
-                return;
+            AccordionProcess = true;
 
-            foreach (Control control in Parent.Controls)
-                if (control is OxCard card && card.Expanded && card != this && card.accordion)
-                    card.Collapse();
+            try
+            {
+                foreach (Control control in Parent.Controls)
+                    if (control is OxCard card
+                        && card.Expanded
+                        && card != this &&
+                        card.accordion)
+                        card.Collapse();
+            }
+            finally
+            {
+                AccordionProcess = false;
+            }
         }
 
         private void SetExpanded(bool value)
@@ -84,7 +95,14 @@ namespace OxLibrary.Panels
         {
             base.SetHandlers();
             ApplyRecalcSizeHandler(ContentContainer, false, true);
-            ExpandButton.Click += (sender, e) => Expanded = !Expanded;
+            ExpandButton.Click += (s, e) => Expanded = !Expanded;
+            Header.Click += AccordionExpandingChangeHandler;
+        }
+
+        private void AccordionExpandingChangeHandler(object? sender, EventArgs e)
+        {
+            if (Accordion)
+                Expanded = !Expanded;
         }
 
         protected override int GetCalcedHeight()

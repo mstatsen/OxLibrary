@@ -357,7 +357,7 @@
                     Paddings.Left = (Width - GetSumColumnsSize().Width) / 2;
                     break;
                 case PanelsHorizontalAlign.OneColumn:
-                    Paddings.Horizontal = Width / 8;
+                    Paddings.Horizontal = 0;
                     break;
             }
         }

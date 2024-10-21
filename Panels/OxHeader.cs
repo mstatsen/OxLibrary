@@ -37,13 +37,20 @@ namespace OxLibrary.Panels
             set => ToolBar.Buttons = value;
         }
 
+
         public OxHeader(string title) : base(new Size(DefaultTitleWidth, DefaultTitleHeight))
         {
             label.Text = title;
             label.DoubleClick += (s, e) => ToolBar.ExecuteDefault();
+            label.Click += LabelClickHandler;
             Paddings.LeftOx = OxSize.Large;
             ReAlign();
         }
+
+        private void LabelClickHandler(object? sender, EventArgs e) => 
+            Click?.Invoke(sender, e);
+
+        public new EventHandler? Click;
 
         public Label Label => label;
 
