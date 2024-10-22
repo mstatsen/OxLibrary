@@ -396,8 +396,15 @@
         private void SetPanelsAlign(PanelsHorizontalAlign value)
         {
             panelsAlign = value;
+            SetTopPadding();
             SetLeftPadding();
         }
+
+        private void SetTopPadding() => 
+            Paddings.Top =
+                panelsAlign == PanelsHorizontalAlign.OneColumn
+                    ? 16
+                    : 18;
 
         protected void UpdateParent() =>
             Parent?.Update();
