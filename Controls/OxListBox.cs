@@ -2,6 +2,8 @@
 {
     public class OxListBox : ListBox
     {
+        public List<object> FixedItems { get; } = new();
+
         public OxListBox()
         {
             DoubleBuffered = true;
@@ -15,10 +17,15 @@
             if (e.Index < 0)
                 return;
 
+            Font itemFont = e.Font ?? Styles.Font(11);
+
+            if (FixedItems.Contains(Items[e.Index]))
+                itemFont = new Font(itemFont, FontStyle.Bold);
+
             if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
                 e = new DrawItemEventArgs(
                     e.Graphics,
-                    e.Font,
+                    itemFont,
                     e.Bounds,
                     e.Index,
                     e.State ^ DrawItemState.Selected,
@@ -33,7 +40,7 @@
                 TextRenderer.MeasureText(Items[e.Index].ToString(), e.Font).Height) / 2;
             e.Graphics.DrawString(
                 Items[e.Index].ToString(),
-                e.Font ?? Styles.Font(10),
+                itemFont,
                 Enabled ? Brushes.Black : Brushes.Silver,
                 textBounds, 
                 StringFormat.GenericDefault);
