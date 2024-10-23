@@ -57,6 +57,13 @@
         public static Bitmap PlatinumTrophy => GetBitmap("platinumTrophy");
         public static Bitmap Plus => GetBitmap("plus");
         public static Bitmap PlusThick => GetBitmap("plus-thick");
+        public static Bitmap PS1 => GetBitmap("ps1");
+        public static Bitmap PS2 => GetBitmap("ps2");
+        public static Bitmap PS3 => GetBitmap("ps3");
+        public static Bitmap PS4 => GetBitmap("ps4");
+        public static Bitmap PS5 => GetBitmap("ps5");
+        public static Bitmap PSP => GetBitmap("psp");
+        public static Bitmap PSVita => GetBitmap("psvita");
         public static Bitmap Related => GetBitmap("related");
         public static Bitmap Replace => GetBitmap("replace");
         public static Bitmap Restore => GetBitmap("restore");
