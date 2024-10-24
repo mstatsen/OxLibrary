@@ -1,8 +1,18 @@
 ﻿namespace OxLibrary.Controls
 {
+    public delegate bool IsHighPriorityItem(object item);
     public class OxListBox : ListBox
     {
-        public List<object> FixedItems { get; } = new();
+        public IsHighPriorityItem? CheckIsHighPriorityItem;
+        public IsHighPriorityItem? CheckIsMandatoryItem;
+
+        private bool IsHighPriorityItem(object item) =>
+            CheckIsHighPriorityItem == null 
+            || CheckIsHighPriorityItem.Invoke(item);
+
+        private bool IsMandatoryItem(object item) =>
+            CheckIsMandatoryItem == null
+            || CheckIsMandatoryItem.Invoke(item);
 
         public OxListBox()
         {
@@ -17,10 +27,15 @@
             if (e.Index < 0)
                 return;
 
-            Font itemFont = e.Font ?? Styles.Font(11);
+            FontStyle fontStyle = FontStyle.Regular;
 
-            if (FixedItems.Contains(Items[e.Index]))
-                itemFont = new Font(itemFont, FontStyle.Bold);
+            if (IsHighPriorityItem(Items[e.Index]))
+                fontStyle |= FontStyle.Underline;
+
+            if (IsMandatoryItem(Items[e.Index]))
+                fontStyle |= FontStyle.Bold;
+
+            Font itemFont = new Font(e.Font ?? Styles.Font(11), fontStyle);
 
             if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
                 e = new DrawItemEventArgs(
@@ -38,8 +53,11 @@
             textBounds.Y +=
                 (textBounds.Height -
                 TextRenderer.MeasureText(Items[e.Index].ToString(), e.Font).Height) / 2;
+
+            string? itemText = Items[e.Index].ToString();
+
             e.Graphics.DrawString(
-                Items[e.Index].ToString(),
+                itemText,
                 itemFont,
                 Enabled ? Brushes.Black : Brushes.Silver,
                 textBounds, 
