@@ -47,7 +47,7 @@ namespace OxLibrary.Panels
         protected virtual void ToolBarButtonVisibleChangeHandler(object? sender, EventArgs e) { }
 
         protected override int GetCalcedHeight() => 
-            base.GetCalcedHeight() + Header.CalcedHeight;
+            base.GetCalcedHeight() + (Header.Visible ? Header.CalcedHeight : 0);
 
         public override void ReAlignControls()
         {
