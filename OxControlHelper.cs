@@ -1,6 +1,6 @@
 ﻿using OxLibrary.Controls;
 using OxLibrary.Dialogs;
-using System.Reflection.Metadata.Ecma335;
+using OxLibrary.Panels;
 
 namespace OxLibrary
 {
@@ -19,23 +19,23 @@ namespace OxLibrary
             if (aligningControl == null)
                 return null;
 
-            int addPoints = 2;
-
-            switch (baseControl)
+            switch (aligningControl)
             {
-                case OxLabel _:
-                    addPoints = 0;
+                case OxPane:
+                    aligningControl.Top = baseControl.Top - (aligningControl.Height - baseControl.Height) / 2;
+                    break;
+                default:
+                    aligningControl.Top =
+                        (baseControl == null)
+                            ? aligningControl.Top
+                            : baseControl.Top
+                                + GetBaseLine(baseControl)
+                                - GetBaseLine(aligningControl)
+                                + (baseControl is OxLabel ? 0 : 2);
                     break;
             }
 
-            aligningControl.Top =
-                (baseControl == null)
-                    ? aligningControl.Top
-                    : baseControl.Top
-                        + GetBaseLine(baseControl)
-                        - GetBaseLine(aligningControl)
-                        + addPoints;
-            return (T)aligningControl;
+            return aligningControl;
         }
 
         public static void CenterForm(OxForm form)
