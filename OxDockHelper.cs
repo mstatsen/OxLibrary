@@ -35,6 +35,9 @@
         public static bool IsVertical(OxDock dock) =>
             dock == OxDock.Top || dock == OxDock.Bottom;
 
+        public static bool IsVertical(DockStyle dock) =>
+            Dock(dock) is OxDock.Top or OxDock.Bottom;
+
         public static List<OxDock> All()
         {
             List<OxDock> list = new();
