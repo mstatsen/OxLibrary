@@ -45,7 +45,7 @@
             || Dock == DockStyle.Bottom
             || Dock == DockStyle.None;
 
-        protected void RecalcSize()
+        public void RecalcSize()
         {
             if (sizeRecalcing)
                 return;
