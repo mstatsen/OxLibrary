@@ -13,7 +13,7 @@
             {
                 Alignment = DataGridViewContentAlignment.MiddleCenter,
                 WrapMode = DataGridViewTriState.True,
-                Font = new Font(FontFamily, 10),
+                Font = new(FontFamily, 10),
             };
         public static DataGridViewCellStyle Cell_LeftAlignment { get; private set; }
         public const int DefaultControlHeight = 24;

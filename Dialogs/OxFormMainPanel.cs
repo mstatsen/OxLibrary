@@ -29,7 +29,7 @@ namespace OxLibrary.Dialogs
 
         private void SetHeaderFont() => 
             Header.Label.Font = 
-                new Font(Header.Label.Font.FontFamily, Header.Label.Font.Size + 1, FontStyle.Bold);
+                new(Header.Label.Font.FontFamily, Header.Label.Font.Size + 1, FontStyle.Bold);
 
         private void SetAnchors() => 
             Anchor = AnchorStyles.Left | AnchorStyles.Top;

@@ -35,7 +35,7 @@
             if (IsMandatoryItem(Items[e.Index]))
                 fontStyle |= FontStyle.Bold;
 
-            Font itemFont = new Font(e.Font ?? Styles.Font(11), fontStyle);
+            Font itemFont = new(e.Font ?? Styles.Font(11), fontStyle);
 
             if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
                 e = new DrawItemEventArgs(

@@ -149,7 +149,7 @@
             
             foreach (OxTabButton button in TabButtons.Values)
             {
-                button.Font = new Font(Font.FontFamily, Font.Size, Font.Style);
+                button.Font = new(Font, Font.Style);
                 button.ForeColor = ForeColor;
             }
         }

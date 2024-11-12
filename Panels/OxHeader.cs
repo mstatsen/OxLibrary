@@ -21,7 +21,7 @@ namespace OxLibrary.Panels
             AutoSize = false,
             Dock = DockStyle.Fill,
             Text = string.Empty,
-            Font = new Font(DefaultFontFamily, DefaultFontSize + 0.5f, FontStyle.Bold | FontStyle.Italic),
+            Font = new(DefaultFontFamily, DefaultFontSize + 0.5f, FontStyle.Bold | FontStyle.Italic),
             TextAlign = ContentAlignment.MiddleLeft
         };
 

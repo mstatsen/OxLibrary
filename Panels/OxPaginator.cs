@@ -139,9 +139,8 @@ namespace OxLibrary.Panels
 
         private bool SetButtonFont(OxTaggedButton button)
         {
-            button.Font = new Font(
-                button.Font.FontFamily,
-                button.Font.Size,
+            button.Font = new(
+                button.Font,
                 button.FreezeHovered ? FontStyle.Bold : FontStyle.Regular);
             return true;
         }

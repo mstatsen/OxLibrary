@@ -117,9 +117,8 @@ namespace OxLibrary.Panels
             if (TabControl == null)
                 return;
 
-            Font = new Font(
-                Font.FontFamily,
-                Font.Size,
+            Font = new(
+                Font,
                 Active ? FontStyle.Bold : FontStyle.Regular);
 
             OxDock startDock = OxDock.Left;
