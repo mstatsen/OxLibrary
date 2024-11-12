@@ -9,9 +9,9 @@ namespace OxLibrary.Controls
             Dock = DockStyle.Fill
         };
 
-        public OxIconButton(Bitmap? icon, int Size) : base(new Size(Size, Size))
+        public OxIconButton(Bitmap? icon, int Size) : base(new(Size, Size))
         {
-            MinimumSize = new Size(Width, Height);
+            MinimumSize = new(Width, Height);
             MinimumSize = MaximumSize;
             Icon = icon;
         }

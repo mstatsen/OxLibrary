@@ -200,7 +200,7 @@ namespace OxLibrary.Controls
 
         public EventHandler? ValueChanged;
 
-        public OxSpinEdit() : base(new Size(80, 22)) { }
+        public OxSpinEdit() : base(new(80, 22)) { }
 
         public bool ReadOnly
         {

@@ -182,7 +182,7 @@ namespace OxLibrary.Dialogs
         public override void SetContentSize(int width, int height)
         {
             base.SetContentSize(width, height);
-            Form.ClientSize = new Size(Width, Height);
+            Form.ClientSize = new(Width, Height);
         }
     }
 }

@@ -38,7 +38,7 @@ namespace OxLibrary.Panels
         }
 
 
-        public OxHeader(string title) : base(new Size(DefaultTitleWidth, DefaultTitleHeight))
+        public OxHeader(string title) : base(new(DefaultTitleWidth, DefaultTitleHeight))
         {
             label.Text = title;
             label.DoubleClick += (s, e) => ToolBar.ExecuteDefault();

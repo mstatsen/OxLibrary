@@ -27,7 +27,7 @@
 
                 if (picture != null)
                     e.Graphics.DrawImage(
-                        OxImageBoxer.BoxingImage(picture, new Size(e.Bounds.Height, e.Bounds.Height)),
+                        OxImageBoxer.BoxingImage(picture, new(e.Bounds.Height, e.Bounds.Height)),
                         e.Bounds.X + ImageLeft,
                         e.Bounds.Y
                     );

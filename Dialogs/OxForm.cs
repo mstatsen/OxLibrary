@@ -38,7 +38,7 @@
         {
             MaximumSize = Screen.GetWorkingArea(this).Size;
             Size wantedMinimumSize = WantedMinimumSize;
-            MinimumSize = new Size(
+            MinimumSize = new(
                 Math.Min(wantedMinimumSize.Width, MaximumSize.Width),
                 Math.Min(wantedMinimumSize.Height, MaximumSize.Height)
             );
@@ -113,7 +113,7 @@
 
         public void ClearConstraints()
         {
-            MinimumSize = new Size(0, 0);
+            MinimumSize = Size.Empty;
             MaximumSize = MinimumSize;
         }
 
@@ -121,7 +121,7 @@
         {
             if (MainPanel != null)
             {
-                MinimumSize = new Size(MainPanel.Width, MainPanel.Height);
+                MinimumSize = new(MainPanel.Width, MainPanel.Height);
                 MaximumSize = MinimumSize;
             }
         }

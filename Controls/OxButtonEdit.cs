@@ -16,7 +16,7 @@ namespace OxLibrary.Controls
                 Cursor = Cursors.Default
             };
 
-        public OxButtonEdit() : base(new Size(120, 22)) { }
+        public OxButtonEdit() : base(new(120, 22)) { }
 
         protected override void PrepareInnerControls() 
         {

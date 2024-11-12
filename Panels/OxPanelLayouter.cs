@@ -182,12 +182,15 @@
             }
         }
 
+        private DockStyle GetColumnDock() =>
+            panelsAlign == PanelsHorizontalAlign.OneColumn
+                ? DockStyle.Top
+                : DockStyle.Left;
+
         private void SetColumnsDock()
         {
             foreach (IOxPane column in columns)
-                column.Dock = panelsAlign == PanelsHorizontalAlign.OneColumn
-                    ? DockStyle.Top
-                    : DockStyle.Left;
+                column.Dock = GetColumnDock();
         }
 
         private void PanelVisibleChangedHander(object? sender, EventArgs e)
@@ -336,7 +339,7 @@
                     sumWidth += column.Width;
             }
 
-            return new Size(sumWidth, maxColumnHeight);
+            return new(sumWidth, maxColumnHeight);
         }
 
         private void SetColumnsSize()
@@ -377,7 +380,7 @@
                 panelsList.Clear();
             }
 
-            SetContentSize(0, 0);
+            SetContentSize(Size.Empty);
             UpdateParent();
         }
 

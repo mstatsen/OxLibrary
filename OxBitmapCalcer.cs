@@ -93,14 +93,14 @@ namespace OxLibrary
         }
 
         public Bitmap CroppedBitmap => GetBitmap(
-            new Size(ImageSize.Width, ImageSize.Height),
-            new Rectangle(0, 0,
+            new(ImageSize.Width, ImageSize.Height),
+            new(0, 0,
                 Math.Min(ImageBox.Width, ImageSize.Width),
                 Math.Min(ImageBox.Height, ImageSize.Height)));
 
         public Bitmap FullBitmap => GetBitmap(
-            new Size(ImageBox.Width, ImageBox.Height),
-            new Rectangle(ImageBox.Left, ImageBox.Top, ImageSize.Width, ImageSize.Height));
+            new(ImageBox.Width, ImageBox.Height),
+            new(ImageBox.Left, ImageBox.Top, ImageSize.Width, ImageSize.Height));
 
         public static Bitmap Zip(Bitmap bitmap, Size maximumSize) => 
             new OxBitmapCalcer(bitmap, maximumSize, true).CroppedBitmap;

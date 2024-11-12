@@ -4,7 +4,7 @@ namespace OxLibrary.Panels
 {
     public class OxLoadingPanel : OxFrame
     {
-        public OxLoadingPanel() : base(new Size(300, 100))
+        public OxLoadingPanel() : base(new(300, 100))
         {
             base.SetVisible(false);
             Borders.SetSize(OxSize.Small);
