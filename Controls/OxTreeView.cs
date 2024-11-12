@@ -104,6 +104,38 @@
                 }
             }
         }
+
+        public object? SelectedItem
+        {
+            get => SelectedNode?.Tag;
+            set => SelectedNode = GetNodeByTag(value);
+        }
+
+        public TreeNode? GetNodeByTag(object? tag, TreeNodeCollection? treeNodes = null)
+        {
+            if (tag == null)
+                return Nodes.Count > 0 
+                    ? Nodes[0] 
+                    : null;
+
+            treeNodes ??= Nodes;
+
+            foreach (TreeNode node in treeNodes)
+            {
+                if (node.Tag.Equals(tag))
+                    return node;
+
+                if (node.Nodes.Count == 0)
+                    continue;
+
+                TreeNode? findNode = GetNodeByTag(tag, node.Nodes);
+
+                if (findNode != null)
+                    return findNode;
+            }
+
+            return null;
+        }
     }
 
     public class CountedTreeNode : TreeNode
