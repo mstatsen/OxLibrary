@@ -1,11 +1,23 @@
-﻿namespace OxLibrary.Controls
+﻿
+namespace OxLibrary.Controls
 {
-    public delegate bool IsHighPriorityItem(object item);
-    public class OxListBox : ListBox
+    public class OxListBox : ListBox, IItemListControl
     {
-        public IsHighPriorityItem? CheckIsHighPriorityItem;
-        public IsHighPriorityItem? CheckIsMandatoryItem;
+        private IsHighPriorityItem? checkIsHighPriorityItem;
+        private IsHighPriorityItem? checkIsMandatoryItem;
 
+        public IsHighPriorityItem? CheckIsHighPriorityItem 
+        { 
+            get => checkIsHighPriorityItem;
+            set => checkIsHighPriorityItem = value;
+        }
+
+        public IsHighPriorityItem? CheckIsMandatoryItem
+        { 
+            get => checkIsMandatoryItem;
+            set => checkIsMandatoryItem = value;
+        }
+            
         private bool IsHighPriorityItem(object item) =>
             CheckIsHighPriorityItem == null 
             || CheckIsHighPriorityItem.Invoke(item);
@@ -98,5 +110,28 @@
 
         public void MoveUp() => MoveItem(MoveDirection.Up);
         public void MoveDown() => MoveItem(MoveDirection.Down);
+
+        public void UpdateItem(int index, object item) =>
+            Items[index] = item;
+
+        public int Count => Items.Count;
+
+        public List<object> ObjectList
+        {
+            get
+            {
+                List<object> result = new();
+
+                foreach (var item in Items)
+                    result.Add(item);
+
+                return result;
+            }
+        }
+
+        public void RemoveAt(int index) => Items.RemoveAt(index);
+
+        public void Add(object item) => Items.Add(item);
+        public void Clear() => Items.Clear();
     }
 }
