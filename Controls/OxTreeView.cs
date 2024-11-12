@@ -1,6 +1,7 @@
-﻿namespace OxLibrary.Controls
+﻿
+namespace OxLibrary.Controls
 {
-    public class OxTreeView : TreeView
+    public class OxTreeView : TreeView, IItemListControl
     {
         public OxTreeView() : base()
         {
@@ -90,6 +91,9 @@
         private Pen SelectedPen = default!;
 
         private bool loading = false;
+
+        public event EventHandler? SelectedIndexChanged;
+
         public bool Loading 
         { 
             get => loading;
@@ -109,6 +113,37 @@
         {
             get => SelectedNode?.Tag;
             set => SelectedNode = GetNodeByTag(value);
+        }
+        public int SelectedIndex 
+        {
+            get => SelectedNode.Index;
+            set => SelectedNode = Nodes[value];
+        }
+
+        public int Count => Nodes.Count;
+
+        public IsHighPriorityItem? CheckIsHighPriorityItem 
+        { 
+            get => null;
+            set { }
+        }
+        public IsHighPriorityItem? CheckIsMandatoryItem 
+        {
+            get => null;
+            set { }
+        }
+
+        public List<object> ObjectList
+        {
+            get
+            {
+                List<object> result = new();
+
+                foreach (TreeNode node in Nodes)
+                    result.Add(node.Tag);
+
+                return result;
+            }
         }
 
         public TreeNode? GetNodeByTag(object? tag, TreeNodeCollection? treeNodes = null)
@@ -135,6 +170,41 @@
             }
 
             return null;
+        }
+
+        public void ClearSelected()
+        {
+            SelectedNode = null;
+        }
+
+        public void UpdateItem(int index, object item)
+        {
+            Nodes[index].Tag = item;
+        }
+
+        public void RemoveAt(int index)
+        {
+            Nodes.RemoveAt(index);
+        }
+
+        public void Add(object item)
+        {
+            Nodes.Add(item.ToString()).Tag = item;
+        }
+
+        public void Clear()
+        {
+            Nodes.Clear();
+        }
+
+        public void MoveUp()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MoveDown()
+        {
+            throw new NotImplementedException();
         }
     }
 

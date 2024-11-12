@@ -26,7 +26,7 @@ namespace OxLibrary.Controls
 
         Control? Parent { get; set; }
 
-        event EventHandler SelectedIndexChanged;
+        event EventHandler? SelectedIndexChanged;
         event EventHandler DoubleClick;
         event EventHandler Click;
         event KeyEventHandler KeyUp;
