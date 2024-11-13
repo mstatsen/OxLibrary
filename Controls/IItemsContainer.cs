@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace OxLibrary.Controls
 {
     public delegate bool IsHighPriorityItem(object item);
 
-    public interface IItemListControl : IComponent
+    public interface IItemsContainer : IComponent
     {
         object? SelectedItem { get; set; }
         int SelectedIndex { get; set; }
@@ -19,11 +14,8 @@ namespace OxLibrary.Controls
         void ClearSelected();
 
         void UpdateItem(int index, object item);
-
         int Count { get; }
-
         public void RemoveAt(int index);
-
         Control? Parent { get; set; }
 
         event EventHandler? SelectedIndexChanged;
@@ -34,7 +26,10 @@ namespace OxLibrary.Controls
         IsHighPriorityItem? CheckIsMandatoryItem { get; set; }
 
         void Add(object item);
+        void AddChild(object item);
         void Clear();
+
+        void ExpandAll();
 
         List<object> ObjectList { get; }
 
@@ -42,5 +37,15 @@ namespace OxLibrary.Controls
 
         void MoveUp();
         void MoveDown();
+
+        bool AvailableMoveUp { get; }
+        bool AvailableMoveDown { get; }
+
+        DockStyle Dock { get; set; }
+
+        BorderStyle BorderStyle { get; set; }
+        Control AsControl();
+
+        bool AvailableChilds { get; }
     }
 }

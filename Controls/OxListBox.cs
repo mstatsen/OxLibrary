@@ -1,7 +1,7 @@
 ﻿
 namespace OxLibrary.Controls
 {
-    public class OxListBox : ListBox, IItemListControl
+    public partial class OxListBox : ListBox, IItemsContainer
     {
         private IsHighPriorityItem? checkIsHighPriorityItem;
         private IsHighPriorityItem? checkIsMandatoryItem;
@@ -77,26 +77,12 @@ namespace OxLibrary.Controls
             e.DrawFocusRectangle();
         }
 
-        private enum MoveDirection
-        {
-            Up,
-            Down
-        };
-
-        private static int MoveDirectionDelta(MoveDirection direction) => 
-            direction switch
-            {
-                MoveDirection.Up => -1,
-                MoveDirection.Down => 1,
-                _ => 0,
-            };
-
         private void MoveItem(MoveDirection direction)
         {
             if (SelectedItem == null || SelectedIndex < 0)
                 return; 
 
-            int newIndex = SelectedIndex + MoveDirectionDelta(direction);
+            int newIndex = SelectedIndex + MoveDirectionHelper.Delta(direction);
 
             if (newIndex < 0 || newIndex >= Items.Count)
                 return; 
@@ -129,9 +115,21 @@ namespace OxLibrary.Controls
             }
         }
 
+        public bool AvailableMoveUp => SelectedIndex > 0;
+
+        public bool AvailableMoveDown => (SelectedIndex > -1)
+                && (SelectedIndex < Count - 1);
+
         public void RemoveAt(int index) => Items.RemoveAt(index);
 
         public void Add(object item) => Items.Add(item);
+        public void AddChild(object item) => Items.Add(item);
+        public void ExpandAll() { }
+
         public void Clear() => Items.Clear();
+
+        public Control AsControl() => this;
+
+        public bool AvailableChilds => false;
     }
 }

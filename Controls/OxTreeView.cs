@@ -1,7 +1,6 @@
-﻿
-namespace OxLibrary.Controls
+﻿namespace OxLibrary.Controls
 {
-    public class OxTreeView : TreeView, IItemListControl
+    public class OxTreeView : TreeView, IItemsContainer
     {
         public OxTreeView() : base()
         {
@@ -94,6 +93,12 @@ namespace OxLibrary.Controls
 
         public event EventHandler? SelectedIndexChanged;
 
+        protected override void OnAfterSelect(TreeViewEventArgs e)
+        {
+            base.OnAfterSelect(e);
+            SelectedIndexChanged?.Invoke(this, e);
+        }
+
         public bool Loading 
         { 
             get => loading;
@@ -116,7 +121,7 @@ namespace OxLibrary.Controls
         }
         public int SelectedIndex 
         {
-            get => SelectedNode.Index;
+            get => SelectedNode == null ? -1 : SelectedNode.Index;
             set => SelectedNode = Nodes[value];
         }
 
@@ -172,39 +177,64 @@ namespace OxLibrary.Controls
             return null;
         }
 
-        public void ClearSelected()
+        public void ClearSelected() => SelectedNode = null;
+
+        public void UpdateItem(int index, object item) => Nodes[index].Tag = item;
+
+        public void RemoveAt(int index) => Nodes.RemoveAt(index);
+
+        public void Add(object item) => Nodes.Add(item.ToString()).Tag = item;
+
+        public bool AvailableMoveUp =>
+            SelectedNode != null
+            && (SelectedNode.Parent == null
+                ? SelectedIndex > 0
+                : SelectedNode.Parent.Nodes.IndexOf(SelectedNode) > 0);
+
+        public bool AvailableMoveDown =>
+            SelectedNode != null
+            && (SelectedNode.Parent == null
+                ? SelectedIndex > -1 && SelectedIndex < Count - 1
+                : SelectedNode.Parent.Nodes.IndexOf(SelectedNode) > SelectedNode.Parent.Nodes.Count - 1);
+
+        public void Clear() => Nodes.Clear();
+
+        private void MoveNode(MoveDirection direction)
         {
-            SelectedNode = null;
+            if (SelectedNode == null)
+                return;
+
+            TreeNodeCollection parentNodes = 
+                SelectedNode.Parent != null 
+                    ? SelectedNode.Parent.Nodes 
+                    : Nodes;
+
+            int newIndex = SelectedIndex + MoveDirectionHelper.Delta(direction);
+
+            if (newIndex < 0 || newIndex >= parentNodes.Count)
+                return;
+
+            TreeNode node = SelectedNode;
+            parentNodes.Remove(node);
+            parentNodes.Insert(newIndex, node);
+            SelectedNode = node;
         }
 
-        public void UpdateItem(int index, object item)
-        {
-            Nodes[index].Tag = item;
-        }
+        public void MoveUp() => MoveNode(MoveDirection.Up);
 
-        public void RemoveAt(int index)
-        {
-            Nodes.RemoveAt(index);
-        }
+        public void MoveDown() => MoveNode(MoveDirection.Down);
 
-        public void Add(object item)
-        {
-            Nodes.Add(item.ToString()).Tag = item;
-        }
+        public Control AsControl() => this;
 
-        public void Clear()
-        {
-            Nodes.Clear();
-        }
+        public bool AvailableChilds => true;
 
-        public void MoveUp()
+        public void AddChild(object item)
         {
-            throw new NotImplementedException();
-        }
-
-        public void MoveDown()
-        {
-            throw new NotImplementedException();
+            TreeNode childNode = new(item.ToString())
+            {
+                Tag = item
+            };
+            SelectedNode.Nodes.Add(childNode);
         }
     }
 

@@ -73,6 +73,16 @@ namespace OxLibrary.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] addChild {
+            get {
+                object obj = ResourceManager.GetObject("addChild", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] batch_edit {
             get {
                 object obj = ResourceManager.GetObject("batch_edit", resourceCulture);

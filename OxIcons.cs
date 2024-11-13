@@ -18,6 +18,7 @@
         }
 
         public static Bitmap Account => GetBitmap("account");
+        public static Bitmap AddChild => GetBitmap("addChild");
         public static Bitmap Batch_edit => GetBitmap("batch_edit");
         public static Bitmap BronzeTrophy => GetBitmap("bronzeTrophy");
         public static Bitmap Close => GetBitmap("close");
