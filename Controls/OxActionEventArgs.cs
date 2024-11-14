@@ -8,6 +8,7 @@
             Action = action;
     }
 
-    public delegate void OxActionClick<TAction>(object? sender, OxActionEventArgs<TAction> EventArgs)
+    public delegate void OxActionClick<TAction>(object? sender, 
+        OxActionEventArgs<TAction> EventArgs)
         where TAction : notnull, Enum;
 }

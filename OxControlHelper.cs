@@ -19,22 +19,19 @@ namespace OxLibrary
             if (aligningControl == null)
                 return null;
 
-            switch (aligningControl)
-            {
-                case OxPane:
-                    aligningControl.Top = baseControl.Top - (aligningControl.Height - baseControl.Height) / 2;
-                    break;
-                default:
-                    aligningControl.Top =
-                        (baseControl == null)
+            aligningControl.Top = 
+                aligningControl switch
+                {
+                    OxPane => 
+                        baseControl.Top - (aligningControl.Height - baseControl.Height) / 2,
+                    _ => 
+                        baseControl == null
                             ? aligningControl.Top
                             : baseControl.Top
                                 + GetBaseLine(baseControl)
                                 - GetBaseLine(aligningControl)
-                                + (baseControl is OxLabel ? 0 : 2);
-                    break;
-            }
-
+                                + (baseControl is OxLabel ? 0 : 2),
+                };
             return aligningControl;
         }
 

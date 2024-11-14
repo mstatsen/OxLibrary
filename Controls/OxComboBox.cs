@@ -162,7 +162,6 @@
                     }
                     break;
                 default:
-                    // Add Case switches to handle other events
                     break;
             }
         }
