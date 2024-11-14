@@ -14,23 +14,26 @@
         }
 
         public bool DoubleClickExpand { get; set; } = true;
+        public bool AllowCollapse { get; set; } = true;
 
         private bool IsDoubleClick = false;
 
         protected override void OnBeforeCollapse(TreeViewCancelEventArgs e)
         {
             base.OnBeforeCollapse(e);
-            e.Cancel |= !DoubleClickExpand 
-                && IsDoubleClick 
-                && e.Action == TreeViewAction.Collapse;
+            if (e.Action == TreeViewAction.Collapse)
+                e.Cancel |= !AllowCollapse 
+                    || (!DoubleClickExpand 
+                        && IsDoubleClick);
         }
 
         protected override void OnBeforeExpand(TreeViewCancelEventArgs e)
         {
             base.OnBeforeExpand(e);
-            e.Cancel |= !DoubleClickExpand 
-                && IsDoubleClick 
-                && e.Action == TreeViewAction.Expand;
+
+            if (e.Action == TreeViewAction.Expand)
+                e.Cancel |= !DoubleClickExpand 
+                    && IsDoubleClick;
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
