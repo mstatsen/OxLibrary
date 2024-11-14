@@ -97,8 +97,8 @@ namespace OxLibrary.Controls
         public void MoveUp() => MoveItem(MoveDirection.Up);
         public void MoveDown() => MoveItem(MoveDirection.Down);
 
-        public void UpdateItem(int index, object item) =>
-            Items[index] = item;
+        public void UpdateSelectedItem(object item) =>
+            Items[SelectedIndex] = item;
 
         public int Count => Items.Count;
 
@@ -121,11 +121,10 @@ namespace OxLibrary.Controls
                 && (SelectedIndex < Count - 1);
 
         public void RemoveAt(int index) => Items.RemoveAt(index);
+        public void RemoveCurrent() => Items.RemoveAt(SelectedIndex);
 
         public void Add(object item) => Items.Add(item);
         public void AddChild(object item) => Items.Add(item);
-        public void ExpandAll() { }
-
         public void Clear() => Items.Clear();
 
         public Control AsControl() => this;

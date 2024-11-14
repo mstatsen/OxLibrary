@@ -13,6 +13,32 @@
             ItemHeight = 26;
         }
 
+        public bool DoubleClickExpand { get; set; } = true;
+
+        private bool IsDoubleClick = false;
+
+        protected override void OnBeforeCollapse(TreeViewCancelEventArgs e)
+        {
+            base.OnBeforeCollapse(e);
+            e.Cancel |= !DoubleClickExpand 
+                && IsDoubleClick 
+                && e.Action == TreeViewAction.Collapse;
+        }
+
+        protected override void OnBeforeExpand(TreeViewCancelEventArgs e)
+        {
+            base.OnBeforeExpand(e);
+            e.Cancel |= !DoubleClickExpand 
+                && IsDoubleClick 
+                && e.Action == TreeViewAction.Expand;
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+            IsDoubleClick = e.Clicks > 1;
+        }
+
         protected override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
@@ -179,9 +205,10 @@
 
         public void ClearSelected() => SelectedNode = null;
 
-        public void UpdateItem(int index, object item) => Nodes[index].Tag = item;
+        public void UpdateSelectedItem(object item) => SelectedNode.Tag = item;
 
         public void RemoveAt(int index) => Nodes.RemoveAt(index);
+        public void RemoveCurrent() => SelectedNode.Remove();
 
         public void Add(object item) => Nodes.Add(item.ToString()).Tag = item;
 
@@ -189,13 +216,13 @@
             SelectedNode != null
             && (SelectedNode.Parent == null
                 ? SelectedIndex > 0
-                : SelectedNode.Parent.Nodes.IndexOf(SelectedNode) > 0);
+                : SelectedNode.Index > 0);
 
         public bool AvailableMoveDown =>
             SelectedNode != null
             && (SelectedNode.Parent == null
                 ? SelectedIndex > -1 && SelectedIndex < Count - 1
-                : SelectedNode.Parent.Nodes.IndexOf(SelectedNode) > SelectedNode.Parent.Nodes.Count - 1);
+                : SelectedNode.Index < SelectedNode.Parent.Nodes.Count - 1);
 
         public void Clear() => Nodes.Clear();
 
@@ -235,6 +262,7 @@
                 Tag = item
             };
             SelectedNode.Nodes.Add(childNode);
+            SelectedNode = childNode;
         }
     }
 

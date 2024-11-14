@@ -12,10 +12,10 @@ namespace OxLibrary.Controls
         void BeginUpdate();
         void EndUpdate();
         void ClearSelected();
-
-        void UpdateItem(int index, object item);
+        void UpdateSelectedItem(object item);
         int Count { get; }
         public void RemoveAt(int index);
+        public void RemoveCurrent();
         Control? Parent { get; set; }
 
         event EventHandler? SelectedIndexChanged;
@@ -28,8 +28,6 @@ namespace OxLibrary.Controls
         void Add(object item);
         void AddChild(object item);
         void Clear();
-
-        void ExpandAll();
 
         List<object> ObjectList { get; }
 
