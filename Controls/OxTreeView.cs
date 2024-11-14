@@ -21,6 +21,7 @@
         protected override void OnBeforeCollapse(TreeViewCancelEventArgs e)
         {
             base.OnBeforeCollapse(e);
+
             if (e.Action == TreeViewAction.Collapse)
                 e.Cancel |= !AllowCollapse 
                     || (!DoubleClickExpand 
@@ -59,10 +60,6 @@
             if (e.Node == null)
                 return;
 
-            FontStyle fontStyle = e.Node.IsSelected
-                ? FontStyle.Bold
-                : FontStyle.Regular;
-
             e.Graphics.DrawRectangle(
                 e.Node.IsSelected ? SelectedPen : StandardPen, 
                 e.Bounds);
@@ -70,7 +67,7 @@
                 e.Node.IsSelected ? SelectedBrush : StandardBrush, 
                 e.Bounds);
             Brush textBrush = Enabled ? Brushes.Black : Brushes.Silver;
-            Font nodeFont = new(Font, fontStyle);
+            Font nodeFont = new(Font, e.Node.IsSelected ? FontStyle.Bold : FontStyle.Regular);
 
             int textTop = e.Bounds.Y 
                 + (e.Bounds.Height - TextRenderer.MeasureText(e.Node.Text, nodeFont).Height) / 2;
@@ -154,7 +151,8 @@
             set => SelectedNode = Nodes[value];
         }
 
-        public int Count => Nodes.Count;
+        public int Count => 
+            Nodes.Count;
 
         public IsHighPriorityItem? CheckIsHighPriorityItem 
         { 
@@ -206,12 +204,17 @@
             return null;
         }
 
-        public void ClearSelected() => SelectedNode = null;
+        public void ClearSelected() => 
+            SelectedNode = null;
 
-        public void UpdateSelectedItem(object item) => SelectedNode.Tag = item;
+        public void UpdateSelectedItem(object item) => 
+            SelectedNode.Tag = item;
 
-        public void RemoveAt(int index) => Nodes.RemoveAt(index);
-        public void RemoveCurrent() => SelectedNode.Remove();
+        public void RemoveAt(int index) => 
+            Nodes.RemoveAt(index);
+
+        public void RemoveCurrent() => 
+            SelectedNode.Remove();
 
         public void Add(object item) => Nodes.Add(item.ToString()).Tag = item;
 
@@ -273,6 +276,8 @@
     {
         private int count;
 
+        public new OxTreeView TreeView => (OxTreeView)base.TreeView;
+
         public CountedTreeNode(string text) : base(text) { }
 
         public int Count 
@@ -283,7 +288,9 @@
                 int oldCount = count;
                 count = value;
 
-                if (TreeView != null && oldCount != count && !((OxTreeView)TreeView).Loading)
+                if (TreeView != null 
+                    && oldCount != count 
+                    && !TreeView.Loading)
                     TreeView?.Invalidate();
             }
         }
