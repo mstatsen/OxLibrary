@@ -76,6 +76,7 @@
         public static Bitmap Settings => GetBitmap("settings");
         public static Bitmap Share => GetBitmap("share");
         public static Bitmap SilverTrophy => GetBitmap("silverTrophy");
+        public static Bitmap SQL => GetBitmap("sql");
         public static Bitmap Storage => GetBitmap("storage");
         public static Bitmap Synchronize => GetBitmap("synchronize");
         public static Bitmap Tag => GetBitmap("tag");

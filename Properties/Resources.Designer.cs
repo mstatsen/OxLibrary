@@ -2973,6 +2973,16 @@ namespace OxLibrary.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] sql {
+            get {
+                object obj = ResourceManager.GetObject("sql", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] storage {
             get {
                 object obj = ResourceManager.GetObject("storage", resourceCulture);
