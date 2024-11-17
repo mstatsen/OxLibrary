@@ -6,6 +6,7 @@
         Small = 1,
         Medium = 2,
         Large = 4,
-        Extra = 8
+        Extra = 8,
+        Nine = 9
     }
 }

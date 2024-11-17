@@ -6,7 +6,7 @@
 
         public OxFunctionsPanel(Size contentSize) : base(contentSize) { }
 
-        private void SetTitleAlign() =>
+        protected virtual void SetTitleAlign() =>
             Header.TitleAlign = ContentAlignment.MiddleCenter;
 
         protected override void AfterCreated()
