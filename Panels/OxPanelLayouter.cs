@@ -83,7 +83,6 @@
             columnsPanels[column].Add(panel);
         }
 
-
         public void LayoutPanels<T>(List<T> list)
             where T : IOxPane
         {
@@ -155,7 +154,7 @@
 
             if (columnNumber == columns.Count)
                 columnNumber = 0;
-
+            else
             if (columnNumber < 0)
                 columnNumber = CalcedColumnCount - 1;
 
@@ -377,6 +376,7 @@
                     panel.Visible = false;
                     panel.Parent = null;
                 }
+
                 panelsList.Clear();
             }
 
