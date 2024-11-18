@@ -40,7 +40,8 @@ namespace OxLibrary.Dialogs
         {
             base.OnKeyUp(e);
 
-            if (!e.Handled && e.KeyCode == Keys.Escape)
+            if (!e.Handled && 
+                e.KeyCode is Keys.Escape)
                 DialogResult = DialogResult.Cancel;
         }
 
@@ -51,10 +52,10 @@ namespace OxLibrary.Dialogs
         {
             if (!e.Handled)
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode is Keys.Enter)
                     DialogResult = DialogResult.OK;
                 else
-                if (e.KeyCode == Keys.Escape)
+                if (e.KeyCode is Keys.Escape)
                     DialogResult = DialogResult.Cancel;
             }
         }
@@ -85,7 +86,7 @@ namespace OxLibrary.Dialogs
             string? emptyMandatoryField = GetEmptyMandatoryFieldName?.Invoke();
             emptyMandatoryField ??= EmptyMandatoryField();
 
-            if (emptyMandatoryField == string.Empty)
+            if (emptyMandatoryField.Equals(string.Empty))
                 return true;
 
             OxMessage.ShowError($"{emptyMandatoryField} is mandatory", this);

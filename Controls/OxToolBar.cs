@@ -32,7 +32,10 @@ namespace OxLibrary.Controls
             foreach (OxClickFrame button in buttons)
             {
                 button.Parent = this;
-                button.Dock = button.Dock == DockStyle.Right ? DockStyle.Right : DockStyle.Left;
+                button.Dock = 
+                    button.Dock is DockStyle.Right 
+                        ? DockStyle.Right 
+                        : DockStyle.Left;
 
                 if (button.BeginGroup && 
                     lastButton is not null)
@@ -40,7 +43,7 @@ namespace OxLibrary.Controls
                     button.Margins.LeftOx = OxSize.Large;
                     lastButton.Margins.RightOx = OxSize.Large;
 
-                    if (lastButton.Dock == button.Dock)
+                    if (lastButton.Dock.Equals(button.Dock))
                         SeparateButtonsGroup(button);
                 }
                 else
@@ -199,7 +202,7 @@ namespace OxLibrary.Controls
         private OxToolbarAction GetActionByButton(OxButton button)
         {
             foreach (var item in Actions)
-                if (item.Value == button)
+                if (item.Value.Equals(button))
                     return item.Key;
 
             return OxToolbarAction.Empty;

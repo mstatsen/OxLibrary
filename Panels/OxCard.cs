@@ -35,8 +35,8 @@ namespace OxLibrary.Panels
                 foreach (Control control in Parent.Controls)
                     if (control is OxCard card
                         && card.Expanded
-                        && card != this &&
-                        card.accordion)
+                        && !card.Equals(this) 
+                        && card.accordion)
                         card.Collapse();
             }
             finally
@@ -47,7 +47,7 @@ namespace OxLibrary.Panels
 
         private void SetExpanded(bool value)
         {
-            bool changed = expanded != value;
+            bool changed = !expanded.Equals(value);
             expanded = value;
 
             if (!Expandable)

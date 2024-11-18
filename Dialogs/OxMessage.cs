@@ -82,15 +82,17 @@
             );
 
         public static bool Confirmation(string Confirm, Control owner) =>
-            ShowConfirm(Confirm, owner) == DialogResult.Yes;
+            ShowConfirm(Confirm, owner) is DialogResult.Yes;
 
         protected override void OnKeyUp(KeyEventArgs e)
         {
             base.OnKeyUp(e);
 
             if (!e.Handled
-                && (MessageType == MessageType.Error || MessageType == MessageType.Info)
-                && (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Space))
+                && (MessageType is MessageType.Error 
+                                or MessageType.Info)
+                && (e.KeyCode is Keys.Enter 
+                              or Keys.Space))
                 DialogResult = DialogResult.OK;
         }
     }

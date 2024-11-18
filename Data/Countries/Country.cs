@@ -10,12 +10,12 @@
         public string Name { get; set; } = string.Empty;
         public string ShortName
         {
-            get => shortName != string.Empty ? shortName : Name;
+            get => shortName.Equals(string.Empty) ? Name : shortName;
             set => shortName = value;
         }
         public string FullName
         {
-            get => fullName != string.Empty ? fullName : Name;
+            get => fullName.Equals(string.Empty) ? Name : fullName;
             set => fullName = value;
         }
 

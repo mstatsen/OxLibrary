@@ -12,7 +12,7 @@
         {
             DataGridViewColumn column = Columns[e.ColumnIndex];
 
-            if (column.SortMode != DataGridViewColumnSortMode.Programmatic)
+            if (column.SortMode is not DataGridViewColumnSortMode.Programmatic)
             {
                 base.OnColumnHeaderMouseClick(e);
                 return;
@@ -26,7 +26,7 @@
                 existColumnSorting = false;
             }
 
-            if (ModifierKeys != Keys.Control)
+            if (ModifierKeys is not Keys.Control)
             {
                 ColumnSorting.Clear();
 
@@ -42,7 +42,8 @@
                     _ => SortOrder.Ascending,
                 };
 
-            if (newSortOrder == SortOrder.None && existColumnSorting)
+            if (newSortOrder is SortOrder.None 
+                && existColumnSorting)
                 ColumnSorting.Remove(column);
             else
             if (existColumnSorting)

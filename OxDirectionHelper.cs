@@ -42,15 +42,15 @@ namespace OxLibrary
             return direction;
         }
 
-        public static bool IsLeft(OxDirection direction) => direction == OxDirection.Left;
-        public static bool IsTop(OxDirection direction) => direction == OxDirection.Top;
-        public static bool IsRight(OxDirection direction) => direction == OxDirection.Right;
-        public static bool IsBottom(OxDirection direction) => direction == OxDirection.Bottom;
+        public static bool IsLeft(OxDirection direction) => direction is OxDirection.Left;
+        public static bool IsTop(OxDirection direction) => direction is OxDirection.Top;
+        public static bool IsRight(OxDirection direction) => direction is OxDirection.Right;
+        public static bool IsBottom(OxDirection direction) => direction is OxDirection.Bottom;
 
-        public static bool ContainsLeft(OxDirection direction) => (direction & OxDirection.Left) != 0;
-        public static bool ContainsTop(OxDirection direction) => (direction & OxDirection.Top) != 0;
-        public static bool ContainsRight(OxDirection direction) => (direction & OxDirection.Right) != 0;
-        public static bool ContainsBottom(OxDirection direction) => (direction & OxDirection.Bottom) != 0;
+        public static bool ContainsLeft(OxDirection direction) => (direction & OxDirection.Left) is not 0;
+        public static bool ContainsTop(OxDirection direction) => (direction & OxDirection.Top) is not 0;
+        public static bool ContainsRight(OxDirection direction) => (direction & OxDirection.Right) is not 0;
+        public static bool ContainsBottom(OxDirection direction) => (direction & OxDirection.Bottom) is not 0;
 
         public static bool IsLeftTop(OxDirection direction) =>
             ContainsLeft(direction)

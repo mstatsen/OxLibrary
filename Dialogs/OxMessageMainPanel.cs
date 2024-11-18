@@ -46,7 +46,7 @@ namespace OxLibrary.Dialogs
             {
                 MessageBox.Text = value;
                 MessageBox.Height = Math.Max(value.Length / 2, 23) 
-                    + 23 * value.Count(c => c =='\r');
+                    + 23 * value.Count(c => c.Equals('\r'));
                 SetContentSize(240, MessageBox.Bottom + Paddings.Bottom);
             }
         }
@@ -58,7 +58,7 @@ namespace OxLibrary.Dialogs
                 int calcedWidth = 0;
 
                 foreach (OxDialogButton button in buttonsDictionary.Keys)
-                    if ((DialogButtons & button) == button)
+                    if ((DialogButtons & button).Equals(button))
                         calcedWidth += OxDialogButtonsHelper.Width(button) + DialogButtonSpace;
 
                 SetContentSize(

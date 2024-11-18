@@ -99,7 +99,7 @@ namespace OxLibrary.Panels
         {
             base.PutBackContentContainer(dialog);
 
-            if (Header.ToolBar.Parent != Header)
+            if (!Header.ToolBar.Parent.Equals(Header))
             {
                 Header.ToolBar.Parent = Header;
 

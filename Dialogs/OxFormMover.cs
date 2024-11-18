@@ -24,7 +24,7 @@
 
         private void MouseDownHandler(object? sender, MouseEventArgs e)
         {
-            Processing = e.Button == MouseButtons.Left;
+            Processing = e.Button is MouseButtons.Left;
             LastMousePosition = e.Location;
         }
 
@@ -40,7 +40,7 @@
             LastMousePosition.X = e.X - deltaX;
             LastMousePosition.Y = e.Y - deltaY;
 
-            if (Form.WindowState == FormWindowState.Normal)
+            if (Form.WindowState is FormWindowState.Normal)
                 MoveForm(Form.PointToScreen(new Point(deltaX, deltaY)));
             else Processing = false;
         }
@@ -52,7 +52,7 @@
 
             switch (Form.WindowState)
             {
-                case FormWindowState.Maximized when LastMousePosition.Y != e.Y:
+                case FormWindowState.Maximized when !LastMousePosition.Y.Equals(e.Y):
                     Form.MainPanel.SetFormState(FormWindowState.Normal);
                     break;
                 case FormWindowState.Normal when Form.PointToScreen(e.Location).Y < 20:
@@ -85,9 +85,10 @@
             int error = delta.X - delta.Y;
             int step = speed;
 
-            while (currentPoint.X != Finish.X || currentPoint.Y != Finish.Y)
+            while (!currentPoint.X.Equals(Finish.X) 
+                || !currentPoint.Y.Equals(Finish.Y))
             {
-                if (step == speed)
+                if (step.Equals(speed))
                 {
                     wayPoints.Add(new Point(currentPoint.X, currentPoint.Y));
                     step = 0;
@@ -110,7 +111,8 @@
                 }
             }
 
-            if (wayPoints.Count == 0 || !wayPoints[^1].Equals(Finish))
+            if (wayPoints.Count is 0 
+                || !wayPoints[^1].Equals(Finish))
                 wayPoints.Add(Finish);
 
             return wayPoints;

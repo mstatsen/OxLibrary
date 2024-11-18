@@ -9,7 +9,8 @@
         private readonly OxPaneList columns = new();
         private readonly OxPaneList placedPanels = new();
 
-        public bool IsEmpty => placedPanels.Count == 0;
+        public bool IsEmpty => 
+            placedPanels.Count is 0;
 
         protected override void PrepareInnerControls()
         {
@@ -96,7 +97,7 @@
 
         public void LayoutPanels(OxPaneList panelList)
         {
-            if (panelList.Count == 0)
+            if (panelList.Count is 0)
             {
                 SetEmptySize();
                 return;
@@ -104,12 +105,12 @@
 
             int oldCalcColumnsCount = IsEmpty ? -1 : CalcedColumnCount;
 
-            if (panelList != placedPanels)
+            if (!panelList.Equals(placedPanels))
                 InitPlacedPanels(panelList);
 
             RecalcColumnsCount();
 
-            if (oldCalcColumnsCount == CalcedColumnCount)
+            if (oldCalcColumnsCount.Equals(CalcedColumnCount))
                 return;
 
             SetColumnsDock();
@@ -152,7 +153,7 @@
         {
             columnNumber--;
 
-            if (columnNumber == columns.Count)
+            if (columnNumber.Equals(columns.Count))
                 columnNumber = 0;
             else
             if (columnNumber < 0)
@@ -182,7 +183,7 @@
         }
 
         private DockStyle GetColumnDock() =>
-            panelsAlign == PanelsHorizontalAlign.OneColumn
+            panelsAlign is PanelsHorizontalAlign.OneColumn
                 ? DockStyle.Top
                 : DockStyle.Left;
 
@@ -206,7 +207,7 @@
 
         private void RecalcColumnsCount()
         {
-            if (panelsAlign == PanelsHorizontalAlign.OneColumn)
+            if (panelsAlign is PanelsHorizontalAlign.OneColumn)
             {
                 CalcedColumnCount = 1;
                 return;
@@ -225,7 +226,7 @@
                     CalcedColumnCount++;
             }
 
-            if (CalcedColumnCount == 0)
+            if (CalcedColumnCount is 0)
                 CalcedColumnCount++;
             else 
                 if (CalcedColumnCount > MaximumColumnCount)
@@ -243,10 +244,10 @@
             int columnNumber = CalcedColumnCount - 1;
             int panelsCount = panelList.Count;
 
-            if (panelsCount % CalcedColumnCount != 0)
+            if (panelsCount % CalcedColumnCount is not 0)
                 columnNumber = panelsCount % CalcedColumnCount - 1;
 
-            if (columnNumber == columns.Count)
+            if (columnNumber.Equals(columns.Count))
                 columnNumber = 0;
 
             return columnNumber;
@@ -262,7 +263,10 @@
 
                 foreach (IOxPane panel in placedPanels)
                 {
-                    panel.Visible = visible && (RealPlacedCount == -1 || itemIndex < RealPlacedCount);
+                    panel.Visible = 
+                        visible 
+                        && (RealPlacedCount is -1 
+                            || itemIndex < RealPlacedCount);
                     itemIndex++;
                 }
             }
@@ -292,7 +296,7 @@
                     maxWidth = Math.Max(maxWidth, panel.CalcedWidth);
                 }
 
-            if (panelsAlign == PanelsHorizontalAlign.OneColumn)
+            if (panelsAlign is PanelsHorizontalAlign.OneColumn)
                 calcedHeight += 48;
 
             column.SetContentSize(maxWidth, calcedHeight);
@@ -337,7 +341,7 @@
                 int columnHeight = SetColumnSize(column);
                 maxColumnHeight = Math.Max(maxColumnHeight, columnHeight);
 
-                if (columnsPanels[column].Count != 0)
+                if (columnsPanels[column].Count is not 0)
                     sumWidth += column.Width;
             }
 
@@ -408,7 +412,7 @@
 
         private void SetTopPadding() => 
             Paddings.Top =
-                panelsAlign == PanelsHorizontalAlign.OneColumn
+                panelsAlign is PanelsHorizontalAlign.OneColumn
                     ? 16
                     : 18;
 

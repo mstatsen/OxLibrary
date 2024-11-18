@@ -14,7 +14,7 @@ namespace OxLibrary.Panels
 
         public bool SetSize(int size)
         {
-            if (GetSize() == size)
+            if (GetSize().Equals(size))
                 return false;
 
             if (OxDockHelper.IsVertical(OxDock))

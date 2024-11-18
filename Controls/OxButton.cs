@@ -59,7 +59,7 @@
         protected override void SetText(string? value)
         {
             Label.Text = value;
-            Label.Visible = value != string.Empty;
+            Label.Visible = !string.Empty.Equals(value);
             CalcLabelWidth();
             RecalcPaddings();
         }

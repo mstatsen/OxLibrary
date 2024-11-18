@@ -68,7 +68,7 @@ namespace OxLibrary.Controls
             }
             set
             {
-                if (TextBox.Text != value.ToString())
+                if (!TextBox.Text.Equals(value.ToString()))
                 {
                     TextBox.Text = value.ToString();
                     Text = TextBox.Text;
@@ -95,7 +95,7 @@ namespace OxLibrary.Controls
             get => minimum;
             set
             {
-                if (minimum != value)
+                if (!minimum.Equals(value))
                 {
                     minimum = value;
                     CheckValue();
@@ -110,7 +110,7 @@ namespace OxLibrary.Controls
             get => maximum;
             set
             {
-                if (maximum != value)
+                if (!maximum.Equals(value))
                 {
                     maximum = value;
                     CheckValue();
@@ -181,7 +181,7 @@ namespace OxLibrary.Controls
 
         private void SetValue(string text)
         {
-            if (text == string.Empty)
+            if (text.Equals(string.Empty))
                 Value = 0;
             else
             if (int.TryParse(text, out int newValue)

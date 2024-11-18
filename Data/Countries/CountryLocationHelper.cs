@@ -19,7 +19,7 @@
         public static CountryLocation Part(string name)
         {
             foreach (CountryLocation part in Enum.GetValues(typeof(CountryLocation)))
-                if (Name(part) == name)
+                if (Name(part).Equals(name))
                     return part;
 
             return CountryLocation.Other;

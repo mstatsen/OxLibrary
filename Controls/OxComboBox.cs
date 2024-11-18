@@ -86,7 +86,7 @@
         protected override void OnDrawItem(DrawItemEventArgs e)
         {
             Color BrushColor =
-                ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+                ((e.State & DrawItemState.Selected) is DrawItemState.Selected)
                     ? new OxColorHelper(BackColor).Darker(2)
                     : BackColor;
 
@@ -110,12 +110,13 @@
                     new SolidBrush(Color.Black),
                     new Point(textStartPosition.X, textStartPosition.Y));
 
-                if (DroppedDown && (e.State & DrawItemState.Selected) == DrawItemState.Selected)
+                if (DroppedDown && (e.State & DrawItemState.Selected) is DrawItemState.Selected)
                 {
                     OnGetToolTip(item, out string toolTipTitle, out string toolTipText);
                     ToolTip.ToolTipTitle = toolTipTitle;
 
-                    if (toolTipTitle != string.Empty || toolTipText != string.Empty)
+                    if (!toolTipTitle.Equals(string.Empty) 
+                        || !toolTipText.Equals(string.Empty))
                         ToolTip.Show(toolTipText, this, e.Bounds.Right, e.Bounds.Bottom);
                     else
                         ToolTip.Hide(this);
@@ -130,7 +131,7 @@
         {
             base.OnDropDownStyleChanged(e);
             FlatStyle = FlatStyle.System;
-            AutoCompleteMode = DropDownStyle == ComboBoxStyle.DropDownList
+            AutoCompleteMode = DropDownStyle is ComboBoxStyle.DropDownList
                 ? AutoCompleteMode.None
                 : AutoCompleteMode.Suggest;
         }
@@ -151,7 +152,7 @@
                 case CB_GETCURSEL:
                     int currentHoveredItemIndex = m.Result.ToInt32();
 
-                    if (hoveredItemIndex != currentHoveredItemIndex)
+                    if (!hoveredItemIndex.Equals(currentHoveredItemIndex))
                     {
                         hoveredItemIndex = currentHoveredItemIndex;
                         OnHoverItem(

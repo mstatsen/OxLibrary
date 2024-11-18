@@ -22,7 +22,7 @@
         {
             base.OnBeforeCollapse(e);
 
-            if (e.Action == TreeViewAction.Collapse)
+            if (e.Action is TreeViewAction.Collapse)
                 e.Cancel |= !AllowCollapse 
                     || (!DoubleClickExpand 
                         && IsDoubleClick);
@@ -32,7 +32,7 @@
         {
             base.OnBeforeExpand(e);
 
-            if (e.Action == TreeViewAction.Expand)
+            if (e.Action is TreeViewAction.Expand)
                 e.Cancel |= !DoubleClickExpand 
                     && IsDoubleClick;
         }
@@ -130,7 +130,7 @@
             get => loading;
             set
             {
-                if (loading != value)
+                if (!loading.Equals(value))
                 {
                     loading = value;
 
@@ -195,7 +195,7 @@
                 if (node.Tag.Equals(tag))
                     return node;
 
-                if (node.Nodes.Count == 0)
+                if (node.Nodes.Count is 0)
                     continue;
 
                 TreeNode? findNode = GetNodeByTag(tag, node.Nodes);
@@ -292,7 +292,7 @@
                 count = value;
 
                 if (TreeView is not null
-                    && oldCount != count 
+                    && !oldCount.Equals(count)
                     && !TreeView.Loading)
                     TreeView?.Invalidate();
             }

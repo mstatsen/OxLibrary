@@ -18,11 +18,11 @@
             };
 
         public static bool ActionForExistItems(OxToolbarAction action) =>
-            action == OxToolbarAction.Edit
-            || action == OxToolbarAction.Copy
-            || action == OxToolbarAction.Delete
-            || action == OxToolbarAction.Update
-            || action == OxToolbarAction.ExportSelected;
+            action is OxToolbarAction.Edit
+                   or OxToolbarAction.Copy
+                   or OxToolbarAction.Delete
+                   or OxToolbarAction.Update
+                   or OxToolbarAction.ExportSelected;
 
         public static string Text(OxToolbarAction action) =>
             action switch

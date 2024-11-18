@@ -21,7 +21,7 @@
             set
             {
                 Header.Dock = OxDockHelper.Dock(value);
-                Header.UnderlineVisible = Header.Dock == DockStyle.Top;
+                Header.UnderlineVisible = Header.Dock is DockStyle.Top;
                 SetHeaderPaddings();
                 SetHeaderSize();
                 SetButtonsPostion();
@@ -96,7 +96,7 @@
             page.Visible = false;
             page.Parent = this;
 
-            if (page.Dock == DockStyle.None)
+            if (page.Dock is DockStyle.None)
                 page.Dock = DockStyle.Fill;
 
             pages.Add(page);
@@ -168,14 +168,18 @@
 
         private void SetActivePage(IOxPane? value)
         {
-            bool isDifferentPage = activePage != value;
+            bool isDifferentPage = 
+                (activePage is null 
+                    && value is not null) 
+                || (activePage is not null 
+                    && !activePage.Equals(value));
             IOxPane? oldPage = activePage;
 
             if (isDifferentPage)
                 DeactivatePage?.Invoke(this, new OxTabControlEventArgs(oldPage, value));
 
             foreach (IOxPane page in Pages)
-                if (page != value)
+                if (!page.Equals(value))
                     page.Visible = false;
 
             activePage = value;

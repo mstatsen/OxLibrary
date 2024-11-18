@@ -33,7 +33,7 @@ namespace OxLibrary.Dialogs
                 dialogButtons = value;
 
                 foreach (var item in buttonsDictionary)
-                    item.Value.Visible = (dialogButtons & item.Key) == item.Key;
+                    item.Value.Visible = (dialogButtons & item.Key).Equals(item.Key);
 
                 PlaceButtons();
             }
@@ -63,7 +63,7 @@ namespace OxLibrary.Dialogs
                 Top = FooterButtonVerticalMargin,
                 Font = Styles.Font(Styles.DefaultFontSize + 0.5f, FontStyle.Bold),
                 Anchor = AnchorStyles.Top | AnchorStyles.Right,
-                Visible = (dialogButtons & dialogButton) == dialogButton
+                Visible = (dialogButtons & dialogButton).Equals(dialogButton)
             };
 
             button.SetContentSize(
@@ -103,7 +103,7 @@ namespace OxLibrary.Dialogs
             OxDialogButton dialogButton = OxDialogButton.OK;
 
             foreach (var item in buttonsDictionary)
-                if (item.Value == button)
+                if (item.Value.Equals(button))
                     dialogButton = item.Key;
 
             Form.DialogResult = OxDialogButtonsHelper.Result(dialogButton);
@@ -116,7 +116,7 @@ namespace OxLibrary.Dialogs
             int fullButtonsWidth = 0;
 
             foreach (var item in buttonsDictionary)
-                if ((dialogButtons & item.Key) == item.Key)
+                if ((dialogButtons & item.Key).Equals(item.Key))
                 {
                     realButtons.Add(item.Key, item.Value);
                     fullButtonsWidth += OxDialogButtonsHelper.Width(item.Key) + DialogButtonSpace;

@@ -162,7 +162,8 @@ namespace OxLibrary.Dialogs
         }
 
         public override Color DefaultColor => Color.FromArgb(146, 143, 140);
-        public bool FormIsMaximized => Form.WindowState == FormWindowState.Maximized;
+        public bool FormIsMaximized => 
+            Form.WindowState is FormWindowState.Maximized;
 
         protected override void OnSizeChanged(EventArgs e)
         {

@@ -41,11 +41,13 @@ namespace OxLibrary
         {
             SizeMode = PictureBoxSizeMode.CenterImage;
 
-            if (ImageSize.Width > ImageBox.Width && ImageBox.Width != 0)
+            if (ImageSize.Width > ImageBox.Width 
+                && ImageBox.Width > 0)
                 ImageSize.Width = ImageBox.Width;
             else ImageBox.Height = ImageSize.Width;
 
-            if (ImageSize.Height > ImageBox.Height && ImageBox.Height != 0)
+            if (ImageSize.Height > ImageBox.Height 
+                && ImageBox.Height > 0)
                 ImageSize.Height = ImageBox.Height;
             else ImageBox.Height = ImageSize.Height;
         }

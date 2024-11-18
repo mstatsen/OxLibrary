@@ -113,7 +113,7 @@ namespace OxLibrary.Controls
             OxPictureAction action = OxPictureAction.Clear;
 
             foreach (KeyValuePair<OxPictureAction, OxClickFrame> item in Actions)
-                if (item.Value == sender)
+                if (item.Value.Equals(sender))
                     action = item.Key;
 
             switch (action)
@@ -141,8 +141,8 @@ namespace OxLibrary.Controls
                 Filter = "PNG picture |  *.png; "
             };
 
-            if (dialog.ShowDialog(this) == DialogResult.OK)
-                if (dialog.FileName != string.Empty)
+            if (dialog.ShowDialog(this) is DialogResult.OK)
+                if (!dialog.FileName.Equals(string.Empty))
                     Image.Save(dialog.FileName, ImageFormat.Png);
         }
 
@@ -201,7 +201,7 @@ namespace OxLibrary.Controls
                 Filter = PictureFilesFilter
             };
 
-            return dialog.ShowDialog(this) == DialogResult.OK
+            return dialog.ShowDialog(this) is DialogResult.OK
                 ? dialog.FileName 
                 : string.Empty;
         }
@@ -212,7 +212,7 @@ namespace OxLibrary.Controls
         {
             string fileName = SelectPictureFile();
 
-            if (fileName != string.Empty)
+            if (!fileName.Equals(string.Empty))
                 Image = new Bitmap(fileName);
         }
 

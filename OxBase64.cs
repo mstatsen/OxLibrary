@@ -26,7 +26,7 @@ namespace OxLibrary
 
         public static Bitmap? Base64ToBitmap(string base64String)
         {
-            if (base64String == string.Empty)
+            if (base64String.Equals(string.Empty))
                 return null;
 
             MemoryStream memoryStream = NewMemoryStream();

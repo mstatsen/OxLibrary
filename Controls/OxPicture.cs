@@ -20,8 +20,12 @@ namespace OxLibrary.Controls
 
         public bool Stretch 
         { 
-            get => picture.Dock == DockStyle.Fill;
-            set => picture.Dock = value ? DockStyle.Fill : DockStyle.None;
+            get => picture.Dock is DockStyle.Fill;
+            set => 
+                picture.Dock = 
+                    value 
+                        ? DockStyle.Fill 
+                        : DockStyle.None;
         }
 
         private void SetEnabledBitmap(Bitmap? value)

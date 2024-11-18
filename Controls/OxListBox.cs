@@ -49,7 +49,7 @@ namespace OxLibrary.Controls
 
             Font itemFont = new(e.Font ?? Styles.Font(11), fontStyle);
 
-            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+            if ((e.State & DrawItemState.Selected) is DrawItemState.Selected)
                 e = new DrawItemEventArgs(
                     e.Graphics,
                     itemFont,

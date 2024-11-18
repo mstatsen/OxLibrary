@@ -74,7 +74,7 @@ namespace OxLibrary.Controls
         }
 
         public bool IsEmpty => 
-            TextBox.Text.Trim() == string.Empty;
+            TextBox.Text.Trim().Equals(string.Empty);
 
         public bool ReadOnly
         {

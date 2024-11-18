@@ -17,10 +17,14 @@
             sizeRecalcing = false;
 
         protected virtual int GetCalcedHeight() =>
-            savedHeight == 0 ? Height : savedHeight;
+            savedHeight is 0 
+                ? Height 
+                : savedHeight;
 
         protected virtual int GetCalcedWidth() =>
-            savedWidth == 0 ? Width : savedWidth;
+            savedWidth is 0 
+                ? Width 
+                : savedWidth;
 
         public Color BaseColor
         {
@@ -57,10 +61,11 @@
 
             try
             {
-                if (IsVariableWidth && Width != calcedWidth)
+                if (IsVariableWidth 
+                    && !Width.Equals(calcedWidth))
                     SetWidth(calcedWidth);
 
-                if (IsVariableHeight && Height != calcedHeight)
+                if (IsVariableHeight && !Height.Equals(calcedHeight))
                     SetHeight(calcedHeight);
             }
             finally

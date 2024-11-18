@@ -94,8 +94,8 @@ namespace OxLibrary.Panels
                 FakeNextButton.Visible =
                     lastPageButton is not null
                     && lastPageButton.Visible
-                    && lastPageButton.Tag != PageCount;
-                FakePrevButton.Visible = Buttons[0].Tag != 1;
+                    && !lastPageButton.Tag.Equals(PageCount);
+                FakePrevButton.Visible = Buttons[0].Tag is not 1;
             }
             else
             {
@@ -106,9 +106,13 @@ namespace OxLibrary.Panels
 
         private void SetButtonsVisible()
         {
-            PrevButton.Visible = objectCount > 0 && currentPage != 1;
+            PrevButton.Visible = 
+                objectCount > 0 
+                && currentPage is not 1;
             FirstButton.Visible = PrevButton.Visible;
-            NextButton.Visible = objectCount > 0 && currentPage != PageCount;
+            NextButton.Visible = 
+                objectCount > 0 
+                && !currentPage.Equals(PageCount);
             LastButton.Visible = NextButton.Visible;
         }
 
