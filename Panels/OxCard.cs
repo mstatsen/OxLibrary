@@ -61,6 +61,7 @@ namespace OxLibrary.Panels
                 Borders[OxDock.Bottom].Visible = value;
                 ContentContainer.Visible = value;
                 ExpandButton.Icon = ExpandButtonIcon;
+                ExpandButton.ToolTipText = ExpandButtonToolTipText;
 
                 CollapseOtherAccordions();
 
@@ -120,7 +121,8 @@ namespace OxLibrary.Panels
 
         private readonly OxIconButton ExpandButton = new(OxIcons.Up, 20)
         {
-            Default = true
+            Default = true,
+            ToolTipText = "Collapse"
         };
 
         private bool expandButtonVisible = true;
@@ -136,7 +138,14 @@ namespace OxLibrary.Panels
         }
 
         private Bitmap ExpandButtonIcon =>
-            expanded ? OxIcons.Up : OxIcons.Down;
+            expanded 
+                ? OxIcons.Up 
+                : OxIcons.Down;
+
+        public string ExpandButtonToolTipText =>
+            expanded 
+                ? "Collapse" 
+                : "Expand";
 
         protected override void PrepareInnerControls()
         {

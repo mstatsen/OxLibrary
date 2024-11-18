@@ -4,7 +4,8 @@ namespace OxLibrary.Panels
 {
     public class OxPaginator : OxUnderlinedPanel
     {
-        private const int PageButtonWidth = 24;
+        private const int PageButtonWidth = 28;
+        private const int PageButtonHeight = 20;
         private const int NavigateButtonWidth = PageButtonWidth * 2;
         private const int ButtonSpace = 3;
         private const int MaximumPageButtonsCount = 10;
@@ -24,10 +25,10 @@ namespace OxLibrary.Panels
             Font = Styles.Font(FontStyle.Bold | FontStyle.Italic)
         };
 
-        private readonly OxButton PrevButton = CreateNavigateButton(OxIcons.Left);
-        private readonly OxButton NextButton = CreateNavigateButton(OxIcons.Right);
-        private readonly OxButton FirstButton = CreateNavigateButton(OxIcons.First);
-        private readonly OxButton LastButton = CreateNavigateButton(OxIcons.Last);
+        private readonly OxButton PrevButton = CreateNavigateButton(OxIcons.Left, "Previous page");
+        private readonly OxButton NextButton = CreateNavigateButton(OxIcons.Right, "Next page");
+        private readonly OxButton FirstButton = CreateNavigateButton(OxIcons.First, "First page");
+        private readonly OxButton LastButton = CreateNavigateButton(OxIcons.Last, "Last page");
         private readonly OxPane FakeNextButton = new();
         private readonly OxPane FakePrevButton = new();
 
@@ -136,8 +137,10 @@ namespace OxLibrary.Panels
 
         private bool SetButtonSize(OxTaggedButton button)
         {
-            int buttonSize = PageButtonWidth + (button.FreezeHovered ? 4 : 0);
-            button.SetContentSize(buttonSize, buttonSize);
+            button.SetContentSize(
+                PageButtonWidth + (button.FreezeHovered ? 8 : 0),
+                PageButtonHeight + (button.FreezeHovered ? 8 : 0)
+            );
             return true;
         }
 
@@ -236,19 +239,20 @@ namespace OxLibrary.Panels
                 Tag = pageNumber,
                 HandHoverCursor = true
             };
-            button.SetContentSize(PageButtonWidth, PageButtonWidth);
+            button.SetContentSize(PageButtonWidth, PageButtonHeight);
             button.Click += (s, e) => CurrentPage = s is not null ? ((OxTaggedButton)s).Tag : 0;
             Buttons.Add(button);
         }
 
-        private static OxButton CreateNavigateButton(Bitmap icon)
+        private static OxButton CreateNavigateButton(Bitmap icon, string toolTipText)
         {
             OxButton button = new(string.Empty, icon)
             {
                 Visible = false,
-                HandHoverCursor = true
+                HandHoverCursor = true,
+                ToolTipText = toolTipText
             };
-            button.SetContentSize(NavigateButtonWidth, PageButtonWidth);
+            button.SetContentSize(NavigateButtonWidth, PageButtonHeight);
             return button;
         }
 
