@@ -29,7 +29,7 @@
         protected override void SetIcon(Bitmap? value)
         {
             base.SetIcon(value);
-            Picture.Visible = value != null;
+            Picture.Visible = value is not null;
             Label.TextAlign = Picture.Visible ? ContentAlignment.MiddleLeft : ContentAlignment.MiddleCenter;
         }
 
@@ -72,7 +72,7 @@
 
         private void CalcLabelWidth()
         {
-            if (Label == null)
+            if (Label is null)
                 return;
 
             Label.AutoSize = true;

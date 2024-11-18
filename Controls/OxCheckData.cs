@@ -53,18 +53,26 @@
             set
             {
                 foreach (OxCheckData<T> checkedItem in this)
-                    checkedItem.Checked = value != null && value.Contains(checkedItem.Data);
+                    checkedItem.Checked = 
+                        value is not null 
+                        && value.Contains(checkedItem.Data);
             }
         }
 
         public T? Item(OxCheckData<T>? checkItem)
         {
             OxCheckData<T>? item = Find(c => c.Equals(checkItem));
-            return item != null ? item.Data : default;
+            return 
+                item is not null 
+                    ? item.Data 
+                    : default;
         }
 
         public OxCheckData<T>? CheckItem(T? item) =>
-            Find(c => item != null && item.Equals(c.Data));
+            Find(c => 
+                item is not null 
+                && item.Equals(c.Data)
+            );
 
         public OxCheckData<T> Add(T item) =>
             Add(new OxCheckData<T>(item));
@@ -77,7 +85,7 @@
 
         public new void Remove(OxCheckData<T>? item)
         {
-            if (item == null)
+            if (item is null)
                 return;
 
             base.Remove(item);
@@ -98,7 +106,7 @@
 
         public new OxCheckData<T>? Insert(int index, OxCheckData<T>? item)
         {
-            if (item == null)
+            if (item is null)
                 return null;
 
             base.Insert(index, item);

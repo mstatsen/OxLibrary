@@ -36,7 +36,8 @@
                 : Colors.Lighter(2);
 
         private Color GetMarginsColor() =>
-            Parent == null || blurredBorder
+            Parent is null 
+            || blurredBorder
                 ? Color.Transparent
                 : Parent.BackColor;
 

@@ -44,7 +44,7 @@
             string toolTipTitle = string.Empty;
             string toolTipText = string.Empty;
 
-            if (SelectedItem != null)
+            if (SelectedItem is not null)
                 OnGetToolTip(SelectedItem, out toolTipTitle, out toolTipText);
 
             ToolTip.ToolTipTitle = toolTipTitle;

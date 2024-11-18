@@ -27,7 +27,10 @@ namespace OxLibrary.Controls
         private void SetEnabledBitmap(Bitmap? value)
         {
             enabledBitmap = value;
-            DisabledBitmap = value == null ? null : GetGrayScale(EnabledBitmap);
+            DisabledBitmap = 
+                value is null 
+                    ? null 
+                    : GetGrayScale(EnabledBitmap);
         }
 
         private Bitmap? DisabledBitmap;
@@ -143,7 +146,7 @@ namespace OxLibrary.Controls
 
         private void SetImage(Image? value)
         {
-            if (value == null)
+            if (value is null)
             {
                 EnabledBitmap = null;
                 picture.Image = null;
@@ -165,7 +168,7 @@ namespace OxLibrary.Controls
 
         private static Bitmap? GetGrayScale(Bitmap? bitmap)
         {
-            if (bitmap == null)
+            if (bitmap is null)
                 return null;
 
             Bitmap result = new(bitmap);

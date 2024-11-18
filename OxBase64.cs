@@ -14,7 +14,7 @@ namespace OxLibrary
 
         public static string BitmapToBase64(Bitmap? bitmap)
         {
-            if (bitmap == null)
+            if (bitmap is null)
                 return string.Empty;
 
             MemoryStream memoryStream = NewMemoryStream();

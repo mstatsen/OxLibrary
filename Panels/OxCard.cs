@@ -22,7 +22,10 @@ namespace OxLibrary.Panels
 
         private void CollapseOtherAccordions()
         {
-            if (!accordion || !expanded || Parent == null || AccordionProcess)
+            if (!accordion 
+                || !expanded 
+                || Parent is null 
+                || AccordionProcess)
                 return;
 
             AccordionProcess = true;

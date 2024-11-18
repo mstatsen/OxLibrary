@@ -26,7 +26,7 @@ namespace OxLibrary.Dialogs
         {
             Paddings.SetSize(24);
             SetContentSize(240, 120);
-            Header.SetContentSize(Header.SavedWidth, 30);
+            HeaderHeight = 30;
         }
 
         protected override HorizontalAlign FooterButtonsAlign => HorizontalAlign.Center;
@@ -53,7 +53,7 @@ namespace OxLibrary.Dialogs
 
         protected override void PlaceButtons()
         {
-            if (Form != null)
+            if (Form is not null)
             {
                 int calcedWidth = 0;
 

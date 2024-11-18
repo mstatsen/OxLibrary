@@ -25,7 +25,7 @@
             {
                 Bitmap? picture = OnGetPicture(TItems[e.Index]);
 
-                if (picture != null)
+                if (picture is not null)
                     e.Graphics.DrawImage(
                         OxImageBoxer.BoxingImage(picture, new(e.Bounds.Height, e.Bounds.Height)),
                         e.Bounds.X + ImageLeft,

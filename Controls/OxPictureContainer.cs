@@ -37,7 +37,7 @@ namespace OxLibrary.Controls
 
             try
             {
-                if (Image == null)
+                if (Image is null)
                 {
                     buttonsParent.Visible = false;
                     return;
@@ -54,7 +54,7 @@ namespace OxLibrary.Controls
 
         private void RecalcButtonsSize()
         {
-            if (Image == null)
+            if (Image is null)
                 return;
 
             int calcedWidth;
@@ -132,7 +132,7 @@ namespace OxLibrary.Controls
 
         private void DownloadImage()
         {
-            if (Image == null)
+            if (Image is null)
                 return;
 
             SaveFileDialog dialog = new()
@@ -272,8 +272,8 @@ namespace OxLibrary.Controls
             set
             {
                 sourceImage = value;
-                label.Visible = sourceImage == null;
-                picture.Visible = sourceImage != null;
+                label.Visible = sourceImage is null;
+                picture.Visible = sourceImage is not null;
                 picture.Image = sourceImage;
                 PlaceButtons();
                 ReAlignControls();

@@ -26,7 +26,9 @@
 
         public void Start()
         {
-            if (enabled && thread != null && thread.IsAlive)
+            if (enabled 
+                && thread is not null 
+                && thread.IsAlive)
             {
                 Ready = true;
                 return;

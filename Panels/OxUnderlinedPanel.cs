@@ -22,7 +22,11 @@
         }
 
         protected override int GetCalcedHeight() =>
-            base.GetCalcedHeight() + (underline != null ? underline.CalcedSize : 0);
+            base.GetCalcedHeight() + 
+            (underline is not null 
+                ? underline.CalcedSize 
+                : 0
+            );
 
         public OxUnderlinedPanel(Size contentSize) : base(contentSize) { }
 

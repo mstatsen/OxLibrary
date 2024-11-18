@@ -96,7 +96,7 @@ namespace OxLibrary.Dialogs
 
         private void DialogButtonClickHandler(object? sender, EventArgs e)
         {
-            if (sender == null)
+            if (sender is null)
                 return;
 
             OxButton button = (OxButton)sender;

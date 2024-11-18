@@ -11,7 +11,7 @@ namespace OxLibrary.Controls
         {
             base.OnGetToolTip(item, out toolTipTitle, out toolTipText);
 
-            if (SelectedItem != null)
+            if (SelectedItem is not null)
             {
                 toolTipTitle = SelectedItem.FullName;
                 toolTipText =

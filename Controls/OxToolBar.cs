@@ -35,7 +35,7 @@ namespace OxLibrary.Controls
                 button.Dock = button.Dock == DockStyle.Right ? DockStyle.Right : DockStyle.Left;
 
                 if (button.BeginGroup && 
-                    lastButton != null)
+                    lastButton is not null)
                 {
                     button.Margins.LeftOx = OxSize.Large;
                     lastButton.Margins.RightOx = OxSize.Large;
@@ -44,7 +44,10 @@ namespace OxLibrary.Controls
                         SeparateButtonsGroup(button);
                 }
                 else
-                    button.Margins.LeftOx = lastButton == null ? OxSize.None : OxSize.Small;
+                    button.Margins.LeftOx = 
+                        lastButton is null 
+                            ? OxSize.None 
+                            : OxSize.Small;
 
                 button.BringToFront();
                 button.VisibleChanged += ButtonVisibleChangedHandler;
@@ -173,7 +176,7 @@ namespace OxLibrary.Controls
             };
             button.Click += (s, e) => ToolbarActionClick?.Invoke(s,
                 new OxActionEventArgs<OxToolbarAction>(
-                    s == null
+                    s is null
                         ? OxToolbarAction.Empty
                         : GetActionByButton((OxButton)s)
                 )

@@ -58,8 +58,11 @@ namespace OxLibrary.Panels
             label.Text;
         protected override void SetText(string? value)
         {
-            label.Text = value != null ? value.Trim() : string.Empty;
-            label.Visible = label.Text != string.Empty;
+            label.Text = 
+                value is not null 
+                    ? value.Trim() 
+                    : string.Empty;
+            label.Visible = !label.Text.Equals(string.Empty);
         }
 
         public ContentAlignment TitleAlign
@@ -72,7 +75,7 @@ namespace OxLibrary.Panels
         protected override void SetIcon(Bitmap? value)
         {
             icon.Image = value;
-            icon.Visible = icon.Image != null;
+            icon.Visible = icon.Image is not null;
         }
 
         protected override void PrepareInnerControls()

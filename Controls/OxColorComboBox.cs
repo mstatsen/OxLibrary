@@ -33,7 +33,7 @@
 
                 try
                 { 
-                    if (colorName != null)
+                    if (colorName is not null)
                         BackColor = Color.FromName(colorName);
                 }
                 catch 

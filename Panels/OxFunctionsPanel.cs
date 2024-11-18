@@ -1,4 +1,5 @@
-﻿namespace OxLibrary.Panels
+﻿
+namespace OxLibrary.Panels
 {
     public class OxFunctionsPanel : OxFrameWithHeader, IOxFrameWithHeader
     {
@@ -6,12 +7,20 @@
 
         public OxFunctionsPanel(Size contentSize) : base(contentSize) { }
 
-        protected virtual void SetTitleAlign() =>
-            Header.TitleAlign = ContentAlignment.MiddleCenter;
+        private void SetTitleAlign() =>
+            Header.TitleAlign = Height > Width
+                ? ContentAlignment.MiddleCenter
+                : ContentAlignment.MiddleLeft;
 
         protected override void AfterCreated()
         {
             base.AfterCreated();
+            SetTitleAlign();
+        }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
             SetTitleAlign();
         }
     }

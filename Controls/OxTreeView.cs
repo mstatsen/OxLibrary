@@ -57,7 +57,7 @@
         {
             base.OnDrawNode(e);
 
-            if (e.Node == null)
+            if (e.Node is null)
                 return;
 
             e.Graphics.DrawRectangle(
@@ -147,7 +147,10 @@
         }
         public int SelectedIndex 
         {
-            get => SelectedNode == null ? -1 : SelectedNode.Index;
+            get => 
+                SelectedNode is null 
+                    ? -1 
+                    : SelectedNode.Index;
             set => SelectedNode = Nodes[value];
         }
 
@@ -180,7 +183,7 @@
 
         public TreeNode? GetNodeByTag(object? tag, TreeNodeCollection? treeNodes = null)
         {
-            if (tag == null)
+            if (tag is null)
                 return Nodes.Count > 0 
                     ? Nodes[0] 
                     : null;
@@ -197,7 +200,7 @@
 
                 TreeNode? findNode = GetNodeByTag(tag, node.Nodes);
 
-                if (findNode != null)
+                if (findNode is not null)
                     return findNode;
             }
 
@@ -219,14 +222,14 @@
         public void Add(object item) => Nodes.Add(item.ToString()).Tag = item;
 
         public bool AvailableMoveUp =>
-            SelectedNode != null
-            && (SelectedNode.Parent == null
+            SelectedNode is not null
+            && (SelectedNode.Parent is null
                 ? SelectedIndex > 0
                 : SelectedNode.Index > 0);
 
         public bool AvailableMoveDown =>
-            SelectedNode != null
-            && (SelectedNode.Parent == null
+            SelectedNode is not null
+            && (SelectedNode.Parent is null
                 ? SelectedIndex > -1 && SelectedIndex < Count - 1
                 : SelectedNode.Index < SelectedNode.Parent.Nodes.Count - 1);
 
@@ -234,11 +237,11 @@
 
         private void MoveNode(MoveDirection direction)
         {
-            if (SelectedNode == null)
+            if (SelectedNode is null)
                 return;
 
             TreeNodeCollection parentNodes = 
-                SelectedNode.Parent != null 
+                SelectedNode.Parent is not null 
                     ? SelectedNode.Parent.Nodes 
                     : Nodes;
 
@@ -288,7 +291,7 @@
                 int oldCount = count;
                 count = value;
 
-                if (TreeView != null 
+                if (TreeView is not null
                     && oldCount != count 
                     && !TreeView.Loading)
                     TreeView?.Invalidate();

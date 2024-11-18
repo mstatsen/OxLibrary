@@ -21,6 +21,7 @@
         public static Bitmap AddChild => GetBitmap("addChild");
         public static Bitmap Batch_edit => GetBitmap("batch_edit");
         public static Bitmap BronzeTrophy => GetBitmap("bronzeTrophy");
+        public static Bitmap Categories => GetBitmap("categories");
         public static Bitmap Close => GetBitmap("close");
         public static Bitmap Console => GetBitmap("console");
         public static Bitmap Copy => GetBitmap("copy");
@@ -35,6 +36,7 @@
         public static Bitmap Export => GetBitmap("export");
         public static Bitmap Eye => GetBitmap("eye");
         public static Bitmap Field => GetBitmap("field");
+        public static Bitmap Filter => GetBitmap("filter");
         public static Bitmap First => GetBitmap("first");
         public static Bitmap Folder => GetBitmap("folder");
         public static Bitmap Game => GetBitmap("game");
@@ -76,7 +78,6 @@
         public static Bitmap Settings => GetBitmap("settings");
         public static Bitmap Share => GetBitmap("share");
         public static Bitmap SilverTrophy => GetBitmap("silverTrophy");
-        public static Bitmap SQL => GetBitmap("sql");
         public static Bitmap Storage => GetBitmap("storage");
         public static Bitmap Synchronize => GetBitmap("synchronize");
         public static Bitmap Tag => GetBitmap("tag");
@@ -84,6 +85,7 @@
         public static Bitmap Trash => GetBitmap("trash");
         public static Bitmap Unpin => GetBitmap("unpin");
         public static Bitmap Up => GetBitmap("up");
+        public static Bitmap ViewInfo => GetBitmap("viewInfo");
         public static Bitmap Warning => GetBitmap("warning");
     }
 }

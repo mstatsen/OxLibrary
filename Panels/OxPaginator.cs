@@ -92,7 +92,7 @@ namespace OxLibrary.Panels
             {
                 OxTaggedButton lastPageButton = Buttons[^1];
                 FakeNextButton.Visible =
-                    lastPageButton != null
+                    lastPageButton is not null
                     && lastPageButton.Visible
                     && lastPageButton.Tag != PageCount;
                 FakePrevButton.Visible = Buttons[0].Tag != 1;
@@ -191,7 +191,7 @@ namespace OxLibrary.Panels
 
         private void RenumerateButtons()
         {
-            if (CurrentButton != null)
+            if (CurrentButton is not null)
                 return;
 
             int buttonIndex = 1;
@@ -233,7 +233,7 @@ namespace OxLibrary.Panels
                 HandHoverCursor = true
             };
             button.SetContentSize(PageButtonWidth, PageButtonWidth);
-            button.Click += (s, e) => CurrentPage = s != null ? ((OxTaggedButton)s).Tag : 0;
+            button.Click += (s, e) => CurrentPage = s is not null ? ((OxTaggedButton)s).Tag : 0;
             Buttons.Add(button);
         }
 

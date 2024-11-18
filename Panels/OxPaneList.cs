@@ -18,7 +18,7 @@
             {
                 IOxPane? last = Last;
 
-                return last == null
+                return last is null
                     ? 0
                     : last.Bottom + 24;
             }

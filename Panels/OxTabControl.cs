@@ -69,7 +69,7 @@
         }
 
         internal OxTabButton? ActiveTabButton =>
-            activePage != null
+            activePage is not null
                 ? TabButtons[activePage]
                 : null;
 
@@ -87,7 +87,9 @@
         }
 
         public int ActivePageIndex =>
-            ActivePage != null ? Pages.IndexOf(ActivePage) : -1;
+            ActivePage is not null 
+                ? Pages.IndexOf(ActivePage) 
+                : -1;
 
         public void AddPage(IOxPane page, Bitmap? icon = null)
         {
@@ -114,7 +116,7 @@
 
         private void PrepareTabButtonsColor()
         {
-            if (TabButtons == null)
+            if (TabButtons is null)
                 return;
 
             foreach (OxTabButton button in TabButtons.Values)
@@ -123,7 +125,7 @@
 
         private void SetTabButtonsVisualParameters()
         {
-            if (TabButtons == null)
+            if (TabButtons is null)
                 return;
 
             foreach (OxTabButton button in TabButtons.Values)
@@ -144,7 +146,7 @@
 
         private void SetTabButtonsFont()
         {
-            if (TabButtons == null)
+            if (TabButtons is null)
                 return;
             
             foreach (OxTabButton button in TabButtons.Values)
@@ -181,7 +183,7 @@
             PrepareColors();
             Update();
 
-            if (activePage != null)
+            if (activePage is not null)
                 activePage.Visible = true;
 
             if (isDifferentPage)
@@ -209,7 +211,7 @@
 
         private void ReAlignTabButtons()
         {
-            if (TabButtons == null)
+            if (TabButtons is null)
                 return;
 
             foreach (OxTabButton button in TabButtons.Values)

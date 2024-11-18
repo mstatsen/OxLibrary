@@ -42,7 +42,7 @@ namespace OxLibrary.Dialogs
 
         public void SetHeaderContentSize(int height)
         {
-            Header.SetContentSize(Width, height);
+            HeaderHeight = height;
             SetButtonsSize();
         }
 
@@ -115,12 +115,14 @@ namespace OxLibrary.Dialogs
         };
 
         private Bitmap GetRestoreIcon() =>
-            Form != null && FormIsMaximized
+            Form is not null 
+            && FormIsMaximized
                 ? OxIcons.Restore
                 : OxIcons.Maximize;
 
         private string GetRestoreToopTip() =>
-            Form != null && FormIsMaximized
+            Form is not null && 
+            FormIsMaximized
                 ? "Restore window"
                 : "Maximize window";
 
@@ -249,10 +251,10 @@ namespace OxLibrary.Dialogs
 
             OxBorder? border = (OxBorder?)sender;
 
-            if (border == null)
+            if (border is null)
                 return;
 
-            if (LastDirection == OxDirection.None)
+            if (LastDirection.Equals(OxDirection.None))
             {
                 SetSizerCursor(
                     OxDirectionHelper.GetDirection(border, e.Location)

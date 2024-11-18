@@ -119,7 +119,7 @@
 
         public void FreezeSize()
         {
-            if (MainPanel != null)
+            if (MainPanel is not null)
             {
                 MinimumSize = new(MainPanel.Width, MainPanel.Height);
                 MaximumSize = MinimumSize;

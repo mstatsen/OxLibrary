@@ -11,6 +11,18 @@ namespace OxLibrary.Panels
             Header.ToolBar.OnButtonVisibleChange += ToolBarButtonVisibleChangeHandler;
         }
 
+        protected override void SetIcon(Bitmap? value) => 
+            Header.Icon = value;
+
+        protected override Bitmap? GetIcon() => 
+            Header.Icon;
+
+        public int HeaderHeight 
+        { 
+            get => Header.Height;
+            set => Header.SetContentSize(Width, value); 
+        }
+
         public OxHeader Header { get; } = new(string.Empty)
         {
             Dock = DockStyle.Top
@@ -35,7 +47,10 @@ namespace OxLibrary.Panels
         protected override void PrepareColors()
         {
             base.PrepareColors();
-            Header.BaseColor = PanelViewer == null ? BaseColor : Colors.Darker();
+            Header.BaseColor = 
+                PanelViewer is null 
+                    ? BaseColor 
+                    : Colors.Darker();
         }
 
         protected override void SetBordersColor(Color value)

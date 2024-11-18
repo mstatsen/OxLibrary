@@ -38,7 +38,7 @@
 
         public override void ReAlignControls()
         {
-            if (columns != null)
+            if (columns is not null)
                 foreach (IOxPane column in columns)
                     column.BringToFront();
 
@@ -64,7 +64,7 @@
         {
             base.PrepareColors();
 
-            if (columns != null)
+            if (columns is not null)
                 foreach (IOxPane column in columns)
                     column.BaseColor = BaseColor;
         }
@@ -194,7 +194,7 @@
 
         private void PanelVisibleChangedHander(object? sender, EventArgs e)
         {
-            if (sender == null)
+            if (sender is null)
                 return;
 
             Control panel = (Control)sender;
@@ -326,7 +326,7 @@
 
         private Size GetSumColumnsSize()
         {
-            if (columns == null)
+            if (columns is null)
                 return Size.Empty;
 
             int sumWidth = 0;

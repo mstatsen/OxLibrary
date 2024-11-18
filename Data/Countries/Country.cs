@@ -44,7 +44,10 @@
                 };
             set
             {
-                string stringValue = value != null ? value.ToString()! : string.Empty;
+                string stringValue = 
+                    value is not null 
+                        ? value.ToString()! 
+                        : string.Empty;
 
                 switch (field)
                 {

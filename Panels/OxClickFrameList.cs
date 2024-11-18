@@ -2,9 +2,15 @@
 {
     public class OxClickFrameList : List<OxClickFrame>
     {
-        public OxClickFrame? Last => Count > 0 ? this[Count - 1] : null;
+        public OxClickFrame? Last => 
+            Count > 0 
+                ? this[Count - 1] 
+                : null;
 
-        public int Right => Last != null ? Last.Right : 0;
+        public int Right => 
+            Last is not null 
+                ? Last.Right 
+            : 0;
 
         public int Width()
         {
@@ -46,7 +52,7 @@
         {
             OxClickFrame? defultButton = Default();
             defultButton?.PerformClick();
-            return defultButton != null;
+            return defultButton is not null;
         }
     }
 

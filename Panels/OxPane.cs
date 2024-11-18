@@ -34,16 +34,16 @@
         }
 
         protected bool IsVariableWidth =>
-            Parent == null
-            || Dock == DockStyle.Left
-            || Dock == DockStyle.Right
-            || Dock == DockStyle.None;
+            Parent is null
+            || Dock is DockStyle.Left
+            || Dock is DockStyle.Right
+            || Dock is DockStyle.None;
 
         protected bool IsVariableHeight =>
-            Parent == null
-            || Dock == DockStyle.Top
-            || Dock == DockStyle.Bottom
-            || Dock == DockStyle.None;
+            Parent is null
+            || Dock is DockStyle.Top
+            || Dock is DockStyle.Bottom
+            || Dock is DockStyle.None;
 
         public void RecalcSize()
         {
@@ -93,13 +93,13 @@
 
         protected static void SetPaneBaseColor(OxPane pane, Color color)
         {
-            if (pane != null)
+            if (pane is not null)
                 pane.BaseColor = color;
         }
 
         protected static void SetControlBackColor(Control? control, Color color)
         {
-            if (control != null)
+            if (control is not null)
                 control.BackColor = color;
         }
 
@@ -145,7 +145,7 @@
 
         protected void ApplyRecalcSizeHandler(Control control, bool forSizeChange = true, bool forVisibleChange = true)
         {
-            if (control == null)
+            if (control is null)
                 return;
 
             if (forVisibleChange)

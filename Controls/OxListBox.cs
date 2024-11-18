@@ -19,11 +19,11 @@ namespace OxLibrary.Controls
         }
             
         private bool IsHighPriorityItem(object item) =>
-            CheckIsHighPriorityItem == null 
+            CheckIsHighPriorityItem is null 
             || CheckIsHighPriorityItem.Invoke(item);
 
         private bool IsMandatoryItem(object item) =>
-            CheckIsMandatoryItem == null
+            CheckIsMandatoryItem is null
             || CheckIsMandatoryItem.Invoke(item);
 
         public OxListBox()
@@ -79,7 +79,8 @@ namespace OxLibrary.Controls
 
         private void MoveItem(MoveDirection direction)
         {
-            if (SelectedItem == null || SelectedIndex < 0)
+            if (SelectedItem is null 
+                || SelectedIndex < 0)
                 return; 
 
             int newIndex = SelectedIndex + MoveDirectionHelper.Delta(direction);

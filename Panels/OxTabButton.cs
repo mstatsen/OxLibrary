@@ -35,7 +35,7 @@ namespace OxLibrary.Panels
 
         private void BorderVisibleChanged(object? sender, EventArgs e)
         {
-            if (sender == null)
+            if (sender is null)
                 return;
 
             OxBorder border = (OxBorder)sender;
@@ -43,16 +43,20 @@ namespace OxLibrary.Panels
         }
 
         public bool Active =>
-            Page != null && Page.Equals(TabControl.ActivePage);
+            Page is not null 
+            && Page.Equals(TabControl.ActivePage);
 
         public int PageIndex =>
-            TabControl != null && Page != null ? TabControl.Pages.IndexOf(Page) : -1;
+            TabControl is not null 
+            && Page is not null 
+                ? TabControl.Pages.IndexOf(Page) 
+                : -1;
 
         public bool IsFirstPage
         {
             get
             {
-                if (TabControl == null)
+                if (TabControl is null)
                     return true;
 
                 foreach (OxTabButton button in TabControl.VisibleTabButtons())
@@ -71,7 +75,7 @@ namespace OxLibrary.Panels
         {
             get
             {
-                if (TabControl == null)
+                if (TabControl is null)
                     return true;
 
                 List<OxTabButton> buttonList = TabControl.VisibleTabButtons();
@@ -91,10 +95,10 @@ namespace OxLibrary.Panels
 
         private bool IsPrevButton(OxTabButton? currentButton)
         {
-            if (TabControl == null)
+            if (TabControl is null)
                 return false;
 
-            if (currentButton == null)
+            if (currentButton is null)
                 return false;
 
             List<OxTabButton> buttonList = TabControl.VisibleTabButtons();
@@ -114,7 +118,7 @@ namespace OxLibrary.Panels
 
         internal void SetVisualParameters()
         {
-            if (TabControl == null)
+            if (TabControl is null)
                 return;
 
             Font = new(
@@ -159,7 +163,7 @@ namespace OxLibrary.Panels
 
         internal void SetPosition()
         {
-            if (TabControl == null)
+            if (TabControl is null)
                 return;
 
             DockStyle buttonDock = DockStyle.Left;

@@ -80,14 +80,16 @@ namespace OxLibrary.Panels
 
             InnerChangeBaseColor = true;
             BaseColor =
-                UseParentColor && Parent != null && Parent is OxPane paneParent
+                UseParentColor 
+                && Parent is not null 
+                && Parent is OxPane paneParent
                     ? paneParent.BaseColor
                     : DefaultColor;
             InnerChangeBaseColor = false;
 
             base.PrepareColors();
 
-            if (LoadingLabel != null)
+            if (LoadingLabel is not null)
                 LoadingLabel.ForeColor = Colors.Darker(4);
         }
 

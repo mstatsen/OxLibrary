@@ -103,6 +103,16 @@ namespace OxLibrary.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] categories {
+            get {
+                object obj = ResourceManager.GetObject("categories", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] close {
             get {
                 object obj = ResourceManager.GetObject("close", resourceCulture);
@@ -236,6 +246,16 @@ namespace OxLibrary.Properties {
         internal static byte[] field {
             get {
                 object obj = ResourceManager.GetObject("field", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] filter {
+            get {
+                object obj = ResourceManager.GetObject("filter", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -2973,16 +2993,6 @@ namespace OxLibrary.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] sql {
-            get {
-                object obj = ResourceManager.GetObject("sql", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] storage {
             get {
                 object obj = ResourceManager.GetObject("storage", resourceCulture);
@@ -3046,6 +3056,16 @@ namespace OxLibrary.Properties {
         internal static byte[] up {
             get {
                 object obj = ResourceManager.GetObject("up", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] viewInfo {
+            get {
+                object obj = ResourceManager.GetObject("viewInfo", resourceCulture);
                 return ((byte[])(obj));
             }
         }

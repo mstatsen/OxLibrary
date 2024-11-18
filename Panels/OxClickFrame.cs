@@ -86,7 +86,7 @@
             ContentContainer.BaseColor =
                 (Enabled && !ReadOnly) || !UseDisabledStyles
                     ? hovered || FreezeHovered
-                        ? GetHoveredColor != null
+                        ? GetHoveredColor is not null
                             ? GetHoveredColor.Invoke()
                             : Colors.Darker(2)
                         : ContentContainer.BaseColor

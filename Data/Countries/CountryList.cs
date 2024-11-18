@@ -1902,16 +1902,12 @@ namespace OxLibrary.Data.Countries
 
         private class CountryComparer : Comparer<Country>
         {
-            public override int Compare(Country? x, Country? y)
-            {
-                if (x == null)
-                    return -1;
-
-                if (y == null)
-                    return 1;
-
-                return x.Name.CompareTo(y.Name);
-            }
+            public override int Compare(Country? x, Country? y) => 
+                x is null
+                    ? -1
+                    : y is null
+                        ? 1
+                        : x.Name.CompareTo(y.Name);
         }
 
         private static void AddCountry(string name, string alpha2, string alpha3, int iso, CountryLocation location, Bitmap? flag = null,

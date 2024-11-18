@@ -13,10 +13,10 @@ namespace OxLibrary
                     / control.Font.FontFamily.GetLineSpacing(control.Font.Style));
 
         public static T? AlignByBaseLine<T>(Control baseControl,
-            T aligningControl)
+            T? aligningControl)
             where T : Control
         {
-            if (aligningControl == null)
+            if (aligningControl is null)
                 return null;
 
             aligningControl.Top = 
@@ -25,7 +25,7 @@ namespace OxLibrary
                     OxPane => 
                         baseControl.Top - (aligningControl.Height - baseControl.Height) / 2,
                     _ => 
-                        baseControl == null
+                        baseControl is null
                             ? aligningControl.Top
                             : baseControl.Top
                                 + GetBaseLine(baseControl)
@@ -54,9 +54,10 @@ namespace OxLibrary
             Point thisPoint = topControl.PointToClient(desktopPoint);
             Control foundControl = topControl.GetChildAtPoint(thisPoint);
 
-            return (foundControl != null) && foundControl.HasChildren 
-                ? GetControlUnderMouse(foundControl, desktopPoint) 
-                : foundControl;
+            return foundControl is not null 
+                && foundControl.HasChildren 
+                    ? GetControlUnderMouse(foundControl, desktopPoint) 
+                    : foundControl;
         }
     }
 }

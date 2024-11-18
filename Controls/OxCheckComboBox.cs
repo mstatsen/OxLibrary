@@ -29,7 +29,10 @@ namespace OxLibrary.Controls
 
         public new T SelectedItem
         {
-            get => SelectedCheckItem != null ? SelectedCheckItem.Data : default!;
+            get => 
+                SelectedCheckItem is not null 
+                    ? SelectedCheckItem.Data 
+                    : default!;
             set => SelectedCheckItem = Items.CheckItem(value);
         }
 
@@ -43,7 +46,7 @@ namespace OxLibrary.Controls
         {
             base.OnSelectedIndexChanged(e);
 
-            if (SelectedCheckItem != null)
+            if (SelectedCheckItem is not null)
                 SelectedCheckItem.Checked = !SelectedCheckItem.Checked;
 
             CheckChanged?.Invoke(SelectedCheckItem, e);
