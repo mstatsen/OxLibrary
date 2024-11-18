@@ -116,5 +116,14 @@ namespace OxLibrary.Panels
             PanelViewer = null;
             return result;
         }
+
+        protected override void SetToolTipText(string value)
+        {
+            base.SetToolTipText(value);
+            ContentContainer.ToolTipText = value;
+
+            foreach (OxBorder padding in Paddings.Borders.Values)
+                padding.ToolTipText = value;
+        }
     }
 }

@@ -175,20 +175,5 @@
 
         public bool Default { get; set; }
         public bool BeginGroup { get; set; }
-        protected readonly ToolTip ToolTip = new() 
-        {
-            AutomaticDelay = 500,
-            InitialDelay = 100,
-            ShowAlways = true
-        };
-
-        public string ToolTipText
-        { 
-            get => ToolTip.GetToolTip(this);
-            set => SetToolTipText(value);
-        }
-
-        protected virtual void SetToolTipText(string value) =>
-            ToolTip.SetToolTip(this, value);
     }
 }

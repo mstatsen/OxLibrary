@@ -120,5 +120,16 @@
             margins.SizeChanged += BorderSizeEventHandler;
             borders.SizeChanged += BorderSizeEventHandler;
         }
+
+        protected override void SetToolTipText(string value)
+        {
+            base.SetToolTipText(value);
+
+            foreach (OxBorder border in Borders.Borders.Values)
+                border.ToolTipText = value;
+
+            foreach (OxBorder margin in Margins.Borders.Values)
+                margin.ToolTipText = value;
+        }
     }
 }

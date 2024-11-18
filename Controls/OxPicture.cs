@@ -202,5 +202,11 @@ namespace OxLibrary.Controls
 
         private void SetPictureImage() => 
             picture.Image = AlwaysEnabled || Enabled ? EnabledBitmap : DisabledBitmap;
+
+        protected override void SetToolTipText(string value)
+        {
+            base.SetToolTipText(value);
+            ToolTip.SetToolTip(picture, value);
+        }
     }
 }

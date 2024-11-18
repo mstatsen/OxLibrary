@@ -3,7 +3,7 @@
     public class OxPanelLayouter : OxPanel
     {
         private bool panelResizing = false;
-        private const int MaximumColumnCount = 24;
+        private const int MaximumColumnCount = 48;
         private int CalcedColumnCount = MaximumColumnCount;
         private readonly OxPaneDictionary columnsPanels = new();
         private readonly OxPaneList columns = new();
@@ -227,6 +227,9 @@
 
             if (CalcedColumnCount == 0)
                 CalcedColumnCount++;
+            else 
+                if (CalcedColumnCount > MaximumColumnCount)
+                    CalcedColumnCount = MaximumColumnCount;
         }
 
         private void ReLayoutPanelsHandler(object? sender, EventArgs e)
