@@ -225,7 +225,7 @@
         {
             get 
             {
-                Point thisPoint = this.PointToClient(Cursor.Position);
+                Point thisPoint = PointToClient(Cursor.Position);
 
                 return (thisPoint.X >= 0) && 
                     (thisPoint.X <= Width) && 
