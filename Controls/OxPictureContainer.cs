@@ -62,7 +62,7 @@ namespace OxLibrary.Controls
             {
                 calcedWidth = (buttonsParent.Width / Buttons.Count) 
                         - (int)OxPictureActionHelper.ButtonMargin * Buttons.Count
-                        + (int)OxSize.Small;
+                        + (int)OxSize.XXS;
                 button.SetContentSize(
                     calcedWidth,
                     OxPictureActionHelper.DefaultHeight
@@ -98,7 +98,7 @@ namespace OxLibrary.Controls
             };
 
             button.Margins.LeftOx = OxPictureActionHelper.ButtonMargin;
-            button.Margins.TopOx = OxSize.Small;
+            button.Margins.TopOx = OxSize.XXS;
             button.Click += ButtonClick;
             Actions.Add(action, button);
             Buttons.Add(button);

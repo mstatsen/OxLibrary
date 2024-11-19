@@ -68,7 +68,7 @@
     <Compile Update="Dialogs\OxMessageMainPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Update="Panels\OxBorder.cs">
+    <Compile Update="Panels\OxBorder_old.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Update="Panels\OxCard.cs">

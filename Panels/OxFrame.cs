@@ -2,19 +2,19 @@
 {
     public class OxFrame : OxPanel, IOxFrame
     {
-        private OxBorders borders = default!;
-        private OxBorders margins = default!;
+        private OxBorders_old borders = default!;
+        private OxBorders_old margins = default!;
         private bool blurredBorder;
 
         private void CreateBorders()
         {
-            borders = new OxBorders(this);
-            borders.SetSize(OxSize.Small);
+            borders = new OxBorders_old(this);
+            borders.SetSize(OxSize.XXS);
             ApplyBordersColor();
         }
 
         private void CreateMargins() =>
-            margins = new OxBorders(this);
+            margins = new OxBorders_old(this);
 
         protected override void PrepareInnerControls()
         {
@@ -55,8 +55,8 @@
             borders.CalcedSize(OxDock.Top) +
             borders.CalcedSize(OxDock.Bottom);
 
-        public OxBorders Borders => borders;
-        public OxBorders Margins => margins;
+        public OxBorders_old Borders => borders;
+        public OxBorders_old Margins => margins;
 
         public int BorderWidth
         {
@@ -126,10 +126,10 @@
         {
             base.SetToolTipText(value);
 
-            foreach (OxBorder border in Borders.Borders.Values)
+            foreach (OxBorder_old border in Borders.Borders.Values)
                 border.ToolTipText = value;
 
-            foreach (OxBorder margin in Margins.Borders.Values)
+            foreach (OxBorder_old margin in Margins.Borders.Values)
                 margin.ToolTipText = value;
         }
     }

@@ -37,10 +37,10 @@
             {
                 case OxDock.Left:
                 case OxDock.Right:
-                    Header.Paddings.TopOx = OxSize.Medium;
+                    Header.Paddings.TopOx = OxSize.XS;
                     break;
                 case OxDock.Bottom:
-                    Header.Paddings.LeftOx = OxSize.Large;
+                    Header.Paddings.LeftOx = OxSize.S;
                     break;
             }
         }

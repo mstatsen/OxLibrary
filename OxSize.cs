@@ -1,12 +1,15 @@
 ﻿namespace OxLibrary
 {
+    [Flags]
     public enum OxSize
     {
         None = 0,
-        Small = 1,
-        Medium = 2,
-        Large = 4,
-        Extra = 8,
-        Nine = 9
+        XXS = 1,
+        XS = 2,
+        S = 4,
+        M = 8,
+        L = 16,
+        XL = 32,
+        XXL = 64
     }
 }

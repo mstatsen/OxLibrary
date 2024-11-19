@@ -136,19 +136,19 @@
             SetClickHandler(ContentContainer);
             SetHoverHandlers(ContentContainer);
 
-            foreach (OxBorder border in Paddings.Borders.Values)
+            foreach (OxBorder_old border in Paddings.Borders.Values)
             {
                 SetClickHandler(border);
                 SetHoverHandlers(border);
             }
 
-            foreach (OxBorder border in Borders.Borders.Values)
+            foreach (OxBorder_old border in Borders.Borders.Values)
             {
                 SetClickHandler(border);
                 SetHoverHandlers(border);
             }
 
-            foreach (OxBorder border in Margins.Borders.Values)
+            foreach (OxBorder_old border in Margins.Borders.Values)
             {
                 SetClickHandler(border);
                 SetHoverHandlers(border);

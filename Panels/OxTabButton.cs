@@ -38,7 +38,7 @@ namespace OxLibrary.Panels
             if (sender is null)
                 return;
 
-            OxBorder border = (OxBorder)sender;
+            OxBorder_old border = (OxBorder_old)sender;
             Margins[border.OxDock].SetSize(border.Visible ? 0 : border.GetSize());
         }
 
@@ -150,8 +150,8 @@ namespace OxLibrary.Panels
                 Active ?
                     (int)OxSize.None
                     : OxDockHelper.IsVertical(TabControl.TabPosition)
-                        ? (int)OxSize.Large
-                        : (int)OxSize.Extra * 3
+                        ? (int)OxSize.S
+                        : (int)OxSize.M * 3
             );
 
             Borders[TabControl.TabPosition].Visible = true;

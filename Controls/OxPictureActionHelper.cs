@@ -22,7 +22,7 @@
 
         public static int DefaultHeight => 20;
 
-        public static readonly OxSize ButtonMargin = OxSize.Medium;
+        public static readonly OxSize ButtonMargin = OxSize.XS;
 
         public static List<OxPictureAction> List
         {

@@ -43,7 +43,7 @@ namespace OxLibrary.Panels
             label.Text = title;
             label.DoubleClick += (s, e) => ToolBar.ExecuteDefault();
             label.Click += LabelClickHandler;
-            Paddings.LeftOx = OxSize.Large;
+            Paddings.LeftOx = OxSize.S;
             ReAlign();
         }
 

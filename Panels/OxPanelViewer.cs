@@ -14,7 +14,7 @@ namespace OxLibrary.Panels
             BaseColor = ContentPanel.BaseColor;
             contentPanel.ContentContainer.Parent = this;
             SetContentSize(ContentPanel.CalcedWidth, contentPanel.CalcedHeight);
-            MainPanel.Paddings.SetSize(OxSize.Large);
+            MainPanel.Paddings.SetSize(OxSize.S);
             contentPanel.Colors.BaseColorChanged += (s, e) => MainPanel.BaseColor = ContentPanel.BaseColor;
         }
 

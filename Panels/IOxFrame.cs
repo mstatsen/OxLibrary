@@ -2,8 +2,8 @@
 {
     public interface IOxFrame : IOxPanel
     {
-        OxBorders Borders { get; }
-        OxBorders Margins { get; }
+        OxBorders_old Borders { get; }
+        OxBorders_old Margins { get; }
         int BorderWidth { get; set; }
         Color BorderColor { get; set; }
         bool BorderVisible { set; }

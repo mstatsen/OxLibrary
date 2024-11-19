@@ -1,145 +1,167 @@
-﻿namespace OxLibrary.Panels
+﻿using System.Collections.Generic;
+
+namespace OxLibrary.Panels
 {
-    public class BorderEventArgs : EventArgs { }
-
-    public delegate void BorderSizeEventHandler(object sender, BorderEventArgs e);
-
-    public class OxBorders
+    namespace OxLibrary.Panels
     {
-        public Dictionary<OxDock, OxBorder> Borders { get; internal set; }
+        public class BorderEventArgs : EventArgs { }
 
-        private void NotifyAboutSizeChanged() =>
-            SizeChanged?.Invoke(this, new BorderEventArgs());
+        public delegate void BorderSizeEventHandler(object sender, BorderEventArgs e);
 
-        private void SetBorderSize(OxDock dock, int size)
+        public class OxBorders
         {
-            if (Borders[dock].SetSize(size))
+            public Dictionary<OxDock, OxBorder> Borders { get; } = new();
+
+            private bool SizeChanging = false;
+            private void NotifyAboutSizeChanged()
+            {
+                if (!SizeChanging)
+                    SizeChanged?.Invoke(this, new BorderEventArgs());
+            }
+
+            private bool SetSize(OxDock dock, OxSize size)
+            {
+                OxSize oldSize = Borders[dock].Size;
+
+                if (oldSize.Equals(size))
+                    return false;
+
+                Borders[dock].Size = size;
                 NotifyAboutSizeChanged();
-        }
-
-        public OxBorders(Control control) =>
-            Borders = OxBorder.NewFull(control, Color.Transparent, OxSize.None);
-
-        public int Left
-        {
-            get => Borders[OxDock.Left].GetSize();
-            set => SetBorderSize(OxDock.Left, value);
-        }
-
-        public OxSize LeftOx
-        {
-            set => SetBorderSize(OxDock.Left, (int)value);
-        }
-
-        public int Horizontal
-        {
-            get => Left;
-            set
-            {
-                Left = value;
-                Right = value;
+                return true;
             }
-        }
 
-        public OxSize HorizontalOx
-        {
-            set
+            public OxBorders()
             {
-                LeftOx = value;
-                RightOx = value;
+                foreach (OxDock dock in Enum.GetValues(typeof(OxDock)))
+                    Borders.Add(dock, new());
             }
-        }
 
-        public int Top
-        {
-            get => Borders[OxDock.Top].GetSize();
-            set => SetBorderSize(OxDock.Top, value);
-        }
-
-        public OxSize TopOx
-        {
-            set => SetBorderSize(OxDock.Top, (int)value);
-        }
-
-        public int Vertical
-        {
-            get => Left;
-            set
+            public int Left
             {
-                Top = value;
-                Bottom = value;
+                get => (int)LeftOx;
+                set => LeftOx = (OxSize)value;
             }
-        }
 
-        public OxSize VerticalOx
-        {
-            set
+            public OxSize LeftOx
             {
-                TopOx = value;
-                BottomOx = value;
+                get => GetSize(OxDock.Left);
+                set => SetSize(OxDock.Left, value);
             }
-        }
 
-        public int Right
-        {
-            get => Borders[OxDock.Right].GetSize();
-            set => SetBorderSize(OxDock.Right, value);
-        }
-
-        public OxSize RightOx
-        {
-            set => SetBorderSize(OxDock.Right, (int)value);
-        }
-
-        public int Bottom
-        {
-            get => Borders[OxDock.Bottom].GetSize();
-            set => SetBorderSize(OxDock.Bottom, value);
-        }
-
-        public OxSize BottomOx
-        {
-            set => SetBorderSize(OxDock.Bottom, (int)value);
-        }
-
-        public void SetSize(int size)
-        {
-            bool sizeChanged = false;
-
-            foreach (OxBorder border in Borders.Values)
-                sizeChanged |= border.SetSize(size);
-
-            if (sizeChanged)
-                NotifyAboutSizeChanged();
-        }
-
-        public void SetSize(OxSize size) =>
-            SetSize((int)size);
-
-        public int GetSize() =>
-            Borders[OxDock.Left].GetSize();
-
-        public int CalcedSize(OxDock dock) =>
-            Borders[dock].CalcedSize;
-
-        public OxBorder this[OxDock dock] => Borders[dock];
-
-        public BorderSizeEventHandler? SizeChanged;
-
-        public Color Color
-        {
-            get => Borders[OxDock.Left].BackColor;
-            set
+            public int Horizontal
             {
-                foreach (OxBorder border in Borders.Values)
-                    border.BackColor = value;
+                get => Left;
+                set
+                {
+                    Left = value;
+                    Right = value;
+                }
             }
-        }
 
-        public void ReAlign()
-        {
-            foreach (OxBorder border in Borders.Values)
-                border.ReAlign();
+            public OxSize HorizontalOx
+            {
+                get => LeftOx;
+                set
+                {
+                    LeftOx = value;
+                    RightOx = value;
+                }
+            }
+
+            public int Top
+            {
+                get => (int)TopOx;
+                set => TopOx = (OxSize)value;
+            }
+
+            public OxSize TopOx
+            {
+                get => GetSize(OxDock.Top);
+                set => SetSize(OxDock.Top, value);
+            }
+
+            public int Vertical
+            {
+                get => Left;
+                set
+                {
+                    Top = value;
+                    Bottom = value;
+                }
+            }
+
+            public OxSize VerticalOx
+            {
+                get => TopOx;
+                set
+                {
+                    TopOx = value;
+                    BottomOx = value;
+                }
+            }
+
+            public int Right
+            {
+                get => (int)RightOx;
+                set => RightOx = (OxSize)value;
+            }
+
+            public OxSize RightOx
+            {
+                get => GetSize(OxDock.Right);
+                set => SetSize(OxDock.Right, value);
+            }
+
+            public int Bottom
+            {
+                get => (int)BottomOx;
+                set => BottomOx = (OxSize)value;
+            }
+
+            public OxSize BottomOx
+            {
+                get => GetSize(OxDock.Bottom);
+                set => SetSize(OxDock.Bottom, value);
+            }
+
+            private void SetSize(OxSize size)
+            {
+                bool sizeChanged = false;
+                SizeChanging = true;
+
+                try
+                {
+                    foreach (OxDock border in Borders.Keys)
+                        sizeChanged |= SetSize(border, size);
+                }
+                finally
+                {
+                    SizeChanging = false;
+                }
+
+                if (sizeChanged)
+                    NotifyAboutSizeChanged();
+            }
+
+            private OxSize GetSize(OxDock dock) =>
+                Borders[dock].Size;
+
+            public OxSize SizeAll
+            {
+                get => GetSize(OxDock.Left);
+                set => SetSize(value);
+            }
+
+            public int IntSizeAll
+            {
+                get => (int)SizeAll;
+                set => SizeAll = (OxSize)value;
+            }
+
+            public OxBorder this[OxDock dock] => Borders[dock];
+
+            public BorderSizeEventHandler? SizeChanged;
         }
     }
 }

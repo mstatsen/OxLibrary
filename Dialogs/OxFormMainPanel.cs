@@ -35,7 +35,7 @@ namespace OxLibrary.Dialogs
             Anchor = AnchorStyles.Left | AnchorStyles.Top;
 
         private void SetBordersSize() => 
-            Borders.SetSize(OxSize.Small);
+            Borders.SetSize(OxSize.XXS);
 
         private void CreateFormMover() => 
             formMover = new OxFormMover(Form, Header.Label);
@@ -185,7 +185,7 @@ namespace OxLibrary.Dialogs
         }
 
         internal void SetMarginsSize() => 
-            Margins.SetSize(Form.Sizeble ? OxSize.Medium : OxSize.None);
+            Margins.SetSize(Form.Sizeble ? OxSize.XS : OxSize.None);
 
         protected override void OnLocationChanged(EventArgs e)
         {
@@ -203,13 +203,13 @@ namespace OxLibrary.Dialogs
         {
             base.SetHandlers();
 
-            foreach (OxBorder margin in Margins.Borders.Values)
+            foreach (OxBorder_old margin in Margins.Borders.Values)
                 SetMarginHandlers(margin);
 
             ContentContainer.VisibleChanged += ContentContainerVisibleChanged;
         }
 
-        private void SetMarginHandlers(OxBorder margin)
+        private void SetMarginHandlers(OxBorder_old margin)
         {
             margin.MouseDown += ResizerMouseDown;
             margin.MouseUp += MarginMouseUpHandler;
@@ -228,7 +228,7 @@ namespace OxLibrary.Dialogs
 
         private void ResizerMouseDown(object? sender, MouseEventArgs e)
         {
-            if (sender is not OxBorder border)
+            if (sender is not OxBorder_old border)
                 return;
 
             LastMousePosition = border.PointToScreen(e.Location);
@@ -250,7 +250,7 @@ namespace OxLibrary.Dialogs
             if (ResizeProcessing)
                 return;
 
-            OxBorder? border = (OxBorder?)sender;
+            OxBorder_old? border = (OxBorder_old?)sender;
 
             if (border is null)
                 return;

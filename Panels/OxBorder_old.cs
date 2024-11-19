@@ -2,7 +2,7 @@
 
 namespace OxLibrary.Panels
 {
-    public class OxBorder : OxPane
+    public class OxBorder_old : OxPane
     {
         public OxDock OxDock { get; internal set; }
 
@@ -38,7 +38,7 @@ namespace OxLibrary.Panels
         public void SetSize(OxSize size) =>
             SetSize((int)size);
 
-        public OxBorder(Control parentControl, OxDock dock, int size, bool visible)
+        public OxBorder_old(Control parentControl, OxDock dock, int size, bool visible)
         {
             Visible = visible;
             Parent = parentControl;
@@ -47,45 +47,45 @@ namespace OxLibrary.Panels
             SetSize(size);
         }
 
-        public OxBorder(Control parentControl, OxDock dock, Color backColor, int size = (int)OxSize.Small, bool visible = true) 
+        public OxBorder_old(Control parentControl, OxDock dock, Color backColor, int size = (int)OxSize.XXS, bool visible = true) 
             : this(parentControl, dock, size, visible)
             => BackColor = backColor;
 
-        public OxBorder(Control parentControl, OxDock dock, Color backColor, OxSize size, bool visible = true) 
+        public OxBorder_old(Control parentControl, OxDock dock, Color backColor, OxSize size, bool visible = true) 
             : this(parentControl, dock, backColor, (int)size, visible)
         { }
 
-        public static OxBorder NewLeft(Control parentControl, Color backColor, int size) =>
+        public static OxBorder_old NewLeft(Control parentControl, Color backColor, int size) =>
             new(parentControl, OxDock.Left, backColor, size);
 
-        public static OxBorder NewLeft(Control parentControl, Color backColor, OxSize size = OxSize.Small) =>
+        public static OxBorder_old NewLeft(Control parentControl, Color backColor, OxSize size = OxSize.XXS) =>
             NewLeft(parentControl, backColor, (int)size);
 
-        public static OxBorder NewRight(Control parentControl, Color backColor, int size) =>
+        public static OxBorder_old NewRight(Control parentControl, Color backColor, int size) =>
             new(parentControl, OxDock.Right, backColor, size);
 
-        public static OxBorder NewRight(Control parentControl, Color backColor, OxSize size = OxSize.Small) =>
+        public static OxBorder_old NewRight(Control parentControl, Color backColor, OxSize size = OxSize.XXS) =>
             NewRight(parentControl, backColor, (int)size);
 
-        public static OxBorder NewTop(Control parentControl, Color backColor, int size) =>
+        public static OxBorder_old NewTop(Control parentControl, Color backColor, int size) =>
             new(parentControl, OxDock.Top, backColor, size);
 
-        public static OxBorder NewTop(Control parentControl, Color backColor, OxSize size = OxSize.Small) =>
+        public static OxBorder_old NewTop(Control parentControl, Color backColor, OxSize size = OxSize.XXS) =>
             NewTop(parentControl, backColor, (int)size);
 
-        public static OxBorder NewBottom(Control parentControl, Color backColor, int size) =>
+        public static OxBorder_old NewBottom(Control parentControl, Color backColor, int size) =>
             new(parentControl, OxDock.Bottom, backColor, size);
 
-        public static OxBorder NewBottom(Control parentControl, Color backColor, OxSize size = OxSize.Small) =>
+        public static OxBorder_old NewBottom(Control parentControl, Color backColor, OxSize size = OxSize.XXS) =>
             NewBottom(parentControl, backColor, (int)size);
 
-        public static OxBorder New(Control parentControl, DockStyle dock, Color backColor, int size, bool visible = true) =>
+        public static OxBorder_old New(Control parentControl, DockStyle dock, Color backColor, int size, bool visible = true) =>
             new(parentControl, OxDockHelper.Dock(dock), backColor, size, visible);
 
-        public static OxBorder New(Control parentControl, DockStyle dock, Color backColor, OxSize size = OxSize.Small, bool visible = true) =>
+        public static OxBorder_old New(Control parentControl, DockStyle dock, Color backColor, OxSize size = OxSize.XXS, bool visible = true) =>
             New(parentControl, dock, backColor, (int)size, visible);
 
-        public static Dictionary<OxDock, OxBorder> NewFull(Control parentControl, Color backColor, int size) =>
+        public static Dictionary<OxDock, OxBorder_old> NewFull(Control parentControl, Color backColor, int size) =>
             new()
                 {
                     { OxDock.Left, NewLeft(parentControl, backColor, size) },
@@ -94,10 +94,10 @@ namespace OxLibrary.Panels
                     { OxDock.Bottom, NewBottom(parentControl, backColor, size) }
                 };
 
-        public static Dictionary<OxDock, OxBorder> NewFull(
+        public static Dictionary<OxDock, OxBorder_old> NewFull(
             Control parentControl,
             Color backColor,
-            OxSize size = OxSize.Small) =>
+            OxSize size = OxSize.XXS) =>
             NewFull(parentControl, backColor, (int)size);
     }
 }

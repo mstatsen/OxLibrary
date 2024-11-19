@@ -4,7 +4,7 @@ namespace OxLibrary.Panels
 {
     public class OxPanel : OxPane, IOxPanel, IOxWithIcon
     {
-        private OxBorders paddings = default!;
+        private OxBorders_old paddings = default!;
         private readonly OxPane contentContainer = new()
         {
             Visible = true,
@@ -17,7 +17,7 @@ namespace OxLibrary.Panels
         protected override void PrepareInnerControls()
         {
             base.PrepareInnerControls();
-            paddings = new OxBorders(this);
+            paddings = new OxBorders_old(this);
             contentContainer.Parent = this;
             contentContainer.Colors.BaseColorChanged += (s, e) => Paddings.Color = BackColor;
         }
@@ -28,10 +28,10 @@ namespace OxLibrary.Panels
             paddings.SizeChanged += BorderSizeEventHandler;
         }
 
-        protected void BorderSizeEventHandler(object sender, BorderEventArgs e) =>
+        protected void BorderSizeEventHandler(object sender, BorderEventArgs_old e) =>
             RecalcSize();
 
-        public OxBorders Paddings => paddings;
+        public OxBorders_old Paddings => paddings;
         public OxPane ContentContainer => contentContainer;
 
         public Bitmap? Icon
@@ -74,7 +74,7 @@ namespace OxLibrary.Panels
 
         protected override void OnControlAdded(ControlEventArgs e)
         {
-            if (Initialized && e.Control is not OxBorder)
+            if (Initialized && e.Control is not OxBorder_old)
                 ContentContainer.Controls.Add(e.Control);
             else
                 base.OnControlAdded(e);
@@ -122,7 +122,7 @@ namespace OxLibrary.Panels
             base.SetToolTipText(value);
             ContentContainer.ToolTipText = value;
 
-            foreach (OxBorder padding in Paddings.Borders.Values)
+            foreach (OxBorder_old padding in Paddings.Borders.Values)
                 padding.ToolTipText = value;
         }
     }

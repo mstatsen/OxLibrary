@@ -23,7 +23,7 @@ namespace OxLibrary.Controls
             SetContentSize(Width, DefaultToolBarHeight);
         }
 
-        private readonly Dictionary<OxClickFrame, OxBorder> separators = new();
+        private readonly Dictionary<OxClickFrame, OxBorder_old> separators = new();
 
         private void PlaceButtons()
         {
@@ -40,8 +40,8 @@ namespace OxLibrary.Controls
                 if (button.BeginGroup && 
                     lastButton is not null)
                 {
-                    button.Margins.LeftOx = OxSize.Large;
-                    lastButton.Margins.RightOx = OxSize.Large;
+                    button.Margins.LeftOx = OxSize.S;
+                    lastButton.Margins.RightOx = OxSize.S;
 
                     if (lastButton.Dock.Equals(button.Dock))
                         SeparateButtonsGroup(button);
@@ -50,7 +50,7 @@ namespace OxLibrary.Controls
                     button.Margins.LeftOx = 
                         lastButton is null 
                             ? OxSize.None 
-                            : OxSize.Small;
+                            : OxSize.XXS;
 
                 button.BringToFront();
                 button.VisibleChanged += ButtonVisibleChangedHandler;
@@ -68,8 +68,8 @@ namespace OxLibrary.Controls
             {
                 separator = startButton.Dock switch
                 {
-                    DockStyle.Right => OxBorder.NewRight(this, BorderColor, OxSize.Small),
-                    _ => OxBorder.NewLeft(this, BorderColor, OxSize.Small),
+                    DockStyle.Right => OxBorder_old.NewRight(this, BorderColor, OxSize.XXS),
+                    _ => OxBorder_old.NewLeft(this, BorderColor, OxSize.XXS),
                 };
                 separators.Add(startButton, separator);
             }
@@ -102,14 +102,14 @@ namespace OxLibrary.Controls
         protected virtual void SetToolBarPaddings()
         {
             Paddings.LeftOx = OxSize.None;
-            Paddings.RightOx = OxSize.Small;
-            Paddings.TopOx = OxSize.Medium;
-            Paddings.BottomOx = OxSize.Large;
+            Paddings.RightOx = OxSize.XXS;
+            Paddings.TopOx = OxSize.XS;
+            Paddings.BottomOx = OxSize.S;
 
             if (buttons.Last?.CalcedHeight > ContentContainer.CalcedHeight)
             {
-                Paddings.TopOx = OxSize.Small;
-                Paddings.BottomOx = OxSize.Small;
+                Paddings.TopOx = OxSize.XXS;
+                Paddings.BottomOx = OxSize.XXS;
             }
         }
 
@@ -215,6 +215,6 @@ namespace OxLibrary.Controls
             BorderColor = Color.Transparent;
 
         protected override void SetToolBarPaddings() => 
-            Paddings.SetSize(OxSize.Small);
+            Paddings.SetSize(OxSize.XXS);
     }
 }

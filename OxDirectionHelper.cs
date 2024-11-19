@@ -14,7 +14,7 @@ namespace OxLibrary
                 _ => OxDirection.None,
             };
 
-        public static OxDirection GetDirection(OxBorder border, Point position)
+        public static OxDirection GetDirection(OxBorder_old border, Point position)
         {
             OxDirection direction = GetDirection(border.OxDock);
             int error = border.GetSize() * 2;

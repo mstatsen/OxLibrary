@@ -2,12 +2,12 @@
 {
     public class OxUnderlinedPanel : OxPanel
     {
-        private OxBorder underline = default!;
+        private OxBorder_old underline = default!;
 
-        public OxBorder Underline => underline!;
+        public OxBorder_old Underline => underline!;
 
         protected void CreateUnderline() =>
-            underline = OxBorder.NewBottom(this, Colors.Darker(4));
+            underline = OxBorder_old.NewBottom(this, Colors.Darker(4));
 
         protected override void PrepareInnerControls()
         {
