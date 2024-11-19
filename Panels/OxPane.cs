@@ -6,15 +6,13 @@
         private int savedHeight = 0;
         private readonly OxColorHelper colors;
 
-        private bool sizeRecalcing = false;
-
-        protected bool SizeRecalcing => sizeRecalcing;
+        protected bool SizeRecalcing { get; private set; } = false;
 
         public void StartSizeRecalcing() =>
-            sizeRecalcing = true;
+            SizeRecalcing = true;
 
         public void EndSizeRecalcing() =>
-            sizeRecalcing = false;
+            SizeRecalcing = false;
 
         protected virtual int GetCalcedHeight() =>
             savedHeight is 0 
@@ -51,7 +49,7 @@
 
         public void RecalcSize()
         {
-            if (sizeRecalcing)
+            if (SizeRecalcing)
                 return;
 
             int calcedWidth = CalcedWidth;
@@ -96,18 +94,6 @@
         protected virtual void SetUseDisabledStyles(bool value) =>
             useDisabledStyles = value;
 
-        protected static void SetPaneBaseColor(OxPane pane, Color color)
-        {
-            if (pane is not null)
-                pane.BaseColor = color;
-        }
-
-        protected static void SetControlBackColor(Control? control, Color color)
-        {
-            if (control is not null)
-                control.BackColor = color;
-        }
-
         protected virtual void PrepareInnerControls() { }
 
         public OxPane() : this(Size.Empty) { }
@@ -141,7 +127,7 @@
 
         private void RecalcSizeHandler(object? sender, EventArgs e)
         {
-            if (Initialized && !sizeRecalcing && (IsVariableHeight || IsVariableWidth))
+            if (Initialized && !SizeRecalcing && (IsVariableHeight || IsVariableWidth))
                 RecalcSize();
         }
 
