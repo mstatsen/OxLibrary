@@ -4,15 +4,15 @@ namespace OxLibrary.Panels
 {
     public class OxHeader : OxUnderlinedPanel, IOxHeader
     {
-        public const int DefaultTitleWidth = 240;
-        public const int DefaultTitleHeight = 26;
+        public readonly static OxWidth DefaultTitleWidth = OxWh.W240;
+        public readonly static OxWidth DefaultTitleHeight = OxWh.W26;
         private const string DefaultFontFamily = "Calibri Light";
         private const float DefaultFontSize = 11;
 
         private readonly OxPicture icon = new()
         {
-            PictureSize = 24,
-            Dock = DockStyle.Left,
+            PictureSize = OxWh.W24,
+            Dock = OxDock.Left,
             Visible = false
         };
 
@@ -27,8 +27,8 @@ namespace OxLibrary.Panels
 
         private readonly OxHeaderToolBar toolBar = new()
         {
-            Dock = DockStyle.Right,
-            Width = 0
+            Dock = OxDock.Right,
+            Width = OxWh.W0
         };
 
         public OxHeaderToolBar ToolBar => toolBar;

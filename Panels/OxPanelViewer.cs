@@ -13,8 +13,8 @@ namespace OxLibrary.Panels
             DialogButtons = buttons;
             BaseColor = ContentPanel.BaseColor;
             contentPanel.Parent = MainPanel;
-            Size = new(ContentPanel.CalcedWidth, contentPanel.CalcedHeight);
-            MainPanel.Padding.Size = OxSize.S;
+            Size = new OxSize(ContentPanel.CalcedWidth, contentPanel.CalcedHeight).Size;
+            MainPanel.Padding.Size = OxWh.W4;
             contentPanel.Colors.BaseColorChanged += (s, e) => MainPanel.BaseColor = ContentPanel.BaseColor;
         }
 

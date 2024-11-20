@@ -49,7 +49,7 @@
         }
 
         public OxClickFrame() : base() { }
-        public OxClickFrame(Size contentSize) : base(contentSize) { }
+        public OxClickFrame(OxSize size) : base(size) { }
 
         private bool readOnly = false;
 

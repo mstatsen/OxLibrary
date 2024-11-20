@@ -4,9 +4,58 @@ namespace OxLibrary.Panels
 {
     public class OxPane : Panel, IOxPane
     {
-        private readonly OxColorHelper colors;
+        public OxPane() : this(OxSize.Empty) { }
+        public OxPane(OxSize size)
+        {
+            BorderVisible = false;
+            colors = new OxColorHelper(DefaultColor);
+            Initialized = false;
+            StartSizeChanging();
+            try
+            {
+                DoubleBuffered = true;
 
-        //TODO: link on base.Padding with OxBorders.SizeChanged
+                if (!size.Equals(OxSize.Empty))
+                    Size = size;
+
+                SetBordersHandlers();
+                PrepareInnerControls();
+                PrepareColors();
+                RecalcSize();
+                SetHandlers();
+                ReAlign();
+                AfterCreated();
+            }
+            finally
+            {
+                EndSizeChanging();
+            }
+
+            Initialized = true;
+            Visible = true;
+        }
+
+        private void SetBordersHandlers()
+        {
+            padding.SizeChanged += BordersSizeChangedHandler;
+            borders.SizeChanged += BordersSizeChangedHandler;
+            margin.SizeChanged += BordersSizeChangedHandler;
+        }
+
+        private void BordersSizeChangedHandler(object sender, BorderEventArgs e)
+        {
+            ClientSize = new(
+                Size.WidthInt - FullClientOffset.HorizontalFullInt, 
+                Size.HeightInt - FullClientOffset.VerticalIntFull
+            );
+
+            if (FullClientOffset.Equals(base.Padding))
+                base.Padding = FullClientOffset.AsPadding;
+
+            Invalidate();
+        }
+
+        private readonly OxColorHelper colors;
 
         private readonly OxBorders padding = new();
         public new OxBorders Padding => padding;
@@ -14,7 +63,7 @@ namespace OxLibrary.Panels
         private readonly OxBorders borders =
             new()
             {
-                Size = OxSize.XXS
+                Size = OxWh.W1
             };
 
         public OxBorders Borders => borders;
@@ -25,10 +74,10 @@ namespace OxLibrary.Panels
             set => BackColor = value;
         }
 
-        public int BorderWidth
+        public OxWidth BorderWidth
         {
-            get => Borders.SizeInt;
-            set => Borders.SizeInt = value;
+            get => Borders.Size;
+            set => Borders.Size = value;
         }
 
         public bool BorderVisible
@@ -76,18 +125,19 @@ namespace OxLibrary.Panels
                 ? BaseColor
                 : Colors.Lighter(2);
 
-        protected bool SizeRecalcing { get; private set; } = false;
+        public void StartSizeChanging() =>
+            SizeChanging = true;
 
-        public void StartSizeRecalcing() =>
-            SizeRecalcing = true;
+        public void EndSizeChanging()
+        {
+            SizeChanging = false;
+            OnSizeChanged();
+        }
 
-        public void EndSizeRecalcing() =>
-            SizeRecalcing = false;
-
-        protected virtual int GetCalcedHeight() =>
+        protected virtual OxWidth GetCalcedHeight() =>
             Height;
 
-        protected virtual int GetCalcedWidth() =>
+        protected virtual OxWidth GetCalcedWidth() =>
             Width;
 
         public Color BaseColor
@@ -122,25 +172,25 @@ namespace OxLibrary.Panels
 
         protected bool IsVariableWidth =>
             Parent is null
-            || Dock is DockStyle.Left
-            || Dock is DockStyle.Right
-            || Dock is DockStyle.None;
+            || Dock is OxDock.Left
+            || Dock is OxDock.Right
+            || Dock is OxDock.None;
 
         protected bool IsVariableHeight =>
             Parent is null
-            || Dock is DockStyle.Top
-            || Dock is DockStyle.Bottom
-            || Dock is DockStyle.None;
+            || Dock is OxDock.Top
+            || Dock is OxDock.Bottom
+            || Dock is OxDock.None;
 
         public void RecalcSize()
         {
-            if (SizeRecalcing)
+            if (SizeChanging)
                 return;
 
-            int calcedWidth = CalcedWidth;
-            int calcedHeight = CalcedHeight;
+            OxWidth calcedWidth = CalcedWidth;
+            OxWidth calcedHeight = CalcedHeight;
 
-            StartSizeRecalcing();
+            StartSizeChanging();
 
             try
             {
@@ -155,13 +205,47 @@ namespace OxLibrary.Panels
             finally
             {
                 PrepareColors();
-                EndSizeRecalcing();
+                EndSizeChanging();
             }
         }
 
-        protected virtual void SetHeight(int value) => Height = value;
+        public int WidthInt
+        {
+            get => OxWh.Int(Width);
+            set => Width = OxWh.W(value);
+        }
 
-        protected virtual void SetWidth(int value) => Width = value;
+        public int HeightInt
+        {
+            get => OxWh.Int(Height);
+            set => Height = OxWh.W(value);
+        }
+
+        public new OxWidth Width
+        { 
+            get => OxWh.W(base.Width);
+            set
+            {
+                base.Width = OxWh.Int(value);
+                OnSizeChanged();
+            }
+        }
+
+        public new OxWidth Height
+        {
+            get => OxWh.W(base.Height);
+            set
+            {
+                base.Height = OxWh.Int(value);
+                OnSizeChanged();
+            }
+        }
+
+        protected virtual void SetHeight(OxWidth value) => 
+            Height = value;
+
+        protected virtual void SetWidth(OxWidth value) => 
+            Width = value;
 
         private bool BaseColorChanging = false;
 
@@ -185,40 +269,29 @@ namespace OxLibrary.Panels
 
         protected virtual void PrepareInnerControls() { }
 
+        private OxBorders FullClientOffset =>
+            Padding + Borders + Margin;
+
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            using Pen pen = new(BaseColor, 1);
-            e.Graphics.DrawRectangle(pen, new Rectangle(1, 1, Width - 1, Height - 1));
-        }
 
-        public OxPane() : this(Size.Empty) { }
-        public OxPane(Size contentSize)
-        {
-            colors = new OxColorHelper(DefaultColor);
-            Initialized = false;
-            StartSizeRecalcing();
-            try
+            using (Pen pen = new(Color.Red, OxWh.Int(BorderWidth)))
             {
-                DoubleBuffered = true;
+                foreach (var border in Borders)
+                {
+                    if (border.Value.Size.Equals(OxWh.W0))
+                        continue;
 
-                if (!contentSize.Equals(Size.Empty))
-                    Size = contentSize;
-
-                PrepareInnerControls();
-                PrepareColors();
-                RecalcSize();
-                SetHandlers();
-                ReAlign();
-                AfterCreated();
-            }
-            finally
-            {
-                EndSizeRecalcing();
-            }
-
-            Initialized = true;
-            Visible = true;
+                    e.Graphics.DrawLine(
+                        pen,
+                        border.Key is OxDock.Right ? ClientRectangle.Width - 1 : ClientRectangle.Left + 1,
+                        border.Key is OxDock.Bottom ? ClientRectangle.Height - 1 : ClientRectangle.Top + 1,
+                        border.Key is OxDock.Left ? ClientRectangle.Left + 1 : ClientRectangle.Width - 1,
+                        border.Key is OxDock.Top ? ClientRectangle.Top + 1 : ClientRectangle.Height - 1
+                    );
+                }
+            };
         }
 
         protected virtual void SetHandlers() { }
@@ -226,13 +299,16 @@ namespace OxLibrary.Panels
         private void RecalcSizeHandler(object? sender, EventArgs e)
         {
             if (Initialized 
-                && !SizeRecalcing 
+                && !SizeChanging
                 && (IsVariableHeight || IsVariableWidth))
                 RecalcSize();
         }
 
-        public int CalcedWidth => GetCalcedWidth();
-        public int CalcedHeight => GetCalcedHeight();
+        public OxWidth CalcedWidth => 
+            GetCalcedWidth();
+        public OxWidth CalcedHeight => 
+            GetCalcedHeight();
+
         protected void ApplyVisibleChangedHandler(Control control)
         {
             if (control is null)
@@ -295,9 +371,9 @@ namespace OxLibrary.Panels
             {
                 Point thisPoint = PointToClient(Cursor.Position);
                 return (thisPoint.X >= 0) && 
-                    (thisPoint.X <= Width) && 
+                    (thisPoint.X <= Size.WidthInt) && 
                     (thisPoint.Y >= 0) && 
-                    (thisPoint.Y <= Height);
+                    (thisPoint.Y <= Size.HeightInt);
             }
         }
 
@@ -323,6 +399,52 @@ namespace OxLibrary.Panels
             get => GetIcon();
             set => SetIcon(value);
         }
+        public new OxDock Dock 
+        { 
+            get => OxDockHelper.Dock(base.Dock);
+            set => base.Dock = OxDockHelper.Dock(value);
+        }
+
+        protected bool SizeChanging = false;
+        public new OxSize Size 
+        { 
+            get => new(Width, Height);
+            set
+            {
+                StartSizeChanging();
+
+                try
+                {
+                    Width = value.Width;
+                    Height = value.Width;
+                }
+                finally
+                {
+                    EndSizeChanging();
+                }
+            }
+        }
+
+        private new void OnSizeChanged(EventArgs e) =>
+            base.OnSizeChanged(e);
+
+        protected virtual void OnSizeChanged()
+        {
+            if (!SizeChanging)
+                OnSizeChanged(EventArgs.Empty);
+        }
+
+        public new OxSize MinimumSize 
+        { 
+            get => new(base.MinimumSize);
+            set => base.MinimumSize = value.Size;
+        }
+        public new OxSize MaximumSize
+        {
+            get => new(base.MaximumSize);
+            set => base.MaximumSize = value.Size;
+        }
+
         protected virtual void SetIcon(Bitmap? value) { }
         protected virtual Bitmap? GetIcon() => null;
 

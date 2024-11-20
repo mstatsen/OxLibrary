@@ -5,7 +5,7 @@ namespace OxLibrary.Controls
     public class OxToolBar<TButton> : OxFrame
         where TButton : OxClickFrame, new()
     {
-        private const int DefaultToolBarHeight = 28;
+        private readonly OxWidth DefaultToolBarHeight = OxWh.W24;
         private OxClickFrameList<TButton> buttons = new();
 
         public OxToolBar() : base() => 
@@ -33,16 +33,15 @@ namespace OxLibrary.Controls
             foreach (TButton button in buttons)
             {
                 button.Parent = this;
-                button.Dock = 
-                    button.Dock is DockStyle.Right 
-                        ? DockStyle.Right 
-                        : DockStyle.Left;
+
+                if (button.Dock is not OxDock.Right)
+                    button.Dock = OxDock.Left;
 
                 if (button.BeginGroup && 
                     lastButton is not null)
                 {
-                    button.Margin.Left = OxSize.S;
-                    lastButton.Margin.Right = OxSize.S;
+                    button.Margin.Left = OxWh.W4;
+                    lastButton.Margin.Right = OxWh.W4;
 
                     if (lastButton.Dock.Equals(button.Dock))
                         SeparateButtonsGroup(button);
@@ -50,8 +49,8 @@ namespace OxLibrary.Controls
                 else
                     button.Margin.Left = 
                         lastButton is null 
-                            ? OxSize.None 
-                            : OxSize.XXS;
+                            ? OxWh.W0
+                            : OxWh.W1;
 
                 button.BringToFront();
                 button.VisibleChanged += ButtonVisibleChangedHandler;
@@ -67,13 +66,13 @@ namespace OxLibrary.Controls
         {
             if (!separators.TryGetValue(startButton, out var separator))
             {
-                separator = new OxPane(new(1, 1))
+                separator = new OxPane(new(OxWh.W1, OxWh.W1))
                 {
                     Parent = this,
                     Dock =
-                        startButton.Dock.Equals(DockStyle.Right)
-                            ? DockStyle.Right
-                            : DockStyle.Left,
+                        startButton.Dock.Equals(OxDock.Right)
+                            ? OxDock.Right
+                            : OxDock.Left,
                     BackColor = BorderColor
                 };
                 separators.Add(startButton, separator);
@@ -106,15 +105,15 @@ namespace OxLibrary.Controls
 
         protected virtual void SetToolBarPaddings()
         {
-            Padding.Left = OxSize.None;
-            Padding.Right = OxSize.XXS;
-            Padding.Top = OxSize.XS;
-            Padding.Bottom = OxSize.S;
+            Padding.Left = OxWh.W0;
+            Padding.Right = OxWh.W1;
+            Padding.Top = OxWh.W2;
+            Padding.Bottom = OxWh.W4;
 
             if (buttons.Last?.CalcedHeight > CalcedHeight)
             {
-                Padding.Top = OxSize.XXS;
-                Padding.Bottom = OxSize.XXS;
+                Padding.Top = OxWh.W1;
+                Padding.Bottom = OxWh.W1;
             }
         }
 
@@ -172,8 +171,8 @@ namespace OxLibrary.Controls
             }
         }
 
-        public TButton AddButton(OxToolbarAction action, bool beginGroup = false, 
-            DockStyle dockStyle = DockStyle.Left)
+        public TButton AddButton(OxToolbarAction action, bool beginGroup = false,
+            OxDock dockStyle = OxDock.Left)
         {
             TButton button = new()
             {

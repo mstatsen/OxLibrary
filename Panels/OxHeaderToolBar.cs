@@ -8,6 +8,6 @@ namespace OxLibrary.Panels
             Color.Transparent;
 
         protected override void SetToolBarPaddings() =>
-            Padding.Size = OxSize.XXS;
+            Padding.Size = OxWh.W1;
     }
 }

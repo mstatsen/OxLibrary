@@ -14,7 +14,7 @@ namespace OxLibrary.Dialogs
             Form = form;
             Form.SizeChanged += FormSizeChanged;
             SetTitleButtonsVisible();
-            SetHeaderHeight(34);
+            SetHeaderHeight(OxWh.W34);
             SetRestoreButtonIconAndTooltip();
             SetBordersSize();
             SetHeaderFont();
@@ -34,12 +34,12 @@ namespace OxLibrary.Dialogs
             Anchor = AnchorStyles.Left | AnchorStyles.Top;
 
         private void SetBordersSize() => 
-            Borders.Size = OxSize.XXS;
+            Borders.Size = OxWh.W1;
 
         private void CreateFormMover() => 
             formMover = new OxFormMover(Form, Header.Label);
 
-        public void SetHeaderHeight(int height)
+        public void SetHeaderHeight(OxWidth height)
         {
             HeaderHeight = height;
             SetButtonsSize();
@@ -77,7 +77,7 @@ namespace OxLibrary.Dialogs
         private void SetButtonsSize()
         {
             foreach (OxClickFrame button in Header.Buttons)
-                button.Size = new(36, 28);
+                button.Size = new(OxWh.W36, OxWh.W28);
         }
 
         private void SetButtonsHandlers()
@@ -96,20 +96,20 @@ namespace OxLibrary.Dialogs
         private void RestoreButtonClickHandler(object? sender, EventArgs e) => 
             SetFormState(FormIsMaximized ? FormWindowState.Normal : FormWindowState.Maximized);
 
-        private readonly OxIconButton closeButton = new(OxIcons.Close, 28)
+        private readonly OxIconButton closeButton = new(OxIcons.Close, OxWh.W28)
         {
-            IconPadding = 5,
+            IconPadding = OxWh.W5,
             ToolTipText = "Close"
         };
-        private readonly OxIconButton restoreButton = new(OxIcons.Restore, 28)
+        private readonly OxIconButton restoreButton = new(OxIcons.Restore, OxWh.W28)
         {
-            IconPadding = 5,
+            IconPadding = OxWh.W5,
             ToolTipText = "Restore window",
             Default = true
         };
-        private readonly OxIconButton minimizeButton = new(OxIcons.Minimize, 28)
+        private readonly OxIconButton minimizeButton = new(OxIcons.Minimize, OxWh.W28)
         {
-            IconPadding = 5,
+            IconPadding = OxWh.W5,
             ToolTipText = "Minimize window"
         };
 
@@ -165,19 +165,22 @@ namespace OxLibrary.Dialogs
         public bool FormIsMaximized => 
             Form.WindowState is FormWindowState.Maximized;
 
-        protected override void OnSizeChanged(EventArgs e)
+        protected override void OnSizeChanged()
         {
-            base.OnSizeChanged(e);
+            base.OnSizeChanged();
 
-            Form.Width = Width;
-            Form.Height = Height;
+            if (Form is not null)
+            {
+                Form.Width = WidthInt;
+                Form.Height = HeightInt;
+            }
         }
 
         internal void SetMarginsSize() => 
             Margin.Size = 
                 Form.Sizeble 
-                    ? OxSize.XS 
-                    : OxSize.None;
+                    ? OxWh.W2
+                    : OxWh.W0;
 
         protected override void OnLocationChanged(EventArgs e)
         {
@@ -246,7 +249,7 @@ namespace OxLibrary.Dialogs
                 return;
 
             Point newLastMousePosition = border.PointToScreen(e.Location);
-            Point oldSize = new(Width, Height);
+            Point oldSize = new(WidthInt, HeightInt);
             Point newSize = new(oldSize.X, oldSize.Y);
             Point delta = new(
                 newLastMousePosition.X - LastMousePosition.X,
@@ -284,15 +287,15 @@ namespace OxLibrary.Dialogs
                 Point newLocationStep = new(Form.Left, Form.Top);
 
                 if (OxDirectionHelper.ContainsLeft(LastDirection))
-                    newLocationStep.X -= point.X - Width;
+                    newLocationStep.X -= point.X - WidthInt;
 
                 if (OxDirectionHelper.ContainsTop(LastDirection))
-                    newLocationStep.Y -= point.Y - Height;
+                    newLocationStep.Y -= point.Y - HeightInt;
 
                 if (!Form.Location.Equals(newLocationStep))
                     Form.Location = newLocationStep;
 
-                Size newSizeStep = new(point);
+                OxSize newSizeStep = new(point);
 
                 if (!Size.Equals(newSizeStep))
                     Size = newSizeStep;

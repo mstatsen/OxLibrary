@@ -4,8 +4,16 @@
 
     public delegate void BorderSizeEventHandler(object sender, BorderEventArgs e);
 
-    public class OxBorders
+    public class OxBorders : Dictionary<OxDock, OxBorder>
     {
+        public static OxBorders operator +(OxBorders left, OxBorders right) =>
+            new(
+                left.Top | right.Top, 
+                left.Left | right.Left, 
+                left.Bottom | right.Bottom, 
+                left.Right | right.Right
+            );
+
         private bool SizeChanging = false;
         private void NotifyAboutSizeChanged()
         {
@@ -13,26 +21,26 @@
                 SizeChanged?.Invoke(this, new BorderEventArgs());
         }
 
-        private bool SetSize(OxDock dock, OxSize size)
+        private bool SetSize(OxDock dock, OxWidth size)
         {
-            OxSize oldSize = Borders[dock].Size;
+            OxWidth oldSize = this[dock].Size;
 
             if (oldSize.Equals(size))
                 return false;
 
-            Borders[dock].Size = size;
+            this[dock].Size = size;
             NotifyAboutSizeChanged();
             return true;
         }
 
-        private void SetSize(OxSize size)
+        private void SetSize(OxWidth size)
         {
             bool sizeChanged = false;
             SizeChanging = true;
 
             try
             {
-                foreach (OxDock border in Borders.Keys)
+                foreach (OxDock border in Keys)
                     sizeChanged |= SetSize(border, size);
             }
             finally
@@ -44,23 +52,25 @@
                 NotifyAboutSizeChanged();
         }
 
-        private OxSize GetSize(OxDock dock) =>
-            Borders[dock].Size;
+        private OxWidth GetSize(OxDock dock) =>
+            this[dock].Size;
 
         public OxBorders()
         {
-            foreach (OxDock dock in Enum.GetValues(typeof(OxDock)))
-                Borders.Add(dock, new());
+            foreach (OxDock dock in OxDockHelper.SimpleDirectionDocks)
+                Add(dock, new());
         }
-        public Dictionary<OxDock, OxBorder> Borders { get; } = new();
+
+        public OxBorders(OxWidth top, OxWidth left, OxWidth bottom, OxWidth right) : this() => 
+            SetSize(top, left, bottom, right);
 
         public int LeftInt
         {
-            get => (int)Left;
-            set => Left = (OxSize)value;
+            get => OxWh.Int(Left);
+            set => Left = OxWh.W(value);
         }
 
-        public OxSize Left
+        public OxWidth Left
         {
             get => GetSize(OxDock.Left);
             set => SetSize(OxDock.Left, value);
@@ -76,7 +86,7 @@
             }
         }
 
-        public OxSize Horizontal
+        public OxWidth Horizontal
         {
             get => Left;
             set
@@ -86,13 +96,19 @@
             }
         }
 
+        public int HorizontalFullInt => 
+            LeftInt + RightInt;
+
+        public OxWidth HorizontalFull => 
+            Left | Right;
+
         public int TopInt
         {
-            get => (int)Top;
-            set => Top = (OxSize)value;
+            get => OxWh.Int(Top);
+            set => Top = OxWh.W(value);
         }
 
-        public OxSize Top
+        public OxWidth Top
         {
             get => GetSize(OxDock.Top);
             set => SetSize(OxDock.Top, value);
@@ -108,7 +124,7 @@
             }
         }
 
-        public OxSize Vertical
+        public OxWidth Vertical
         {
             get => Top;
             set
@@ -118,13 +134,17 @@
             }
         }
 
+        public int VerticalIntFull => TopInt + BottomInt;
+
+        public OxWidth VerticalFull => Top | Bottom;
+
         public int RightInt
         {
-            get => (int)Right;
-            set => Right = (OxSize)value;
+            get => OxWh.Int(Right);
+            set => Right = OxWh.W(value);
         }
 
-        public OxSize Right
+        public OxWidth Right
         {
             get => GetSize(OxDock.Right);
             set => SetSize(OxDock.Right, value);
@@ -132,17 +152,17 @@
 
         public int BottomInt
         {
-            get => (int)Bottom;
-            set => Bottom = (OxSize)value;
+            get => OxWh.Int(Bottom);
+            set => Bottom = OxWh.W(value);
         }
 
-        public OxSize Bottom
+        public OxWidth Bottom
         {
             get => GetSize(OxDock.Bottom);
             set => SetSize(OxDock.Bottom, value);
         }
 
-        public OxSize Size
+        public OxWidth Size
         {
             get => GetSize(OxDock.Left);
             set => SetSize(value);
@@ -150,11 +170,11 @@
 
         public int SizeInt
         {
-            get => (int)Size;
-            set => Size = (OxSize)value;
+            get => OxWh.Int(Size);
+            set => Size = OxWh.W(value);
         }
 
-        public void SetSize(OxSize top, OxSize left, OxSize bottom, OxSize right)
+        public void SetSize(OxWidth top, OxWidth left, OxWidth bottom, OxWidth right)
         {
             Top = top;
             Left = left;
@@ -171,15 +191,15 @@
         }
 
         public bool Visible(OxDock dock) => 
-            Borders[dock].Visible;
+            this[dock].Visible;
 
         public bool SetVisible(OxDock dock, bool visible)
         {
-            bool visibleChanged = !Borders[dock].Visible.Equals(visible);
+            bool visibleChanged = !this[dock].Visible.Equals(visible);
 
             if (visibleChanged)
             {
-                Borders[dock].Visible = visible;
+                this[dock].Visible = visible;
                 NotifyAboutSizeChanged();
             }
 
@@ -190,25 +210,31 @@
         {
             bool visibleChanged = false;
 
-            foreach (OxDock dock in Borders.Keys) 
+            foreach (OxDock dock in Keys) 
                 visibleChanged |= SetVisible(dock, visible);
 
             if (visibleChanged)
                 NotifyAboutSizeChanged();
         }
-            
+
+        public bool EqualsPadding(Padding padding) => 
+            padding.Left == LeftInt
+            && padding.Right == RightInt
+            && padding.Top == TopInt
+            && padding.Bottom == BottomInt;
+
+        public Padding AsPadding => 
+            new(LeftInt, TopInt, RightInt, BottomInt);
 
         public bool AllVisible
-        { 
-            get => 
-                Borders[OxDock.Top].Visible
-                && Borders [OxDock.Left].Visible
-                && Borders[OxDock.Bottom].Visible
-                && Borders[OxDock.Right].Visible;
+        {
+            get =>
+                this[OxDock.Top].Visible
+                && this[OxDock.Left].Visible
+                && this[OxDock.Bottom].Visible
+                && this[OxDock.Right].Visible;
             set => SetVisible(value);
         }
-
-        public OxBorder this[OxDock dock] => Borders[dock];
 
         public BorderSizeEventHandler? SizeChanged;
     }

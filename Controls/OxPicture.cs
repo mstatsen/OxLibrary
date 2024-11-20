@@ -45,14 +45,14 @@ namespace OxLibrary.Controls
         public OxPicture()
         {
             BackColor = Color.Transparent;
-            Width = 24;
-            Height = 24;
-            PictureSize = 16;
+            Width = OxWh.W24;
+            Height = OxWh.W24;
+            PictureSize = OxWh.W16;
         }
 
-        public int PictureSize
+        public OxWidth PictureSize
         {
-            get => picture.Height;
+            get => OxWh.W(picture.Height);
             set => SetPictureSize(value);
         }
 
@@ -70,13 +70,13 @@ namespace OxLibrary.Controls
             PictureSize = Height - picturePadding * 2;
         }
 
-        private void SetPictureSize(int value)
+        private void SetPictureSize(OxWidth value)
         {
             if (Stretch)
                 return;
             
-            picture.Width = value;
-            picture.Height = value;
+            picture.Width = (int)value;
+            picture.Height = (int)value;
             CorrectPicturePosition();
         }
 
@@ -85,13 +85,13 @@ namespace OxLibrary.Controls
             if (Stretch)
                 return;
 
-            picturePadding = (Height - picture.Height) / 2;
+            picturePadding = (HeightInt - picture.Height) / 2;
 
             if (picturePadding < 0)
                 picturePadding = 0;
 
-            picture.Left = (Width - picture.Width) / 2;
-            picture.Top = (Height - picture.Height) / 2;
+            picture.Left = (WidthInt - picture.Width) / 2;
+            picture.Top = (HeightInt - picture.Height) / 2;
         }
 
         protected override void PrepareInnerControls()

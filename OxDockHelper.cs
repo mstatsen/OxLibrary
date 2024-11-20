@@ -2,23 +2,27 @@
 {
     public static class OxDockHelper
     {
-        public static DockStyle Dock(OxDock oxDock) => 
+        public static DockStyle Dock(OxDock oxDock) =>
             oxDock switch
             {
                 OxDock.Left => DockStyle.Left,
                 OxDock.Right => DockStyle.Right,
                 OxDock.Top => DockStyle.Top,
                 OxDock.Bottom => DockStyle.Bottom,
+                OxDock.Fill => DockStyle.Fill,
+                OxDock.None => DockStyle.None,
                 _ => DockStyle.Left,
             };
 
-        public static OxDock Dock(DockStyle dock) => 
+        public static OxDock Dock(DockStyle dock) =>
             dock switch
             {
                 DockStyle.Top => OxDock.Top,
                 DockStyle.Bottom => OxDock.Bottom,
                 DockStyle.Left => OxDock.Left,
                 DockStyle.Right => OxDock.Right,
+                DockStyle.None => OxDock.None,
+                DockStyle.Fill => OxDock.Fill,
                 _ => OxDock.Top,
             };
 
@@ -36,10 +40,6 @@
             dock is OxDock.Top 
                  or OxDock.Bottom;
 
-        public static bool IsVertical(DockStyle dock) =>
-            Dock(dock) is OxDock.Top 
-                       or OxDock.Bottom;
-
         public static List<OxDock> All()
         {
             List<OxDock> list = new();
@@ -49,5 +49,13 @@
 
             return list;
         }
+
+        public static readonly List<OxDock> SimpleDirectionDocks = new()
+        {
+            OxDock.Top,
+            OxDock.Left,
+            OxDock.Bottom,
+            OxDock.Right
+        };
     }
 }

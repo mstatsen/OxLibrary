@@ -13,7 +13,7 @@
                 ? Last.Right 
             : 0;
 
-        public int Width()
+        public OxWidth Width()
         {
             int calcedRight = 0;
             int calcedLeft = -1;
@@ -27,15 +27,15 @@
                     calcedRight = frame.Right;
                 }
 
-            return calcedRight - Math.Max(calcedLeft, 0);
+            return OxWh.Sub(calcedRight, OxWh.Max(calcedLeft, OxWh.W0));
         }
 
-        public int Height()
+        public OxWidth Height()
         {
-            int maxHeight = 0;
+            OxWidth maxHeight = OxWh.W0;
 
             foreach (TClickFrame frame in this)
-                maxHeight = Math.Max(maxHeight, frame.Height);
+                maxHeight = OxWh.Max(maxHeight, frame.HeightInt);
 
             return maxHeight;
         }

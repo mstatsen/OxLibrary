@@ -16,8 +16,8 @@ namespace OxLibrary.Controls
             Dock = DockStyle.Fill,
             BorderStyle = BorderStyle.None
         };
-        private readonly OxIconButton DecreaseButton = CreateButton(OxIcons.Minus, DockStyle.Left);
-        private readonly OxIconButton IncreaseButton = CreateButton(OxIcons.Plus, DockStyle.Right);
+        private readonly OxIconButton DecreaseButton = CreateButton(OxIcons.Minus, OxDock.Left);
+        private readonly OxIconButton IncreaseButton = CreateButton(OxIcons.Plus, OxDock.Right);
 
         protected override void PrepareInnerControls()
         {
@@ -46,8 +46,8 @@ namespace OxLibrary.Controls
             //ContentBox.SendToBack();
         }
 
-        private static OxIconButton CreateButton(Bitmap icon, DockStyle dock) =>
-            new(icon, 14)
+        private static OxIconButton CreateButton(Bitmap icon, OxDock dock) =>
+            new(icon, OxWh.W14)
             {
                 Dock = dock,
                 HiddenBorder = false,

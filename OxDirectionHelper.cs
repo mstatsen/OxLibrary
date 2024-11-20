@@ -16,20 +16,20 @@ namespace OxLibrary
 
         public static OxDirection GetDirection(OxPane border, Point position)
         {
-            OxDock borderDock = OxDockHelper.Dock(border.Dock);
-            OxDirection direction = GetDirection(borderDock);
-
-            int borderSize = OxDockHelper.IsVertical(border.Dock) ? border.Height : border.Width;
+            OxDirection direction = GetDirection(border.Dock);
+            int borderSize = OxDockHelper.IsVertical(border.Dock) 
+                ? border.HeightInt 
+                : border.WidthInt;
             int error = borderSize * 2;
 
-            switch (borderDock)
+            switch (border.Dock)
             {
                 case OxDock.Left:
                 case OxDock.Right:
                     if (position.Y < error)
                         direction |= OxDirection.Top;
                     else
-                    if (position.Y > border.Height - error)
+                    if (position.Y > border.HeightInt - error)
                         direction |= OxDirection.Bottom;
                     break;
                 case OxDock.Top:
@@ -37,7 +37,7 @@ namespace OxLibrary
                     if (position.X < error)
                         direction |= OxDirection.Left;
                     else
-                    if (position.X > border.Width - error)
+                    if (position.X > border.WidthInt - error)
                         direction |= OxDirection.Right;
                     break;
             }

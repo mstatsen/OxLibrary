@@ -10,13 +10,13 @@ namespace OxLibrary.Controls
         };
 
         public readonly OxIconButton Button = 
-            new (OxIcons.Elipsis, 16)
+            new (OxIcons.Elipsis, OxWh.W16)
             {
-                Dock = DockStyle.Right,
+                Dock = OxDock.Right,
                 Cursor = Cursors.Default
             };
 
-        public OxButtonEdit() : base(new(120, 22)) { }
+        public OxButtonEdit() : base(new(OxWh.W120, OxWh.W22)) { }
 
         protected override void PrepareInnerControls() 
         {
@@ -29,8 +29,11 @@ namespace OxLibrary.Controls
         {
             Button.Parent = this;
             Button.BaseColor = BaseColor;
-            Button.Size = new(Math.Min(26, TextBox.Height - 4), TextBox.Height);
-            Button.Borders.Left = OxSize.None;
+            Button.Size = new(
+                OxWh.Min(OxWh.W26, TextBox.Height - 4), 
+                TextBox.Height
+            );
+            Button.Borders.Left = OxWh.W0;
             Button.FixBorderColor = true;
         }
 
@@ -58,8 +61,8 @@ namespace OxLibrary.Controls
         {
             base.OnSizeChanged(e);
             int calcedButtonWidth = Math.Min(22, TextBox.Height - 4);
-            Button.Size = new(calcedButtonWidth, Height - 2);
-            Button.Width = calcedButtonWidth;
+            Button.Size = new(calcedButtonWidth, HeightInt - 2);
+            Button.WidthInt = calcedButtonWidth;
             Button.ReAlign();
         }
 

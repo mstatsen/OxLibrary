@@ -5,6 +5,8 @@
         Left,
         Right,
         Top,
-        Bottom
+        Bottom,
+        Fill,
+        None
     }
 }

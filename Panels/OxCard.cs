@@ -109,9 +109,9 @@ namespace OxLibrary.Panels
                 Expanded = !Expanded;
         }
 
-        protected override int GetCalcedHeight()
+        protected override OxWidth GetCalcedHeight()
         {
-            int calcedHeight = base.GetCalcedHeight();
+            OxWidth calcedHeight = base.GetCalcedHeight();
 
             if (!Expanded)
                 calcedHeight -= Height;
@@ -119,7 +119,7 @@ namespace OxLibrary.Panels
             return calcedHeight;
         }
 
-        private readonly OxIconButton ExpandButton = new(OxIcons.Up, 20)
+        private readonly OxIconButton ExpandButton = new(OxIcons.Up, OxWh.W20)
         {
             Default = true,
             ToolTipText = "Collapse"
@@ -150,7 +150,7 @@ namespace OxLibrary.Panels
         protected override void PrepareInnerControls()
         {
             base.PrepareInnerControls();
-            ExpandButton.Size = new(25, 20);
+            ExpandButton.Size = new(OxWh.W25, OxWh.W20);
             Header.AddToolButton(ExpandButton);
         }
 

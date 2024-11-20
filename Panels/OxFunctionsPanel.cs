@@ -5,7 +5,7 @@ namespace OxLibrary.Panels
     {
         public OxFunctionsPanel() : base() { }
 
-        public OxFunctionsPanel(Size contentSize) : base(contentSize) { }
+        public OxFunctionsPanel(OxSize size) : base(size) { }
 
         private void SetTitleAlign() =>
             Header.TitleAlign = Height > Width

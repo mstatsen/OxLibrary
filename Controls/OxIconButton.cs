@@ -7,11 +7,11 @@ namespace OxLibrary.Controls
         public readonly OxPicture Picture = 
             new()
             {
-                Dock = DockStyle.Fill
+                Dock = OxDock.Fill
             };
 
         public OxIconButton() : base() { }
-        public OxIconButton(Bitmap? icon, int Size) : base(new(Size, Size))
+        public OxIconButton(Bitmap? icon, OxWidth Size) : base(new(Size, Size))
         {
             Icon = icon;
         }
@@ -34,10 +34,10 @@ namespace OxLibrary.Controls
         protected override void SetIcon(Bitmap? value) => 
             Picture.Image = value;
 
-        public int IconPadding
+        public OxWidth IconPadding
         {
-            get => Picture.PicturePadding;
-            set => Picture.PicturePadding = value;
+            get => OxWh.W(Picture.PicturePadding);
+            set => Picture.PicturePadding = OxWh.Int(value);
         }
 
         protected override void SetUseDisabledStyles(bool value)

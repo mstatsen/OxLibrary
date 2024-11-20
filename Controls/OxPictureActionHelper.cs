@@ -20,9 +20,9 @@
                 _ => string.Empty,
             };
 
-        public static int DefaultHeight => 20;
+        public static OxWidth DefaultHeight => OxWh.W20;
 
-        public static readonly OxSize ButtonMargin = OxSize.XS;
+        public static readonly OxWidth ButtonMargin = OxWh.W2;
 
         public static List<OxPictureAction> List
         {

@@ -3,7 +3,7 @@
     public class OxFrame : OxPane
     {
         public OxFrame() : base() { }
-        public OxFrame(Size contentSize) : base(contentSize) 
+        public OxFrame(OxSize size) : base(size) 
         { 
             BorderVisible = true;
         }

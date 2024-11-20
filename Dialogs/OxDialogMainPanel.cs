@@ -6,8 +6,8 @@ namespace OxLibrary.Dialogs
 {
     public class OxDialogMainPanel : OxFormMainPanel
     {
-        public int DialogButtonSpace = 6;
-        public int DialogButtonStartSpace = 10;
+        public OxWidth DialogButtonSpace = OxWh.W6;
+        public OxWidth DialogButtonStartSpace = OxWh.W10;
         protected readonly Dictionary<OxDialogButton, OxButton> buttonsDictionary = new();
         protected virtual HorizontalAlign FooterButtonsAlign => HorizontalAlign.Right;
 
@@ -60,14 +60,17 @@ namespace OxLibrary.Dialogs
             )
             {
                 Parent = Footer,
-                Top = FooterButtonVerticalMargin,
+                Top = (int)FooterButtonVerticalMargin,
                 Font = Styles.Font(Styles.DefaultFontSize + 0.5f, FontStyle.Bold),
                 Anchor = AnchorStyles.Top | AnchorStyles.Right,
                 Visible = (dialogButtons & dialogButton).Equals(dialogButton),
                 Size = new(
-                OxDialogButtonsHelper.Width(dialogButton),
-                FooterButtonHeight - FooterButtonVerticalMargin * 2
-            )
+                    OxDialogButtonsHelper.Width(dialogButton),
+                    OxWh.Sub(
+                        FooterButtonHeight,
+                        OxWh.Mul(FooterButtonVerticalMargin, 2)
+                    )
+                )
             };
             button.Click += DialogButtonClickHandler;
             buttonsDictionary.Add(dialogButton, button);
@@ -75,7 +78,7 @@ namespace OxLibrary.Dialogs
 
         private void PrepareFooter()
         {
-            Footer.Dock = DockStyle.Bottom;
+            Footer.Dock = OxDock.Bottom;
             Footer.Parent = this;
             Footer.BlurredBorder = true;
 
@@ -89,9 +92,9 @@ namespace OxLibrary.Dialogs
             Footer.Borders[OxDock.Bottom].Visible = false;
         }
 
-        protected virtual int FooterButtonHeight => 36;
+        protected virtual OxWidth FooterButtonHeight => OxWh.W36;
 
-        protected virtual int FooterButtonVerticalMargin => 4;
+        protected virtual OxWidth FooterButtonVerticalMargin => OxWh.W4;
 
         private void DialogButtonClickHandler(object? sender, EventArgs e)
         {
@@ -118,16 +121,16 @@ namespace OxLibrary.Dialogs
                 if ((dialogButtons & item.Key).Equals(item.Key))
                 {
                     realButtons.Add(item.Key, item.Value);
-                    fullButtonsWidth += OxDialogButtonsHelper.Width(item.Key) + DialogButtonSpace;
+                    fullButtonsWidth += OxDialogButtonsHelper.WidthInt(item.Key) + (int)DialogButtonSpace;
                 }
 
-            fullButtonsWidth -= DialogButtonSpace;
+            fullButtonsWidth -= (int)DialogButtonSpace;
 
             int rightOffset =
                 FooterButtonsAlign switch
                 {
                     HorizontalAlign.Left => fullButtonsWidth,
-                    HorizontalAlign.Center => Footer.Width - ((Footer.Width - fullButtonsWidth) / 2),
+                    HorizontalAlign.Center => Footer.WidthInt - ((Footer.WidthInt - fullButtonsWidth) / 2),
                     _ => Footer.Width - DialogButtonStartSpace
                 };
 
@@ -135,19 +138,22 @@ namespace OxLibrary.Dialogs
 
             foreach (var item in realButtons)
             {
-                item.Value.Left = rightOffset - OxDialogButtonsHelper.Width(item.Key);
+                item.Value.Left = rightOffset - OxDialogButtonsHelper.WidthInt(item.Key);
                 item.Value.Size = new(
                     OxDialogButtonsHelper.Width(item.Key),
-                    FooterButtonHeight - FooterButtonVerticalMargin * 2
+                    OxWh.Sub(
+                        FooterButtonHeight,
+                        OxWh.Mul(FooterButtonVerticalMargin, 2)
+                    )
                 );
-                rightOffset = item.Value.Left - DialogButtonSpace;
+                rightOffset = item.Value.Left - (int)DialogButtonSpace;
 
                 buttonIndex++;
             }
         }
 
-        protected override int GetCalcedHeight() =>
-            base.GetCalcedHeight() + Footer.CalcedHeight;
+        protected override OxWidth GetCalcedHeight() =>
+            base.GetCalcedHeight() | Footer.CalcedHeight;
 
         protected override void PrepareColors()
         {

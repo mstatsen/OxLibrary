@@ -16,7 +16,7 @@ namespace OxLibrary.Panels
         protected override Bitmap? GetIcon() => 
             Header.Icon;
 
-        public int HeaderHeight 
+        public OxWidth HeaderHeight 
         { 
             get => Header.Height;
             set => Header.Height = value; 
@@ -25,7 +25,7 @@ namespace OxLibrary.Panels
         public OxHeader Header { get; } = 
             new(string.Empty)
             {
-                Dock = DockStyle.Top
+                Dock = OxDock.Top
             };
 
         public bool HeaderVisible 
@@ -53,7 +53,7 @@ namespace OxLibrary.Panels
 
         public OxFrameWithHeader() : base() { }
 
-        public OxFrameWithHeader(Size contentSize) : base(contentSize) { }
+        public OxFrameWithHeader(OxSize size) : base(size) { }
 
         protected override void PrepareColors()
         {
@@ -64,11 +64,11 @@ namespace OxLibrary.Panels
                     : Colors.Darker(3);
         }
 
-        protected override int GetCalcedHeight() => 
+        protected override OxWidth GetCalcedHeight() => 
             base.GetCalcedHeight() 
-            + (HeaderVisible 
+            | (HeaderVisible 
                 ? HeaderHeight 
-                : 0);
+                : OxWh.W0);
 
         public override void ReAlignControls()
         {

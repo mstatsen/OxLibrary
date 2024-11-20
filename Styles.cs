@@ -4,7 +4,7 @@
     {
         public const string FontFamily = "Calibri Light";
         public const float DefaultFontSize = 11;
-        public const int ToolBarButtonWidth = 100;
+        public static readonly OxWidth ToolBarButtonWidth = OxWh.W100;
         public static readonly Color ElementControlColor = Color.FromArgb(235, 241, 241);
         public static readonly Color DefaultGridRowColor = Color.FromArgb(254, 254, 255);
         public static readonly Color DefaultGridFontColor = Color.Black;

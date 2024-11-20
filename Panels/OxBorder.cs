@@ -4,19 +4,19 @@
     {
         public OxBorder() { }
 
-        private OxSize size = OxSize.None;
+        private OxWidth size = OxWh.W0;
         private bool visible = true;
 
-        public OxSize Size
+        public OxWidth Size
         {
-            get => visible ? size : OxSize.None;
+            get => visible ? size : OxWh.W0;
             set => size = value;
         }
 
         public int IntSize
         {
-            get => (int)Size;
-            set => Size = (OxSize)value;
+            get => OxWh.Int(Size);
+            set => Size = OxWh.W(value);
         }
 
         public bool Visible

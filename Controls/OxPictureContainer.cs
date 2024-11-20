@@ -28,7 +28,7 @@ namespace OxLibrary.Controls
         { 
             Visible = false,
             BackColor = Color.Transparent,
-            Dock = DockStyle.Bottom
+            Dock = OxDock.Bottom
         };
 
         private void PlaceButtons()
@@ -57,12 +57,15 @@ namespace OxLibrary.Controls
             if (Image is null)
                 return;
 
-            int calcedWidth;
+            OxWidth calcedWidth;
+
             foreach (OxClickFrame button in Buttons)
             {
-                calcedWidth = (buttonsParent.Width / Buttons.Count) 
-                        - (int)OxPictureActionHelper.ButtonMargin * Buttons.Count
-                        + (int)OxSize.XXS;
+                calcedWidth = 
+                    OxWh.Div(buttonsParent.Width, Buttons.Count) 
+                    | OxWh.Mul(OxPictureActionHelper.ButtonMargin,Buttons.Count)
+                    | OxWh.W1;
+
                 button.Size = new(
                     calcedWidth,
                     OxPictureActionHelper.DefaultHeight
@@ -94,11 +97,11 @@ namespace OxLibrary.Controls
                 OxPictureActionHelper.Icon(action), OxPictureActionHelper.DefaultHeight)
             {
                 Parent = buttonsParent,
-                Dock = DockStyle.Left,
+                Dock = OxDock.Left,
             };
 
             button.Margin.Left = OxPictureActionHelper.ButtonMargin;
-            button.Margin.Top = OxSize.XXS;
+            button.Margin.Top = OxWh.W1;
             button.Click += ButtonClick;
             Actions.Add(action, button);
             Buttons.Add(button);
@@ -159,7 +162,7 @@ namespace OxLibrary.Controls
 
         private readonly OxPicture picture = new()
         {
-            Dock = DockStyle.Fill,
+            Dock = OxDock.Fill,
             Visible = false,
             Stretch = true,
             PicturePadding = 0,

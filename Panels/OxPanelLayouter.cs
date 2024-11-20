@@ -25,7 +25,7 @@
                 OxPane column = new()
                 {
                     Parent = this,
-                    Dock = DockStyle.Left,
+                    Dock = OxDock.Left,
                     BaseColor = BaseColor
                 };
                 columns.Add(column);
@@ -50,7 +50,7 @@
 
         public OxPanelLayouter() : base()
         {
-            Dock = DockStyle.Top;
+            Dock = OxDock.Top;
             SetSizes();
         }
 
@@ -79,7 +79,7 @@
         {
             OxPane column = columns[(int)panel.Tag];
             panel.Parent = column;
-            panel.Dock = DockStyle.Top;
+            panel.Dock = OxDock.Top;
             columnsPanels[column].Add(panel);
         }
 
@@ -98,7 +98,9 @@
         {
             if (panelList.Count is 0)
             {
-                SetEmptySize();
+                /*TODO: need review this code
+                    SetEmptySize();
+                */
                 return;
             }
 
@@ -169,22 +171,22 @@
 
         private void SetEmptySize()
         {
-            StartSizeRecalcing();
+            StartSizeChanging();
 
             try
             {
-                Size = new(0, 0);
+                Size = new();
             }
             finally
             {
-                EndSizeRecalcing();
+                EndSizeChanging();
             }
         }
 
-        private DockStyle GetColumnDock() =>
+        private OxDock GetColumnDock() =>
             panelsAlign is PanelsHorizontalAlign.OneColumn
-                ? DockStyle.Top
-                : DockStyle.Left;
+                ? OxDock.Top
+                : OxDock.Left;
 
         private void SetColumnsDock()
         {
@@ -217,9 +219,9 @@
 
             foreach (OxPane panel in placedPanels)
             {
-                calcedWidth += panel.CalcedWidth;
+                calcedWidth += OxWh.Int(panel.CalcedWidth);
 
-                if (calcedWidth >= Width)
+                if (calcedWidth >= WidthInt)
                     break;
                 else
                     CalcedColumnCount++;
@@ -234,7 +236,8 @@
 
         private void ReLayoutPanelsHandler(object? sender, EventArgs e)
         {
-            if (!SizeRecalcing && !panelResizing)
+            if (!SizeChanging 
+                && !panelResizing)
                 LayoutPanels(placedPanels);
         }
 
@@ -283,20 +286,20 @@
                 columnsPanels[column].Clear();
         }
 
-        private int SetColumnSize(OxPane column)
+        private OxWidth SetColumnSize(OxPane column)
         {
-            int calcedHeight = 0;
-            int maxWidth = 1;
+            OxWidth calcedHeight = OxWh.W0;
+            OxWidth maxWidth = OxWh.W1;
 
             foreach (OxPane panel in columnsPanels[column])
                 if (panel.Visible)
                 {
-                    calcedHeight += panel.Height;
-                    maxWidth = Math.Max(maxWidth, panel.CalcedWidth);
+                    calcedHeight |= panel.Height;
+                    maxWidth = OxWh.Max(maxWidth, panel.CalcedWidth);
                 }
 
             if (panelsAlign is PanelsHorizontalAlign.OneColumn)
-                calcedHeight += 48;
+                calcedHeight |= OxWh.W48;
 
             column.Size = new(maxWidth, calcedHeight);
             return calcedHeight;
@@ -315,7 +318,7 @@
             try
             {
                 SetColumnsSize();
-                Size columnsSize = GetSumColumnsSize();
+                OxSize columnsSize = GetSumColumnsSize();
                 columnsSize.Height +=
                     Padding.TopInt
                     + Padding.BottomInt;
@@ -327,21 +330,21 @@
             }
         }
 
-        private Size GetSumColumnsSize()
+        private OxSize GetSumColumnsSize()
         {
             if (columns is null)
-                return Size.Empty;
+                return OxSize.Empty;
 
-            int sumWidth = 0;
-            int maxColumnHeight = 0;
+            OxWidth sumWidth = OxWh.W0;
+            OxWidth maxColumnHeight = OxWh.W0;
 
             foreach (OxPane column in columns)
             {
-                int columnHeight = SetColumnSize(column);
-                maxColumnHeight = Math.Max(maxColumnHeight, columnHeight);
+                OxWidth columnHeight = SetColumnSize(column);
+                maxColumnHeight = OxWh.Max(maxColumnHeight, columnHeight);
 
                 if (columnsPanels[column].Count is not 0)
-                    sumWidth += column.Width;
+                    sumWidth |= column.Width;
             }
 
             return new(sumWidth, maxColumnHeight);
@@ -362,7 +365,7 @@
                     break;
                 case PanelsHorizontalAlign.Center:
                 case PanelsHorizontalAlign.Right:
-                    Padding.LeftInt = (Width - GetSumColumnsSize().Width) / 2;
+                    Padding.LeftInt = (WidthInt - GetSumColumnsSize().WidthInt) / 2;
                     break;
                 case PanelsHorizontalAlign.OneColumn:
                     Padding.HorizontalInt = 0;
@@ -386,7 +389,7 @@
                 panelsList.Clear();
             }
 
-            Size = Size.Empty;
+            Size = OxSize.Empty;
             UpdateParent();
         }
 

@@ -4,18 +4,21 @@ namespace OxLibrary.Panels
 {
     public interface IOxPane : IOxWithIcon
     {
-        void StartSizeRecalcing();
-        void EndSizeRecalcing();
+        void StartSizeChanging();
+        void EndSizeChanging();
         Color BaseColor { get; set; }
-        int CalcedWidth { get; }
-        int CalcedHeight { get; }
+        OxWidth CalcedWidth { get; }
+        OxWidth CalcedHeight { get; }
         void ReAlignControls();
         void ReAlign();
         bool Enabled { get; set; }
         OxColorHelper Colors { get; }
         Color DefaultColor { get; }
         string? Text { get; set; }
-        DockStyle Dock { get; set; }
+        OxDock Dock { get; set; }
+        OxSize Size { get; set; }
+        OxSize MinimumSize { get; set; }
+        OxSize MaximumSize { get; set; }
         //OxPane? Parent { get; set; }
         Control? Parent { get; set; }
         void Dispose();
@@ -32,19 +35,21 @@ namespace OxLibrary.Panels
         void SendToBack();
         event EventHandler? VisibleChanged;
         event EventHandler? SizeChanged;
-        int Width { get; set; }
-        int Height { get; set; }
+        OxWidth Width { get; set; }
+        OxWidth Height { get; set; }
+        int WidthInt { get; set; }
+        int HeightInt { get; set; }
+
         bool IsHovered { get; }
         OxPanelViewer AsDialog(OxDialogButton buttons = OxDialogButton.OK);
         DialogResult ShowAsDialog(Control owner, OxDialogButton buttons = OxDialogButton.OK);
         OxBorders Padding { get; }
         OxBorders Borders { get; }
         Color BorderColor { get; set; }
-        int BorderWidth { get; set; }
+        OxWidth BorderWidth { get; set; }
         bool BorderVisible { get; set; }
         OxBorders Margin { get; }
         bool BlurredBorder { get; set; }
-        Size Size { get; set; }
         Color BackColor { get; set; }
     }
 }

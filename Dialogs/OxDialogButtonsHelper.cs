@@ -64,7 +64,12 @@
                 _ => null,
             };
 
-        public static int Width(OxDialogButton button) =>
-            button is OxDialogButton.ApplyForAll ? 140 : 100;
+        public static int WidthInt(OxDialogButton button) =>
+            (int)Width(button);
+
+        public static OxWidth Width(OxDialogButton button) =>
+            button is OxDialogButton.ApplyForAll 
+                ? OxWh.W140
+                : OxWh.W100;
     }
 }

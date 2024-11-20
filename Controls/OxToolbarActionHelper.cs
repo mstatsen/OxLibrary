@@ -39,10 +39,10 @@
                 _ => string.Empty,
             };
 
-        public static int Width(OxToolbarAction action) =>
+        public static OxWidth Width(OxToolbarAction action) =>
             action switch
             {
-                OxToolbarAction.Update => 140,
+                OxToolbarAction.Update => OxWh.W140,
                 _ => Styles.ToolBarButtonWidth
             };
     }

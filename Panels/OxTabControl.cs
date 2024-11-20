@@ -17,11 +17,11 @@
 
         public OxDock TabPosition
         {
-            get => OxDockHelper.Dock(Header.Dock);
+            get => Header.Dock;
             set
             {
-                Header.Dock = OxDockHelper.Dock(value);
-                Header.UnderlineVisible = Header.Dock is DockStyle.Top;
+                Header.Dock = value;
+                Header.UnderlineVisible = Header.Dock is OxDock.Top;
                 SetHeaderPaddings();
                 SetHeaderSize();
                 SetButtonsPostion();
@@ -31,16 +31,16 @@
 
         private void SetHeaderPaddings()
         {
-            Header.Padding.Size = OxSize.None;
+            Header.Padding.Size = OxWh.W0;
 
             switch (TabPosition)
             {
                 case OxDock.Left:
                 case OxDock.Right:
-                    Header.Padding.Top = OxSize.XS;
+                    Header.Padding.Top = OxWh.W2;
                     break;
                 case OxDock.Bottom:
-                    Header.Padding.Left = OxSize.S;
+                    Header.Padding.Left = OxWh.W4;
                     break;
             }
         }
@@ -56,8 +56,8 @@
 
         public OxPaneList Pages => pages;
 
-        private Size tabHeaderSize;
-        public Size TabHeaderSize
+        private OxSize tabHeaderSize = new();
+        public OxSize TabHeaderSize
         {
             get => tabHeaderSize;
             set
@@ -96,8 +96,8 @@
             page.Visible = false;
             page.Parent = this;
 
-            if (page.Dock is DockStyle.None)
-                page.Dock = DockStyle.Fill;
+            if (page.Dock is OxDock.None)
+                page.Dock = OxDock.Fill;
 
             pages.Add(page);
             CreateTabButton(page, icon ?? (page is IOxWithIcon iconedPage ? iconedPage.Icon : null));

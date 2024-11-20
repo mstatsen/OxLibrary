@@ -17,6 +17,6 @@
             base.PrepareInnerControls();
         }
 
-        public OxUnderlinedPanel(Size contentSize) : base(contentSize) { }
+        public OxUnderlinedPanel(OxSize size) : base(size) { }
     }
 }

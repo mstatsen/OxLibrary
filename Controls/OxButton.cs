@@ -8,22 +8,22 @@
             TextAlign = ContentAlignment.MiddleLeft
         };
 
-        public const int DefaultWidth = 100;
-        public const int DefaultHeight = 20;
+        public static readonly OxWidth DefaultWidth = OxWh.W100;
+        public static readonly OxWidth DefaultHeight = OxWh.W20;
 
         public OxButton() : base() { }
         public OxButton(string? text, Bitmap? icon) : base(icon, DefaultHeight)
         {
             Size = new(DefaultWidth, DefaultHeight);
             Text = text;
-            MinimumSize = Size.Empty;
+            MinimumSize = OxSize.Empty;
         }
 
         protected override void AfterCreated()
         {
             base.AfterCreated();
-            Picture.Dock = DockStyle.Left;
-            Picture.Width = 16;
+            Picture.Dock = OxDock.Left;
+            Picture.WidthInt = 16;
             HiddenBorder = false;
         }
 
@@ -65,11 +65,14 @@
             RecalcPaddings();
         }
 
-        private void RecalcPaddings()
-        {
-            int calcedLeftPadding = (Width - (RealPictureWidth + RealLabelWidth)) / 2;
-            Padding.LeftInt = calcedLeftPadding > 0 ? calcedLeftPadding : 0;
-        }
+        private void RecalcPaddings() => 
+            Padding.Left = OxWh.Max(
+                OxWh.Div(
+                    OxWh.Sub(
+                        Width,
+                        RealPictureWidth | RealLabelWidth),
+                    OxWh.W2),
+                OxWh.W0);
 
         private void CalcLabelWidth()
         {
@@ -79,9 +82,9 @@
             Label.AutoSize = true;
             int calcedLabelWidth = Label.Width;
             Label.AutoSize = false;
-            calcedLabelWidth = calcedLabelWidth + RealPictureWidth < Width 
+            calcedLabelWidth = calcedLabelWidth + (int)RealPictureWidth < WidthInt 
                 ? calcedLabelWidth 
-                : Width - RealPictureWidth;
+                : WidthInt - (int)RealPictureWidth;
             Label.Width = Math.Max(calcedLabelWidth, 0);
         }
 
@@ -91,18 +94,18 @@
             CalcLabelWidth();
         }
 
-        private int RealPictureWidth => Picture.Visible ? Picture.Width : 0;
-        private int RealLabelWidth => Label.Visible ? Label.Width : 0;
+        private OxWidth RealPictureWidth => Picture.Visible ? Picture.Width : OxWh.W0;
+        private OxWidth RealLabelWidth => Label.Visible ? OxWh.W(Label.Width) : OxWh.W0;
 
-        protected override void SetWidth(int value)
+        protected override void SetWidth(OxWidth value)
         {
-            Width = value;
+            base.SetWidth(value);
             CalcLabelWidth();
             RecalcPaddings();
-            Width = value;
+            base.SetWidth(value);
         }
 
-        protected override int GetCalcedWidth() => 
+        protected override OxWidth GetCalcedWidth() => 
             base.GetCalcedWidth() 
             - Padding.LeftInt 
             - Padding.RightInt;

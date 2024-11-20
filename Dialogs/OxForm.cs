@@ -46,7 +46,7 @@ namespace OxLibrary.Dialogs
 
         private void PlaceMainPanel()
         {
-            ((Control)MainPanel).Parent = this;
+            MainPanel.Parent = this;
             MainPanel.Left = 0;
             MainPanel.Top = 0;
             MainPanel.Size = new(Width, Height);
@@ -68,7 +68,7 @@ namespace OxLibrary.Dialogs
             base.OnSizeChanged(e);
 
             if (MainPanel is not null)
-                MainPanel.Size = Size;
+                MainPanel.Size = new(Size);
         }
 
         private bool canMaximize = true;
@@ -118,7 +118,7 @@ namespace OxLibrary.Dialogs
         {
             if (MainPanel is not null)
             {
-                MinimumSize = new(MainPanel.Width, MainPanel.Height);
+                MinimumSize = new(MainPanel.WidthInt, MainPanel.HeightInt);
                 MaximumSize = MinimumSize;
             }
         }

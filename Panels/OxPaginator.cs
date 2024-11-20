@@ -4,11 +4,13 @@ namespace OxLibrary.Panels
 {
     public class OxPaginator : OxUnderlinedPanel
     {
-        private const int PageButtonWidth = 28;
-        private const int PageButtonHeight = 20;
-        private const int NavigateButtonWidth = PageButtonWidth * 2;
-        private const int ButtonSpace = 3;
+        private static readonly OxWidth PageButtonWidth = OxWh.W28;
+        private static readonly OxWidth PageButtonHeight = OxWh.W20;
+        private static readonly OxWidth NavigateButtonWidth = OxWh.Mul(PageButtonWidth, 2);
+        private static readonly OxWidth ButtonSpace = OxWh.W3;
         private const int MaximumPageButtonsCount = 10;
+        
+        
 
         private int pageSize = 12;
         private int currentPage;
@@ -169,7 +171,7 @@ namespace OxLibrary.Panels
         private static int PlaceButton(OxPane button, int left)
         {
             button.Left = left;
-            return button.Right + ButtonSpace;
+            return button.Right + OxWh.Int(ButtonSpace);
         }
 
         private void PlaceButtons()
@@ -250,9 +252,9 @@ namespace OxLibrary.Panels
             {
                 Visible = false,
                 HandHoverCursor = true,
-                ToolTipText = toolTipText
+                ToolTipText = toolTipText,
+                Size = new(NavigateButtonWidth, PageButtonHeight)
             };
-            button.Size = new(NavigateButtonWidth, PageButtonHeight);
             return button;
         }
 
@@ -279,7 +281,7 @@ namespace OxLibrary.Panels
             return button;
         }
 
-        public OxPaginator() : base(Size.Empty) { }
+        public OxPaginator() : base(OxSize.Empty) { }
 
         protected override void PrepareInnerControls()
         {
@@ -303,7 +305,7 @@ namespace OxLibrary.Panels
         protected override void AfterCreated()
         {
             base.AfterCreated();
-            Height = 40;
+            Height = OxWh.W40;
         }
 
         protected override void OnSizeChanged(EventArgs e)

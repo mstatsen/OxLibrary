@@ -14,7 +14,7 @@ namespace OxLibrary.Panels
             Page = page;
             Text = Page.Text;
             Parent = TabControl.Header;
-            Dock = DockStyle.Left;
+            Dock = OxDock.Left;
             Font = TabControl.Font;
             Size = new(tabControl.TabHeaderSize.Width, tabControl.TabHeaderSize.Height);
         }
@@ -137,13 +137,13 @@ namespace OxLibrary.Panels
 
             Margin[TabControl.TabPosition].Size =
                 Active ?
-                    OxSize.None
+                    OxWh.W0
                     : OxDockHelper.IsVertical(TabControl.TabPosition)
-                        ? OxSize.S
-                        : OxSize.L | OxSize.M;
+                        ? OxWh.W4
+                        : OxWh.W24;
             Borders[TabControl.TabPosition].Visible = true;
             OxDock oppositeDock = OxDockHelper.Opposite(TabControl.TabPosition);
-            Margin[oppositeDock].Size = OxSize.None;
+            Margin[oppositeDock].Size = OxWh.W0;
             Borders[oppositeDock].Visible = false;
             Text += string.Empty; //for recalc label size
         }
@@ -153,13 +153,13 @@ namespace OxLibrary.Panels
             if (TabControl is null)
                 return;
 
-            DockStyle buttonDock = DockStyle.Left;
+            OxDock buttonDock = OxDock.Left;
 
             switch (TabControl.TabPosition)
             {
                 case OxDock.Left:
                 case OxDock.Right:
-                    buttonDock = DockStyle.Top;
+                    buttonDock = OxDock.Top;
                     break;
             }
 
