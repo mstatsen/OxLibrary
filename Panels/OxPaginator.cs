@@ -137,7 +137,7 @@ namespace OxLibrary.Panels
 
         private bool SetButtonSize(OxTaggedButton button)
         {
-            button.SetContentSize(
+            button.Size = new(
                 PageButtonWidth + (button.FreezeHovered ? 8 : 0),
                 PageButtonHeight + (button.FreezeHovered ? 8 : 0)
             );
@@ -237,9 +237,9 @@ namespace OxLibrary.Panels
             {
                 Parent = buttonsPanel,
                 Tag = pageNumber,
-                HandHoverCursor = true
+                HandHoverCursor = true,
+                Size = new(PageButtonWidth, PageButtonHeight)
             };
-            button.SetContentSize(PageButtonWidth, PageButtonHeight);
             button.Click += (s, e) => CurrentPage = s is not null ? ((OxTaggedButton)s).Tag : 0;
             Buttons.Add(button);
         }
@@ -252,7 +252,7 @@ namespace OxLibrary.Panels
                 HandHoverCursor = true,
                 ToolTipText = toolTipText
             };
-            button.SetContentSize(NavigateButtonWidth, PageButtonHeight);
+            button.Size = new(NavigateButtonWidth, PageButtonHeight);
             return button;
         }
 
@@ -265,7 +265,7 @@ namespace OxLibrary.Panels
         private OxPane PrepareFakeButton(OxPane button, ContentAlignment textAlign)
         {
             button.Parent = buttonsPanel;
-            button.SetContentSize(NavigateButtonWidth, PageButtonWidth);
+            button.Size = new(NavigateButtonWidth, PageButtonWidth);
             _ = new OxLabel()
             {
                 Parent = button,
@@ -284,8 +284,8 @@ namespace OxLibrary.Panels
         protected override void PrepareInnerControls()
         {
             base.PrepareInnerControls();
-            itemsCountLabel.Parent = ContentContainer;
-            buttonsPanel.Parent = ContentContainer;
+            itemsCountLabel.Parent = this;
+            buttonsPanel.Parent = this;
             buttonsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             SetButtonsPanelLeft();
 
@@ -298,7 +298,7 @@ namespace OxLibrary.Panels
         }
 
         private void SetButtonsPanelWidth() =>
-            buttonsPanel.SetContentSize(LastButton.Right + ButtonSpace, Height);
+            buttonsPanel.Size = new(LastButton.Right + ButtonSpace, Height);
 
         protected override void AfterCreated()
         {

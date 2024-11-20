@@ -14,12 +14,15 @@ namespace OxLibrary
                 _ => OxDirection.None,
             };
 
-        public static OxDirection GetDirection(OxBorder_old border, Point position)
+        public static OxDirection GetDirection(OxPane border, Point position)
         {
-            OxDirection direction = GetDirection(border.OxDock);
-            int error = border.GetSize() * 2;
+            OxDock borderDock = OxDockHelper.Dock(border.Dock);
+            OxDirection direction = GetDirection(borderDock);
 
-            switch (border.OxDock)
+            int borderSize = OxDockHelper.IsVertical(border.Dock) ? border.Height : border.Width;
+            int error = borderSize * 2;
+
+            switch (borderDock)
             {
                 case OxDock.Left:
                 case OxDock.Right:

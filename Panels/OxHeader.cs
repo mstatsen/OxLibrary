@@ -2,7 +2,7 @@
 
 namespace OxLibrary.Panels
 {
-    public class OxHeader : OxUnderlinedPanel
+    public class OxHeader : OxUnderlinedPanel, IOxHeader
     {
         public const int DefaultTitleWidth = 240;
         public const int DefaultTitleHeight = 26;
@@ -25,37 +25,38 @@ namespace OxLibrary.Panels
             TextAlign = ContentAlignment.MiddleLeft
         };
 
-        public readonly OxHeaderToolBar ToolBar = new()
+        private readonly OxHeaderToolBar toolBar = new()
         {
             Dock = DockStyle.Right,
             Width = 0
         };
 
-        public OxClickFrameList Buttons
+        public OxHeaderToolBar ToolBar => toolBar;
+
+        public OxClickFrameList<OxIconButton> Buttons
         {
             get => ToolBar.Buttons;
             set => ToolBar.Buttons = value;
         }
-
 
         public OxHeader(string title) : base(new(DefaultTitleWidth, DefaultTitleHeight))
         {
             label.Text = title;
             label.DoubleClick += (s, e) => ToolBar.ExecuteDefault();
             label.Click += LabelClickHandler;
-            Paddings.LeftOx = OxSize.S;
             ReAlign();
         }
 
         private void LabelClickHandler(object? sender, EventArgs e) => 
             Click?.Invoke(sender, e);
 
-        public new EventHandler? Click;
+        public new EventHandler? Click { get; set; }
 
         public Label Label => label;
 
         protected override string GetText() =>
             label.Text;
+
         protected override void SetText(string? value)
         {
             label.Text = 
@@ -70,7 +71,11 @@ namespace OxLibrary.Panels
             get => label.TextAlign;
             set => label.TextAlign = value;
         }
-
+        public Font TitleFont 
+        { 
+            get => label.Font; 
+            set => label.Font = value;
+        }
         protected override Bitmap? GetIcon() => (Bitmap?)icon.Image;
         protected override void SetIcon(Bitmap? value)
         {
@@ -81,9 +86,11 @@ namespace OxLibrary.Panels
         protected override void PrepareInnerControls()
         {
             base.PrepareInnerControls();
-            icon.Parent = ContentContainer;
-            ToolBar.Parent = ContentContainer;
-            label.Parent = ContentContainer;
+            icon.Parent = this;
+            ToolBar.Parent = this;
+            ToolBar.BorderVisible = false;
+            label.Parent = this;
+            SendToBack();
         }
 
         protected override void PrepareColors()
@@ -95,9 +102,9 @@ namespace OxLibrary.Panels
 
         public override void ReAlignControls()
         {
-            base.ReAlignControls();
             ToolBar.SendToBack();
             icon.SendToBack();
+            base.ReAlignControls();
         }
 
         protected override void OnSizeChanged(EventArgs e)
@@ -106,7 +113,7 @@ namespace OxLibrary.Panels
             icon.Width = icon.Height;
         }
 
-        public void AddToolButton(OxClickFrame button) =>
+        public void AddToolButton(OxIconButton button) =>
             ToolBar.AddButton(button);
     }
 }

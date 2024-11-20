@@ -29,8 +29,8 @@ namespace OxLibrary.Controls
         {
             Button.Parent = this;
             Button.BaseColor = BaseColor;
-            Button.SetContentSize(Math.Min(26, TextBox.Height - 4), TextBox.Height);
-            Button.Borders.LeftOx = OxSize.None;
+            Button.Size = new(Math.Min(26, TextBox.Height - 4), TextBox.Height);
+            Button.Borders.Left = OxSize.None;
             Button.FixBorderColor = true;
         }
 
@@ -58,7 +58,7 @@ namespace OxLibrary.Controls
         {
             base.OnSizeChanged(e);
             int calcedButtonWidth = Math.Min(22, TextBox.Height - 4);
-            Button.SetContentSize(calcedButtonWidth, Height - 2);
+            Button.Size = new(calcedButtonWidth, Height - 2);
             Button.Width = calcedButtonWidth;
             Button.ReAlign();
         }

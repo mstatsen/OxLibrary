@@ -5,28 +5,28 @@ namespace OxLibrary.Panels
 {
     public class OxPanelViewer : OxDialog
     {
-        public OxPanelViewer(OxPanel contentPanel, OxDialogButton buttons) : base()
+        public OxPanelViewer(OxPane contentPanel, OxDialogButton buttons) : base()
         {
             ButtonsWithBorders = new List<OxIconButton>();
             ContentPanel = contentPanel;
             Text = ContentPanel.Text;
             DialogButtons = buttons;
             BaseColor = ContentPanel.BaseColor;
-            contentPanel.ContentContainer.Parent = this;
-            SetContentSize(ContentPanel.CalcedWidth, contentPanel.CalcedHeight);
-            MainPanel.Paddings.SetSize(OxSize.S);
+            contentPanel.Parent = MainPanel;
+            Size = new(ContentPanel.CalcedWidth, contentPanel.CalcedHeight);
+            MainPanel.Padding.Size = OxSize.S;
             contentPanel.Colors.BaseColorChanged += (s, e) => MainPanel.BaseColor = ContentPanel.BaseColor;
         }
 
         public override Bitmap? FormIcon => ContentPanel.Icon;
 
         public List<OxIconButton> ButtonsWithBorders { get; }
-        private readonly OxPanel ContentPanel;
+        private readonly OxPane ContentPanel;
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             base.OnFormClosed(e);
-            ContentPanel.PutBackContentContainer(this);
+            ContentPanel.PutBack(this);
         }
     }
 }

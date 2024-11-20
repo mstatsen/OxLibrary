@@ -7,7 +7,7 @@ namespace OxLibrary.Panels
         public OxLoadingPanel() : base(new(300, 100))
         {
             base.SetVisible(false);
-            Borders.SetSize(OxSize.XXS);
+            Borders.Size = OxSize.XXS;
             Dock = DockStyle.Fill;
 
             LoadingLabel = new OxLabel
@@ -19,7 +19,7 @@ namespace OxLibrary.Panels
                 Text = "- - - Loading - - -"
             };
             FontSize = 22;
-            Margins.SetSize(OxSize.XXS);
+            Margin.Size = OxSize.XXS;
         }
 
 

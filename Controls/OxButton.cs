@@ -11,9 +11,10 @@
         public const int DefaultWidth = 100;
         public const int DefaultHeight = 20;
 
+        public OxButton() : base() { }
         public OxButton(string? text, Bitmap? icon) : base(icon, DefaultHeight)
         {
-            SetContentSize(DefaultWidth, DefaultHeight);
+            Size = new(DefaultWidth, DefaultHeight);
             Text = text;
             MinimumSize = Size.Empty;
         }
@@ -36,7 +37,7 @@
         protected override void PrepareInnerControls()
         {
             base.PrepareInnerControls();
-            Label.Parent = ContentContainer;
+            Label.Parent = this;
         }
 
         protected override void SetHandlers()
@@ -67,7 +68,7 @@
         private void RecalcPaddings()
         {
             int calcedLeftPadding = (Width - (RealPictureWidth + RealLabelWidth)) / 2;
-            Paddings.Left = calcedLeftPadding > 0 ? calcedLeftPadding : 0;
+            Padding.LeftInt = calcedLeftPadding > 0 ? calcedLeftPadding : 0;
         }
 
         private void CalcLabelWidth()
@@ -78,9 +79,9 @@
             Label.AutoSize = true;
             int calcedLabelWidth = Label.Width;
             Label.AutoSize = false;
-            calcedLabelWidth = calcedLabelWidth + RealPictureWidth < SavedWidth 
+            calcedLabelWidth = calcedLabelWidth + RealPictureWidth < Width 
                 ? calcedLabelWidth 
-                : SavedWidth - RealPictureWidth;
+                : Width - RealPictureWidth;
             Label.Width = Math.Max(calcedLabelWidth, 0);
         }
 
@@ -103,8 +104,8 @@
 
         protected override int GetCalcedWidth() => 
             base.GetCalcedWidth() 
-            - Paddings.Left 
-            - Paddings.Right;
+            - Padding.LeftInt 
+            - Padding.RightInt;
 
         protected override void OnVisibleChanged(EventArgs e)
         {

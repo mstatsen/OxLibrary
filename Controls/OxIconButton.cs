@@ -4,29 +4,29 @@ namespace OxLibrary.Controls
 {
     public class OxIconButton : OxClickFrame
     {
-        public readonly OxPicture Picture = new()
-        {
-            Dock = DockStyle.Fill
-        };
+        public readonly OxPicture Picture = 
+            new()
+            {
+                Dock = DockStyle.Fill
+            };
 
+        public OxIconButton() : base() { }
         public OxIconButton(Bitmap? icon, int Size) : base(new(Size, Size))
         {
-            MinimumSize = new(Width, Height);
-            MinimumSize = MaximumSize;
             Icon = icon;
         }
 
         protected override void PrepareInnerControls()
         {
-            base.PrepareInnerControls();
-            Picture.Parent = ContentContainer;
+            Picture.Parent = this;
             Picture.UseDisabledStyles = UseDisabledStyles;
+            base.PrepareInnerControls();
         }
 
         protected override void PrepareColors()
         {
             base.PrepareColors();
-            Picture.BaseColor = ContentContainer.BaseColor;
+            Picture.BaseColor = BaseColor;
         }
 
         protected override Bitmap? GetIcon() => (Bitmap?)Picture.Image;

@@ -4,10 +4,11 @@ namespace OxLibrary.Panels
 {
     public class OxTabButton : OxButton
     {
-        public IOxPane Page { get; internal set; }
+        public OxPane Page { get; internal set; }
         public OxTabControl TabControl { get; internal set; }
 
-        public OxTabButton(IOxPane page, OxTabControl tabControl, Bitmap? icon = null) : base(page.Text, icon)
+        public OxTabButton(OxPane page, OxTabControl tabControl, Bitmap? icon = null) 
+            : base(page.Text, icon)
         {
             TabControl = tabControl;
             Page = page;
@@ -15,31 +16,19 @@ namespace OxLibrary.Panels
             Parent = TabControl.Header;
             Dock = DockStyle.Left;
             Font = TabControl.Font;
-            SetContentSize(tabControl.TabHeaderSize.Width, tabControl.TabHeaderSize.Height);
+            Size = new(tabControl.TabHeaderSize.Width, tabControl.TabHeaderSize.Height);
         }
 
         protected override void SetHandlers()
         {
             base.SetHandlers();
             Click += (s, e) => TabControl.ActivePage = Page;
-
-            foreach (OxDock dock in OxDockHelper.All())
-                Borders[dock].VisibleChanged += BorderVisibleChanged;
         }
 
         protected override void AfterCreated()
         {
             base.AfterCreated();
             HiddenBorder = false;
-        }
-
-        private void BorderVisibleChanged(object? sender, EventArgs e)
-        {
-            if (sender is null)
-                return;
-
-            OxBorder_old border = (OxBorder_old)sender;
-            Margins[border.OxDock].SetSize(border.Visible ? 0 : border.GetSize());
         }
 
         public bool Active =>
@@ -146,17 +135,15 @@ namespace OxLibrary.Panels
                 || IsLastPage
                 || !IsPrevButton(TabControl.ActiveTabButton);
 
-            Margins[TabControl.TabPosition].SetSize(
+            Margin[TabControl.TabPosition].Size =
                 Active ?
-                    (int)OxSize.None
+                    OxSize.None
                     : OxDockHelper.IsVertical(TabControl.TabPosition)
-                        ? (int)OxSize.S
-                        : (int)OxSize.M * 3
-            );
-
+                        ? OxSize.S
+                        : OxSize.L | OxSize.M;
             Borders[TabControl.TabPosition].Visible = true;
             OxDock oppositeDock = OxDockHelper.Opposite(TabControl.TabPosition);
-            Margins[oppositeDock].SetSize(OxSize.None);
+            Margin[oppositeDock].Size = OxSize.None;
             Borders[oppositeDock].Visible = false;
             Text += string.Empty; //for recalc label size
         }

@@ -31,16 +31,16 @@
 
         private void SetHeaderPaddings()
         {
-            Header.Paddings.SetSize(OxSize.None);
+            Header.Padding.Size = OxSize.None;
 
             switch (TabPosition)
             {
                 case OxDock.Left:
                 case OxDock.Right:
-                    Header.Paddings.TopOx = OxSize.XS;
+                    Header.Padding.Top = OxSize.XS;
                     break;
                 case OxDock.Bottom:
-                    Header.Paddings.LeftOx = OxSize.S;
+                    Header.Padding.Left = OxSize.S;
                     break;
             }
         }
@@ -52,7 +52,7 @@
         }
 
         private void SetHeaderSize() =>
-            Header.SetContentSize(tabHeaderSize.Width, tabHeaderSize.Height);
+            Header.Size = new(tabHeaderSize.Width, tabHeaderSize.Height);
 
         public OxPaneList Pages => pages;
 
@@ -73,8 +73,8 @@
                 ? TabButtons[activePage]
                 : null;
 
-        private IOxPane? activePage;
-        public IOxPane? ActivePage
+        private OxPane? activePage;
+        public OxPane? ActivePage
         {
             get => activePage;
             set => SetActivePage(value);
@@ -91,7 +91,7 @@
                 ? Pages.IndexOf(ActivePage) 
                 : -1;
 
-        public void AddPage(IOxPane page, Bitmap? icon = null)
+        public void AddPage(OxPane page, Bitmap? icon = null)
         {
             page.Visible = false;
             page.Parent = this;
@@ -156,7 +156,7 @@
             }
         }
 
-        private void CreateTabButton(IOxPane page, Bitmap? icon = null)
+        private void CreateTabButton(OxPane page, Bitmap? icon = null)
         {
             if (TabButtons.TryGetValue(page, out _))
                 return;
@@ -166,19 +166,19 @@
             TabButtons.Add(page, button);
         }
 
-        private void SetActivePage(IOxPane? value)
+        private void SetActivePage(OxPane? value)
         {
             bool isDifferentPage = 
                 (activePage is null 
                     && value is not null) 
                 || (activePage is not null 
                     && !activePage.Equals(value));
-            IOxPane? oldPage = activePage;
+            OxPane? oldPage = activePage;
 
             if (isDifferentPage)
                 DeactivatePage?.Invoke(this, new OxTabControlEventArgs(oldPage, value));
 
-            foreach (IOxPane page in Pages)
+            foreach (OxPane page in Pages)
                 if (!page.Equals(value))
                     page.Visible = false;
 
@@ -199,16 +199,14 @@
             base.AfterCreated();
             Borders[OxDock.Top].Visible = false;
             Text = string.Empty;
-            ContentContainer.AutoScroll = true;
+            //ContentBox.AutoScroll = true;
+            this.AutoScroll = true;
         }
 
         public override void ReAlignControls()
         {
-            ContentContainer.ReAlign();
-            Paddings.ReAlign();
-            Borders.ReAlign();
+            base.ReAlignControls();
             Header.ReAlign();
-            Margins.ReAlign();
             ReAlignTabButtons();
             SendToBack();
         }

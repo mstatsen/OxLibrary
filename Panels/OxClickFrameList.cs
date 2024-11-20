@@ -1,8 +1,9 @@
 ﻿namespace OxLibrary.Panels
 {
-    public class OxClickFrameList : List<OxClickFrame>
+    public class OxClickFrameList<TClickFrame> : List<TClickFrame>
+        where TClickFrame : OxClickFrame, new()
     {
-        public OxClickFrame? Last => 
+        public TClickFrame? Last => 
             Count > 0 
                 ? this[Count - 1] 
                 : null;
@@ -17,7 +18,7 @@
             int calcedRight = 0;
             int calcedLeft = -1;
 
-            foreach (OxClickFrame frame in this)
+            foreach (TClickFrame frame in this)
                 if (frame.Visible)
                 {
                     if (calcedLeft < 0)
@@ -33,15 +34,15 @@
         {
             int maxHeight = 0;
 
-            foreach (OxClickFrame frame in this)
+            foreach (TClickFrame frame in this)
                 maxHeight = Math.Max(maxHeight, frame.Height);
 
             return maxHeight;
         }
 
-        private OxClickFrame? Default()
+        private TClickFrame? Default()
         {
-            foreach (OxClickFrame button in this)
+            foreach (TClickFrame button in this)
                 if (button.Visible && button.Enabled && button.Default)
                     return button;
 
@@ -50,10 +51,13 @@
 
         public bool ExecuteDefault()
         {
-            OxClickFrame? defultButton = Default();
+            TClickFrame? defultButton = Default();
             defultButton?.PerformClick();
             return defultButton is not null;
         }
     }
 
+    public class OxClickFrameList : OxClickFrameList<OxClickFrame>
+    { 
+    }
 }

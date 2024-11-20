@@ -1,22 +1,23 @@
 ﻿namespace OxLibrary.Panels
 {
-    public class OxPaneList : List<IOxPane>
+    public class OxPaneList<TPane> : List<TPane>
+        where TPane : IOxPane, new()
     {
-        public IOxPane? Last =>
+        public TPane? Last =>
             Count > 0
                 ? this[Count - 1]
-                : null;
+                : default;
 
-        public IOxPane? First =>
+        public TPane? First =>
             Count > 0
                 ? this[0]
-                : null;
+                : default;
 
         public int Bottom
         {
             get
             {
-                IOxPane? last = Last;
+                TPane? last = Last;
 
                 return last is null
                     ? 0
@@ -24,10 +25,14 @@
             }
         }
 
-        public new OxPaneList AddRange(IEnumerable<IOxPane> collection)
+        public new OxPaneList<TPane> AddRange(IEnumerable<TPane> collection)
         {
             base.AddRange(collection);
             return this;
         }
+    }
+
+    public class OxPaneList : OxPaneList<OxPane>
+    { 
     }
 }

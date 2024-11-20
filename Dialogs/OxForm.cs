@@ -1,4 +1,6 @@
-﻿namespace OxLibrary.Dialogs
+﻿using OxLibrary.Panels;
+
+namespace OxLibrary.Dialogs
 {
     public class OxForm : Form
     {
@@ -13,12 +15,6 @@
             PlaceMainPanel();
             SetUpForm();
             Initialized = true;
-        }
-
-        protected override void OnLocationChanged(EventArgs e)
-        {
-            base.OnLocationChanged(e);
-            MainPanel.SetMarginsSize();
         }
 
         protected virtual void SetUpForm()
@@ -50,11 +46,10 @@
 
         private void PlaceMainPanel()
         {
-            MainPanel.Parent = this;
+            ((Control)MainPanel).Parent = this;
             MainPanel.Left = 0;
             MainPanel.Top = 0;
-            MainPanel.Width = Width;
-            MainPanel.Height = Height;
+            MainPanel.Size = new(Width, Height);
             MainPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
         }
 
@@ -68,11 +63,13 @@
         protected override void OnTextChanged(EventArgs e) =>
             MainPanel.Text = Text;
 
-        public void SetContentSize(int width, int height) =>
-            MainPanel.SetContentSize(width, height);
-        
-        public void SetContentSize(Size size) =>
-            MainPanel.SetContentSize(size);
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+
+            if (MainPanel is not null)
+                MainPanel.Size = Size;
+        }
 
         private bool canMaximize = true;
         private bool canMinimize = true;

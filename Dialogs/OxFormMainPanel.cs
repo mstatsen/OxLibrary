@@ -14,11 +14,10 @@ namespace OxLibrary.Dialogs
             Form = form;
             Form.SizeChanged += FormSizeChanged;
             SetTitleButtonsVisible();
-            SetHeaderContentSize(34);
+            SetHeaderHeight(34);
             SetRestoreButtonIconAndTooltip();
             SetBordersSize();
             SetHeaderFont();
-            SetContentSize(Width, Height);
             SetMarginsSize();
             CreateFormMover();
             SetAnchors();
@@ -28,19 +27,19 @@ namespace OxLibrary.Dialogs
         private void FormSizeChanged(object? sender, EventArgs e) => SetRestoreButtonIconAndTooltip();
 
         private void SetHeaderFont() => 
-            Header.Label.Font = 
-                new(Header.Label.Font.FontFamily, Header.Label.Font.Size + 1, FontStyle.Bold);
+            Header.TitleFont = 
+                new(Header.TitleFont.FontFamily, Header.TitleFont.Size + 1, FontStyle.Bold);
 
         private void SetAnchors() => 
             Anchor = AnchorStyles.Left | AnchorStyles.Top;
 
         private void SetBordersSize() => 
-            Borders.SetSize(OxSize.XXS);
+            Borders.Size = OxSize.XXS;
 
         private void CreateFormMover() => 
             formMover = new OxFormMover(Form, Header.Label);
 
-        public void SetHeaderContentSize(int height)
+        public void SetHeaderHeight(int height)
         {
             HeaderHeight = height;
             SetButtonsSize();
@@ -50,8 +49,8 @@ namespace OxLibrary.Dialogs
         {
             Header.Icon = Form.FormIcon;
 
-            if (Form.FormIcon is Bitmap bitmap)
-                Form.Icon = System.Drawing.Icon.FromHandle(bitmap.GetHicon());
+            if (Form.FormIcon is not null)
+                Form.Icon = System.Drawing.Icon.FromHandle(Form.FormIcon.GetHicon());
         }
 
         internal void SetTitleButtonsVisible()
@@ -78,7 +77,7 @@ namespace OxLibrary.Dialogs
         private void SetButtonsSize()
         {
             foreach (OxClickFrame button in Header.Buttons)
-                button.SetContentSize(36, 28);
+                button.Size = new(36, 28);
         }
 
         private void SetButtonsHandlers()
@@ -121,8 +120,8 @@ namespace OxLibrary.Dialogs
                 : OxIcons.Maximize;
 
         private string GetRestoreToopTip() =>
-            Form is not null && 
-            FormIsMaximized
+            Form is not null
+            && FormIsMaximized
                 ? "Restore window"
                 : "Maximize window";
 
@@ -134,7 +133,7 @@ namespace OxLibrary.Dialogs
 
         public void SetFormState(FormWindowState state)
         {
-            ContentContainer.Visible = false;
+            //ContentBox.Visible = false;
 
             try
             {
@@ -143,7 +142,7 @@ namespace OxLibrary.Dialogs
             }
             finally
             {
-                ContentContainer.Visible = true;
+                //ContentBox.Visible = true;
             }
         }
 
@@ -158,10 +157,11 @@ namespace OxLibrary.Dialogs
             base.PrepareColors();
             BorderColor = BaseColor;
             Header.BaseColor = Colors.Darker();
-            Header.UnderlineColor = BaseColor;
         }
 
-        public override Color DefaultColor => Color.FromArgb(146, 143, 140);
+        public override Color DefaultColor =>
+            Color.FromArgb(146, 143, 140);
+
         public bool FormIsMaximized => 
             Form.WindowState is FormWindowState.Maximized;
 
@@ -171,21 +171,13 @@ namespace OxLibrary.Dialogs
 
             Form.Width = Width;
             Form.Height = Height;
-
-            StartSizeRecalcing();
-
-            try
-            {
-                SetMarginsSize();
-            }
-            finally
-            {
-                EndSizeRecalcing();
-            }
         }
 
         internal void SetMarginsSize() => 
-            Margins.SetSize(Form.Sizeble ? OxSize.XS : OxSize.None);
+            Margin.Size = 
+                Form.Sizeble 
+                    ? OxSize.XS 
+                    : OxSize.None;
 
         protected override void OnLocationChanged(EventArgs e)
         {
@@ -196,25 +188,15 @@ namespace OxLibrary.Dialogs
 
             Form.Left += Left;
             Form.Top += Top;
-            SetMarginsSize();
         }
 
         protected override void SetHandlers()
         {
             base.SetHandlers();
-
-            foreach (OxBorder_old margin in Margins.Borders.Values)
-                SetMarginHandlers(margin);
-
-            ContentContainer.VisibleChanged += ContentContainerVisibleChanged;
-        }
-
-        private void SetMarginHandlers(OxBorder_old margin)
-        {
-            margin.MouseDown += ResizerMouseDown;
-            margin.MouseUp += MarginMouseUpHandler;
-            margin.MouseMove += ResizeHandler;
-            margin.MouseLeave += MarginMouseLeaveHandler;
+            MouseDown += ResizerMouseDown;
+            MouseUp += MarginMouseUpHandler;
+            MouseMove += ResizeHandler;
+            MouseLeave += MarginMouseLeaveHandler;
         }
 
         private void MarginMouseLeaveHandler(object? sender, EventArgs e) =>
@@ -223,12 +205,9 @@ namespace OxLibrary.Dialogs
         private void MarginMouseUpHandler(object? sender, MouseEventArgs e) =>
             LastDirection = OxDirection.None;
 
-        private void ContentContainerVisibleChanged(object? sender, EventArgs e) => 
-            Update();
-
         private void ResizerMouseDown(object? sender, MouseEventArgs e)
         {
-            if (sender is not OxBorder_old border)
+            if (sender is not OxPane border)
                 return;
 
             LastMousePosition = border.PointToScreen(e.Location);
@@ -250,7 +229,7 @@ namespace OxLibrary.Dialogs
             if (ResizeProcessing)
                 return;
 
-            OxBorder_old? border = (OxBorder_old?)sender;
+            OxPane? border = (OxPane?)sender;
 
             if (border is null)
                 return;

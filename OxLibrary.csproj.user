@@ -23,6 +23,9 @@
     <Compile Update="Controls\OxDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Update="Panels\OxHeaderToolBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Update="Controls\OxIconButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -68,9 +71,6 @@
     <Compile Update="Dialogs\OxMessageMainPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Update="Panels\OxBorder_old.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Update="Panels\OxCard.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -96,9 +96,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Update="Panels\OxPane.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="Panels\OxPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Update="Panels\OxPanelLayouter.cs">

@@ -24,8 +24,8 @@ namespace OxLibrary.Dialogs
 
         public OxMessageMainPanel(OxForm form) : base(form)
         {
-            Paddings.SetSize(24);
-            SetContentSize(240, 120);
+            Padding.Size = OxSize.L | OxSize.M;
+            Size = new(240, 120);
             HeaderHeight = 30;
         }
 
@@ -34,7 +34,7 @@ namespace OxLibrary.Dialogs
         protected override void PrepareInnerControls()
         {
             base.PrepareInnerControls();
-            MessageBox.Parent = ContentContainer;
+            MessageBox.Parent = this;
         }
 
         public override Color DefaultColor => Color.FromArgb(146, 141, 140);
@@ -47,7 +47,7 @@ namespace OxLibrary.Dialogs
                 MessageBox.Text = value;
                 MessageBox.Height = Math.Max(value.Length / 2, 23) 
                     + 23 * value.Count(c => c.Equals('\r'));
-                SetContentSize(240, MessageBox.Bottom + Paddings.Bottom);
+                Size = new(240, MessageBox.Bottom + Padding.BottomInt);
             }
         }
 
@@ -61,9 +61,9 @@ namespace OxLibrary.Dialogs
                     if ((DialogButtons & button).Equals(button))
                         calcedWidth += OxDialogButtonsHelper.Width(button) + DialogButtonSpace;
 
-                SetContentSize(
-                    Math.Max(calcedWidth + 160, SavedWidth),
-                    Math.Max(calcedWidth / 2, SavedHeight)
+                Size = new(
+                    Math.Max(calcedWidth + 160, Width),
+                    Math.Max(calcedWidth / 2, Height)
                 );
             }
 

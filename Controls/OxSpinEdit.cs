@@ -40,13 +40,10 @@ namespace OxLibrary.Controls
 
         public override void ReAlignControls()
         {
-            ContentContainer.ReAlign();
-            Paddings.ReAlign();
-            Borders.ReAlign();
+            base.ReAlignControls();
             DecreaseButton.ReAlign();
             IncreaseButton.ReAlign();
-            ContentContainer.SendToBack();
-            Margins.ReAlign();
+            //ContentBox.SendToBack();
         }
 
         private static OxIconButton CreateButton(Bitmap icon, DockStyle dock) =>
@@ -136,7 +133,7 @@ namespace OxLibrary.Controls
 
         private void PrepareTextBox()
         {
-            TextBox.Parent = ContentContainer;
+            TextBox.Parent = this;
             TextBox.Left = DecreaseButton.Right;
         }
 
@@ -193,8 +190,8 @@ namespace OxLibrary.Controls
             ValueChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        protected override void ApplyBordersColor() =>
-            Borders.Color = Enabled
+        public override Color GetBordersColor() =>
+            Enabled
                 ? Colors.Darker(8)
                 : Colors.Lighter(2);
 

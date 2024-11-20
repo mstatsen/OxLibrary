@@ -53,13 +53,13 @@ namespace OxLibrary.Panels
             if (!Expandable)
                 return;
 
-            ContentContainer.StartSizeRecalcing();
+            //ContentBox.StartSizeRecalcing();
             try
             {
-                Paddings[OxDock.Top].Visible = value;
-                Paddings[OxDock.Bottom].Visible = value;
+                Padding[OxDock.Top].Visible = value;
+                Padding[OxDock.Bottom].Visible = value;
                 Borders[OxDock.Bottom].Visible = value;
-                ContentContainer.Visible = value;
+                //ContentBox.Visible = value;
                 ExpandButton.Icon = ExpandButtonIcon;
                 ExpandButton.ToolTipText = ExpandButtonToolTipText;
 
@@ -74,7 +74,7 @@ namespace OxLibrary.Panels
             {
                 Update();
 
-                ContentContainer.EndSizeRecalcing();
+                //ContentBox.EndSizeRecalcing();
 
                 if (changed)
                     ExpandHandler?.Invoke(this, EventArgs.Empty);
@@ -98,7 +98,7 @@ namespace OxLibrary.Panels
         protected override void SetHandlers()
         {
             base.SetHandlers();
-            ApplyRecalcSizeHandler(ContentContainer, false, true);
+            //ApplyVisibleChangedHandler(ContentBox);
             ExpandButton.Click += (s, e) => Expanded = !Expanded;
             Header.Click += AccordionExpandingChangeHandler;
         }
@@ -114,7 +114,7 @@ namespace OxLibrary.Panels
             int calcedHeight = base.GetCalcedHeight();
 
             if (!Expanded)
-                calcedHeight -= SavedHeight;
+                calcedHeight -= Height;
 
             return calcedHeight;
         }
@@ -150,7 +150,7 @@ namespace OxLibrary.Panels
         protected override void PrepareInnerControls()
         {
             base.PrepareInnerControls();
-            ExpandButton.SetContentSize(25, 20);
+            ExpandButton.Size = new(25, 20);
             Header.AddToolButton(ExpandButton);
         }
 
@@ -161,9 +161,9 @@ namespace OxLibrary.Panels
             Header.ToolBar.Visible = Header.ToolBar.Buttons.Count > 1;
         }
 
-        internal override void PutBackContentContainer(OxPanelViewer dialog)
+        public override void PutBack(OxPanelViewer dialog)
         {
-            base.PutBackContentContainer(dialog);
+            base.PutBack(dialog);
             ExpandButton.Visible = true;
             Header.ToolBar.Visible = true;
         }

@@ -40,7 +40,7 @@ namespace OxLibrary.Dialogs
         }
 
         public OxDialogMainPanel(OxForm form) : base(form) =>
-            SetContentSize(480, 360);
+            Size = new(480, 360);
 
         public readonly OxFrame Footer = new();
 
@@ -63,13 +63,12 @@ namespace OxLibrary.Dialogs
                 Top = FooterButtonVerticalMargin,
                 Font = Styles.Font(Styles.DefaultFontSize + 0.5f, FontStyle.Bold),
                 Anchor = AnchorStyles.Top | AnchorStyles.Right,
-                Visible = (dialogButtons & dialogButton).Equals(dialogButton)
-            };
-
-            button.SetContentSize(
-                OxDialogButtonsHelper.Width(dialogButton), 
+                Visible = (dialogButtons & dialogButton).Equals(dialogButton),
+                Size = new(
+                OxDialogButtonsHelper.Width(dialogButton),
                 FooterButtonHeight - FooterButtonVerticalMargin * 2
-            );
+            )
+            };
             button.Click += DialogButtonClickHandler;
             buttonsDictionary.Add(dialogButton, button);
         }
@@ -84,7 +83,7 @@ namespace OxLibrary.Dialogs
                 CreateButton(button);
 
             PlaceButtons();
-            Footer.SetContentSize(Footer.SavedWidth, FooterButtonHeight);
+            Footer.Size = new(Footer.Width, FooterButtonHeight);
             Footer.Borders[OxDock.Left].Visible = false;
             Footer.Borders[OxDock.Right].Visible = false;
             Footer.Borders[OxDock.Bottom].Visible = false;
@@ -137,7 +136,7 @@ namespace OxLibrary.Dialogs
             foreach (var item in realButtons)
             {
                 item.Value.Left = rightOffset - OxDialogButtonsHelper.Width(item.Key);
-                item.Value.SetContentSize(
+                item.Value.Size = new(
                     OxDialogButtonsHelper.Width(item.Key),
                     FooterButtonHeight - FooterButtonVerticalMargin * 2
                 );
@@ -162,12 +161,9 @@ namespace OxLibrary.Dialogs
 
         public override void ReAlignControls()
         {
-            ContentContainer.ReAlign();
-            Paddings.ReAlign();
+            base.ReAlignControls();
             Footer.ReAlign();
             Header.ReAlign();
-            Borders.ReAlign();
-            Margins.ReAlign();
             SendToBack();
         }
 
@@ -179,10 +175,12 @@ namespace OxLibrary.Dialogs
             Form.FreezeSize();
         }
 
-        public override void SetContentSize(int width, int height)
+        /*
+        public new void Size = new(int width, int height)
         {
-            base.SetContentSize(width, height);
+            base.Size = new(width, height);
             Form.ClientSize = new(Width, Height);
-        }
+        };
+        */
     }
 }

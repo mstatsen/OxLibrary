@@ -1,4 +1,4 @@
-﻿namespace OxLibrary
+﻿namespace OxLibrary.Panels
 {
     public class OxBorder
     {
@@ -7,10 +7,10 @@
         private OxSize size = OxSize.None;
         private bool visible = true;
 
-        public OxSize Size 
-        { 
-            get => visible ? size : OxSize.None; 
-            set => size = value; 
+        public OxSize Size
+        {
+            get => visible ? size : OxSize.None;
+            set => size = value;
         }
 
         public int IntSize
@@ -20,7 +20,7 @@
         }
 
         public bool Visible
-        { 
+        {
             get => visible;
             set => visible = value;
         }

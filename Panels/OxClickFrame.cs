@@ -69,29 +69,41 @@
             BeginGroup = false;
         }
 
-        protected override void ApplyBordersColor()
-        {
-            base.ApplyBordersColor();
-
-            if ((fixBorderColor || hovered) && !ReadOnly)
-                BorderColor = Colors.Darker(3);
-            else
-            if (HiddenBorder || !Enabled)
-                BorderColor = Colors.Lighter(7);
-        }
+        public override Color GetBordersColor() => 
+            (fixBorderColor || hovered)
+            && !ReadOnly
+                ? Colors.Darker(3)
+                : HiddenBorder 
+                    || !Enabled
+                    ? Colors.Lighter(8)
+                    : base.GetBordersColor();
 
         protected override void PrepareColors()
         {
             base.PrepareColors();
-            ContentContainer.BaseColor =
-                (Enabled && !ReadOnly) || !UseDisabledStyles
-                    ? hovered || FreezeHovered
+
+            BackColor =
+                (Enabled && !ReadOnly)
+                || !UseDisabledStyles
+                    ? hovered
+                        || FreezeHovered
                         ? GetHoveredColor is not null
                             ? GetHoveredColor.Invoke()
                             : Colors.Darker(2)
-                        : ContentContainer.BaseColor
+                        : BaseColor
                     : Colors.Darker(ReadOnly ? 0 : 1);
-            Paddings.Color = ContentContainer.BackColor;
+            /*
+            BaseColor =
+                (Enabled && !ReadOnly) 
+                || !UseDisabledStyles
+                    ? hovered 
+                        || FreezeHovered
+                        ? GetHoveredColor is not null
+                            ? GetHoveredColor.Invoke()
+                            : Colors.Darker(2)
+                        : BaseColor
+                    : Colors.Darker(ReadOnly ? 0 : 1);
+            */
         }
 
         public void PerformClick() =>
@@ -128,31 +140,6 @@
 
             if (HandHoverCursor)
                 Cursor = Cursors.Default;
-        }
-
-        protected override void SetHandlers()
-        {
-            base.SetHandlers();
-            SetClickHandler(ContentContainer);
-            SetHoverHandlers(ContentContainer);
-
-            foreach (OxBorder_old border in Paddings.Borders.Values)
-            {
-                SetClickHandler(border);
-                SetHoverHandlers(border);
-            }
-
-            foreach (OxBorder_old border in Borders.Borders.Values)
-            {
-                SetClickHandler(border);
-                SetHoverHandlers(border);
-            }
-
-            foreach (OxBorder_old border in Margins.Borders.Values)
-            {
-                SetClickHandler(border);
-                SetHoverHandlers(border);
-            }
         }
 
         private bool hiddenBorder;

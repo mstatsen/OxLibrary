@@ -8,7 +8,6 @@ namespace OxLibrary.Panels
         {
             base.PrepareInnerControls();
             Header.Parent = this;
-            Header.ToolBar.OnButtonVisibleChange += ToolBarButtonVisibleChangeHandler;
         }
 
         protected override void SetIcon(Bitmap? value) => 
@@ -20,13 +19,25 @@ namespace OxLibrary.Panels
         public int HeaderHeight 
         { 
             get => Header.Height;
-            set => Header.SetContentSize(Width, value); 
+            set => Header.Height = value; 
         }
 
-        public OxHeader Header { get; } = new(string.Empty)
+        public OxHeader Header { get; } = 
+            new(string.Empty)
+            {
+                Dock = DockStyle.Top
+            };
+
+        public bool HeaderVisible 
         {
-            Dock = DockStyle.Top
-        };
+            get => Header.Visible;
+            set => Header.Visible = value;
+        }
+        public Font HeaderFont 
+        { 
+            get => Header.TitleFont;
+            set => Header.TitleFont = value;
+        }
 
         protected override string? GetText() =>
             Header.Text;
@@ -50,28 +61,19 @@ namespace OxLibrary.Panels
             Header.BaseColor = 
                 PanelViewer is null 
                     ? BaseColor 
-                    : Colors.Darker();
+                    : Colors.Darker(3);
         }
-
-        protected override void SetBordersColor(Color value)
-        {
-            base.SetBordersColor(value);
-            Header.UnderlineColor = value;
-        }
-
-        protected virtual void ToolBarButtonVisibleChangeHandler(object? sender, EventArgs e) { }
 
         protected override int GetCalcedHeight() => 
-            base.GetCalcedHeight() + (Header.Visible ? Header.CalcedHeight : 0);
+            base.GetCalcedHeight() 
+            + (HeaderVisible 
+                ? HeaderHeight 
+                : 0);
 
         public override void ReAlignControls()
         {
-            ContentContainer.ReAlign();
-            Paddings.ReAlign();
             Header.ReAlign();
-            Borders.ReAlign();
-            Margins.ReAlign();
-            SendToBack();
+            base.ReAlignControls();
         }
 
         protected override void PrepareDialog(OxPanelViewer dialog)
@@ -95,11 +97,11 @@ namespace OxLibrary.Panels
             }
         }
 
-        internal override void PutBackContentContainer(OxPanelViewer dialog)
+        public override void PutBack(OxPanelViewer dialog)
         {
-            base.PutBackContentContainer(dialog);
+            base.PutBack(dialog);
 
-            if (!Header.ToolBar.Parent.Equals(Header))
+            if (!Header.Equals(Header.ToolBar.Parent))
             {
                 Header.ToolBar.Parent = Header;
 

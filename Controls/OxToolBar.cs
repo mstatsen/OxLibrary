@@ -2,34 +2,35 @@
 
 namespace OxLibrary.Controls
 {
-    public class OxToolBar : OxFrame
+    public class OxToolBar<TButton> : OxFrame
+        where TButton : OxClickFrame, new()
     {
         private const int DefaultToolBarHeight = 28;
-        private OxClickFrameList buttons = new();
+        private OxClickFrameList<TButton> buttons = new();
 
         public OxToolBar() : base() => 
             UseDisabledStyles = false;
 
-        public readonly Dictionary<OxToolbarAction, OxButton> Actions = new();
+        public readonly Dictionary<OxToolbarAction, TButton> Actions = new();
         public OxActionClick<OxToolbarAction>? ToolbarActionClick;
 
         public void RecalcWidth() => 
-            SetContentSize(buttons.Width(), SavedHeight);
+            Width = buttons.Width();
 
         protected override void AfterCreated()
         {
             base.AfterCreated();
             SetToolBarPaddings();
-            SetContentSize(Width, DefaultToolBarHeight);
+            Size = new(Width, DefaultToolBarHeight);
         }
 
-        private readonly Dictionary<OxClickFrame, OxBorder_old> separators = new();
+        private readonly Dictionary<TButton, OxPane> separators = new();
 
         private void PlaceButtons()
         {
-            OxClickFrame? lastButton = null;
+            TButton? lastButton = null;
 
-            foreach (OxClickFrame button in buttons)
+            foreach (TButton button in buttons)
             {
                 button.Parent = this;
                 button.Dock = 
@@ -40,14 +41,14 @@ namespace OxLibrary.Controls
                 if (button.BeginGroup && 
                     lastButton is not null)
                 {
-                    button.Margins.LeftOx = OxSize.S;
-                    lastButton.Margins.RightOx = OxSize.S;
+                    button.Margin.Left = OxSize.S;
+                    lastButton.Margin.Right = OxSize.S;
 
                     if (lastButton.Dock.Equals(button.Dock))
                         SeparateButtonsGroup(button);
                 }
                 else
-                    button.Margins.LeftOx = 
+                    button.Margin.Left = 
                         lastButton is null 
                             ? OxSize.None 
                             : OxSize.XXS;
@@ -62,14 +63,18 @@ namespace OxLibrary.Controls
             SetToolBarPaddings();
         }
 
-        private void SeparateButtonsGroup(OxClickFrame startButton)
+        private void SeparateButtonsGroup(TButton startButton)
         {
             if (!separators.TryGetValue(startButton, out var separator))
             {
-                separator = startButton.Dock switch
+                separator = new OxPane(new(1, 1))
                 {
-                    DockStyle.Right => OxBorder_old.NewRight(this, BorderColor, OxSize.XXS),
-                    _ => OxBorder_old.NewLeft(this, BorderColor, OxSize.XXS),
+                    Parent = this,
+                    Dock =
+                        startButton.Dock.Equals(DockStyle.Right)
+                            ? DockStyle.Right
+                            : DockStyle.Left,
+                    BackColor = BorderColor
                 };
                 separators.Add(startButton, separator);
             }
@@ -85,14 +90,14 @@ namespace OxLibrary.Controls
 
         private void ClearButtons() 
         {
-            foreach (OxClickFrame button in buttons)
+            foreach (TButton button in buttons)
             {
                 button.VisibleChanged -= ButtonVisibleChangedHandler;
                 button.Parent = null;
             }
         }
 
-        private void SetButtons(OxClickFrameList buttonList)
+        private void SetButtons(OxClickFrameList<TButton> buttonList)
         {
             ClearButtons();
             buttons = buttonList;
@@ -101,19 +106,19 @@ namespace OxLibrary.Controls
 
         protected virtual void SetToolBarPaddings()
         {
-            Paddings.LeftOx = OxSize.None;
-            Paddings.RightOx = OxSize.XXS;
-            Paddings.TopOx = OxSize.XS;
-            Paddings.BottomOx = OxSize.S;
+            Padding.Left = OxSize.None;
+            Padding.Right = OxSize.XXS;
+            Padding.Top = OxSize.XS;
+            Padding.Bottom = OxSize.S;
 
-            if (buttons.Last?.CalcedHeight > ContentContainer.CalcedHeight)
+            if (buttons.Last?.CalcedHeight > CalcedHeight)
             {
-                Paddings.TopOx = OxSize.XXS;
-                Paddings.BottomOx = OxSize.XXS;
+                Padding.Top = OxSize.XXS;
+                Padding.Bottom = OxSize.XXS;
             }
         }
 
-        public OxClickFrameList Buttons
+        public OxClickFrameList<TButton> Buttons
         {
             get => buttons;
             set => SetButtons(value);
@@ -125,7 +130,7 @@ namespace OxLibrary.Controls
         {
             base.PrepareColors();
 
-            foreach (OxClickFrame button in buttons)
+            foreach (TButton button in buttons)
                 button.BaseColor = BaseColor;
         }
 
@@ -133,12 +138,12 @@ namespace OxLibrary.Controls
         { 
             base.OnEnabledChanged(e);
 
-            foreach (OxClickFrame button in buttons)
+            foreach (TButton button in buttons)
                 button.Enabled = Enabled;
         }
 
-        protected override void ApplyBordersColor() => 
-            BorderColor = Colors.Lighter(4);
+        public override Color GetBordersColor() => 
+            Colors.Lighter(4);
 
         public bool ExecuteDefault() =>
             Buttons.ExecuteDefault();
@@ -167,13 +172,13 @@ namespace OxLibrary.Controls
             }
         }
 
-        public OxButton AddButton(OxToolbarAction action, bool beginGroup = false, 
+        public TButton AddButton(OxToolbarAction action, bool beginGroup = false, 
             DockStyle dockStyle = DockStyle.Left)
         {
-            OxButton button = new(
-                OxToolbarActionHelper.Text(action),
-                OxToolbarActionHelper.Icon(action))
+            TButton button = new()
             {
+                Text = OxToolbarActionHelper.Text(action),
+                Icon = OxToolbarActionHelper.Icon(action),
                 BeginGroup = beginGroup,
                 Dock = dockStyle
             };
@@ -184,15 +189,14 @@ namespace OxLibrary.Controls
                         : GetActionByButton((OxButton)s)
                 )
             );
-            button.SetContentSize(OxToolbarActionHelper.Width(action), button.Height);
+            button.Size = new(OxToolbarActionHelper.Width(action), button.Height);
             Actions.Add(action, button);
             Buttons.Add(button);
-
             PlaceButtons();
             return button;
         }
 
-        public OxClickFrame AddButton(OxClickFrame button)
+        public TButton AddButton(TButton button)
         {
             Buttons.Insert(0, button);
             PlaceButtons();
@@ -209,12 +213,7 @@ namespace OxLibrary.Controls
         }
     }
 
-    public class OxHeaderToolBar : OxToolBar
-    {
-        protected override void ApplyBordersColor() => 
-            BorderColor = Color.Transparent;
-
-        protected override void SetToolBarPaddings() => 
-            Paddings.SetSize(OxSize.XXS);
+    public class OxToolBar : OxToolBar<OxClickFrame>
+    { 
     }
 }

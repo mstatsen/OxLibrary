@@ -63,7 +63,7 @@ namespace OxLibrary.Controls
                 calcedWidth = (buttonsParent.Width / Buttons.Count) 
                         - (int)OxPictureActionHelper.ButtonMargin * Buttons.Count
                         + (int)OxSize.XXS;
-                button.SetContentSize(
+                button.Size = new(
                     calcedWidth,
                     OxPictureActionHelper.DefaultHeight
                 );
@@ -81,7 +81,7 @@ namespace OxLibrary.Controls
             buttonsParent.SizeChanged += ButtonsParentSizeChanged;
             
             if (Buttons.Count > 0)
-                Buttons.First()!.Margins.RightOx = OxPictureActionHelper.ButtonMargin;
+                Buttons.First()!.Margin.Right = OxPictureActionHelper.ButtonMargin;
             
         }
 
@@ -97,8 +97,8 @@ namespace OxLibrary.Controls
                 Dock = DockStyle.Left,
             };
 
-            button.Margins.LeftOx = OxPictureActionHelper.ButtonMargin;
-            button.Margins.TopOx = OxSize.XXS;
+            button.Margin.Left = OxPictureActionHelper.ButtonMargin;
+            button.Margin.Top = OxSize.XXS;
             button.Click += ButtonClick;
             Actions.Add(action, button);
             Buttons.Add(button);
@@ -177,7 +177,7 @@ namespace OxLibrary.Controls
         protected override void PrepareInnerControls()
         {
             base.PrepareInnerControls();
-            label.Parent = ContentContainer;
+            label.Parent = this;
             label.Font = Styles.Font(Font.Size + 1, FontStyle.Italic);
             picture.Parent = this;
             buttonsParent.Parent = this;
