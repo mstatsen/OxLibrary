@@ -161,13 +161,13 @@ namespace OxLibrary.Controls
                 return;
             }
 
-            OxBitmapCalcer bitmapCalcer = new(value, picture.Size, Stretch);
+            OxBitmapCalcer bitmapCalcer = new(value, new(picture.Size), Stretch);
             picture.SizeMode = bitmapCalcer.SizeMode;
 
             if (!Stretch)
             {
-                picture.Width = bitmapCalcer.ImageBox.Width;
-                picture.Height = bitmapCalcer.ImageBox.Height;
+                picture.Width = OxWh.Int(bitmapCalcer.ImageBox.Width);
+                picture.Height = OxWh.Int(bitmapCalcer.ImageBox.Height);
             }
 
             EnabledBitmap = bitmapCalcer.FullBitmap;

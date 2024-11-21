@@ -43,6 +43,16 @@
         public OxPoint(OxPoint point) : base(point) { }
         public Point Point => new(Size);
 
+        public override bool Equals(object? obj) => 
+            base.Equals(obj)
+            || (obj is OxPoint otherPoint
+                && X.Equals(otherPoint.X)
+                && Y.Equals(otherPoint.Y)
+                );
+
+        public override int GetHashCode() =>
+            X.GetHashCode() ^ Y.GetHashCode();
+
         public new static readonly OxPoint Empty = new(0, 0);
     }
 }

@@ -121,10 +121,10 @@ namespace OxLibrary.Dialogs
                 if ((dialogButtons & item.Key).Equals(item.Key))
                 {
                     realButtons.Add(item.Key, item.Value);
-                    fullButtonsWidth += OxDialogButtonsHelper.WidthInt(item.Key) + (int)DialogButtonSpace;
+                    fullButtonsWidth |= OxDialogButtonsHelper.Width(item.Key) | DialogButtonSpace;
                 }
 
-            fullButtonsWidth -= (int)DialogButtonSpace;
+            fullButtonsWidth = OxWh.Sub(fullButtonsWidth, DialogButtonSpace);
 
             OxWidth rightOffset =
                 FooterButtonsAlign switch

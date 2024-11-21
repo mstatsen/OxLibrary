@@ -55,8 +55,8 @@
 
             try
             {
-                Width = OxWh.Less(width, OxWh.W0) ? OxWh.W0 : width;
-                Height = OxWh.Less(height, OxWh.W0) ? OxWh.W0 : height;
+                Width = OxWh.Max(width, OxWh.W0);
+                Height = OxWh.Max(height, OxWh.W0);
             }
             finally
             { 
@@ -86,6 +86,16 @@
 
         public Size Size => 
             new(WidthInt, HeightInt);
+
+        public override bool Equals(object? obj) => 
+            base.Equals(obj)
+            || (obj is OxSize otherSize
+                && Width.Equals(otherSize.Width)
+                && Height.Equals(otherSize.Height)
+            );
+
+        public override int GetHashCode() => 
+            WidthInt.GetHashCode() ^ HeightInt.GetHashCode();
 
         public static readonly OxSize Empty = new(0, 0);
     }

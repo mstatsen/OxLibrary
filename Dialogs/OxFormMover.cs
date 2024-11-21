@@ -70,15 +70,15 @@
             if (FinishPosition.Equals(Form.Location))
                 return;
 
-            List<Point> wayPoints = WayPoints(Form.Location, FinishPosition, 30);
+            List<OxPoint> wayPoints = WayPoints(Form.Location, FinishPosition, 30);
 
-            foreach (Point point in wayPoints)
-                Form.Location = new(point);
+            foreach (OxPoint point in wayPoints)
+                Form.Location = point;
         }
 
-        public static List<Point> WayPoints(OxPoint Start, OxPoint Finish, int speed)
+        public static List<OxPoint> WayPoints(OxPoint Start, OxPoint Finish, int speed)
         {
-            List<Point> wayPoints = new();
+            List<OxPoint> wayPoints = new();
             Point currentPoint = Start.Point;
             Point delta = new(Finish.X - Start.X, Finish.Y - Start.Y);
             Point sign = new(delta.X > 0 ? 1 : -1, delta.Y > 0 ? 1 : -1);
@@ -88,12 +88,11 @@
             int error = delta.X - delta.Y;
             int step = speed;
 
-            while (!currentPoint.X.Equals(Finish.X) 
-                || !currentPoint.Y.Equals(Finish.Y))
+            while (!currentPoint.Equals(Finish.Point))
             {
                 if (step.Equals(speed))
                 {
-                    wayPoints.Add(new Point(currentPoint.X, currentPoint.Y));
+                    wayPoints.Add(new OxPoint(currentPoint));
                     step = 0;
                 }
 
@@ -116,7 +115,7 @@
 
             if (wayPoints.Count is 0 
                 || !wayPoints[^1].Equals(Finish.Point))
-                wayPoints.Add(Finish.Point);
+                wayPoints.Add(Finish);
 
             return wayPoints;
         }

@@ -174,7 +174,7 @@ namespace OxLibrary.Dialogs
 
             if (e.Changed &&
                 Form is not null)
-                Form.Size = new(OxWh.Int(Width), OxWh.Int(Height));
+                Form.Size = Size;
 
             return e.Changed;
         }
@@ -192,8 +192,8 @@ namespace OxLibrary.Dialogs
             if (formMover.Processing)
                 return;
 
-            Form.Left += OxWh.Int(Left);
-            Form.Top += OxWh.Int(Top);
+            Form.Left |= Left;
+            Form.Top |= Top;
         }
 
         protected override void SetHandlers()
@@ -279,13 +279,13 @@ namespace OxLibrary.Dialogs
             if (OxWh.LessOrEquals(newSize.Y, Form.MinimumSize.Height))
                 newSize.Y = Form.MinimumSize.Height;
 
-            List<Point> sizePoints = OxFormMover.WayPoints(oldSize, newSize, 30);
+            List<OxPoint> sizePoints = OxFormMover.WayPoints(oldSize, newSize, 30);
 
             ResizeProcessing = true;
             Form.SuspendLayout();
             SuspendLayout();
 
-            foreach (Point point in sizePoints)
+            foreach (OxPoint point in sizePoints)
             {
                 OxPoint newLocationStep = new(Form.Left, Form.Top);
 
@@ -293,18 +293,14 @@ namespace OxLibrary.Dialogs
                     newLocationStep.X =
                         OxWh.Sub(
                             newLocationStep.X, 
-                            OxWh.Int(
-                                OxWh.Sub(point.X, Width)
-                            )
+                            OxWh.Sub(point.X, Width)
                         );
 
                 if (OxDirectionHelper.ContainsTop(LastDirection))
                     newLocationStep.Y =
                         OxWh.Sub(
                             newLocationStep.Y,
-                            OxWh.Int(
-                                OxWh.Sub(point.Y, Height)
-                            )
+                            OxWh.Sub(point.Y, Height)
                         );
 
                 if (!Form.Location.Equals(newLocationStep))
