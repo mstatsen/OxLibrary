@@ -195,7 +195,7 @@ namespace OxLibrary.Dialogs
             Form.Left |= Left;
             Form.Top |= Top;
         }
-
+                                             
         protected override void SetHandlers()
         {
             base.SetHandlers();
