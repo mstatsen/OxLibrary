@@ -9,15 +9,17 @@
             (int)width;
 
         public static OxWidth W(int intWidth) =>
-            (OxWidth)intWidth;
+            intWidth < 0 
+                ? W0
+                : (OxWidth)intWidth;
 
         public static OxWidth Add(OxWidth left, OxWidth right) =>
             left | right;
 
         public static OxWidth Add(OxWidth left, int right) =>
-            W(Int(left) + right);
+            Add(left, W(right));
 
-        public static OxWidth Sum(int left, OxWidth right) =>
+        public static OxWidth Add(int left, OxWidth right) =>
             Add(right, left);
 
         public static OxWidth Sub(OxWidth left, OxWidth right) =>

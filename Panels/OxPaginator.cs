@@ -168,15 +168,15 @@ namespace OxLibrary.Panels
             CurrentPage = 1;
         }
 
-        private static int PlaceButton(OxPane button, int left)
+        private static OxWidth PlaceButton(OxPane button, OxWidth left)
         {
             button.Left = left;
-            return button.Right + OxWh.Int(ButtonSpace);
+            return button.Right | ButtonSpace;
         }
 
         private void PlaceButtons()
         {
-            int lastRight = PlaceButton(FirstButton, 0);
+            OxWidth lastRight = PlaceButton(FirstButton, 0);
             lastRight = PlaceButton(PrevButton, lastRight);
             lastRight = PlaceButton(FakePrevButton, lastRight);
 
@@ -300,7 +300,7 @@ namespace OxLibrary.Panels
         }
 
         private void SetButtonsPanelWidth() =>
-            buttonsPanel.Size = new(LastButton.Right + ButtonSpace, Height);
+            buttonsPanel.Size = new(LastButton.Right | ButtonSpace, Height);
 
         protected override void AfterCreated()
         {
@@ -316,7 +316,11 @@ namespace OxLibrary.Panels
         }
 
         private void SetButtonTop(OxPane button) =>
-            button.Top = (buttonsPanel.Height - button.Height) / 2;
+            button.Top = 
+                OxWh.Div(
+                    OxWh.Sub(buttonsPanel.Height, button.Height), 
+                    OxWh.W2
+                );
 
         private bool SetButtonTop(OxTaggedButton button)
         {
@@ -336,7 +340,11 @@ namespace OxLibrary.Panels
         }
 
         private void SetButtonsPanelLeft() =>
-            buttonsPanel.Left = (Width - buttonsPanel.Width) / 2;
+            buttonsPanel.Left = 
+                OxWh.Div(
+                    OxWh.Sub(Width, buttonsPanel.Width), 
+                    OxWh.W2
+                );
 
         private bool SetButtonBaseColor(OxTaggedButton button)
         {

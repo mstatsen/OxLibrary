@@ -134,7 +134,7 @@ namespace OxLibrary.Controls
         private void PrepareTextBox()
         {
             TextBox.Parent = this;
-            TextBox.Left = DecreaseButton.Right;
+            TextBox.Left = DecreaseButton.RightInt;
         }
 
         protected override void SetHandlers()

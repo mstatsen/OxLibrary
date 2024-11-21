@@ -39,7 +39,7 @@ namespace OxLibrary.Panels
             set => Header.TitleFont = value;
         }
 
-        protected override string? GetText() =>
+        protected override string GetText() =>
             Header.Text;
 
         protected override void SetUseDisabledStyles(bool value)
@@ -48,8 +48,8 @@ namespace OxLibrary.Panels
             Header.UseDisabledStyles = value;
         }
 
-        protected override void SetText(string? value) =>
-            Header.Text = value?.Trim();
+        protected override void SetText(string value) =>
+            Header.Text = value.Trim();
 
         public OxFrameWithHeader() : base() { }
 

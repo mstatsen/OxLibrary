@@ -118,7 +118,7 @@ namespace OxLibrary.Dialogs
         {
             if (MainPanel is not null)
             {
-                MinimumSize = new(MainPanel.WidthInt, MainPanel.HeightInt);
+                MinimumSize = MainPanel.Size.Size;
                 MaximumSize = MinimumSize;
             }
         }

@@ -189,8 +189,8 @@ namespace OxLibrary.Dialogs
             if (formMover.Processing)
                 return;
 
-            Form.Left += Left;
-            Form.Top += Top;
+            Form.Left += LeftInt;
+            Form.Top += TopInt;
         }
 
         protected override void SetHandlers()

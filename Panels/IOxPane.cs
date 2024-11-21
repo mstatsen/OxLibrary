@@ -14,7 +14,8 @@ namespace OxLibrary.Panels
         bool Enabled { get; set; }
         OxColorHelper Colors { get; }
         Color DefaultColor { get; }
-        string? Text { get; set; }
+        string Text { get; set; }
+        string Name { get; set; }
         OxDock Dock { get; set; }
         OxSize Size { get; set; }
         OxSize MinimumSize { get; set; }
@@ -23,10 +24,15 @@ namespace OxLibrary.Panels
         Control? Parent { get; set; }
         void Dispose();
 
-        int Bottom { get; }
-        int Right { get; }
-        int Top { get; set; }
-        int Left { get; set; }
+        OxWidth Bottom { get; }
+        OxWidth Right { get; }
+        OxWidth Top { get; set; }
+        OxWidth Left { get; set; }
+
+        int BottomInt { get; }
+        int RightInt { get; }
+        int TopInt { get; set; }
+        int LeftInt { get; set; }
 
         bool Visible { get; set; }
         object Tag { get; set; }

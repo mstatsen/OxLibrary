@@ -13,15 +13,15 @@
                 ? this[0]
                 : default;
 
-        public int Bottom
+        public OxWidth Bottom
         {
             get
             {
                 TPane? last = Last;
 
                 return last is null
-                    ? 0
-                    : last.Bottom + 24;
+                    ? OxWh.W0
+                    : last.Bottom | OxWh.W24;
             }
         }
 

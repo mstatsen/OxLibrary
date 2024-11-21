@@ -49,7 +49,7 @@ namespace OxLibrary.Dialogs
                     + 23 * value.Count(c => c.Equals('\r'));
                 Size = new(
                     OxWh.W240, 
-                    OxWh.Sum(MessageBox.Bottom, Padding.Bottom)
+                    OxWh.Add(MessageBox.Bottom, Padding.Bottom)
                 );
             }
         }

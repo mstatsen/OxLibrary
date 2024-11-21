@@ -283,12 +283,22 @@ namespace OxLibrary.Panels
                     if (border.Value.Size.Equals(OxWh.W0))
                         continue;
 
+                    /*                    
                     e.Graphics.DrawLine(
                         pen,
                         border.Key is OxDock.Right ? ClientRectangle.Width - 1 : ClientRectangle.Left + 1,
                         border.Key is OxDock.Bottom ? ClientRectangle.Height - 1 : ClientRectangle.Top + 1,
                         border.Key is OxDock.Left ? ClientRectangle.Left + 1 : ClientRectangle.Width - 1,
                         border.Key is OxDock.Top ? ClientRectangle.Top + 1 : ClientRectangle.Height - 1
+                    );
+                    */
+
+                    e.Graphics.DrawLine(
+                        pen,
+                        border.Key is OxDock.Right ? ClientRectangle.Width - 1 : 1,
+                        border.Key is OxDock.Bottom ? ClientRectangle.Height - 1 : 1,
+                        border.Key is OxDock.Left ? 1 : ClientRectangle.Width - 1,
+                        border.Key is OxDock.Top ? 1 : ClientRectangle.Height - 1
                     );
                 }
             };
@@ -344,16 +354,21 @@ namespace OxLibrary.Panels
         public OxColorHelper Colors => colors;
         public virtual Color DefaultColor => Color.FromArgb(142, 142, 138);
 
-        public new string? Text
+        public new string Text
         {
-            get => GetText();
-            set => SetText(value);
+            get
+            {
+                string text = base.Text;
+                return text is null ? string.Empty : text;
+            }
+
+            set => SetText(value is null ? string.Empty : value);
         }
 
-        protected virtual void SetText(string? value) =>
+        protected virtual void SetText(string value) =>
             base.Text = value;
 
-        protected virtual string? GetText() =>
+        protected virtual string GetText() =>
             base.Text;
 
         public new bool Visible
@@ -443,6 +458,46 @@ namespace OxLibrary.Panels
         {
             get => new(base.MaximumSize);
             set => base.MaximumSize = value.Size;
+        }
+
+        public new OxWidth Bottom => OxWh.W(base.Bottom);
+
+        public new OxWidth Right => OxWh.W(base.Right);
+
+        public new OxWidth Top 
+        { 
+            get => OxWh.W(base.Top);
+            set
+            {
+                base.Top = OxWh.Int(value);
+                OnSizeChanged();
+            }
+        }
+
+        public new OxWidth Left
+        {
+            get => OxWh.W(base.Left);
+            set
+            {
+                base.Left = OxWh.Int(value);
+                OnSizeChanged();
+            }
+        }
+
+        public int BottomInt => OxWh.Int(Bottom);
+
+        public int RightInt => OxWh.Int(Right);
+
+        public int TopInt 
+        { 
+            get => OxWh.Int(Top);
+            set => Top = OxWh.W(value);
+        }
+
+        public int LeftInt
+        {
+            get => OxWh.Int(Left);
+            set => Left = OxWh.W(value);
         }
 
         protected virtual void SetIcon(Bitmap? value) { }

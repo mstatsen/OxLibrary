@@ -3,31 +3,54 @@
     public class OxClickFrameList<TClickFrame> : List<TClickFrame>
         where TClickFrame : OxClickFrame, new()
     {
-        public TClickFrame? Last => 
-            Count > 0 
-                ? this[Count - 1] 
+        public TClickFrame? First =>
+            Count > 0
+                ? this[0]
                 : null;
 
-        public int Right => 
+        public TClickFrame? Last =>
+            Count > 0
+                ? this[Count - 1]
+                : null;
+
+        public TClickFrame? FirstVisible =>
+            Find(f => f.Visible);
+
+        public TClickFrame? LastVisible
+        {
+            get
+            {
+                TClickFrame? visibleFrame = null;
+
+                foreach (TClickFrame frame in this)
+                    if (frame.Visible)
+                        visibleFrame = frame;
+
+                return visibleFrame;
+            }
+        }
+
+        public OxWidth Right => 
             Last is not null 
                 ? Last.Right 
-            : 0;
+                : OxWh.W0;
 
         public OxWidth Width()
         {
-            int calcedRight = 0;
-            int calcedLeft = -1;
+            TClickFrame? firstFisibleFrame = FirstVisible;
+            TClickFrame? lastVisibleFrame = LastVisible;
 
-            foreach (TClickFrame frame in this)
-                if (frame.Visible)
-                {
-                    if (calcedLeft < 0)
-                        calcedLeft = frame.Left;
-
-                    calcedRight = frame.Right;
-                }
-
-            return OxWh.Sub(calcedRight, OxWh.Max(calcedLeft, OxWh.W0));
+            return OxWh.Sub(
+                lastVisibleFrame is null
+                    ? OxWh.W0
+                    : lastVisibleFrame.Right,
+                OxWh.Max(
+                    firstFisibleFrame is null 
+                        ? OxWh.W0 
+                        : firstFisibleFrame.Right, 
+                    OxWh.W0
+                )
+            ); 
         }
 
         public OxWidth Height()

@@ -59,8 +59,8 @@ namespace OxLibrary
 
             try
             {
-                Width = width;
-                Height = height;
+                Width = OxWh.Less(width, OxWh.W0) ? OxWh.W0 : width;
+                Height = OxWh.Less(height, OxWh.W0) ? OxWh.W0 : height;
             }
             finally
             { 
