@@ -79,6 +79,12 @@ namespace OxLibrary.Controls
             set => managingControl.Dock = OxDockHelper.Dock(value);
         }
 
+        public IOxControl? Parent
+        {
+            get => (IOxControl?)managingControl.Parent;
+            set => managingControl.Parent = (Control?)value;
+        }
+
         public OxSize Size
         {
             get => new(Width, Height);
@@ -113,8 +119,8 @@ namespace OxLibrary.Controls
             }
         }
 
-        public OxSize ClientSize 
-        { 
+        public OxSize ClientSize
+        {
             get => new(managingControl.ClientSize);
             set => managingControl.ClientSize = value.Size;
         }
@@ -136,7 +142,27 @@ namespace OxLibrary.Controls
             set => managingControl.MaximumSize = value.Size;
         }
 
-        //public Control? Parent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public OxRectangle ClientRectangle =>
+            new(managingControl.ClientRectangle);
+
+        public OxRectangle DisplayRectangle => new(managingControl.DisplayRectangle);
+
+        public OxRectangle Bounds
+        {
+            get => new(managingControl.Bounds);
+            set => managingControl.Bounds = value.Rectangle;
+        }
+
+        public OxSize PreferredSize =>
+            new(managingControl.Size);
+
+        public OxPoint AutoScrollOffset
+        {
+            get => new(managingControl.AutoScrollOffset);
+            set => managingControl.AutoScrollOffset = value.Point;
+        }
+
+        public bool HasOxChildren => ((IOxControl)managingControl).OxControls.Count > 0;
 
         public bool OnSizeChanged(SizeChangedEventArgs e)
         {
@@ -154,6 +180,45 @@ namespace OxLibrary.Controls
                 OxWh.Int(width),
                 OxWh.Int(height)
             );
+
+        public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height, BoundsSpecified specified) =>
+            managingControl.SetBounds(
+                OxWh.Int(x),
+                OxWh.Int(y),
+                OxWh.Int(width),
+                OxWh.Int(height),
+                specified
+            );
+
+        public Control GetChildAtPoint(OxPoint pt, GetChildAtPointSkip skipValue) =>
+            managingControl.GetChildAtPoint(pt.Point, skipValue);
+
+        public Control GetChildAtPoint(OxPoint pt) =>
+            managingControl.GetChildAtPoint(pt.Point);
+
+        public OxSize GetPreferredSize(OxSize proposedSize) =>
+            new(managingControl.GetPreferredSize(proposedSize.Size));
+
+        public void Invalidate(OxRectangle rc) =>
+            managingControl.Invalidate(rc.Rectangle);
+
+        public void Invalidate(OxRectangle rc, bool invalidateChildren) =>
+            managingControl.Invalidate(rc.Rectangle, invalidateChildren);
+
+        public OxSize LogicalToDeviceUnits(OxSize value) =>
+            new(managingControl.LogicalToDeviceUnits(value.Size));
+
+        public OxPoint PointToClient(OxPoint p) =>
+            new(managingControl.PointToClient(p.Point));
+
+        public OxPoint PointToScreen(OxPoint p) =>
+            new(managingControl.PointToScreen(p.Point));
+
+        public OxRectangle RectangleToClient(OxRectangle r) =>
+            new(managingControl.RectangleToClient(r.Rectangle));
+
+        public OxRectangle RectangleToScreen(OxRectangle r) =>
+            new(managingControl.RectangleToScreen(r.Rectangle));
     }
 
     public static class OxControlManager

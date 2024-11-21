@@ -102,7 +102,63 @@ namespace OxLibrary.Panels
             set => manager.Dock = value;
         }
 
-        private new void SetBounds(int x, int y, int width, int height) { }
+        public new IOxControl? Parent
+        {
+            get => manager.Parent;
+            set => manager.Parent = value;
+        }
+        public bool HasOxChildren => manager.HasOxChildren;
+
+        public new OxRectangle ClientRectangle => manager.ClientRectangle;
+
+        public new OxRectangle DisplayRectangle => manager.DisplayRectangle;
+
+        public new OxRectangle Bounds
+        {
+            get => manager.Bounds;
+            set => manager.Bounds = value;
+        }
+
+        public new OxSize PreferredSize => manager.PreferredSize;
+
+        public new OxPoint AutoScrollOffset
+        {
+            get => manager.AutoScrollOffset;
+            set => manager.AutoScrollOffset = value;
+        }
+
+        public Control GetChildAtPoint(OxPoint pt, GetChildAtPointSkip skipValue) =>
+            manager.GetChildAtPoint(pt, skipValue);
+
+        public Control GetChildAtPoint(OxPoint pt) =>
+            manager.GetChildAtPoint(pt);
+
+        public OxSize GetPreferredSize(OxSize proposedSize) =>
+            manager.GetPreferredSize(proposedSize);
+
+        public void Invalidate(OxRectangle rc) =>
+            manager.Invalidate(rc);
+
+        public void Invalidate(OxRectangle rc, bool invalidateChildren) =>
+            manager.Invalidate(rc, invalidateChildren);
+
+        public OxSize LogicalToDeviceUnits(OxSize value) =>
+            manager.LogicalToDeviceUnits(value);
+
+        public OxPoint PointToClient(OxPoint p) =>
+            manager.PointToClient(p);
+
+        public OxPoint PointToScreen(OxPoint p) =>
+            manager.PointToScreen(p);
+
+        public OxRectangle RectangleToClient(OxRectangle r) =>
+            manager.RectangleToClient(r);
+
+        public OxRectangle RectangleToScreen(OxRectangle r) =>
+            manager.RectangleToScreen(r);
+
+        public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height, BoundsSpecified specified) =>
+            manager.SetBounds(x, y, width, height, specified);
 
         public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
             manager.SetBounds(x, y, width, height);
@@ -295,10 +351,10 @@ namespace OxLibrary.Panels
 
                     e.Graphics.DrawLine(
                         pen,
-                        border.Key is OxDock.Right ? ClientRectangle.Width - 1 : 1,
-                        border.Key is OxDock.Bottom ? ClientRectangle.Height - 1 : 1,
-                        border.Key is OxDock.Left ? 1 : ClientRectangle.Width - 1,
-                        border.Key is OxDock.Top ? 1 : ClientRectangle.Height - 1
+                        border.Key is OxDock.Right ? OxWh.Int(ClientRectangle.Width) - 1 : 1,
+                        border.Key is OxDock.Bottom ? OxWh.Int(ClientRectangle.Height) - 1 : 1,
+                        border.Key is OxDock.Left ? 1 : OxWh.Int(ClientRectangle.Width) - 1,
+                        border.Key is OxDock.Top ? 1 : OxWh.Int(ClientRectangle.Height) - 1
                     );
                 }
             };
@@ -357,6 +413,9 @@ namespace OxLibrary.Panels
 
         protected virtual void SetVisible(bool value) =>
             base.Visible = value;
+
+        private readonly OxControls oxControls = new();
+        public OxControls OxControls => oxControls;
 
         public bool IsHovered
         {

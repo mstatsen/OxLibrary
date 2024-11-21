@@ -12,6 +12,156 @@ namespace OxLibrary.Dialogs
 
         public OxControlManager<Form> Manager => manager;
 
+        public virtual bool OnSizeChanged(SizeChangedEventArgs e)
+        {
+            if (SizeChanging || !e.Changed)
+                return false;
+
+            SizeChanging = true;
+            try
+            {
+                base.OnSizeChanged(e);
+
+                if (MainPanel is not null)
+                    MainPanel.Size = new(Size);
+            }
+            finally
+            {
+                SizeChanging = false;
+            }
+
+            return true;
+        }
+
+        private readonly OxControls oxControls = new();
+        public OxControls OxControls => oxControls;
+
+        public OxForm()
+        {
+            manager = OxControlManager.RegisterControl<Form>(this, OnSizeChanged);
+            DoubleBuffered = true;
+            AutoSize = true;
+            MainPanel = CreateMainPanel();
+            PlaceMainPanel();
+            SetUpForm();
+            Initialized = true;
+        }
+
+        protected virtual void SetUpForm()
+        {
+            FormBorderStyle = FormBorderStyle.None;
+            SetUpSizes();
+            StartPosition = FormStartPosition.CenterParent;
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            MainPanel.SetIcon();
+        }
+
+        public void SetUpSizes()
+        {
+            MaximumSize = new(Screen.GetWorkingArea(this).Size);
+            OxSize wantedMinimumSize = WantedMinimumSize;
+            MinimumSize = new(
+                OxWh.Min(wantedMinimumSize.Width, MaximumSize.Width),
+                OxWh.Min(wantedMinimumSize.Height, MaximumSize.Height)
+            );
+        }
+
+        public virtual OxSize WantedMinimumSize => new(OxWh.W640, OxWh.W480);
+
+        protected virtual OxFormMainPanel CreateMainPanel() => new(this);
+
+        private void PlaceMainPanel()
+        {
+            MainPanel.Parent = this;
+            MainPanel.StartSizeChanging();
+
+            try
+            {
+                MainPanel.Left = OxWh.W0;
+                MainPanel.Top = OxWh.W0;
+                MainPanel.Size = new(Width, Height);
+                MainPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
+            }
+            finally
+            {
+                MainPanel.EndSizeChanging();
+            }
+        }
+
+        protected override void OnControlAdded(ControlEventArgs e)
+        {
+            if (Initialized)
+                MainPanel.Controls.Add(e.Control);
+            else base.OnControlAdded(e);
+        }
+
+        protected override void OnTextChanged(EventArgs e) =>
+            MainPanel.Text = Text;
+
+        protected bool SizeChanging = false;
+
+        private bool canMaximize = true;
+        private bool canMinimize = true;
+
+        public bool CanMaximize
+        {
+            get => canMaximize;
+            set
+            {
+                canMaximize = value;
+                MainPanel.SetTitleButtonsVisible();
+            }
+        }
+
+        public bool CanMinimize
+        {
+            get => canMinimize;
+            set
+            {
+                canMinimize = value;
+                MainPanel.SetTitleButtonsVisible();
+            }
+        }
+
+
+        private bool sizeble = true;
+        public bool Sizeble
+        {
+            get => sizeble;
+            set
+            {
+                sizeble = value;
+                MainPanel.SetMarginsSize();
+            }
+        }
+
+        public virtual Bitmap? FormIcon => null;
+
+        public void ClearConstraints()
+        {
+            MinimumSize = OxSize.Empty;
+            MaximumSize = MinimumSize;
+        }
+
+        public void FreezeSize()
+        {
+            if (MainPanel is null)
+                return;
+
+            MinimumSize = MainPanel.Size;
+            MaximumSize = MinimumSize;
+        }
+
+        public Color BaseColor
+        {
+            get => MainPanel.BaseColor;
+            set => MainPanel.BaseColor = value;
+        }
+
         public new OxWidth Width
         {
             get => manager.Width;
@@ -76,160 +226,68 @@ namespace OxLibrary.Dialogs
             set => manager.Dock = value;
         }
 
-        public virtual bool OnSizeChanged(SizeChangedEventArgs e)
+        public new IOxControl? Parent
         {
-            if (SizeChanging || !e.Changed)
-                return false;
-
-            SizeChanging = true;
-            try
-            {
-                base.OnSizeChanged(e);
-
-                if (MainPanel is not null)
-                    MainPanel.Size = new(Size);
-            }
-            finally
-            {
-                SizeChanging = false;
-            }
-
-            return true;
+            get => manager.Parent;
+            set => manager.Parent = value;
         }
+        public bool HasOxChildren => manager.HasOxChildren;
 
-        protected override sealed void OnSizeChanged(EventArgs e) =>
-            base.OnSizeChanged(e);
+        public new OxRectangle ClientRectangle => manager.ClientRectangle;
 
-        public OxForm()
+        public new OxRectangle DisplayRectangle => manager.DisplayRectangle;
+
+        public new OxRectangle Bounds
         {
-            manager = OxControlManager.RegisterControl<Form>(this, OnSizeChanged);
-            DoubleBuffered = true;
-            AutoSize = true;
-            MainPanel = CreateMainPanel();
-            PlaceMainPanel();
-            SetUpForm();
-            Initialized = true;
+            get => manager.Bounds;
+            set => manager.Bounds = value;
         }
 
-        protected virtual void SetUpForm()
+        public new OxSize PreferredSize => manager.PreferredSize;
+
+        public new OxPoint AutoScrollOffset
         {
-            FormBorderStyle = FormBorderStyle.None;
-            SetUpSizes();
-            StartPosition = FormStartPosition.CenterParent;
+            get => manager.AutoScrollOffset;
+            set => manager.AutoScrollOffset = value;
         }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            MainPanel.SetIcon();
-        }
+        public Control GetChildAtPoint(OxPoint pt, GetChildAtPointSkip skipValue) =>
+            manager.GetChildAtPoint(pt, skipValue);
 
-        public void SetUpSizes()
-        {
-            MaximumSize = new(Screen.GetWorkingArea(this).Size);
-            OxSize wantedMinimumSize = WantedMinimumSize;
-            MinimumSize = new(
-                OxWh.Min(wantedMinimumSize.Width, MaximumSize.Width),
-                OxWh.Min(wantedMinimumSize.Height, MaximumSize.Height)
-            );
-        }
+        public Control GetChildAtPoint(OxPoint pt) =>
+            manager.GetChildAtPoint(pt);
 
-        public virtual OxSize WantedMinimumSize => new(OxWh.W640, OxWh.W480);
+        public OxSize GetPreferredSize(OxSize proposedSize) =>
+            manager.GetPreferredSize(proposedSize);
 
-        protected virtual OxFormMainPanel CreateMainPanel() => new(this);
+        public void Invalidate(OxRectangle rc) =>
+            manager.Invalidate(rc);
 
-        private void PlaceMainPanel()
-        {
-            MainPanel.Parent = this;
+        public void Invalidate(OxRectangle rc, bool invalidateChildren) =>
+            manager.Invalidate(rc, invalidateChildren);
 
-            MainPanel.StartSizeChanging();
+        public OxSize LogicalToDeviceUnits(OxSize value) =>
+            manager.LogicalToDeviceUnits(value);
 
-            try
-            {
-                MainPanel.Left = 0;
-                MainPanel.Top = 0;
-                MainPanel.Size = new(Width, Height);
-                MainPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
-            }
-            finally
-            {
-                MainPanel.EndSizeChanging();
-            }
-        }
+        public OxPoint PointToClient(OxPoint p) =>
+            manager.PointToClient(p);
 
-        protected override void OnControlAdded(ControlEventArgs e)
-        {
-            if (Initialized)
-                MainPanel.Controls.Add(e.Control);
-            else base.OnControlAdded(e);
-        }
+        public OxPoint PointToScreen(OxPoint p) =>
+            manager.PointToScreen(p);
 
-        protected override void OnTextChanged(EventArgs e) =>
-            MainPanel.Text = Text;
+        public OxRectangle RectangleToClient(OxRectangle r) =>
+            manager.RectangleToClient(r);
 
-        protected bool SizeChanging = false;
+        public OxRectangle RectangleToScreen(OxRectangle r) =>
+            manager.RectangleToScreen(r);
 
-        private bool canMaximize = true;
-        private bool canMinimize = true;
-
-        public bool CanMaximize
-        {
-            get => canMaximize;
-            set
-            {
-                canMaximize = value;
-                MainPanel.SetTitleButtonsVisible();
-            }
-        }
-
-        public bool CanMinimize
-        {
-            get => canMinimize;
-            set
-            {
-                canMinimize = value;
-                MainPanel.SetTitleButtonsVisible();
-            }
-        }
-
-
-        private bool sizeble = true;
-        public bool Sizeble 
-        { 
-            get => sizeble;
-            set
-            {
-                sizeble = value;
-                MainPanel.SetMarginsSize();
-            }
-        }
-
-        public virtual Bitmap? FormIcon => null;
-
-        public void ClearConstraints()
-        {
-            MinimumSize = OxSize.Empty;
-            MaximumSize = MinimumSize;
-        }
-
-        public void FreezeSize()
-        {
-            if (MainPanel is null)
-                return;
-
-            MinimumSize = MainPanel.Size;
-            MaximumSize = MinimumSize;
-        }
-
-        private new void SetBounds(int x, int y, int width, int height) { }
+        public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height, BoundsSpecified specified) =>
+            manager.SetBounds(x, y, width, height, specified);
 
         public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
             manager.SetBounds(x, y, width, height);
 
-        public Color BaseColor
-        {
-            get => MainPanel.BaseColor;
-            set => MainPanel.BaseColor = value;
-        }
+        protected override sealed void OnSizeChanged(EventArgs e) =>
+            base.OnSizeChanged(e);
     }
 }

@@ -49,11 +49,25 @@
         public OxRectangle(Rectangle rectangle)
             : this(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height) { }
 
-        public OxRectangle(OxPoint point, OxSize size)
-            : this(point.X, point.Y, size.Width, size.Height) { }
+        public OxRectangle(OxPoint location, OxSize size)
+            : this(location.X, location.Y, size.Width, size.Height) { }
 
-        public Rectangle Rectandle => 
+        public Rectangle Rectangle => 
             new(OxWh.Int(X), OxWh.Int(Y), OxWh.Int(Width), OxWh.Int(Height));
+
+        public bool Contains(OxWidth x, OxWidth y) =>
+            OxWh.LessOrEquals(X, x) 
+            && OxWh.Less(x, X | Width) 
+            && OxWh.LessOrEquals(Y, y) 
+            && OxWh.Less(y, Y | Height);
+
+        public bool Contains(OxPoint pt) => Contains(pt.X, pt.Y);
+
+        public bool Contains(OxRectangle rect) =>
+            OxWh.LessOrEquals(X, rect.X) 
+            && OxWh.LessOrEquals(rect.X | rect.Width, X | Width) 
+            && OxWh.LessOrEquals(Y, rect.Y)
+            && OxWh.LessOrEquals(rect.Y | rect.Height, Y | Height);
 
         public override bool Equals(object? obj) => 
             base.Equals(obj)

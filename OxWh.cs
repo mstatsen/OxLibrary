@@ -98,13 +98,13 @@
             W(Math.Min(Int(left), right));
 
         public static OxWidth Max(OxWidth left, OxWidth right) =>
-            W(Math.Min(Int(left), Int(right)));
+            W(Math.Max(Int(left), Int(right)));
 
         public static OxWidth Max(int left, OxWidth right) =>
-            W(Math.Min(left, Int(right)));
+            W(Math.Max(left, Int(right)));
 
         public static OxWidth Max(OxWidth left, int right) =>
-            W(Math.Min(Int(left), right));
+            W(Math.Max(Int(left), right));
 
         public static readonly OxWidth W0 = OxWidth.None;
         public static readonly OxWidth W1 = OxWidth.XXS;

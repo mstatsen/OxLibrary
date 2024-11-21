@@ -44,7 +44,7 @@ namespace OxLibrary
             if (ImageSize.Width > ImageBox.Width 
                 && ImageBox.Width > 0)
                 ImageSize.Width = ImageBox.Width;
-            else ImageBox.Height = ImageSize.Width;
+            else ImageBox.Width = ImageSize.Width;
 
             if (ImageSize.Height > ImageBox.Height 
                 && ImageBox.Height > 0)
@@ -88,7 +88,7 @@ namespace OxLibrary
             Graphics g = Graphics.FromImage(resultBitmap);
             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
-            Rectangle rect = coordinates.Rectandle;
+            Rectangle rect = coordinates.Rectangle;
             g.DrawImage(Image,
                 rect.Left,
                 rect.Top,
