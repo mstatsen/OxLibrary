@@ -26,13 +26,22 @@
             Add(right, left);
 
         public static OxWidth Sub(OxWidth left, OxWidth right) =>
-            left & ~right;
+            W(Int(left) - Int(right));
 
         public static OxWidth Sub(OxWidth left, int right) =>
-            Sub(left, W(right));
+            W(Int(left) - right);
+
+        public static OxWidth Sub(OxWidth left, OxWidth[] right)
+        {
+            foreach (OxWidth rComp in right)
+                left -= rComp;
+
+            return left;
+        }
+            
 
         public static OxWidth Sub(int left, OxWidth right) =>
-            Sub(W(left), right);
+            W(left - Int(right));
 
         public static OxWidth Mul(OxWidth left, OxWidth right) =>
             W(Int(left) * Int(right));
