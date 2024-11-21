@@ -41,7 +41,11 @@
             LastMousePosition.Y = e.Y - deltaY;
 
             if (Form.WindowState is FormWindowState.Normal)
-                MoveForm(Form.PointToScreen(new Point(deltaX, deltaY)));
+                MoveForm(
+                    new(
+                        Form.PointToScreen(new Point(deltaX, deltaY))
+                    )
+                );
             else Processing = false;
         }
 
@@ -61,7 +65,7 @@
             }
         }
 
-        private void MoveForm(Point FinishPosition)
+        private void MoveForm(OxPoint FinishPosition)
         {
             if (FinishPosition.Equals(Form.Location))
                 return;
@@ -69,13 +73,13 @@
             List<Point> wayPoints = WayPoints(Form.Location, FinishPosition, 30);
 
             foreach (Point point in wayPoints)
-                Form.Location = point;
+                Form.Location = new(point);
         }
 
-        public static List<Point> WayPoints(Point Start, Point Finish, int speed)
+        public static List<Point> WayPoints(OxPoint Start, OxPoint Finish, int speed)
         {
             List<Point> wayPoints = new();
-            Point currentPoint = new(Start.X, Start.Y);
+            Point currentPoint = Start.Point;
             Point delta = new(Finish.X - Start.X, Finish.Y - Start.Y);
             Point sign = new(delta.X > 0 ? 1 : -1, delta.Y > 0 ? 1 : -1);
             delta.X = Math.Abs(delta.X);
@@ -111,8 +115,8 @@
             }
 
             if (wayPoints.Count is 0 
-                || !wayPoints[^1].Equals(Finish))
-                wayPoints.Add(Finish);
+                || !wayPoints[^1].Equals(Finish.Point))
+                wayPoints.Add(Finish.Point);
 
             return wayPoints;
         }

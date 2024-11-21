@@ -274,12 +274,12 @@ namespace OxLibrary.Dialogs
             LastMousePosition = newLastMousePosition;
 
             if (OxWh.LessOrEquals(newSize.X, Form.MinimumSize.Width))
-                newSize.X = OxWh.W(Form.MinimumSize.Width);
+                newSize.X = Form.MinimumSize.Width;
 
             if (OxWh.LessOrEquals(newSize.Y, Form.MinimumSize.Height))
-                newSize.Y = OxWh.W(Form.MinimumSize.Height);
+                newSize.Y = Form.MinimumSize.Height;
 
-            List<Point> sizePoints = OxFormMover.WayPoints(oldSize.Point, newSize.Point, 30);
+            List<Point> sizePoints = OxFormMover.WayPoints(oldSize, newSize, 30);
 
             ResizeProcessing = true;
             Form.SuspendLayout();
@@ -287,18 +287,24 @@ namespace OxLibrary.Dialogs
 
             foreach (Point point in sizePoints)
             {
-                Point newLocationStep = new(Form.Left, Form.Top);
+                OxPoint newLocationStep = new(Form.Left, Form.Top);
 
                 if (OxDirectionHelper.ContainsLeft(LastDirection))
-                    newLocationStep.X -=
-                        OxWh.Int(
-                            OxWh.Sub(point.X, Width)
+                    newLocationStep.X =
+                        OxWh.Sub(
+                            newLocationStep.X, 
+                            OxWh.Int(
+                                OxWh.Sub(point.X, Width)
+                            )
                         );
 
                 if (OxDirectionHelper.ContainsTop(LastDirection))
-                    newLocationStep.Y -=
-                        OxWh.Int(
-                            OxWh.Sub(point.Y, Height)
+                    newLocationStep.Y =
+                        OxWh.Sub(
+                            newLocationStep.Y,
+                            OxWh.Int(
+                                OxWh.Sub(point.Y, Height)
+                            )
                         );
 
                 if (!Form.Location.Equals(newLocationStep))

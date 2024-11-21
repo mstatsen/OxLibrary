@@ -11,6 +11,8 @@ namespace OxLibrary.Controls
         OxWidth Bottom { get; }
         OxWidth Right { get; }
         OxSize Size { get; set; }
+        OxSize ClientSize { get; set; }
+        OxPoint Location { get; set; }
         OxSize MinimumSize { get; set; }
         OxSize MaximumSize { get; set; }
         OxDock Dock { get; set; }
@@ -18,5 +20,6 @@ namespace OxLibrary.Controls
         //OxPane? Parent { get; set; }
         //Control? Parent { get; set; }
         bool OnSizeChanged(SizeChangedEventArgs e);
+        void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height);
     }
 }

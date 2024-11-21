@@ -1,6 +1,4 @@
-﻿using OxLibrary.Panels;
-
-namespace OxLibrary.Controls
+﻿namespace OxLibrary.Controls
 {
     /// <remarks>
     /// The Control interface that is supposed to be used in the OxDaoEngine component system.
@@ -8,7 +6,7 @@ namespace OxLibrary.Controls
     /// to implement the parent interface IOxControlManager.<br/><br/>
     /// <b>Firstly:</b> you need registry manager as OxControlManager&lt;BaseControl&gt; by call 
     /// <code>manager = OxControlManager.RegisterControl&lt;BaseControlClass&gt;(this,OnSizeChanged);</code>
-    /// <b>Secondly:</b> add int the your class code like following 
+    /// <b>Secondly:</b> add to your class code, like following 
     /// (<comment>for all code, see comments below ther IOxControl description in IOxControl.cs</comment>):<br/><br/>
     /// <code>
     /// public new OxWidth Width { get =&gt; manager.Width; set =&gt; manager.Width = value;}<br/>
@@ -51,9 +49,17 @@ namespace OxLibrary.Controls
     }
 
     /**
-     * IOxControlManager Code implementation example for IOxControl
-     * 
-     * public new OxWidth Width
+       IOxControlManager Code implementation example for IOxControl<BaseControlClass>
+       private readonly OxControlManager<BaseControlClass> manager;
+
+       public OxControlManager<BaseControlClass> Manager => manager;
+
+       public ... ()
+       {
+          maneger OxControlManager.RegisterControl<BaseControlClass>(this,OnSizeChanged);
+       }
+
+        public new OxWidth Width
         {
             get => manager.Width;
             set => manager.Width = value;
@@ -87,6 +93,19 @@ namespace OxLibrary.Controls
             set => manager.Size = value;
         }
 
+        public new OxSize ClientSize
+        {
+            get => manager.ClientSize;
+            set => manager.ClientSize = value;
+        }
+
+        public new OxPoint Location 
+        {
+            get => manager.Location;
+            set => manager.Location = value;
+        }
+
+
         public new OxSize MinimumSize
         {
             get => manager.MinimumSize;
@@ -104,6 +123,11 @@ namespace OxLibrary.Controls
             get => manager.Dock;
             set => manager.Dock = value;
         }
+
+        private new void SetBounds(int x, int y, int width, int height) { }
+
+        public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
+            manager.SetBounds(x, y, width, height);
 
         public virtual bool OnSizeChanged(SizeChangedEventArgs e)
         {

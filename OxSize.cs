@@ -1,6 +1,4 @@
-﻿using System.Drawing.Design;
-
-namespace OxLibrary
+﻿namespace OxLibrary
 {
     public delegate void OxSizeChanged(OxSize newSize, OxSize oldSize);
 
@@ -50,8 +48,6 @@ namespace OxLibrary
         public int WidthInt => OxWh.Int(Width);
 
         public int HeightInt => OxWh.Int(Height);
-
-        
 
         public OxSize(OxWidth width, OxWidth height)
         {

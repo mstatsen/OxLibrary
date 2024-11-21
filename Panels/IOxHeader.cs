@@ -5,7 +5,6 @@ namespace OxLibrary.Panels
     public interface IOxHeader : IOxPane
     {
         OxHeaderToolBar ToolBar { get; }
-        EventHandler? Click { get; set; }
         Label Label { get; }
         ContentAlignment TitleAlign { get; set; }
         Font TitleFont { get; set; }

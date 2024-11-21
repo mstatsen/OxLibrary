@@ -1,6 +1,6 @@
-﻿using OxLibrary.Controls;
+﻿using OxLibrary.Panels;
 
-namespace OxLibrary.Panels
+namespace OxLibrary.Controls
 {
     public class OxControlManager<TBaseControl> : IOxControlManager
         where TBaseControl : notnull, Control
@@ -40,10 +40,10 @@ namespace OxLibrary.Panels
 
                 managingControl.Width = OxWh.Int(value);
                 OnSizeChanged(new SizeChangedEventArgs(oldWidth, Height, value, Height));
-            }   
+            }
         }
 
-        public OxWidth Height 
+        public OxWidth Height
         {
             get => OxWh.W(managingControl.Height);
             set
@@ -113,12 +113,24 @@ namespace OxLibrary.Panels
             }
         }
 
-        public OxSize MinimumSize 
+        public OxSize ClientSize 
+        { 
+            get => new(managingControl.ClientSize);
+            set => managingControl.ClientSize = value.Size;
+        }
+
+        public OxPoint Location
+        {
+            get => new(managingControl.Location);
+            set => managingControl.Location = value.Point;
+        }
+
+        public OxSize MinimumSize
         {
             get => new(managingControl.MinimumSize);
             set => managingControl.MinimumSize = value.Size;
         }
-        public OxSize MaximumSize 
+        public OxSize MaximumSize
         {
             get => new(managingControl.MaximumSize);
             set => managingControl.MaximumSize = value.Size;
@@ -134,6 +146,14 @@ namespace OxLibrary.Panels
             managingOnSizeChanged(e);
             return true;
         }
+
+        public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
+            managingControl.SetBounds(
+                OxWh.Int(x),
+                OxWh.Int(y),
+                OxWh.Int(width),
+                OxWh.Int(height)
+            );
     }
 
     public static class OxControlManager
@@ -146,7 +166,7 @@ namespace OxLibrary.Panels
             where TBaseControl : Control
         {
             OxControlManager<TBaseControl> oxControlManager = new(managingControl, onSizeChanged);
-            Controls.Add(managingControl, (IOxControlManager)oxControlManager);
+            Controls.Add(managingControl, oxControlManager);
             return oxControlManager;
         }
 

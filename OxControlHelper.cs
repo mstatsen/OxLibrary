@@ -39,8 +39,20 @@ namespace OxLibrary
         {
             Screen screen = Screen.FromControl(form);
             form.SetBounds(
-                screen.Bounds.Left + (screen.WorkingArea.Width - form.Width) / 2,
-                screen.Bounds.Top + (screen.WorkingArea.Height - form.Height) / 2,
+                OxWh.Add(
+                    screen.Bounds.Left, 
+                    OxWh.Div(
+                        OxWh.Sub(screen.WorkingArea.Width, form.Width),
+                        OxWh.W2
+                    )
+                ),
+                OxWh.Add(
+                    screen.Bounds.Top,
+                    OxWh.Div(
+                        OxWh.Sub(screen.WorkingArea.Height, form.Height), 
+                        OxWh.W2
+                    )
+                ),
                 form.Width,
                 form.Height
             );

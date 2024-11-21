@@ -72,6 +72,18 @@ namespace OxLibrary.Panels
             set => manager.Size = value;
         }
 
+        public new OxSize ClientSize
+        {
+            get => manager.ClientSize;
+            set => manager.ClientSize = value;
+        }
+
+        public new OxPoint Location 
+        {
+            get => manager.Location;
+            set => manager.Location = value;
+        }
+
         public new OxSize MinimumSize
         {
             get => manager.MinimumSize;
@@ -89,6 +101,11 @@ namespace OxLibrary.Panels
             get => manager.Dock;
             set => manager.Dock = value;
         }
+
+        private new void SetBounds(int x, int y, int width, int height) { }
+
+        public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
+            manager.SetBounds(x, y, width, height);
 
         public virtual bool OnSizeChanged(SizeChangedEventArgs e)
         {
