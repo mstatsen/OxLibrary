@@ -31,15 +31,6 @@
         public static OxWidth Sub(OxWidth left, int right) =>
             W(Int(left) - right);
 
-        public static OxWidth Sub(OxWidth left, OxWidth[] right)
-        {
-            foreach (OxWidth rComp in right)
-                left -= rComp;
-
-            return left;
-        }
-            
-
         public static OxWidth Sub(int left, OxWidth right) =>
             W(left - Int(right));
 
