@@ -36,8 +36,8 @@ namespace OxLibrary.Controls
 
         public OxWidth IconPadding
         {
-            get => OxWh.W(Picture.PicturePadding);
-            set => Picture.PicturePadding = OxWh.Int(value);
+            get => Picture.PicturePadding;
+            set => Picture.PicturePadding = value;
         }
 
         protected override void SetUseDisabledStyles(bool value)

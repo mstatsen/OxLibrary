@@ -109,6 +109,7 @@ namespace OxLibrary.Panels
                 Expanded = !Expanded;
         }
 
+        /*
         protected override OxWidth GetCalcedHeight()
         {
             OxWidth calcedHeight = base.GetCalcedHeight();
@@ -118,6 +119,7 @@ namespace OxLibrary.Panels
 
             return calcedHeight;
         }
+        */
 
         private readonly OxIconButton ExpandButton = new(OxIcons.Up, OxWh.W20)
         {

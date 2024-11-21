@@ -75,7 +75,6 @@
         public static List<Point> WayPoints(Point Start, Point Finish, int speed)
         {
             List<Point> wayPoints = new();
-
             Point currentPoint = new(Start.X, Start.Y);
             Point delta = new(Finish.X - Start.X, Finish.Y - Start.Y);
             Point sign = new(delta.X > 0 ? 1 : -1, delta.Y > 0 ? 1 : -1);

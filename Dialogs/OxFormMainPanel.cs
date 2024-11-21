@@ -165,15 +165,18 @@ namespace OxLibrary.Dialogs
         public bool FormIsMaximized => 
             Form.WindowState is FormWindowState.Maximized;
 
-        protected override void OnSizeChanged()
+        public override bool OnSizeChanged(SizeChangedEventArgs e)
         {
-            base.OnSizeChanged();
+            if (SizeChanging)
+                return false;
 
-            if (Form is not null)
-            {
-                Form.Width = WidthInt;
-                Form.Height = HeightInt;
-            }
+            base.OnSizeChanged(e);
+
+            if (e.Changed &&
+                Form is not null)
+                Form.Size = new(OxWh.Int(Width), OxWh.Int(Height));
+
+            return e.Changed;
         }
 
         internal void SetMarginsSize() => 
@@ -189,8 +192,8 @@ namespace OxLibrary.Dialogs
             if (formMover.Processing)
                 return;
 
-            Form.Left += LeftInt;
-            Form.Top += TopInt;
+            Form.Left += OxWh.Int(Left);
+            Form.Top += OxWh.Int(Top);
         }
 
         protected override void SetHandlers()
@@ -213,14 +216,14 @@ namespace OxLibrary.Dialogs
             if (sender is not OxPane border)
                 return;
 
-            LastMousePosition = border.PointToScreen(e.Location);
-            LastDirection = OxDirectionHelper.GetDirection(border, e.Location);
+            LastMousePosition = new(border.PointToScreen(e.Location));
+            LastDirection = OxDirectionHelper.GetDirection(border, new(e.Location));
         }
 
         private void SetSizerCursor(OxDirection direction) => 
             Cursor = OxDirectionHelper.GetSizerCursor(direction);
 
-        private Point LastMousePosition = new(-1, -1);
+        private OxPoint LastMousePosition = new(-1, -1);
         private OxDirection LastDirection = OxDirection.None;
         private bool ResizeProcessing = false;
 
@@ -240,7 +243,7 @@ namespace OxLibrary.Dialogs
             if (LastDirection.Equals(OxDirection.None))
             {
                 SetSizerCursor(
-                    OxDirectionHelper.GetDirection(border, e.Location)
+                    OxDirectionHelper.GetDirection(border, new(e.Location))
                 );
                 return;
             }
@@ -248,19 +251,19 @@ namespace OxLibrary.Dialogs
             if (LastMousePosition.Equals(e.Location))
                 return;
 
-            Point newLastMousePosition = border.PointToScreen(e.Location);
-            Point oldSize = new(WidthInt, HeightInt);
-            Point newSize = new(oldSize.X, oldSize.Y);
-            Point delta = new(
+            OxPoint newLastMousePosition = new(border.PointToScreen(e.Location));
+            OxPoint oldSize = new(Width, Height);
+            OxPoint newSize = new(oldSize.X, oldSize.Y);
+            OxPoint delta = new(
                 newLastMousePosition.X - LastMousePosition.X,
                 newLastMousePosition.Y - LastMousePosition.Y
             );
 
             if (OxDirectionHelper.ContainsRight(LastDirection))
-                newSize.X += delta.X;
+                newSize.X |= delta.X;
 
             if (OxDirectionHelper.ContainsBottom(LastDirection))
-                newSize.Y += delta.Y;
+                newSize.Y |= delta.Y;
 
             if (OxDirectionHelper.ContainsLeft(LastDirection))
                 newSize.X -= delta.X;
@@ -270,13 +273,13 @@ namespace OxLibrary.Dialogs
 
             LastMousePosition = newLastMousePosition;
 
-            if (newSize.X <= Form.MinimumSize.Width)
-                newSize.X = Form.MinimumSize.Width;
+            if (OxWh.LessOrEquals(newSize.X, Form.MinimumSize.Width))
+                newSize.X = OxWh.W(Form.MinimumSize.Width);
 
-            if (newSize.Y <= Form.MinimumSize.Height)
-                newSize.Y = Form.MinimumSize.Height;
+            if (OxWh.LessOrEquals(newSize.Y, Form.MinimumSize.Height))
+                newSize.Y = OxWh.W(Form.MinimumSize.Height);
 
-            List<Point> sizePoints = OxFormMover.WayPoints(oldSize, newSize, 30);
+            List<Point> sizePoints = OxFormMover.WayPoints(oldSize.Point, newSize.Point, 30);
 
             ResizeProcessing = true;
             Form.SuspendLayout();
@@ -287,10 +290,16 @@ namespace OxLibrary.Dialogs
                 Point newLocationStep = new(Form.Left, Form.Top);
 
                 if (OxDirectionHelper.ContainsLeft(LastDirection))
-                    newLocationStep.X -= point.X - WidthInt;
+                    newLocationStep.X -=
+                        OxWh.Int(
+                            OxWh.Sub(point.X, Width)
+                        );
 
                 if (OxDirectionHelper.ContainsTop(LastDirection))
-                    newLocationStep.Y -= point.Y - HeightInt;
+                    newLocationStep.Y -=
+                        OxWh.Int(
+                            OxWh.Sub(point.Y, Height)
+                        );
 
                 if (!Form.Location.Equals(newLocationStep))
                     Form.Location = newLocationStep;

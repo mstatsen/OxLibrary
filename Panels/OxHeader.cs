@@ -107,10 +107,14 @@ namespace OxLibrary.Panels
             base.ReAlignControls();
         }
 
-        protected override void OnSizeChanged(EventArgs e)
+        public override bool OnSizeChanged(SizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
-            icon.Width = icon.Height;
+
+            if (e.Changed)
+                icon.Width = icon.Height;
+
+            return e.Changed;
         }
 
         public void AddToolButton(OxIconButton button) =>

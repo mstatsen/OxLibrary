@@ -81,8 +81,11 @@ namespace OxLibrary
 
         public OxSize(Size size)
             : this(size.Width, size.Height) { }
-
+        public OxSize(OxSize size)
+            : this(size.Width, size.Height) { }
         public OxSize(Point point)
+            : this(point.X, point.Y) { }
+        public OxSize(OxPoint point)
             : this(point.X, point.Y) { }
 
         public Size Size => 

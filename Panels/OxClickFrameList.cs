@@ -58,7 +58,7 @@
             OxWidth maxHeight = OxWh.W0;
 
             foreach (TClickFrame frame in this)
-                maxHeight = OxWh.Max(maxHeight, frame.HeightInt);
+                maxHeight = OxWh.Max(maxHeight, frame.Height);
 
             return maxHeight;
         }

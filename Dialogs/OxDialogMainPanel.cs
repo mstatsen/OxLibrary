@@ -160,9 +160,6 @@ namespace OxLibrary.Dialogs
             }
         }
 
-        protected override OxWidth GetCalcedHeight() =>
-            base.GetCalcedHeight() | Footer.CalcedHeight;
-
         protected override void PrepareColors()
         {
             base.PrepareColors();
@@ -181,12 +178,16 @@ namespace OxLibrary.Dialogs
             SendToBack();
         }
 
-        protected override void OnSizeChanged(EventArgs e)
+        public override bool OnSizeChanged(SizeChangedEventArgs e)
         {
+            if (!e.Changed)
+                return false;
+
             Form.ClearConstraints();
             base.OnSizeChanged(e);
             PlaceButtons();
             Form.FreezeSize();
+            return e.Changed;
         }
 
         /*

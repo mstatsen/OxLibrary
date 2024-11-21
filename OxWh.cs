@@ -5,8 +5,11 @@
     /// </summary>
     public static class OxWh
     {
-        public static int Int(OxWidth width) =>
+        public static int I(OxWidth width) =>
             (int)width;
+
+        public static int Int(OxWidth width) =>
+            I(width);
 
         public static OxWidth W(int intWidth) =>
             intWidth < 0 
@@ -26,10 +29,10 @@
             left & ~right;
 
         public static OxWidth Sub(OxWidth left, int right) =>
-            W(Int(left) - right);
+            Sub(left, W(right));
 
         public static OxWidth Sub(int left, OxWidth right) =>
-            W(left - Int(right));
+            Sub(W(left), right);
 
         public static OxWidth Mul(OxWidth left, OxWidth right) =>
             W(Int(left) * Int(right));
@@ -58,6 +61,15 @@
         public static bool Greater(int left, OxWidth right) =>
             left > Int(right);
 
+        public static bool GreaterOrEquals(OxWidth left, OxWidth right) =>
+            Int(left) >= Int(right);
+
+        public static bool GreaterOrEquals(OxWidth left, int right) =>
+            Int(left) >= right;
+
+        public static bool GreaterOrEquals(int left, OxWidth right) =>
+            left >= Int(right);
+
         public static bool Less(OxWidth left, OxWidth right) =>
             Int(left) < Int(right);
 
@@ -66,6 +78,15 @@
 
         public static bool Less(int left, OxWidth right) =>
             left < Int(right);
+
+        public static bool LessOrEquals(OxWidth left, OxWidth right) =>
+            Int(left) <= Int(right);
+
+        public static bool LessOrEquals(OxWidth left, int right) =>
+            Int(left) <= right;
+
+        public static bool LessOrEquals(int left, OxWidth right) =>
+            left <= Int(right);
 
         public static OxWidth Min(OxWidth left, OxWidth right) =>
             W(Math.Min(Int(left), Int(right)));

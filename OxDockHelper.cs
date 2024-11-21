@@ -40,6 +40,18 @@
             dock is OxDock.Top 
                  or OxDock.Bottom;
 
+        public static bool IsHorizontal(OxDock dock) =>
+            dock is OxDock.Left
+                 or OxDock.Right;
+
+        public static bool IsVariableHeight(OxDock dock) =>
+            IsVertical(dock)
+            || dock is OxDock.None;
+
+        public static bool IsVariableWidth(OxDock dock) =>
+            IsHorizontal(dock)
+            || dock is OxDock.None;
+
         public static List<OxDock> All()
         {
             List<OxDock> list = new();

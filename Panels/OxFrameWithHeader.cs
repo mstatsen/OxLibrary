@@ -64,11 +64,13 @@ namespace OxLibrary.Panels
                     : Colors.Darker(3);
         }
 
+        /*
         protected override OxWidth GetCalcedHeight() => 
             base.GetCalcedHeight() 
             | (HeaderVisible 
                 ? HeaderHeight 
                 : OxWh.W0);
+        */
 
         public override void ReAlignControls()
         {

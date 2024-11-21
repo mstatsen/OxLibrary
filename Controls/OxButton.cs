@@ -1,4 +1,6 @@
-﻿namespace OxLibrary.Controls
+﻿using OxLibrary.Panels;
+
+namespace OxLibrary.Controls
 {
     public class OxButton : OxIconButton
     {
@@ -12,7 +14,7 @@
         public static readonly OxWidth DefaultHeight = OxWh.W20;
 
         public OxButton() : base() { }
-        public OxButton(string? text, Bitmap? icon) : base(icon, DefaultHeight)
+        public OxButton(string text, Bitmap? icon) : base(icon, DefaultHeight)
         {
             Size = new(DefaultWidth, DefaultHeight);
             Text = text;
@@ -23,7 +25,7 @@
         {
             base.AfterCreated();
             Picture.Dock = OxDock.Left;
-            Picture.WidthInt = 16;
+            Picture.Width = OxWh.W16;
             HiddenBorder = false;
         }
 
@@ -80,12 +82,12 @@
                 return;
 
             Label.AutoSize = true;
-            int calcedLabelWidth = Label.Width;
+            OxWidth calcedLabelWidth = OxWh.W(Label.Width);
             Label.AutoSize = false;
-            calcedLabelWidth = calcedLabelWidth + (int)RealPictureWidth < WidthInt 
+            calcedLabelWidth = OxWh.Less(calcedLabelWidth | RealPictureWidth, Width)
                 ? calcedLabelWidth 
-                : WidthInt - (int)RealPictureWidth;
-            Label.Width = Math.Max(calcedLabelWidth, 0);
+                : OxWh.Sub(Width, RealPictureWidth);
+            Label.Width = OxWh.Int(OxWh.Max(calcedLabelWidth, 0));
         }
 
         protected override void OnFontChanged(EventArgs e)
@@ -94,22 +96,40 @@
             CalcLabelWidth();
         }
 
-        private OxWidth RealPictureWidth => Picture.Visible ? Picture.Width : OxWh.W0;
-        private OxWidth RealLabelWidth => Label.Visible ? OxWh.W(Label.Width) : OxWh.W0;
+        private OxWidth RealPictureWidth =>
+            Picture.Visible
+                ? Picture.Width
+                : OxWh.W0;
 
-        protected override void SetWidth(OxWidth value)
+        private OxWidth RealLabelWidth =>
+            Label.Visible
+                ? OxWh.W(Label.Width)
+                : OxWh.W0;
+
+        public override bool OnSizeChanged(SizeChangedEventArgs e)
         {
-            base.SetWidth(value);
-            CalcLabelWidth();
-            RecalcPaddings();
-            base.SetWidth(value);
+            if (e.WidthChanged)
+            {
+                CalcLabelWidth();
+                RecalcPaddings();
+
+                /*
+                StartSizeChanging();
+                try
+                {
+                    base.SetWidth(Width);
+                }
+                finally
+                {
+                    EndSizeChanging();
+                }
+                */
+            }
+
+            return base.OnSizeChanged(e);
         }
 
-        protected override OxWidth GetCalcedWidth() => 
-            base.GetCalcedWidth() 
-            - Padding.LeftInt 
-            - Padding.RightInt;
-
+        /*
         protected override void OnVisibleChanged(EventArgs e)
         {
             base.OnVisibleChanged(e);
@@ -120,6 +140,7 @@
                 RecalcPaddings();
             }
         }
+        */
 
         protected override void SetToolTipText(string value)
         {

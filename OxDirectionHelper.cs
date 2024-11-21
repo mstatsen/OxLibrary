@@ -14,13 +14,13 @@ namespace OxLibrary
                 _ => OxDirection.None,
             };
 
-        public static OxDirection GetDirection(OxPane border, Point position)
+        public static OxDirection GetDirection(OxPane border, OxPoint position)
         {
             OxDirection direction = GetDirection(border.Dock);
-            int borderSize = OxDockHelper.IsVertical(border.Dock) 
-                ? border.HeightInt 
-                : border.WidthInt;
-            int error = borderSize * 2;
+            OxWidth borderSize = OxDockHelper.IsVertical(border.Dock) 
+                ? border.Height
+                : border.Width;
+            OxWidth error = OxWh.Mul(borderSize, 2);
 
             switch (border.Dock)
             {
@@ -29,7 +29,7 @@ namespace OxLibrary
                     if (position.Y < error)
                         direction |= OxDirection.Top;
                     else
-                    if (position.Y > border.HeightInt - error)
+                    if (OxWh.Greater(position.Y, OxWh.Sub(border.Height, error)))
                         direction |= OxDirection.Bottom;
                     break;
                 case OxDock.Top:
@@ -37,7 +37,7 @@ namespace OxLibrary
                     if (position.X < error)
                         direction |= OxDirection.Left;
                     else
-                    if (position.X > border.WidthInt - error)
+                    if (OxWh.Greater(position.X, OxWh.Sub(border.Width, error)))
                         direction |= OxDirection.Right;
                     break;
             }

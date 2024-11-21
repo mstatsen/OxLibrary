@@ -308,11 +308,17 @@ namespace OxLibrary.Panels
             Height = OxWh.W40;
         }
 
-        protected override void OnSizeChanged(EventArgs e)
+        public override bool OnSizeChanged(SizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
-            SetButtonsPanelLeft();
-            SetButtonsTop();
+
+            if (e.Changed)
+            {
+                SetButtonsPanelLeft();
+                SetButtonsTop();
+            }
+
+            return e.Changed;
         }
 
         private void SetButtonTop(OxPane button) =>

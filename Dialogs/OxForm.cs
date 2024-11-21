@@ -1,4 +1,4 @@
-﻿using OxLibrary.Panels;
+﻿using OxLibrary.Controls;
 
 namespace OxLibrary.Dialogs
 {
@@ -47,10 +47,20 @@ namespace OxLibrary.Dialogs
         private void PlaceMainPanel()
         {
             MainPanel.Parent = this;
-            MainPanel.Left = 0;
-            MainPanel.Top = 0;
-            MainPanel.Size = new(Width, Height);
-            MainPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
+
+            MainPanel.StartSizeChanging();
+
+            try
+            {
+                MainPanel.Left = 0;
+                MainPanel.Top = 0;
+                MainPanel.Size = new(Width, Height);
+                MainPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
+            }
+            finally
+            {
+                MainPanel.EndSizeChanging();
+            }
         }
 
         protected override void OnControlAdded(ControlEventArgs e)
@@ -63,12 +73,24 @@ namespace OxLibrary.Dialogs
         protected override void OnTextChanged(EventArgs e) =>
             MainPanel.Text = Text;
 
+        protected bool SizeChanging = false;
         protected override void OnSizeChanged(EventArgs e)
         {
-            base.OnSizeChanged(e);
+            if (SizeChanging)
+                return;
 
-            if (MainPanel is not null)
-                MainPanel.Size = new(Size);
+            SizeChanging = true;
+            try
+            {
+                base.OnSizeChanged(e);
+
+                if (MainPanel is not null)
+                    MainPanel.Size = new(Size);
+            }
+            finally
+            {
+                SizeChanging = false;
+            }
         }
 
         private bool canMaximize = true;

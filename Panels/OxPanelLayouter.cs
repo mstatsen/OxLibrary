@@ -215,13 +215,13 @@
             }
 
             CalcedColumnCount = 0;
-            int calcedWidth = 0;
+            OxWidth calcedWidth = OxWh.W0;
 
             foreach (OxPane panel in placedPanels)
             {
-                calcedWidth += OxWh.Int(panel.CalcedWidth);
+                calcedWidth |= panel.Width;
 
-                if (calcedWidth >= WidthInt)
+                if (OxWh.GreaterOrEquals(calcedWidth, Width))
                     break;
                 else
                     CalcedColumnCount++;
@@ -295,7 +295,7 @@
                 if (panel.Visible)
                 {
                     calcedHeight |= panel.Height;
-                    maxWidth = OxWh.Max(maxWidth, panel.CalcedWidth);
+                    maxWidth = OxWh.Max(maxWidth, panel.Width);
                 }
 
             if (panelsAlign is PanelsHorizontalAlign.OneColumn)
@@ -365,7 +365,7 @@
                     break;
                 case PanelsHorizontalAlign.Center:
                 case PanelsHorizontalAlign.Right:
-                    Padding.LeftInt = (WidthInt - GetSumColumnsSize().WidthInt) / 2;
+                    Padding.LeftInt = (Width - GetSumColumnsSize().Width) / 2;
                     break;
                 case PanelsHorizontalAlign.OneColumn:
                     Padding.HorizontalInt = 0;
@@ -393,10 +393,14 @@
             UpdateParent();
         }
 
-        protected override void OnSizeChanged(EventArgs e)
+        public override bool OnSizeChanged(SizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
-            SetLeftPadding();
+
+            if (e.Changed)
+                SetLeftPadding();
+
+            return e.Changed;
         }
 
         public PanelsHorizontalAlign PanelsAlign

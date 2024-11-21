@@ -220,10 +220,14 @@
                 button.BringToFront();
         }
 
-        protected override void OnSizeChanged(EventArgs e)
+        public override bool OnSizeChanged(SizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
-            SetTabButtonsVisualParameters();
+
+            if (e.Changed)
+                SetTabButtonsVisualParameters();
+
+            return e.Changed;
         }
 
         public event OxTabControlEvent? ActivatePage;

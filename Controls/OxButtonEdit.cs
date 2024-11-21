@@ -57,13 +57,14 @@ namespace OxLibrary.Controls
             TextBox.WordWrap = true;
         }
 
-        protected override void OnSizeChanged(EventArgs e)
+        public override bool OnSizeChanged(SizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
-            int calcedButtonWidth = Math.Min(22, TextBox.Height - 4);
-            Button.Size = new(calcedButtonWidth, HeightInt - 2);
-            Button.WidthInt = calcedButtonWidth;
+            OxWidth calcedButtonWidth = OxWh.Min(OxWh.W22, TextBox.Height - 4);
+            Button.Size = new(calcedButtonWidth, OxWh.Sub(Height, OxWh.W2));
+            Button.Width = calcedButtonWidth;
             Button.ReAlign();
+            return e.Changed;
         }
 
         protected override void PrepareColors()

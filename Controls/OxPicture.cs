@@ -56,18 +56,18 @@ namespace OxLibrary.Controls
             set => SetPictureSize(value);
         }
 
-        private int picturePadding = 0;
+        private OxWidth picturePadding = OxWh.W0;
 
-        public int PicturePadding
+        public OxWidth PicturePadding
         {
             get => picturePadding;
             set => SetPicturePadding(value);
         }
 
-        private void SetPicturePadding(int value)
+        private void SetPicturePadding(OxWidth value)
         {
             picturePadding = value;
-            PictureSize = Height - picturePadding * 2;
+            PictureSize = OxWh.Sub(Height, OxWh.Mul(picturePadding, OxWh.W2));
         }
 
         private void SetPictureSize(OxWidth value)
@@ -85,13 +85,13 @@ namespace OxLibrary.Controls
             if (Stretch)
                 return;
 
-            picturePadding = (HeightInt - picture.Height) / 2;
+            picturePadding = OxWh.Div(OxWh.Sub(Height, picture.Height), OxWh.W2);
 
             if (picturePadding < 0)
                 picturePadding = 0;
 
-            picture.Left = (WidthInt - picture.Width) / 2;
-            picture.Top = (HeightInt - picture.Height) / 2;
+            picture.Left = OxWh.Int(OxWh.Div(OxWh.Sub(Width, picture.Width), OxWh.W2));
+            picture.Top = OxWh.Int(OxWh.Div(OxWh.Sub(Height, picture.Height), OxWh.W2));
         }
 
         protected override void PrepareInnerControls()
@@ -115,10 +115,14 @@ namespace OxLibrary.Controls
             SetHoverHandlers(picture);
         }
 
-        protected override void OnSizeChanged(EventArgs e)
+        public override bool OnSizeChanged(SizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
-            CorrectPicturePosition();
+
+            if (e.Changed)
+                CorrectPicturePosition();
+
+            return e.Changed;
         }
 
         protected override void PrepareColors()

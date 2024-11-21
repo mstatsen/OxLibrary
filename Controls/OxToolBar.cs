@@ -110,7 +110,7 @@ namespace OxLibrary.Controls
             Padding.Top = OxWh.W2;
             Padding.Bottom = OxWh.W4;
 
-            if (buttons.Last?.CalcedHeight > CalcedHeight)
+            if (buttons.Last?.Height > Height)
             {
                 Padding.Top = OxWh.W1;
                 Padding.Bottom = OxWh.W1;
@@ -147,10 +147,14 @@ namespace OxLibrary.Controls
         public bool ExecuteDefault() =>
             Buttons.ExecuteDefault();
 
-        protected override void OnSizeChanged(EventArgs e)
+        public override bool OnSizeChanged(SizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
-            SetToolBarPaddings();
+
+            if (e.Changed)
+                SetToolBarPaddings();
+
+            return e.Changed;
         }
 
         public bool AllowEditingActions

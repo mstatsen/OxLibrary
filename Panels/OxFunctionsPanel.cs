@@ -18,10 +18,11 @@ namespace OxLibrary.Panels
             SetTitleAlign();
         }
 
-        protected override void OnSizeChanged(EventArgs e)
+        public override bool OnSizeChanged(SizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
             SetTitleAlign();
+            return e.Changed;
         }
     }
 }
