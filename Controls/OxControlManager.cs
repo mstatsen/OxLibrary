@@ -1,24 +1,44 @@
 ﻿using OxLibrary.Panels;
+using System.Windows.Forms;
 
 namespace OxLibrary.Controls
 {
     public class OxControlManager<TBaseControl> : IOxControlManager
-        where TBaseControl : notnull, Control
+        where TBaseControl : Control
     {
         private readonly TBaseControl managingControl;
+        private IOxControl OxControl => (IOxControl)managingControl;
         public TBaseControl ManagingControl => managingControl;
         private readonly Func<SizeChangedEventArgs, bool> managingOnSizeChanged;
         internal OxControlManager(TBaseControl managingControl, Func<SizeChangedEventArgs, bool> onSizeChanged)
         {
             this.managingControl = managingControl;
             this.managingControl.Disposed += ControlDisposedHandler;
+            this.managingControl.ControlAdded += ControlAddedHandler;
+            this.managingControl.ControlRemoved += ControlRemovedHandler;
             managingOnSizeChanged = onSizeChanged;
         }
 
-        private void ControlDisposedHandler(object? sender, EventArgs e)
+        private void ControlRemovedHandler(object? sender, ControlEventArgs e)
         {
-            OxControlManager.UnRegisterControl(managingControl);
+            if (e.Control is not IOxControl oxControl)
+                return;
+
+            OxControl.OxControls.Remove(oxControl);
+            OxControl.OxDockedControls.RemoveControl(oxControl);
         }
+
+        private void ControlAddedHandler(object? sender, ControlEventArgs e)
+        {
+            if (e.Control is not IOxControl oxControl)
+                return;
+
+            OxControl.OxControls.Add(oxControl);
+            OxControl.OxDockedControls.AddControl(oxControl);
+        }
+
+        private void ControlDisposedHandler(object? sender, EventArgs e) => 
+            OxControlManager.UnRegisterControl(managingControl);
 
         private bool SizeChanging = false;
 
@@ -73,10 +93,48 @@ namespace OxLibrary.Controls
             set => managingControl.Left = OxWh.Int(value);
         }
 
+        public OxDock SavedDock = OxDock.None;
+
         public OxDock Dock
         {
-            get => OxDockHelper.Dock(managingControl.Dock);
-            set => managingControl.Dock = OxDockHelper.Dock(value);
+            get => SavedDock;
+            set
+            {
+                managingControl.Dock = DockStyle.None;
+                SavedDock = value;
+                RecalcControlsPositionsAndSizes();
+            }
+        }
+
+        private void RecalcControlsPositionsAndSizes()
+        {
+            if (SavedDock is OxDock.None)
+                return;
+
+            //TODO: realign some docked control by Parent.OxDockedControls
+
+            switch (SavedDock)
+            {
+                case OxDock.Fill:
+                    Location = ClientRectangle.Location;
+                    Size = ClientRectangle.Size;
+                    break;
+                default:
+                    Location = new(
+                        SavedDock is OxDock.Right
+                            ? OxWh.Sub(ClientRectangle.Width, Width)
+                            : ClientRectangle.X,
+                        SavedDock is OxDock.Bottom
+                            ? OxWh.Sub(ClientRectangle.Height, Height)
+                            : ClientRectangle.Y);
+
+                    if (OxDockHelper.IsHorizontal(SavedDock))
+                        Height = ClientRectangle.Height;
+
+                    if (OxDockHelper.IsVertical(SavedDock))
+                        Width = ClientRectangle.Width;
+                    break;
+            }
         }
 
         public IOxControl? Parent
@@ -170,6 +228,7 @@ namespace OxLibrary.Controls
                 return false;
 
             managingOnSizeChanged(e);
+            RecalcControlsPositionsAndSizes();
             return true;
         }
 

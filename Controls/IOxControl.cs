@@ -45,6 +45,7 @@ namespace OxLibrary.Controls
         LayoutEngine LayoutEngine { get; }
         string Name { get; set; }
         OxControls OxControls { get; }
+        OxDockedControls OxDockedControls { get; }
         bool RecreatingHandle { get; }
         Region Region { get; set; }
         RightToLeft RightToLeft { get; set; }
@@ -118,6 +119,7 @@ namespace OxLibrary.Controls
         event ControlEventHandler ControlAdded;
         event ControlEventHandler ControlRemoved;
         event EventHandler CursorChanged;
+        event EventHandler? Disposed;
         event EventHandler DockChanged;
         event EventHandler DoubleClick;
         event EventHandler DpiChangedAfterParent;
@@ -203,8 +205,8 @@ namespace OxLibrary.Controls
     /**
         IOxControlManager Code implementation example for IOxControl<BaseControlClass>
         private readonly OxControlManager<BaseControlClass> manager;
-
         public OxControlManager<BaseControlClass> Manager => manager;
+        
 
         public ... ()
         {
@@ -212,6 +214,12 @@ namespace OxLibrary.Controls
         }
 
         OxControlManager<Control> IOxControl<Control>.Manager => default!;
+
+        private readonly List<IOxControl> oxControls = new();
+        private readonly OxControls oxControls = new();
+        public OxControls OxControls => oxControls;
+        private readonly OxDockedControls oxDockedControls = new();
+        public OxDockedControls OxDockedControls => oxDockedControls;
 
         public new OxWidth Width
         {

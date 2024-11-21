@@ -55,6 +55,9 @@
         public Rectangle Rectangle => 
             new(OxWh.Int(X), OxWh.Int(Y), OxWh.Int(Width), OxWh.Int(Height));
 
+        public OxPoint Location => new(X, Y);
+        public OxSize Size => new(Width, Height);
+
         public bool Contains(OxWidth x, OxWidth y) =>
             OxWh.LessOrEquals(X, x) 
             && OxWh.Less(x, X | Width) 

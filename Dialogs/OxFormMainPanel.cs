@@ -11,6 +11,7 @@ namespace OxLibrary.Dialogs
 
         public OxFormMainPanel(OxForm form) : base()
         {
+            Dock = OxDock.Fill;
             Form = form;
             Form.SizeChanged += FormSizeChanged;
             SetTitleButtonsVisible();
@@ -24,7 +25,8 @@ namespace OxLibrary.Dialogs
             BlurredBorder = true;
         }
 
-        private void FormSizeChanged(object? sender, EventArgs e) => SetRestoreButtonIconAndTooltip();
+        private void FormSizeChanged(object? sender, EventArgs e) => 
+            SetRestoreButtonIconAndTooltip();
 
         private void SetHeaderFont() => 
             Header.TitleFont = 

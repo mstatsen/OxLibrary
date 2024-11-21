@@ -12,6 +12,11 @@ namespace OxLibrary.Dialogs
 
         public OxControlManager<Form> Manager => manager;
 
+        private readonly OxControls oxControls = new();
+        public OxControls OxControls => oxControls;
+        private readonly OxDockedControls oxDockedControls = new();
+        public OxDockedControls OxDockedControls => oxDockedControls;
+
         public virtual bool OnSizeChanged(SizeChangedEventArgs e)
         {
             if (SizeChanging || !e.Changed)
@@ -23,7 +28,7 @@ namespace OxLibrary.Dialogs
                 base.OnSizeChanged(e);
 
                 if (MainPanel is not null)
-                    MainPanel.Size = new(Size);
+                    MainPanel.Size = Size;
             }
             finally
             {
@@ -32,9 +37,6 @@ namespace OxLibrary.Dialogs
 
             return true;
         }
-
-        private readonly OxControls oxControls = new();
-        public OxControls OxControls => oxControls;
 
         public OxForm()
         {

@@ -417,6 +417,9 @@ namespace OxLibrary.Panels
         private readonly OxControls oxControls = new();
         public OxControls OxControls => oxControls;
 
+        private readonly OxDockedControls oxDockedControls = new();
+        public OxDockedControls OxDockedControls => oxDockedControls;
+
         public bool IsHovered
         {
             get 
