@@ -10,7 +10,7 @@ namespace OxLibrary.Dialogs
 
         private readonly OxControlManager<Form> manager;
 
-        public OxControlManager<Form> Manager => manager;
+        public IOxControlManager Manager => manager;
 
         private readonly OxControls oxControls = new();
         public OxControls OxControls => oxControls;
@@ -19,21 +19,17 @@ namespace OxLibrary.Dialogs
 
         public virtual bool OnSizeChanged(SizeChangedEventArgs e)
         {
-            if (SizeChanging || !e.Changed)
+            if (!e.Changed)
                 return false;
 
-            SizeChanging = true;
-            try
-            {
-                base.OnSizeChanged(e);
+            SilentSizeChange(() =>
+                {
+                    base.OnSizeChanged(e);
 
-                if (MainPanel is not null)
-                    MainPanel.Size = Size;
-            }
-            finally
-            {
-                SizeChanging = false;
-            }
+                    if (MainPanel is not null)
+                        MainPanel.Size = Size;
+                }
+            );
 
             return true;
         }
@@ -79,19 +75,14 @@ namespace OxLibrary.Dialogs
         private void PlaceMainPanel()
         {
             MainPanel.Parent = this;
-            MainPanel.StartSizeChanging();
-
-            try
-            {
-                MainPanel.Left = OxWh.W0;
-                MainPanel.Top = OxWh.W0;
-                MainPanel.Size = new(Width, Height);
-                MainPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
-            }
-            finally
-            {
-                MainPanel.EndSizeChanging();
-            }
+            MainPanel.SilentSizeChange(() =>
+                {
+                    MainPanel.Left = OxWh.W0;
+                    MainPanel.Top = OxWh.W0;
+                    MainPanel.Size = new(Width, Height);
+                    MainPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
+                }
+            );
         }
 
         protected override void OnControlAdded(ControlEventArgs e)
@@ -104,7 +95,8 @@ namespace OxLibrary.Dialogs
         protected override void OnTextChanged(EventArgs e) =>
             MainPanel.Text = Text;
 
-        protected bool SizeChanging = false;
+        public bool SizeChanging => 
+            manager.SizeChanging;
 
         private bool canMaximize = true;
         private bool canMinimize = true;
@@ -253,6 +245,9 @@ namespace OxLibrary.Dialogs
             set => manager.AutoScrollOffset = value;
         }
 
+        public bool SilentSizeChange(Action method) => 
+            manager.SilentSizeChange(method);
+
         public Control GetChildAtPoint(OxPoint pt, GetChildAtPointSkip skipValue) =>
             manager.GetChildAtPoint(pt, skipValue);
 
@@ -288,6 +283,9 @@ namespace OxLibrary.Dialogs
 
         public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
             manager.SetBounds(x, y, width, height);
+
+        public void RealignControls() =>
+            manager.RealignControls();
 
         protected override sealed void OnSizeChanged(EventArgs e) =>
             base.OnSizeChanged(e);

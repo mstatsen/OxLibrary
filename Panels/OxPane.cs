@@ -6,7 +6,7 @@ namespace OxLibrary.Panels
     public class OxPane : Panel, IOxPane, IOxControl<Panel>
     {
         private readonly OxControlManager<Panel> manager;
-        public OxControlManager<Panel> Manager => manager;
+        public IOxControlManager Manager => manager;
         public OxPane() : this(OxSize.Empty) { }
         public OxPane(OxSize size)
         {
@@ -14,25 +14,23 @@ namespace OxLibrary.Panels
             BorderVisible = false;
             colors = new OxColorHelper(DefaultColor);
             Initialized = false;
-            StartSizeChanging();
-            try
-            {
-                DoubleBuffered = true;
 
-                if (!size.Equals(OxSize.Empty))
-                    Size = size;
 
-                SetBordersHandlers();
-                PrepareInnerControls();
-                PrepareColors();
-                SetHandlers();
-                ReAlign();
-                AfterCreated();
-            }
-            finally
-            {
-                EndSizeChanging();
-            }
+            SilentSizeChange(
+                () =>
+                {
+                    DoubleBuffered = true;
+
+                    if (!size.Equals(OxSize.Empty))
+                        Size = size;
+
+                    SetBordersHandlers();
+                    PrepareInnerControls();
+                    PrepareColors();
+                    SetHandlers();
+                    AfterCreated();
+                }
+            );
 
             Initialized = true;
             Visible = true;
@@ -126,6 +124,11 @@ namespace OxLibrary.Panels
             get => manager.AutoScrollOffset;
             set => manager.AutoScrollOffset = value;
         }
+        public bool SizeChanging =>
+            manager.SizeChanging;
+
+        public bool SilentSizeChange(Action method) =>
+            manager.SilentSizeChange(method);
 
         public Control GetChildAtPoint(OxPoint pt, GetChildAtPointSkip skipValue) =>
             manager.GetChildAtPoint(pt, skipValue);
@@ -163,13 +166,14 @@ namespace OxLibrary.Panels
         public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
             manager.SetBounds(x, y, width, height);
 
-        public virtual bool OnSizeChanged(SizeChangedEventArgs e)
-        {
-            if (!SizeChanging && e.Changed)
-                base.OnSizeChanged(e);
+        public virtual bool OnSizeChanged(SizeChangedEventArgs e) => 
+            e.Changed
+                && SilentSizeChange(() =>
+                    base.OnSizeChanged(e)
+                );
 
-            return e.Changed;
-        }
+        public void RealignControls() => 
+            manager.RealignControls();
 
         protected override sealed void OnSizeChanged(EventArgs e) =>
             base.OnSizeChanged(e);
@@ -258,12 +262,6 @@ namespace OxLibrary.Panels
             || !UseDisabledStyles
                 ? BaseColor
                 : Colors.Lighter(2);
-
-        public void StartSizeChanging() =>
-            SizeChanging = true;
-
-        public void EndSizeChanging() => 
-            SizeChanging = false;
 
         public Color BaseColor
         {
@@ -366,20 +364,6 @@ namespace OxLibrary.Panels
 
         protected bool Initialized { get; set; } = false;
 
-        public virtual void ReAlignControls() { }
-
-        public void ReAlign()
-        {
-            ReAlignControls();
-            SendToBack();
-        }
-
-        protected override void OnDockChanged(EventArgs e)
-        {
-            base.OnDockChanged(e);
-            ReAlign();
-        }
-
         protected override void OnEnabledChanged(EventArgs e)
         {
             base.OnEnabledChanged(e);
@@ -454,8 +438,6 @@ namespace OxLibrary.Panels
             get => GetIcon();
             set => SetIcon(value);
         }
-
-        protected bool SizeChanging = false;
 
         protected virtual void SetIcon(Bitmap? value) { }
         protected virtual Bitmap? GetIcon() => null;

@@ -32,20 +32,7 @@
                 columnsPanels.Add(column);
             }
 
-            ReAlign();
             columns.Reverse();
-        }
-
-        public override void ReAlignControls()
-        {
-            if (columns is not null)
-                foreach (OxPane column in columns)
-                    column.BringToFront();
-
-            base.ReAlignControls();
-
-            foreach (OxPane panel in placedPanels)
-                panel.SendToBack();
         }
 
         public OxPanelLayouter() : base()
@@ -118,7 +105,6 @@
             ClearColumnsPanels();
             SetPanelsVisible(false);
             PlacePanelsOnColumns();
-            ReAlign();
             SetPanelsVisible(true);
             RecalcColumnsSize();
             SetVisibleChangedHandlerToPanels();
@@ -171,16 +157,11 @@
 
         private void SetEmptySize()
         {
-            StartSizeChanging();
-
-            try
-            {
-                Size = new();
-            }
-            finally
-            {
-                EndSizeChanging();
-            }
+            SilentSizeChange(() =>
+                {
+                    Size = new();
+                }
+            );
         }
 
         private OxDock GetColumnDock() =>

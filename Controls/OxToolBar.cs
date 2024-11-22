@@ -57,7 +57,6 @@ namespace OxLibrary.Controls
                 lastButton = button;
             }
 
-            ReAlign();
             RecalcWidth();
             SetToolBarPaddings();
         }

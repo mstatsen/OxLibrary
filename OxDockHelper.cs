@@ -62,12 +62,22 @@
             return list;
         }
 
-        public static readonly List<OxDock> SimpleDirectionDocks = new()
+        public static readonly List<OxDock> SingleDirectionDocks = new()
         {
             OxDock.Top,
             OxDock.Left,
             OxDock.Bottom,
             OxDock.Right
+        };
+
+        public static readonly List<OxDock> ByPlacingPriority = new()
+        {
+            OxDock.Top,
+            OxDock.Bottom,
+            OxDock.Left,
+            OxDock.Right,
+            OxDock.Fill,
+            OxDock.None
         };
     }
 }

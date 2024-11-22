@@ -57,7 +57,7 @@
 
         public OxBorders()
         {
-            foreach (OxDock dock in OxDockHelper.SimpleDirectionDocks)
+            foreach (OxDock dock in OxDockHelper.SingleDirectionDocks)
                 Add(dock, new());
         }
 

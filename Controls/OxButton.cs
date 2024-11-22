@@ -50,12 +50,6 @@ namespace OxLibrary.Controls
             ForeColorChanged += (s, e) => Label.ForeColor = ForeColor;
         }
 
-        public override void ReAlignControls()
-        {
-            base.ReAlignControls();
-            Label.BringToFront();
-        }
-
         protected override string GetText() => 
             Label.Text;
 

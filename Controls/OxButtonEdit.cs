@@ -63,7 +63,6 @@ namespace OxLibrary.Controls
             OxWidth calcedButtonWidth = OxWh.Min(OxWh.W22, TextBox.Height - 4);
             Button.Size = new(calcedButtonWidth, OxWh.Sub(Height, OxWh.W2));
             Button.Width = calcedButtonWidth;
-            Button.ReAlign();
             return e.Changed;
         }
 

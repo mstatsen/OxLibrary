@@ -33,13 +33,16 @@
             set => height = value;
         }
 
-        public OxRectangle(OxWidth x, OxWidth y, OxWidth width, OxWidth height)
+        private void Set(OxWidth x, OxWidth y, OxWidth width, OxWidth height)
         {
             X = OxWh.Max(x, OxWh.W0);
             Y = OxWh.Max(y, OxWh.W0);
             Width = OxWh.Max(width, OxWh.W0);
             Height = OxWh.Max(height, OxWh.W0);
         }
+
+        public OxRectangle(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
+            Set(x, y, width, height);
 
         public OxRectangle() : this(Rectangle.Empty) { }
 
@@ -86,6 +89,15 @@
             ^ Y.GetHashCode() 
             ^ Width.GetHashCode() 
             ^ Height.GetHashCode();
+
+        public bool IsEmpty =>
+            X is OxWidth.None
+            && Y is OxWidth.None
+            && Width is OxWidth.None
+            && Height is OxWidth.None;
+
+        public void Clear() => 
+            Set(OxWh.W0, OxWh.W0, OxWh.W0, OxWh.W0);
 
         public static readonly OxRectangle Empty = new(OxWh.W0, OxWh.W0, OxWh.W0, OxWh.W0);
     }

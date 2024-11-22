@@ -1,6 +1,6 @@
 ﻿namespace OxLibrary.Controls
 {
-    public class OxDockedControls : Dictionary<OxDock, List<IOxControl>>
+    public class OxDockedControls : Dictionary<OxDock, OxControls>
     {
         public OxDockedControls()
         {
@@ -35,5 +35,20 @@
             Controls.Remove(control);
             this[control.Dock].Remove(control);
         }
+
+        public OxControls ByPlacingPriority
+        {
+            get
+            {
+                OxControls result = new();
+
+                foreach (OxDock dock in OxDockHelper.ByPlacingPriority)
+                    foreach (IOxControl oxControl in this[dock])
+                        result.Add(oxControl);
+
+                return result;
+            }
+        }
+            
     }
 }

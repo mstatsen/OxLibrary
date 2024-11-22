@@ -23,6 +23,9 @@ namespace OxLibrary.Controls
         OxPoint AutoScrollOffset { get; set; }
         IOxControl? Parent { get; set; }
         bool HasOxChildren { get; }
+        bool SizeChanging { get; }
+        bool SilentSizeChange(Action method);
+        void RealignControls();
         bool OnSizeChanged(SizeChangedEventArgs e);
         void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height);
         void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height, BoundsSpecified specified);
@@ -36,7 +39,11 @@ namespace OxLibrary.Controls
         OxPoint PointToScreen(OxPoint p);
         OxRectangle RectangleToClient(OxRectangle r);
         OxRectangle RectangleToScreen(OxRectangle r);
+    }
 
-
+    public interface IOxControlManager<TBaseControl> : IOxControlManager
+        where TBaseControl : Control
+    { 
+        IOxControl ManagingControl { get; }
     }
 }

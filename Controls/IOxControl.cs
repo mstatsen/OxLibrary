@@ -7,6 +7,7 @@ namespace OxLibrary.Controls
     public interface IOxControl : IOxControlManager
     {
         AccessibleObject AccessibilityObject { get; }
+        IOxControlManager Manager { get; }
         string AccessibleDefaultActionDescription { get; set; }
         string AccessibleDescription { get; set; }
         AnchorStyles Anchor { get; set; }
@@ -57,7 +58,6 @@ namespace OxLibrary.Controls
         Control TopLevelControl { get; }
         bool UseWaitCursor { get; set; }
         bool Visible { get; set; }
-
         IAsyncResult BeginInvoke(Action method);
         IAsyncResult BeginInvoke(Delegate method);
         IAsyncResult BeginInvoke(Delegate method, params object[] args);
@@ -199,7 +199,7 @@ namespace OxLibrary.Controls
     public interface IOxControl<TBaseControl> : IOxControl
         where TBaseControl : Control
     {
-        OxControlManager<TBaseControl> Manager { get; }
+        //new IOxControlManager<TBaseControl> Manager { get; }
     }
 
     /**
@@ -345,6 +345,8 @@ namespace OxLibrary.Controls
 
         public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
             manager.SetBounds(x, y, width, height);
+
+        public void RealignControls() => manager.RealignControls();
 
         public virtual bool OnSizeChanged(SizeChangedEventArgs e)
         {

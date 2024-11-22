@@ -5,11 +5,7 @@ namespace OxLibrary.Panels
 {
     public interface IOxPane : IOxWithIcon, IOxControl<Panel>
     {
-        void StartSizeChanging();
-        void EndSizeChanging();
         Color BaseColor { get; set; }
-        void ReAlignControls();
-        void ReAlign();
         OxColorHelper Colors { get; }
         Color DefaultColor { get; }
         bool IsHovered { get; }

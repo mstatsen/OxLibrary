@@ -170,14 +170,6 @@ namespace OxLibrary.Dialogs
                 item.Value.BaseColor = BaseColor;
         }
 
-        public override void ReAlignControls()
-        {
-            base.ReAlignControls();
-            Footer.ReAlign();
-            Header.ReAlign();
-            SendToBack();
-        }
-
         public override bool OnSizeChanged(SizeChangedEventArgs e)
         {
             if (!e.Changed)

@@ -25,7 +25,6 @@
                 SetHeaderPaddings();
                 SetHeaderSize();
                 SetButtonsPostion();
-                ReAlign();
             }
         }
 
@@ -201,14 +200,6 @@
             Text = string.Empty;
             //ContentBox.AutoScroll = true;
             this.AutoScroll = true;
-        }
-
-        public override void ReAlignControls()
-        {
-            base.ReAlignControls();
-            Header.ReAlign();
-            ReAlignTabButtons();
-            SendToBack();
         }
 
         private void ReAlignTabButtons()

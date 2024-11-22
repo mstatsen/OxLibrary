@@ -38,14 +38,6 @@ namespace OxLibrary.Controls
             EnableButtons();
         }
 
-        public override void ReAlignControls()
-        {
-            base.ReAlignControls();
-            DecreaseButton.ReAlign();
-            IncreaseButton.ReAlign();
-            //ContentBox.SendToBack();
-        }
-
         private static OxIconButton CreateButton(Bitmap icon, OxDock dock) =>
             new(icon, OxWh.W14)
             {

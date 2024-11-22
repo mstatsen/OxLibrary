@@ -1,14 +1,12 @@
 ﻿using OxLibrary.Panels;
-using System.Windows.Forms;
 
 namespace OxLibrary.Controls
 {
-    public class OxControlManager<TBaseControl> : IOxControlManager
+    public class OxControlManager<TBaseControl> : IOxControlManager<TBaseControl>
         where TBaseControl : Control
     {
         private readonly TBaseControl managingControl;
-        private IOxControl OxControl => (IOxControl)managingControl;
-        public TBaseControl ManagingControl => managingControl;
+        public IOxControl ManagingControl => (IOxControl)managingControl;
         private readonly Func<SizeChangedEventArgs, bool> managingOnSizeChanged;
         internal OxControlManager(TBaseControl managingControl, Func<SizeChangedEventArgs, bool> onSizeChanged)
         {
@@ -24,8 +22,9 @@ namespace OxLibrary.Controls
             if (e.Control is not IOxControl oxControl)
                 return;
 
-            OxControl.OxControls.Remove(oxControl);
-            OxControl.OxDockedControls.RemoveControl(oxControl);
+            ManagingControl.OxControls.Remove(oxControl);
+            ManagingControl.OxDockedControls.RemoveControl(oxControl);
+            RealignControls();
         }
 
         private void ControlAddedHandler(object? sender, ControlEventArgs e)
@@ -33,20 +32,35 @@ namespace OxLibrary.Controls
             if (e.Control is not IOxControl oxControl)
                 return;
 
-            OxControl.OxControls.Add(oxControl);
-            OxControl.OxDockedControls.AddControl(oxControl);
+            ManagingControl.OxControls.Add(oxControl);
+            ManagingControl.OxDockedControls.AddControl(oxControl);
+            RealignControls();
         }
 
         private void ControlDisposedHandler(object? sender, EventArgs e) => 
             OxControlManager.UnRegisterControl(managingControl);
 
-        private bool SizeChanging = false;
+        private bool sizeChanging = false;
 
-        private void StartSizeChanging() =>
-            SizeChanging = true;
+        public bool SizeChanging => sizeChanging;
 
-        private void EndSizeChanging() =>
-            SizeChanging = false;
+        public bool SilentSizeChange(Action method)
+        {
+            if (SizeChanging)
+                return false;
+
+            sizeChanging = true;
+
+            try
+            {
+                method();
+            }
+            finally
+            {
+                sizeChanging = false;
+            }
+            return true;
+        }
 
         public OxWidth Width
         {
@@ -102,38 +116,77 @@ namespace OxLibrary.Controls
             {
                 managingControl.Dock = DockStyle.None;
                 SavedDock = value;
-                RecalcControlsPositionsAndSizes();
+                Parent?.RealignControls();
             }
         }
 
-        private void RecalcControlsPositionsAndSizes()
+        public void RealignControls()
         {
-            if (SavedDock is OxDock.None)
+            if (ClientRectangle.IsEmpty)
                 return;
 
-            //TODO: realign some docked control by Parent.OxDockedControls
+            OxRectangle clientZone = ClientRectangle;
+            OxRectangle currentBounds = ClientRectangle;
 
-            switch (SavedDock)
+            foreach (IOxControl oxControl in ManagingControl.OxDockedControls.ByPlacingPriority)
             {
-                case OxDock.Fill:
-                    Location = ClientRectangle.Location;
-                    Size = ClientRectangle.Size;
+                if (clientZone.IsEmpty)
                     break;
-                default:
-                    Location = new(
-                        SavedDock is OxDock.Right
-                            ? OxWh.Sub(ClientRectangle.Width, Width)
-                            : ClientRectangle.X,
-                        SavedDock is OxDock.Bottom
-                            ? OxWh.Sub(ClientRectangle.Height, Height)
-                            : ClientRectangle.Y);
 
-                    if (OxDockHelper.IsHorizontal(SavedDock))
-                        Height = ClientRectangle.Height;
+                OxDock currentDock = oxControl.Dock;
+                currentBounds = clientZone;
 
-                    if (OxDockHelper.IsVertical(SavedDock))
-                        Width = ClientRectangle.Width;
-                    break;
+                if (currentDock is OxDock.None)
+                    continue;
+
+                switch (currentDock)
+                {
+                    case OxDock.None:
+                        continue;
+                    case OxDock.Fill:
+                        oxControl.Location = currentBounds.Location;
+                        oxControl.Size = currentBounds.Size;
+                        clientZone.Clear();
+                        break;
+                    case OxDock.Left:
+                    case OxDock.Right:
+                        currentBounds.Width = oxControl.Width;
+                        clientZone.Width = 
+                            OxWh.Max(
+                                OxWh.Sub(
+                                    clientZone.Width, 
+                                    oxControl.Width), 
+                                OxWh.W0
+                            );
+
+                        if (currentDock is OxDock.Left)
+                            clientZone.X = clientZone.X | oxControl.Width;
+
+                        break;
+                    case OxDock.Top:
+                    case OxDock.Bottom:
+                        currentBounds.Height = oxControl.Height;
+                        clientZone.Height = 
+                            OxWh.Max(
+                                OxWh.Sub(
+                                    clientZone.Height, 
+                                    oxControl.Height), 
+                                OxWh.W0
+                            );
+
+                        if (currentDock is OxDock.Top)
+                            clientZone.Y = clientZone.Y | oxControl.Height;
+
+                        break;
+                }
+
+                ManagingControl.Manager.SilentSizeChange(
+                    () => 
+                    { 
+                        oxControl.Location = currentBounds.Location;
+                        oxControl.Size = currentBounds.Size;
+                    }
+                );
             }
         }
 
@@ -152,28 +205,25 @@ namespace OxLibrary.Controls
                 OxWidth oldWidth = Width;
                 OxWidth oldHeight = Height;
 
-                StartSizeChanging();
-                try
-                {
-                    if (!oldWidth.Equals(value.Width))
+                SilentSizeChange(
+                    () =>
                     {
-                        changed = true;
-                        Width = value.Width;
-                    }
+                        if (!oldWidth.Equals(value.Width))
+                        {
+                            changed = true;
+                            Width = value.Width;
+                        }
 
-                    if (!oldHeight.Equals(value.Height))
-                    {
-                        Height = value.Height;
-                        changed = true;
+                        if (!oldHeight.Equals(value.Height))
+                        {
+                            Height = value.Height;
+                            changed = true;
+                        }
                     }
-                }
-                finally
-                {
-                    EndSizeChanging();
-
-                    if (changed)
-                        OnSizeChanged(new SizeChangedEventArgs(oldWidth, oldHeight, Width, Height));
-                }
+                );
+                
+                if (changed)
+                    OnSizeChanged(new SizeChangedEventArgs(oldWidth, oldHeight, Width, Height));
             }
         }
 
@@ -224,11 +274,12 @@ namespace OxLibrary.Controls
 
         public bool OnSizeChanged(SizeChangedEventArgs e)
         {
-            if (!SizeChanging || !e.Changed)
+            if (sizeChanging || 
+                !e.Changed)
                 return false;
 
             managingOnSizeChanged(e);
-            RecalcControlsPositionsAndSizes();
+            RealignControls();
             return true;
         }
 

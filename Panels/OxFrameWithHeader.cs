@@ -72,12 +72,6 @@ namespace OxLibrary.Panels
                 : OxWh.W0);
         */
 
-        public override void ReAlignControls()
-        {
-            Header.ReAlign();
-            base.ReAlignControls();
-        }
-
         protected override void PrepareDialog(OxPanelViewer dialog)
         {
             base.PrepareDialog(dialog);

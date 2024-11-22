@@ -97,6 +97,10 @@
         public override int GetHashCode() => 
             WidthInt.GetHashCode() ^ HeightInt.GetHashCode();
 
+        public bool IsEmpty =>
+            Width is OxWidth.None
+            && Height is OxWidth.None;
+
         public static readonly OxSize Empty = new(0, 0);
     }
 }

@@ -152,14 +152,6 @@ namespace OxLibrary.Controls
         private void ClearImage() => 
             Image = null;
 
-        public override void ReAlignControls()
-        {
-            label.SendToBack();
-            picture.SendToBack();
-            buttonsParent.BringToFront();
-            base.ReAlignControls();
-        }
-
         private readonly OxPicture picture = new()
         {
             Dock = OxDock.Fill,
@@ -245,7 +237,6 @@ namespace OxLibrary.Controls
                 return;
 
             buttonsParent.Visible = picture.Visible;
-            ReAlignControls();
         }
 
         protected override void MouseLeaveHandler(object? sender, EventArgs e)
@@ -258,7 +249,6 @@ namespace OxLibrary.Controls
             if (buttonsParent.IsHovered)
                 return;
             buttonsParent.Visible = false;
-            ReAlignControls();
         }
 
         protected override void PrepareColors()
@@ -279,7 +269,6 @@ namespace OxLibrary.Controls
                 picture.Visible = sourceImage is not null;
                 picture.Image = sourceImage;
                 PlaceButtons();
-                ReAlignControls();
             }
         }
 

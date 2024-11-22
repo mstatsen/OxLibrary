@@ -44,7 +44,6 @@ namespace OxLibrary.Panels
             label.Text = title;
             label.DoubleClick += (s, e) => ToolBar.ExecuteDefault();
             label.Click += LabelClickHandler;
-            ReAlign();
         }
 
         private void LabelClickHandler(object? sender, EventArgs e) => 
@@ -98,13 +97,6 @@ namespace OxLibrary.Panels
             base.PrepareColors();
             label.ForeColor = Colors.Darker(6);
             ToolBar.BaseColor = BaseColor;
-        }
-
-        public override void ReAlignControls()
-        {
-            ToolBar.SendToBack();
-            icon.SendToBack();
-            base.ReAlignControls();
         }
 
         public override bool OnSizeChanged(SizeChangedEventArgs e)

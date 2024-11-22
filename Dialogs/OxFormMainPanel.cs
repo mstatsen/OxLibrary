@@ -167,19 +167,17 @@ namespace OxLibrary.Dialogs
         public bool FormIsMaximized => 
             Form.WindowState is FormWindowState.Maximized;
 
-        public override bool OnSizeChanged(SizeChangedEventArgs e)
-        {
-            if (SizeChanging)
-                return false;
+        public override bool OnSizeChanged(SizeChangedEventArgs e) => 
+            SilentSizeChange(() =>
+                {
+                    base.OnSizeChanged(e);
 
-            base.OnSizeChanged(e);
-
-            if (e.Changed &&
-                Form is not null)
-                Form.Size = Size;
-
-            return e.Changed;
-        }
+                    if (e.Changed &&
+                        Form is not null)
+                        Form.Size = Size;
+                }
+            ) 
+            && e.Changed;
 
         internal void SetMarginsSize() => 
             Margin.Size = 
