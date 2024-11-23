@@ -14,7 +14,7 @@ namespace OxLibrary.Panels
             {
                 AutoSize = false,
                 Parent = this,
-                Dock = DockStyle.Fill,
+                Dock = OxDock.Fill,
                 TextAlign = ContentAlignment.MiddleCenter,
                 Text = "- - - Loading - - -"
             };

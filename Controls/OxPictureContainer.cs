@@ -14,7 +14,7 @@ namespace OxLibrary.Controls
 
         private readonly OxLabel label = new()
         {
-            Dock = DockStyle.Fill,
+            Dock = OxDock.Fill,
             TextAlign = ContentAlignment.MiddleCenter,
             Text = SelectText,
             ForeColor = Color.Silver,

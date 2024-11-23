@@ -6,7 +6,7 @@ namespace OxLibrary.Controls
     {
         private readonly OxLabel Label = new()
         {
-            Dock = DockStyle.Left,
+            Dock = OxDock.Left,
             TextAlign = ContentAlignment.MiddleLeft
         };
 
@@ -76,12 +76,12 @@ namespace OxLibrary.Controls
                 return;
 
             Label.AutoSize = true;
-            OxWidth calcedLabelWidth = OxWh.W(Label.Width);
+            OxWidth calcedLabelWidth = Label.Width;
             Label.AutoSize = false;
             calcedLabelWidth = OxWh.Less(calcedLabelWidth | RealPictureWidth, Width)
                 ? calcedLabelWidth 
                 : OxWh.Sub(Width, RealPictureWidth);
-            Label.Width = OxWh.Int(OxWh.Max(calcedLabelWidth, 0));
+            Label.Width = OxWh.Max(calcedLabelWidth, 0);
         }
 
         protected override void OnFontChanged(EventArgs e)
@@ -97,7 +97,7 @@ namespace OxLibrary.Controls
 
         private OxWidth RealLabelWidth =>
             Label.Visible
-                ? OxWh.W(Label.Width)
+                ? Label.Width
                 : OxWh.W0;
 
         public override bool OnSizeChanged(SizeChangedEventArgs e)

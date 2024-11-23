@@ -21,8 +21,8 @@ namespace OxLibrary.Panels
         private readonly OxLabel itemsCountLabel = new()
         {
             AutoSize = false,
-            Dock = DockStyle.Right,
-            Width = 120,
+            Dock = OxDock.Right,
+            Width = OxWh.W120,
             TextAlign = ContentAlignment.MiddleRight,
             Font = Styles.Font(FontStyle.Bold | FontStyle.Italic)
         };
@@ -271,7 +271,7 @@ namespace OxLibrary.Panels
             _ = new OxLabel()
             {
                 Parent = button,
-                Dock = DockStyle.Fill,
+                Dock = OxDock.Fill,
                 Text = "...",
                 AutoSize = false,
                 TextAlign = textAlign,

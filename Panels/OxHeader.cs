@@ -17,7 +17,7 @@ namespace OxLibrary.Panels
         private readonly OxLabel label = new()
         {
             AutoSize = false,
-            Dock = DockStyle.Fill,
+            Dock = OxDock.Fill,
             Text = string.Empty,
             Font = new(
                 DefaultFontFamily, 
