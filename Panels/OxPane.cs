@@ -329,10 +329,10 @@ namespace OxLibrary.Panels
 
         protected virtual void PrepareInnerControls() { }
 
-        public OxRectangle FullControlZone =>
+        public virtual OxRectangle FullControlZone =>
             ClientRectangle - (Padding + Borders + Margin);
 
-        public OxRectangle ControlZone =>
+        public virtual OxRectangle ControlZone =>
             manager.ControlZone;
 
         private OxRectangle BorderRectangle
@@ -354,7 +354,6 @@ namespace OxLibrary.Panels
                 return;
 
             using (Pen pen = new(BorderColor, OxWh.Int(BorderWidth)))
-            //using (Pen pen = new(Color.Red, OxWh.Int(BorderWidth)))
             {
                 OxRectangle rect = BorderRectangle;
                 int X1 = OxWh.Int(rect.X);
