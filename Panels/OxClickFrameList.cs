@@ -44,12 +44,9 @@
                 lastVisibleFrame is null
                     ? OxWh.W0
                     : lastVisibleFrame.Right,
-                OxWh.Max(
-                    firstFisibleFrame is null 
-                        ? OxWh.W0 
-                        : firstFisibleFrame.Left, 
-                    OxWh.W0
-                )
+                firstFisibleFrame is null 
+                    ? OxWh.W0 
+                    : firstFisibleFrame.Left
             ); 
         }
 

@@ -12,9 +12,8 @@ namespace OxLibrary.Test
             InitializeComponent();
             BaseColor = Color.FromArgb(116, 138, 138);
             MainPanel.Header.ToolBar.Click += (s, e) => MessageBox.Show("Toolbar");
-            MainPanel.Header.Margin.Size = OxWh.W0;
-            MainPanel.Header.Click += (s, e) => MessageBox.Show("Header");
-            MainPanel.Click += (s, e) => MessageBox.Show("MainPanel");
+            //MainPanel.Header.Click += (s, e) => MessageBox.Show("Header");
+            //MainPanel.Click += (s, e) => MessageBox.Show("MainPanel");
             Click += (s, e) => MessageBox.Show("Form");
             OxControlHelper.CenterForm(this);
         }

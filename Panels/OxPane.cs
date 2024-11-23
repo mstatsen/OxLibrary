@@ -195,13 +195,25 @@ namespace OxLibrary.Panels
             padding.SizeChanged += BordersSizeChangedHandler;
             borders.SizeChanged += BordersSizeChangedHandler;
             margin.SizeChanged += BordersSizeChangedHandler;
+            margin.SizeChanged += MarginSizeChanedHandler;
         }
 
-        private void BordersSizeChangedHandler(object sender, BorderEventArgs e)
+        private void MarginSizeChanedHandler(object sender, BorderEventArgs e)
         {
-            //RealignControls();
-            Invalidate();
+            /*
+            SilentSizeChange(() =>
+            {
+                Size = new(
+                    OxWh.A(OxWh.A(Width, Margin.Left), Margin.Right),
+                    OxWh.A(OxWh.A(Height, Margin.Top), Margin.Bottom)
+                );
+            }, 
+            Size);
+            */
         }
+
+        private void BordersSizeChangedHandler(object sender, BorderEventArgs e) =>
+            Invalidate();
 
         private readonly OxColorHelper colors;
 

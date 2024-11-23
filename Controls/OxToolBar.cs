@@ -8,14 +8,25 @@ namespace OxLibrary.Controls
         private readonly OxWidth DefaultToolBarHeight = OxWh.W24;
         private OxClickFrameList<TButton> buttons = new();
 
-        public OxToolBar() : base() => 
+        public OxToolBar() : base() =>
             UseDisabledStyles = false;
 
         public readonly Dictionary<OxToolbarAction, TButton> Actions = new();
         public OxActionClick<OxToolbarAction>? ToolbarActionClick;
 
-        public void RecalcWidth() => 
-            Width = buttons.Width();
+        public void RecalcWidth()
+        {
+            OxWidth calcedWidth = OxWh.W0;
+
+            foreach (TButton button in buttons)
+                calcedWidth = OxWh.Add(calcedWidth, button.Width);
+
+            foreach (OxPane separator in separators.Values)
+                calcedWidth = OxWh.Add(calcedWidth, separator.Width);
+
+            Width = calcedWidth;
+            //Width = buttons.Width();
+        }
 
         protected override void AfterCreated()
         {
@@ -29,7 +40,6 @@ namespace OxLibrary.Controls
         private void PlaceButtons()
         {
             TButton? lastButton = null;
-
             foreach (TButton button in buttons)
             {
                 button.Parent = this;
@@ -65,13 +75,10 @@ namespace OxLibrary.Controls
         {
             if (!separators.TryGetValue(startButton, out var separator))
             {
-                separator = new OxPane(new(OxWh.W1, OxWh.W1))
+                separator = new(new(OxWh.W1, OxWh.W1))
                 {
                     Parent = this,
-                    Dock =
-                        startButton.Dock.Equals(OxDock.Right)
-                            ? OxDock.Right
-                            : OxDock.Left,
+                    Dock = startButton.Dock,
                     BackColor = BorderColor
                 };
                 separators.Add(startButton, separator);
