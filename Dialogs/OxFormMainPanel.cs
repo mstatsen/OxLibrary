@@ -11,7 +11,6 @@ namespace OxLibrary.Dialogs
 
         public OxFormMainPanel(OxForm form) : base()
         {
-            Dock = OxDock.Fill;
             Form = form;
             Form.SizeChanged += FormSizeChanged;
             SetTitleButtonsVisible();
@@ -21,8 +20,13 @@ namespace OxLibrary.Dialogs
             SetHeaderFont();
             SetMarginsSize();
             CreateFormMover();
-            SetAnchors();
             BlurredBorder = true;
+        }
+
+        public override OxDock Dock 
+        { 
+            get => OxDock.Fill; 
+            set => base.Dock = value; 
         }
 
         private void FormSizeChanged(object? sender, EventArgs e) => 
@@ -31,9 +35,6 @@ namespace OxLibrary.Dialogs
         private void SetHeaderFont() => 
             Header.TitleFont = 
                 new(Header.TitleFont.FontFamily, Header.TitleFont.Size + 1, FontStyle.Bold);
-
-        private void SetAnchors() => 
-            Anchor = AnchorStyles.Left | AnchorStyles.Top;
 
         private void SetBordersSize() => 
             Borders.Size = OxWh.W1;
@@ -129,6 +130,9 @@ namespace OxLibrary.Dialogs
 
         private void SetRestoreButtonIconAndTooltip()
         {
+            if (!Initialized)
+                return;
+
             restoreButton.Icon = GetRestoreIcon();
             restoreButton.ToolTipText = GetRestoreToopTip();
         }
@@ -139,8 +143,7 @@ namespace OxLibrary.Dialogs
 
             try
             {
-                Form.SetUpSizes();
-                Form.WindowState = state;
+                Form.SetUpSizes(state);
             }
             finally
             {
@@ -154,13 +157,6 @@ namespace OxLibrary.Dialogs
             Form.Close();
         }
 
-        protected override void PrepareColors()
-        {
-            base.PrepareColors();
-            BorderColor = BaseColor;
-            Header.BaseColor = Colors.Darker();
-        }
-
         public override Color DefaultColor =>
             Color.FromArgb(146, 143, 140);
 
@@ -168,14 +164,14 @@ namespace OxLibrary.Dialogs
             Form.WindowState is FormWindowState.Maximized;
 
         public override bool OnSizeChanged(SizeChangedEventArgs e) => 
+            Initialized && 
             SilentSizeChange(() =>
                 {
-                    base.OnSizeChanged(e);
-
                     if (e.Changed &&
                         Form is not null)
                         Form.Size = Size;
-                }
+                },
+                e.OldSize
             ) 
             && e.Changed;
 

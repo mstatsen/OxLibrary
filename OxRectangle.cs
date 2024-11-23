@@ -1,7 +1,17 @@
-﻿namespace OxLibrary
+﻿using OxLibrary.Panels;
+
+namespace OxLibrary
 {
     public class OxRectangle
     {
+        public static OxRectangle operator -(OxRectangle rect, OxBorders borders) =>
+            new(
+                OxWh.Add(rect.X, borders.Left),
+                OxWh.Add(rect.Y, borders.Top),
+                OxWh.Sub(OxWh.Sub(rect.Width, borders.Left), borders.Right),
+                OxWh.Sub(OxWh.Sub(rect.Height, borders.Top), borders.Bottom)
+            );
+
         private OxWidth x;
 
         private OxWidth y;
@@ -51,6 +61,9 @@
 
         public OxRectangle(Rectangle rectangle)
             : this(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height) { }
+
+        public OxRectangle(OxRectangle rectangle)
+            : this(rectangle.Rectangle) { }
 
         public OxRectangle(OxPoint location, OxSize size)
             : this(location.X, location.Y, size.Width, size.Height) { }

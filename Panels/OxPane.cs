@@ -3,18 +3,17 @@ using OxLibrary.Dialogs;
 
 namespace OxLibrary.Panels
 {
-    public class OxPane : Panel, IOxPane, IOxControl<Panel>
+    public class OxPane : Panel, IOxPane, IOxControlContainer<Panel>
     {
         private readonly OxControlManager<Panel> manager;
         public IOxControlManager Manager => manager;
         public OxPane() : this(OxSize.Empty) { }
         public OxPane(OxSize size)
         {
-            manager = OxControlManager.RegisterControl<Panel>(this,OnSizeChanged);
+            manager = OxControlManager.RegisterControl<Panel>(this, OnSizeChanged);
             BorderVisible = false;
-            colors = new OxColorHelper(DefaultColor);
+            colors = new(DefaultColor);
             Initialized = false;
-
 
             SilentSizeChange(
                 () =>
@@ -22,14 +21,15 @@ namespace OxLibrary.Panels
                     DoubleBuffered = true;
 
                     if (!size.Equals(OxSize.Empty))
-                        Size = size;
+                        Size = new(size);
 
                     SetBordersHandlers();
                     PrepareInnerControls();
                     PrepareColors();
                     SetHandlers();
                     AfterCreated();
-                }
+                },
+                Size
             );
 
             Initialized = true;
@@ -94,22 +94,22 @@ namespace OxLibrary.Panels
             set => manager.MaximumSize = value;
         }
 
-        public new OxDock Dock
+        public new virtual OxDock Dock
         {
             get => manager.Dock;
             set => manager.Dock = value;
         }
 
-        public new IOxControl? Parent
+        public new virtual IOxControlContainer? Parent
         {
             get => manager.Parent;
             set => manager.Parent = value;
         }
-        public bool HasOxChildren => manager.HasOxChildren;
 
-        public new OxRectangle ClientRectangle => manager.ClientRectangle;
+        public new OxRectangle ClientRectangle => 
+            manager.ClientRectangle;
 
-        public new OxRectangle DisplayRectangle => manager.DisplayRectangle;
+        public new virtual OxRectangle DisplayRectangle => manager.DisplayRectangle;
 
         public new OxRectangle Bounds
         {
@@ -127,8 +127,8 @@ namespace OxLibrary.Panels
         public bool SizeChanging =>
             manager.SizeChanging;
 
-        public bool SilentSizeChange(Action method) =>
-            manager.SilentSizeChange(method);
+        public bool SilentSizeChange(Action method, OxSize oldSize) =>
+            manager.SilentSizeChange(method, oldSize);
 
         public Control GetChildAtPoint(OxPoint pt, GetChildAtPointSkip skipValue) =>
             manager.GetChildAtPoint(pt, skipValue);
@@ -166,17 +166,25 @@ namespace OxLibrary.Panels
         public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
             manager.SetBounds(x, y, width, height);
 
-        public virtual bool OnSizeChanged(SizeChangedEventArgs e) => 
-            e.Changed
-                && SilentSizeChange(() =>
-                    base.OnSizeChanged(e)
-                );
+        public virtual bool OnSizeChanged(SizeChangedEventArgs e)
+        {
+            if (!e.Changed)
+                return false;
+
+            base.OnSizeChanged(e);
+            return true;
+        }
 
         public void RealignControls() => 
             manager.RealignControls();
 
-        protected override sealed void OnSizeChanged(EventArgs e) =>
+        protected override sealed void OnSizeChanged(EventArgs e)
+        {
+            if (SizeChanging)
+                return;
+
             base.OnSizeChanged(e);
+        }
 
         private void SetBordersHandlers()
         {
@@ -187,8 +195,8 @@ namespace OxLibrary.Panels
 
         private void BordersSizeChangedHandler(object sender, BorderEventArgs e)
         {
-            if (FullClientOffset.Equals(base.Padding))
-                base.Padding = FullClientOffset.AsPadding;
+            //if (FullControlZone.Equals(base.Padding))
+                //base.Padding = FullControlZone.AsPadding;
 
             Invalidate();
         }
@@ -206,16 +214,38 @@ namespace OxLibrary.Panels
 
         public OxBorders Borders => borders;
 
+        private bool useDefaultBorderColor = true;
+        public bool UseDefaultBorderColor 
+        { 
+            get => useDefaultBorderColor;
+            set
+            {
+                useDefaultBorderColor = value;
+                Invalidate();
+            }
+        }
+
+        private Color borderColor = Color.Black;
         public Color BorderColor
         {
-            get => BackColor;
-            set => BackColor = value;
+            get =>
+                useDefaultBorderColor
+                ? BaseColor
+                : borderColor;
+            set
+            {
+                useDefaultBorderColor = false;
+                borderColor = value;
+                Invalidate();
+            }
         }
+
+        private OxWidth borderWidth = OxWh.W0;
 
         public OxWidth BorderWidth
         {
-            get => Borders.Size;
-            set => Borders.Size = value;
+            get => borderWidth;
+            set => borderWidth = value;
         }
 
         public bool BorderVisible
@@ -225,36 +255,20 @@ namespace OxLibrary.Panels
         }
 
         private readonly OxBorders margin = new();
-        private bool blurredBorder;
-
-        private Color GetMarginsColor() =>
-            Parent is null
-            || blurredBorder
-                ? Colors.Lighter(7)
-                : Parent.BackColor;
 
         public new OxBorders Margin => margin;
 
+        private bool blurredBorder = false;
         public bool BlurredBorder
         {
             get => blurredBorder;
             set
             {
                 blurredBorder = value;
-                ApplyMarginsColor();
+
+                if (!margin.IsEmpty)
+                    Invalidate();
             }
-        }
-
-        private void ApplyMarginsColor() =>
-            BackColor = GetMarginsColor();
-
-        protected override void OnParentBackColorChanged(EventArgs e) =>
-            ApplyMarginsColor();
-
-        protected override void OnParentChanged(EventArgs e)
-        {
-            base.OnParentChanged(e);
-            ApplyMarginsColor();
         }
 
         public virtual Color GetBordersColor() =>
@@ -268,30 +282,23 @@ namespace OxLibrary.Panels
             get => colors.BaseColor;
             set
             {
+                if (BaseColorChanging)
+                    return;
+
                 BaseColorChanging = true;
 
                 try
                 {
                     colors.BaseColor = value;
                     PrepareColors();
-
-                    if (!BaseColorChanging)
-                        Update();
                 }
                 finally
                 { 
-                    BaseColorChanging = false; 
+                    BaseColorChanging = false;
+                    Invalidate();
                 }
             }
         }
-
-        /*
-        public new OxPane? Parent 
-        { 
-            get => (OxPane)base.Parent;
-            set => base.Parent = value; 
-        }
-        */
 
         protected bool IsVariableWidth =>
             Parent is null
@@ -307,7 +314,6 @@ namespace OxLibrary.Panels
         {
             BackColor = Colors.Lighter(Enabled || !useDisabledStyles ? 7 : 8);
             ForeColor = Colors.Darker(7);
-            ApplyMarginsColor();
         }
 
         private bool useDisabledStyles = true;
@@ -323,39 +329,67 @@ namespace OxLibrary.Panels
 
         protected virtual void PrepareInnerControls() { }
 
-        private OxBorders FullClientOffset =>
-            Padding + Borders + Margin;
+        public OxRectangle FullControlZone =>
+            ClientRectangle - (Padding + Borders + Margin);
+
+        public OxRectangle ControlZone =>
+            manager.ControlZone;
+
+        private OxRectangle BorderRectangle
+        {
+            get
+            {
+                OxRectangle bordersRectangle = ClientRectangle - Margin;
+                bordersRectangle.X |= OxWh.W1;
+                bordersRectangle.Y |= OxWh.W1;
+                bordersRectangle.Width -= OxWh.W2;
+                bordersRectangle.Height -= OxWh.W2;
+                return bordersRectangle;
+            }
+        }
+
+        private void DrawBorders(Graphics g)
+        {
+            if (Borders.IsEmpty)
+                return;
+
+            using (Pen pen = new(BorderColor, OxWh.Int(BorderWidth)))
+            //using (Pen pen = new(Color.Red, OxWh.Int(BorderWidth)))
+            {
+                OxRectangle rect = BorderRectangle;
+                int X1 = OxWh.Int(rect.X);
+                int Y1 = OxWh.Int(rect.Y);
+                int X2 = OxWh.Int(OxWh.Add(rect.X, rect.Width));
+                int Y2 = OxWh.Int(OxWh.Add(rect.Y, rect.Height));
+
+                foreach (var border in Borders)
+                {
+                    if (border.Value.IsEmpty)
+                        continue;
+
+                    switch (border.Key)
+                    {
+                        case OxDock.Left:
+                            g.DrawLine(pen, X1, Y1, X1, Y2);
+                            break;
+                        case OxDock.Right:
+                            g.DrawLine(pen, X2, Y1, X2, Y2);
+                            break;
+                        case OxDock.Top:
+                            g.DrawLine(pen, X1, Y1, X2, Y1);
+                            break;
+                        case OxDock.Bottom:
+                            g.DrawLine(pen, X1, Y2, X2, Y2);
+                            break;
+                    }
+                }
+            };
+        }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-
-            using (Pen pen = new(Color.Red, OxWh.Int(BorderWidth)))
-            {
-                foreach (var border in Borders)
-                {
-                    if (border.Value.Size.Equals(OxWh.W0))
-                        continue;
-
-                    /*                    
-                    e.Graphics.DrawLine(
-                        pen,
-                        border.Key is OxDock.Right ? ClientRectangle.Width - 1 : ClientRectangle.Left + 1,
-                        border.Key is OxDock.Bottom ? ClientRectangle.Height - 1 : ClientRectangle.Top + 1,
-                        border.Key is OxDock.Left ? ClientRectangle.Left + 1 : ClientRectangle.Width - 1,
-                        border.Key is OxDock.Top ? ClientRectangle.Top + 1 : ClientRectangle.Height - 1
-                    );
-                    */
-
-                    e.Graphics.DrawLine(
-                        pen,
-                        border.Key is OxDock.Right ? OxWh.Int(ClientRectangle.Width) - 1 : 1,
-                        border.Key is OxDock.Bottom ? OxWh.Int(ClientRectangle.Height) - 1 : 1,
-                        border.Key is OxDock.Left ? 1 : OxWh.Int(ClientRectangle.Width) - 1,
-                        border.Key is OxDock.Top ? 1 : OxWh.Int(ClientRectangle.Height) - 1
-                    );
-                }
-            };
+            DrawBorders(e.Graphics);
         }
 
         protected virtual void SetHandlers() { }

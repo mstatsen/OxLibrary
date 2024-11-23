@@ -28,7 +28,7 @@ namespace OxLibrary.Panels
         private readonly OxHeaderToolBar toolBar = new()
         {
             Dock = OxDock.Right,
-            Width = OxWh.W0
+            Width = OxWh.W1
         };
 
         public OxHeaderToolBar ToolBar => toolBar;
@@ -39,12 +39,18 @@ namespace OxLibrary.Panels
             set => ToolBar.Buttons = value;
         }
 
-        public OxHeader(string title) : base(new(DefaultTitleWidth, DefaultTitleHeight))
+        public OxHeader(string title = "") : base(new(DefaultTitleWidth, DefaultTitleHeight))
         {
+            Dock = OxDock.Top;
             label.Text = title;
             label.DoubleClick += (s, e) => ToolBar.ExecuteDefault();
             label.Click += LabelClickHandler;
         }
+
+        public override OxDock Dock 
+        { 
+            get => base.Dock; 
+            set => base.Dock = OxDock.Top; }
 
         private void LabelClickHandler(object? sender, EventArgs e) => 
             Click?.Invoke(sender, e);

@@ -14,6 +14,14 @@
                 left.Right | right.Right
             );
 
+        public static OxBorders operator -(OxBorders left, OxBorders right) =>
+            new(
+                OxWh.Sub(left.Top, right.Top),
+                OxWh.Sub(left.Left, right.Left),
+                OxWh.Sub(left.Bottom, right.Bottom),
+                OxWh.Sub(left.Right, right.Right)
+            );
+
         private bool SizeChanging = false;
         private void NotifyAboutSizeChanged()
         {
@@ -218,10 +226,10 @@
         }
 
         public bool EqualsPadding(Padding padding) => 
-            padding.Left == LeftInt
-            && padding.Right == RightInt
-            && padding.Top == TopInt
-            && padding.Bottom == BottomInt;
+            padding.Left.Equals(LeftInt)
+            && padding.Right.Equals(RightInt)
+            && padding.Top.Equals(TopInt)
+            && padding.Bottom.Equals(BottomInt);
 
         public Padding AsPadding => 
             new(LeftInt, TopInt, RightInt, BottomInt);
@@ -236,6 +244,36 @@
             set => SetVisible(value);
         }
 
+        public bool IsEmpty
+        {
+            get 
+            {
+                bool result = false;
+
+                foreach (OxDock dock in Keys)
+                    result &= this[dock].IsEmpty;
+
+                return result;
+            }
+        }
+
+        public override bool Equals(object? obj) =>
+            obj is OxBorders otherBorders
+            && Left.Equals(otherBorders.Left)
+            && Right.Equals(otherBorders.Right)
+            && Top.Equals(otherBorders.Top)
+            && Bottom.Equals(otherBorders.Bottom);
+
         public BorderSizeEventHandler? SizeChanged;
+
+        public override int GetHashCode()
+        {
+            int result = 0;
+
+            foreach (OxBorder border in this.Values)
+                result ^= border.GetHashCode();
+
+            return result;
+        }
     }
 }

@@ -106,6 +106,15 @@
         public static OxWidth Max(OxWidth left, int right) =>
             W(Math.Max(Int(left), right));
 
+
+        public static readonly OxWidth Maximum =
+            OxWidth.XXXG | OxWidth.XXG | OxWidth.XG | OxWidth.G |
+            OxWidth.XXXL | OxWidth.XXL | OxWidth.XL | OxWidth.L |
+            OxWidth.M | OxWidth.S | OxWidth.XXS | OxWidth.XS | OxWidth.S;
+
+        public static readonly OxWidth Minimum =
+            OxWidth.None;
+
         public static readonly OxWidth W0 = OxWidth.None;
         public static readonly OxWidth W1 = OxWidth.XXS;
         public static readonly OxWidth W2 = OxWidth.XS;

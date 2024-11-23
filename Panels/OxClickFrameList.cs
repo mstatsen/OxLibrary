@@ -47,7 +47,7 @@
                 OxWh.Max(
                     firstFisibleFrame is null 
                         ? OxWh.W0 
-                        : firstFisibleFrame.Right, 
+                        : firstFisibleFrame.Left, 
                     OxWh.W0
                 )
             ); 

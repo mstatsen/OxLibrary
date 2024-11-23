@@ -1,14 +1,13 @@
 ﻿namespace OxLibrary.Panels
 {
-    public class OxPaneList<TPane> : List<TPane>
-        where TPane : IOxPane, new()
+    public class OxPaneList: List<OxPane>
     {
-        public TPane? Last =>
+        public OxPane? Last =>
             Count > 0
                 ? this[Count - 1]
                 : default;
 
-        public TPane? First =>
+        public OxPane? First =>
             Count > 0
                 ? this[0]
                 : default;
@@ -17,7 +16,7 @@
         {
             get
             {
-                TPane? last = Last;
+                OxPane? last = Last;
 
                 return last is null
                     ? OxWh.W0
@@ -25,14 +24,10 @@
             }
         }
 
-        public new OxPaneList<TPane> AddRange(IEnumerable<TPane> collection)
+        public new OxPaneList AddRange(IEnumerable<OxPane> collection)
         {
             base.AddRange(collection);
             return this;
         }
-    }
-
-    public class OxPaneList : OxPaneList<OxPane>
-    { 
     }
 }

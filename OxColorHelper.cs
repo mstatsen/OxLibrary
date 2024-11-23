@@ -14,7 +14,7 @@
 
         private static Color GrouthColor(Color color, int grouthRed, int grouthGreen, int grouthBlue) =>
             Color.FromArgb(
-                color.A,
+                0,
                 ColorPart(color.R + grouthRed),
                 ColorPart(color.G + grouthGreen),
                 ColorPart(color.B + grouthBlue)
@@ -30,7 +30,7 @@
             get => baseColor;
             set
             {
-                baseColor = value;
+                baseColor = Color.FromArgb(value.R, value.G, value.B);
                 BaseColorChanged?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -115,6 +115,6 @@
             return this;
         }
             
-        public EventHandler? BaseColorChanged;
+        public event EventHandler? BaseColorChanged;
     }
 }

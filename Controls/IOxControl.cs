@@ -45,8 +45,6 @@ namespace OxLibrary.Controls
         bool IsMirrored { get; }
         LayoutEngine LayoutEngine { get; }
         string Name { get; set; }
-        OxControls OxControls { get; }
-        OxDockedControls OxDockedControls { get; }
         bool RecreatingHandle { get; }
         Region Region { get; set; }
         RightToLeft RightToLeft { get; set; }
@@ -81,7 +79,7 @@ namespace OxLibrary.Controls
         void Invoke(Action method);
         object Invoke(Delegate method);
         object Invoke(Delegate method, params object[] args);
-        T Invoke<T>(Func<T> method) => (T)Invoke(method, null);
+        T Invoke<T>(Func<T> method) => (T)Invoke(method, default!);
         int LogicalToDeviceUnits(int value);
         void PerformLayout();
         void PerformLayout(Control affectedControl, string affectedProperty);
@@ -290,7 +288,6 @@ namespace OxLibrary.Controls
             get => manager.Parent;
             set => manager.Parent = value;
         }
-        public bool HasOxChildren => manager.HasOxChildren;
 
         public new OxRectangle ClientRectangle => manager.ClientRectangle;
 

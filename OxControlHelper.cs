@@ -35,6 +35,9 @@ namespace OxLibrary
             return aligningControl;
         }
 
+        public static OxSize ScreenSize(Control control) =>
+            new(Screen.GetWorkingArea(control).Size);
+
         public static void CenterForm(OxForm form)
         {
             Screen screen = Screen.FromControl(form);

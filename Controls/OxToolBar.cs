@@ -148,12 +148,13 @@ namespace OxLibrary.Controls
 
         public override bool OnSizeChanged(SizeChangedEventArgs e)
         {
+            if (!e.Changed)
+                return false;
+
             base.OnSizeChanged(e);
+            SetToolBarPaddings();
 
-            if (e.Changed)
-                SetToolBarPaddings();
-
-            return e.Changed;
+            return true;
         }
 
         public bool AllowEditingActions

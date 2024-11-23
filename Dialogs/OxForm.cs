@@ -3,7 +3,7 @@ using OxLibrary.Panels;
 
 namespace OxLibrary.Dialogs
 {
-    public class OxForm : Form, IOxControl<Form>
+    public class OxForm : Form, IOxControlContainer<Form>
     {
         private readonly bool Initialized = false;
         public OxFormMainPanel MainPanel { get; internal set; }
@@ -22,15 +22,14 @@ namespace OxLibrary.Dialogs
             if (!e.Changed)
                 return false;
 
-            SilentSizeChange(() =>
-                {
-                    base.OnSizeChanged(e);
+            base.OnSizeChanged(e);
 
-                    if (MainPanel is not null)
-                        MainPanel.Size = Size;
-                }
-            );
-
+            //MainPanel?.SilentSizeChange(() =>
+            //    {
+                    MainPanel.Size = Size;
+            //    },
+             //   MainPanel.Size
+            //);
             return true;
         }
 
@@ -38,17 +37,17 @@ namespace OxLibrary.Dialogs
         {
             manager = OxControlManager.RegisterControl<Form>(this, OnSizeChanged);
             DoubleBuffered = true;
-            AutoSize = true;
+            //AutoSize = true;
             MainPanel = CreateMainPanel();
-            PlaceMainPanel();
             SetUpForm();
+            PlaceMainPanel();
             Initialized = true;
         }
 
         protected virtual void SetUpForm()
         {
             FormBorderStyle = FormBorderStyle.None;
-            SetUpSizes();
+            SetUpSizes(WindowState);
             StartPosition = FormStartPosition.CenterParent;
         }
 
@@ -58,9 +57,10 @@ namespace OxLibrary.Dialogs
             MainPanel.SetIcon();
         }
 
-        public void SetUpSizes()
+        public void SetUpSizes(FormWindowState state)
         {
-            MaximumSize = new(Screen.GetWorkingArea(this).Size);
+            WindowState = state;
+            MaximumSize = OxControlHelper.ScreenSize(this);
             OxSize wantedMinimumSize = WantedMinimumSize;
             MinimumSize = new(
                 OxWh.Min(wantedMinimumSize.Width, MaximumSize.Width),
@@ -68,21 +68,31 @@ namespace OxLibrary.Dialogs
             );
         }
 
-        public virtual OxSize WantedMinimumSize => new(OxWh.W640, OxWh.W480);
+        public new FormWindowState WindowState
+        {
+            get => base.WindowState;
+            set
+            {
+                if (WindowState.Equals(value))
+                    return;
 
-        protected virtual OxFormMainPanel CreateMainPanel() => new(this);
+                OxSize oldSize = new(Size);
+                base.WindowState = value;
+                OnSizeChanged(new(oldSize, Size));
+            }
+        }
+
+        public virtual OxSize WantedMinimumSize => 
+            new(OxWh.W640, OxWh.W480);
+
+        protected virtual OxFormMainPanel CreateMainPanel() => 
+            new(this);
 
         private void PlaceMainPanel()
         {
             MainPanel.Parent = this;
-            MainPanel.SilentSizeChange(() =>
-                {
-                    MainPanel.Left = OxWh.W0;
-                    MainPanel.Top = OxWh.W0;
-                    MainPanel.Size = new(Width, Height);
-                    MainPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
-                }
-            );
+            MainPanel.Location = new(OxWh.W0, OxWh.W0);
+            MainPanel.Size = new(Width, Height);
         }
 
         protected override void OnControlAdded(ControlEventArgs e)
@@ -220,16 +230,17 @@ namespace OxLibrary.Dialogs
             set => manager.Dock = value;
         }
 
-        public new IOxControl? Parent
+        public new IOxControlContainer? Parent
         {
             get => manager.Parent;
             set => manager.Parent = value;
         }
-        public bool HasOxChildren => manager.HasOxChildren;
 
-        public new OxRectangle ClientRectangle => manager.ClientRectangle;
+        public new OxRectangle ClientRectangle =>
+            manager.ClientRectangle;
 
-        public new OxRectangle DisplayRectangle => manager.DisplayRectangle;
+        public new OxRectangle DisplayRectangle =>
+            manager.DisplayRectangle;
 
         public new OxRectangle Bounds
         {
@@ -237,7 +248,14 @@ namespace OxLibrary.Dialogs
             set => manager.Bounds = value;
         }
 
-        public new OxSize PreferredSize => manager.PreferredSize;
+        public OxRectangle FullControlZone =>
+            ClientRectangle;
+
+        public OxRectangle ControlZone =>
+            manager.ControlZone;
+
+        public new OxSize PreferredSize =>
+            manager.PreferredSize;
 
         public new OxPoint AutoScrollOffset
         {
@@ -245,8 +263,8 @@ namespace OxLibrary.Dialogs
             set => manager.AutoScrollOffset = value;
         }
 
-        public bool SilentSizeChange(Action method) => 
-            manager.SilentSizeChange(method);
+        public bool SilentSizeChange(Action method, OxSize oldSize) => 
+            manager.SilentSizeChange(method, oldSize);
 
         public Control GetChildAtPoint(OxPoint pt, GetChildAtPointSkip skipValue) =>
             manager.GetChildAtPoint(pt, skipValue);
@@ -287,7 +305,12 @@ namespace OxLibrary.Dialogs
         public void RealignControls() =>
             manager.RealignControls();
 
-        protected override sealed void OnSizeChanged(EventArgs e) =>
+        protected override sealed void OnSizeChanged(EventArgs e)
+        {
+            if (SizeChanging)
+                return;
+
             base.OnSizeChanged(e);
+        }
     }
 }

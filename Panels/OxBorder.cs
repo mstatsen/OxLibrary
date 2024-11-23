@@ -24,5 +24,16 @@
             get => visible;
             set => visible = value;
         }
+
+        public bool IsEmpty =>
+            Size is OxWidth.None;
+
+        public override bool Equals(object? obj) => 
+            obj is OxBorder otherBorder
+            && Size == otherBorder.Size;
+
+        public override int GetHashCode() => 
+            Size.GetHashCode();
+
     }
 }

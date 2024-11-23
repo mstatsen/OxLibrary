@@ -81,6 +81,7 @@
         public static Bitmap Storage => GetBitmap("storage");
         public static Bitmap Synchronize => GetBitmap("synchronize");
         public static Bitmap Tag => GetBitmap("tag");
+        public static Bitmap TestCode => GetBitmap("testCode");
         public static Bitmap Tick => GetBitmap("tick");
         public static Bitmap Trash => GetBitmap("trash");
         public static Bitmap Unpin => GetBitmap("unpin");

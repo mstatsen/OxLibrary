@@ -21,10 +21,9 @@ namespace OxLibrary.Controls
         OxDock Dock { get; set; }
         OxSize PreferredSize { get; }
         OxPoint AutoScrollOffset { get; set; }
-        IOxControl? Parent { get; set; }
-        bool HasOxChildren { get; }
+        IOxControlContainer? Parent { get; set; }
         bool SizeChanging { get; }
-        bool SilentSizeChange(Action method);
+        bool SilentSizeChange(Action method, OxSize currentSize);
         void RealignControls();
         bool OnSizeChanged(SizeChangedEventArgs e);
         void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height);

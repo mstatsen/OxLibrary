@@ -22,17 +22,14 @@ namespace OxLibrary.Panels
             set => Header.Height = value; 
         }
 
-        public OxHeader Header { get; } = 
-            new(string.Empty)
-            {
-                Dock = OxDock.Top
-            };
+        public OxHeader Header { get; } = new();
 
         public bool HeaderVisible 
         {
             get => Header.Visible;
             set => Header.Visible = value;
         }
+
         public Font HeaderFont 
         { 
             get => Header.TitleFont;
@@ -59,9 +56,7 @@ namespace OxLibrary.Panels
         {
             base.PrepareColors();
             Header.BaseColor = 
-                PanelViewer is null 
-                    ? BaseColor 
-                    : Colors.Darker(3);
+                Colors.Darker(PanelViewer is null ? 1 : 3);
         }
 
         /*

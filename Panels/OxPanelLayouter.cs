@@ -160,7 +160,8 @@
             SilentSizeChange(() =>
                 {
                     Size = new();
-                }
+                },
+                Size
             );
         }
 
