@@ -6,10 +6,10 @@ namespace OxLibrary
     {
         public static OxRectangle operator -(OxRectangle rect, OxBorders borders) =>
             new(
-                OxWh.Add(rect.X, borders.Left),
-                OxWh.Add(rect.Y, borders.Top),
-                OxWh.Sub(OxWh.Sub(rect.Width, borders.Left), borders.Right),
-                OxWh.Sub(OxWh.Sub(rect.Height, borders.Top), borders.Bottom)
+                OxWh.A(rect.X, borders.Left),
+                OxWh.A(rect.Y, borders.Top),
+                OxWh.S(OxWh.S(rect.Width, borders.Left), borders.Right),
+                OxWh.S(OxWh.S(rect.Height, borders.Top), borders.Bottom)
             );
 
         private OxWidth x;
@@ -42,6 +42,15 @@ namespace OxLibrary
             get => height;
             set => height = value;
         }
+
+        public OxWidth Right => OxWh.A(X, Width);
+        public OxWidth Bottom => OxWh.A(Y, Height);
+
+        public OxPoint TopLeft => new(X, Y);
+        public OxPoint TopRight => new(Right, Y);
+
+        public OxPoint BottomLeft => new(X, Bottom);
+        public OxPoint BottomRight => new(Right, Bottom);
 
         private void Set(OxWidth x, OxWidth y, OxWidth width, OxWidth height)
         {

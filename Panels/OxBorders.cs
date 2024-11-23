@@ -8,18 +8,18 @@
     {
         public static OxBorders operator +(OxBorders left, OxBorders right) =>
             new(
-                left.Top | right.Top, 
-                left.Left | right.Left, 
-                left.Bottom | right.Bottom, 
-                left.Right | right.Right
+                OxWh.A(left.Top, right.Top),
+                OxWh.A(left.Left, right.Left),
+                OxWh.A(left.Bottom, right.Bottom),
+                OxWh.A(left.Right, right.Right)
             );
 
         public static OxBorders operator -(OxBorders left, OxBorders right) =>
             new(
-                OxWh.Sub(left.Top, right.Top),
-                OxWh.Sub(left.Left, right.Left),
-                OxWh.Sub(left.Bottom, right.Bottom),
-                OxWh.Sub(left.Right, right.Right)
+                OxWh.S(left.Top, right.Top),
+                OxWh.S(left.Left, right.Left),
+                OxWh.S(left.Bottom, right.Bottom),
+                OxWh.S(left.Right, right.Right)
             );
 
         private bool SizeChanging = false;
@@ -108,7 +108,7 @@
             LeftInt + RightInt;
 
         public OxWidth HorizontalFull => 
-            Left | Right;
+            OxWh.A(Left, Right);
 
         public int TopInt
         {
@@ -142,9 +142,11 @@
             }
         }
 
-        public int VerticalIntFull => TopInt + BottomInt;
+        public int VerticalIntFull => 
+            TopInt + BottomInt;
 
-        public OxWidth VerticalFull => Top | Bottom;
+        public OxWidth VerticalFull =>
+            OxWh.A(Top, Bottom);
 
         public int RightInt
         {
@@ -234,15 +236,11 @@
         public Padding AsPadding => 
             new(LeftInt, TopInt, RightInt, BottomInt);
 
-        public bool AllVisible
-        {
-            get =>
-                this[OxDock.Top].Visible
-                && this[OxDock.Left].Visible
-                && this[OxDock.Bottom].Visible
-                && this[OxDock.Right].Visible;
-            set => SetVisible(value);
-        }
+        public bool GetVisible() =>
+            this[OxDock.Top].Visible
+            || this[OxDock.Left].Visible
+            || this[OxDock.Bottom].Visible
+            || this[OxDock.Right].Visible;
 
         public bool IsEmpty
         {

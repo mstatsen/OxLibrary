@@ -10,8 +10,9 @@ namespace OxLibrary.Test
         public TestForm()
         {
             InitializeComponent();
-            BaseColor = Color.FromArgb(1, 116, 138, 140);
+            BaseColor = Color.FromArgb(116, 138, 138);
             MainPanel.Header.ToolBar.Click += (s, e) => MessageBox.Show("Toolbar");
+            MainPanel.Header.Margin.Size = OxWh.W0;
             MainPanel.Header.Click += (s, e) => MessageBox.Show("Header");
             MainPanel.Click += (s, e) => MessageBox.Show("MainPanel");
             Click += (s, e) => MessageBox.Show("Form");

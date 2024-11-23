@@ -14,6 +14,7 @@
         {
             Borders.SetVisible(false);
             Borders.SetVisible(OxDock.Bottom, true);
+            Borders.Bottom = OxWh.W1;
             base.PrepareInnerControls();
         }
 

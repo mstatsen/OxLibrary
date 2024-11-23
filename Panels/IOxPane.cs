@@ -14,7 +14,8 @@ namespace OxLibrary.Panels
         OxBorders Padding { get; }
         OxBorders Borders { get; }
         Color BorderColor { get; set; }
-        OxWidth BorderWidth { get; set; }
+        void SetBorderWidth(OxWidth value);
+        void SetBorderWidth(OxDock dock, OxWidth value);
         bool BorderVisible { get; set; }
         OxBorders Margin { get; }
         bool BlurredBorder { get; set; }

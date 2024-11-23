@@ -7,14 +7,17 @@
         private const int Default_Grouth = 15;
 
         private static int ColorPart(int colorPart) =>
-            colorPart < 0 ? 0 : colorPart > 255 ? 255 : colorPart;
+            colorPart < 0 
+                ? 0 
+                : colorPart > 255 
+                    ? 255 
+                    : colorPart;
 
         private static Color GrouthColor(Color color, int grouth) =>
             GrouthColor(color, grouth, grouth, grouth);
 
         private static Color GrouthColor(Color color, int grouthRed, int grouthGreen, int grouthBlue) =>
             Color.FromArgb(
-                0,
                 ColorPart(color.R + grouthRed),
                 ColorPart(color.G + grouthGreen),
                 ColorPart(color.B + grouthBlue)

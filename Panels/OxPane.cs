@@ -109,7 +109,8 @@ namespace OxLibrary.Panels
         public new OxRectangle ClientRectangle => 
             manager.ClientRectangle;
 
-        public new virtual OxRectangle DisplayRectangle => manager.DisplayRectangle;
+        public new virtual OxRectangle DisplayRectangle => 
+            manager.DisplayRectangle;
 
         public new OxRectangle Bounds
         {
@@ -117,7 +118,8 @@ namespace OxLibrary.Panels
             set => manager.Bounds = value;
         }
 
-        public new OxSize PreferredSize => manager.PreferredSize;
+        public new OxSize PreferredSize => 
+            manager.PreferredSize;
 
         public new OxPoint AutoScrollOffset
         {
@@ -195,9 +197,7 @@ namespace OxLibrary.Panels
 
         private void BordersSizeChangedHandler(object sender, BorderEventArgs e)
         {
-            //if (FullControlZone.Equals(base.Padding))
-                //base.Padding = FullControlZone.AsPadding;
-
+            //RealignControls();
             Invalidate();
         }
 
@@ -240,18 +240,16 @@ namespace OxLibrary.Panels
             }
         }
 
-        private OxWidth borderWidth = OxWh.W0;
+        public void SetBorderWidth(OxWidth value) =>
+            Borders.Size = value;
 
-        public OxWidth BorderWidth
-        {
-            get => borderWidth;
-            set => borderWidth = value;
-        }
+        public void SetBorderWidth(OxDock dock, OxWidth value) =>
+            Borders[dock].Size = value;
 
         public bool BorderVisible
         {
-            get => Borders.AllVisible;
-            set => Borders.AllVisible = value;
+            get => Borders.GetVisible();
+            set => Borders.SetVisible(value);
         }
 
         private readonly OxBorders margin = new();
@@ -330,59 +328,57 @@ namespace OxLibrary.Panels
         protected virtual void PrepareInnerControls() { }
 
         public virtual OxRectangle FullControlZone =>
-            ClientRectangle - (Padding + Borders + Margin);
+            ClientRectangle 
+            - Padding 
+            - Borders 
+            - Margin;
 
         public virtual OxRectangle ControlZone =>
             manager.ControlZone;
 
-        private OxRectangle BorderRectangle
-        {
-            get
-            {
-                OxRectangle bordersRectangle = ClientRectangle - Margin;
-                bordersRectangle.X |= OxWh.W1;
-                bordersRectangle.Y |= OxWh.W1;
-                bordersRectangle.Width -= OxWh.W2;
-                bordersRectangle.Height -= OxWh.W2;
-                return bordersRectangle;
-            }
-        }
+        private OxRectangle BorderRectangle => 
+            ClientRectangle - Margin;
 
         private void DrawBorders(Graphics g)
         {
             if (Borders.IsEmpty)
                 return;
 
-            using (Pen pen = new(BorderColor, OxWh.Int(BorderWidth)))
+            foreach (var border in Borders)
             {
-                OxRectangle rect = BorderRectangle;
-                int X1 = OxWh.Int(rect.X);
-                int Y1 = OxWh.Int(rect.Y);
-                int X2 = OxWh.Int(OxWh.Add(rect.X, rect.Width));
-                int Y2 = OxWh.Int(OxWh.Add(rect.Y, rect.Height));
+                if (border.Value.IsEmpty)
+                    continue;
 
-                foreach (var border in Borders)
+                OxRectangle borderBounds = new(BorderRectangle);
+                borderBounds.Width = OxWh.Sub(borderBounds.Width, border.Value.Size);
+                borderBounds.Height = OxWh.Sub(borderBounds.Height, border.Value.Size);
+
+                using Pen pen = new(BorderColor, OxWh.I(border.Value.Size));
+                Point startPoint = Point.Empty;
+                Point finishPoint = Point.Empty;
+
+                switch (border.Key)
                 {
-                    if (border.Value.IsEmpty)
-                        continue;
-
-                    switch (border.Key)
-                    {
-                        case OxDock.Left:
-                            g.DrawLine(pen, X1, Y1, X1, Y2);
-                            break;
-                        case OxDock.Right:
-                            g.DrawLine(pen, X2, Y1, X2, Y2);
-                            break;
-                        case OxDock.Top:
-                            g.DrawLine(pen, X1, Y1, X2, Y1);
-                            break;
-                        case OxDock.Bottom:
-                            g.DrawLine(pen, X1, Y2, X2, Y2);
-                            break;
-                    }
+                    case OxDock.Left:
+                        startPoint = borderBounds.TopLeft.Point;
+                        finishPoint = borderBounds.BottomLeft.Point;
+                        break;
+                    case OxDock.Right:
+                        startPoint = borderBounds.TopRight.Point;
+                        finishPoint = borderBounds.BottomRight.Point;
+                        break;
+                    case OxDock.Top:
+                        startPoint = borderBounds.TopLeft.Point;
+                        finishPoint = borderBounds.TopRight.Point;
+                        break;
+                    case OxDock.Bottom:
+                        startPoint = borderBounds.BottomLeft.Point;
+                        finishPoint = borderBounds.BottomRight.Point;
+                        break;
                 }
-            };
+
+                g.DrawLine(pen, startPoint, finishPoint);
+            }
         }
 
         protected override void OnPaint(PaintEventArgs e)

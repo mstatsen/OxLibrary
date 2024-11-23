@@ -6,7 +6,7 @@
         public OxFrame(OxSize size) : base(size)
         {
             BorderVisible = true;
-            BorderWidth = OxWh.W1;
+            SetBorderWidth(OxWh.W1);
         }
     }
 }

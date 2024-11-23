@@ -16,7 +16,7 @@
                 OxWidth oldValue = width;
                 width = value;
 
-                if (oldValue != width)
+                if (!oldValue.Equals(width))
                     OnSizeChanged(new(oldValue, Height));
             }
         }

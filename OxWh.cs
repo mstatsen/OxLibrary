@@ -16,8 +16,17 @@
                 ? W0
                 : (OxWidth)intWidth;
 
+        public static int IAdd(OxWidth left, OxWidth right) =>
+            I(left) + I(right);
+
+        public static OxWidth A(OxWidth left, OxWidth right) =>
+            W(IAdd(left, right));
+
+        public static OxWidth S(OxWidth left, OxWidth right) =>
+            W(I(left) - I(right));
+
         public static OxWidth Add(OxWidth left, OxWidth right) =>
-            left | right;
+            A(left, right);
 
         public static OxWidth Add(OxWidth left, int right) =>
             Add(left, W(right));
@@ -26,7 +35,7 @@
             Add(right, left);
 
         public static OxWidth Sub(OxWidth left, OxWidth right) =>
-            W(Int(left) - Int(right));
+            S(left, right);
 
         public static OxWidth Sub(OxWidth left, int right) =>
             W(Int(left) - right);

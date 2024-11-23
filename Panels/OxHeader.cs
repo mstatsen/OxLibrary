@@ -4,8 +4,6 @@ namespace OxLibrary.Panels
 {
     public class OxHeader : OxUnderlinedPanel, IOxHeader
     {
-        public readonly static OxWidth DefaultTitleWidth = OxWh.W240;
-        public readonly static OxWidth DefaultTitleHeight = OxWh.W26;
         private const string DefaultFontFamily = "Calibri Light";
         private const float DefaultFontSize = 11;
 
@@ -21,7 +19,11 @@ namespace OxLibrary.Panels
             AutoSize = false,
             Dock = DockStyle.Fill,
             Text = string.Empty,
-            Font = new(DefaultFontFamily, DefaultFontSize + 0.5f, FontStyle.Bold | FontStyle.Italic),
+            Font = new(
+                DefaultFontFamily, 
+                DefaultFontSize + 0.5f, 
+                FontStyle.Bold | FontStyle.Italic
+            ),
             TextAlign = ContentAlignment.MiddleLeft
         };
 
@@ -39,7 +41,7 @@ namespace OxLibrary.Panels
             set => ToolBar.Buttons = value;
         }
 
-        public OxHeader(string title = "") : base(new(DefaultTitleWidth, DefaultTitleHeight))
+        public OxHeader(string title = "") : base(new(OxWh.W240, OxWh.W26))
         {
             Dock = OxDock.Top;
             label.Text = title;
@@ -50,7 +52,8 @@ namespace OxLibrary.Panels
         public override OxDock Dock 
         { 
             get => base.Dock; 
-            set => base.Dock = OxDock.Top; }
+            set => base.Dock = OxDock.Top; 
+        }
 
         private void LabelClickHandler(object? sender, EventArgs e) => 
             Click?.Invoke(sender, e);
@@ -76,12 +79,16 @@ namespace OxLibrary.Panels
             get => label.TextAlign;
             set => label.TextAlign = value;
         }
+
         public Font TitleFont 
         { 
             get => label.Font; 
             set => label.Font = value;
         }
-        protected override Bitmap? GetIcon() => (Bitmap?)icon.Image;
+
+        protected override Bitmap? GetIcon() => 
+            (Bitmap?)icon.Image;
+
         protected override void SetIcon(Bitmap? value)
         {
             icon.Image = value;
@@ -95,7 +102,7 @@ namespace OxLibrary.Panels
             ToolBar.Parent = this;
             ToolBar.BorderVisible = false;
             label.Parent = this;
-            SendToBack();
+            //SendToBack();
         }
 
         protected override void PrepareColors()

@@ -72,9 +72,11 @@ namespace OxLibrary.Dialogs
 
         private void PlaceButtons()
         {
+            /*
             Header.AddToolButton(closeButton);
             Header.AddToolButton(restoreButton);
             Header.AddToolButton(minimizeButton);
+            */
         }
 
         private void SetButtonsSize()
