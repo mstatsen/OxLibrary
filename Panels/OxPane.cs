@@ -60,9 +60,11 @@ namespace OxLibrary.Panels
             set => manager.Left = value;
         }
 
-        public new OxWidth Bottom => manager.Bottom;
+        public new OxWidth Bottom => 
+            manager.Bottom;
 
-        public new OxWidth Right => manager.Right;
+        public new OxWidth Right => 
+            manager.Right;
 
         public new OxSize Size
         {
