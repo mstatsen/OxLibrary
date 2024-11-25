@@ -283,9 +283,9 @@ namespace OxLibrary.Panels
 
         public OxPaginator() : base(OxSize.Empty) { }
 
-        protected override void PrepareInnerControls()
+        protected override void PrepareInnerComponents()
         {
-            base.PrepareInnerControls();
+            base.PrepareInnerComponents();
             itemsCountLabel.Parent = this;
             buttonsPanel.Parent = this;
             buttonsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;

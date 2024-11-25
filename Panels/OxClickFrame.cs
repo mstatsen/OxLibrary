@@ -6,7 +6,30 @@
         private bool freezeHovered = false;
         public bool HandHoverCursor = false;
 
-        public GetColor? GetHoveredColor;
+        private bool useDefaultHoveredColor = true;
+        public bool UseDefaultHoveredColor 
+        { 
+            get => useDefaultHoveredColor;
+            set
+            { 
+                useDefaultHoveredColor = value;
+                SetBaseColor();
+            }
+        }
+        private Color hoveredColor = Color.Transparent;
+        public Color HoveredColor
+        {
+            get => 
+                useDefaultHoveredColor 
+                    ? Colors.Darker(2) 
+                    : hoveredColor;
+            set
+            {
+                hoveredColor = value;
+                useDefaultHoveredColor = false;
+                SetBaseColor();
+            }
+        }
 
         public bool Hovered
         {
@@ -14,17 +37,60 @@
             set
             {
                 hovered = value;
-                PrepareColors();
+                SetBaseColor();
                 HoveredChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
-        private bool fixBorderColor = false;
-
-        public bool FixBorderColor
+        protected override void PrepareInnerComponents()
         {
-            get => fixBorderColor;
-            set => SetFixBorderColor(value);
+            base.PrepareInnerComponents();
+            Colors = new(DefaultColor);
+        }
+
+        protected override void PrepareColors()
+        {
+            base.PrepareColors();
+
+            if (!ClickFrameBaseColorProcess)
+                Colors.BaseColor = BaseColor;
+        }
+
+        private bool ClickFrameBaseColorProcess = false;
+
+        public new OxColorHelper Colors { get; private set; }
+
+        private void SetBaseColor()
+        {
+            ClickFrameBaseColorProcess = true;
+
+            try
+            {
+                BaseColor =
+                    (Enabled && !ReadOnly)
+                    || !UseDisabledStyles
+                        ? hovered
+                            || FreezeHovered
+                            ? HoveredColor
+                            : Colors.BaseColor
+                        : Colors.Lighter(ReadOnly ? 1 : 0);
+            }
+            finally
+            { 
+                ClickFrameBaseColorProcess = false;
+            }
+        }
+
+        private bool fixedBorderColor = false;
+
+        public bool FixedBorderColor
+        {
+            get => fixedBorderColor;
+            set
+            {
+                fixedBorderColor = value;
+                SetBaseColor();
+            }
         }
 
 
@@ -33,23 +99,15 @@
         public bool FreezeHovered
         {
             get => freezeHovered;
-            set => SetFreezeHovered(value);
+            set
+            {
+                freezeHovered = value;
+                SetBaseColor();
+            }
         }
 
-        private void SetFreezeHovered(bool value)
-        {
-            freezeHovered = value;
-            PrepareColors();
-        }
-
-        private void SetFixBorderColor(bool value)
-        {
-            fixBorderColor = value;
-            PrepareColors();
-        }
-
-        public OxClickFrame() : base() { }
-        public OxClickFrame(OxSize size) : base(size) { }
+        public OxClickFrame() : this(OxSize.Empty) { }
+        public OxClickFrame(OxSize size) : base(size: size) => Colors ??= new(DefaultColor);
 
         private bool readOnly = false;
 
@@ -69,42 +127,15 @@
             BeginGroup = false;
         }
 
-        public override Color GetBordersColor() => 
-            (fixBorderColor || hovered)
+        protected override Color GetBorderColor() => 
+            (fixedBorderColor || hovered)
             && !ReadOnly
                 ? Colors.Darker(3)
                 : HiddenBorder 
                     || !Enabled
-                    ? Colors.Lighter(8)
-                    : base.GetBordersColor();
+                    ? Colors.Lighter(7)
+                    : base.GetBorderColor();
 
-        protected override void PrepareColors()
-        {
-            base.PrepareColors();
-
-            BackColor =
-                (Enabled && !ReadOnly)
-                || !UseDisabledStyles
-                    ? hovered
-                        || FreezeHovered
-                        ? GetHoveredColor is not null
-                            ? GetHoveredColor.Invoke()
-                            : Colors.Darker(2)
-                        : BaseColor
-                    : Colors.Darker(ReadOnly ? 0 : 1);
-            /*
-            BaseColor =
-                (Enabled && !ReadOnly) 
-                || !UseDisabledStyles
-                    ? hovered 
-                        || FreezeHovered
-                        ? GetHoveredColor is not null
-                            ? GetHoveredColor.Invoke()
-                            : Colors.Darker(2)
-                        : BaseColor
-                    : Colors.Darker(ReadOnly ? 0 : 1);
-            */
-        }
 
         public void PerformClick() =>
             InvokeOnClick(this, null);
@@ -150,14 +181,8 @@
             set
             {
                 hiddenBorder = value;
-                PrepareColors();
+                SetBaseColor();
             }
-        }
-
-        public Color Color
-        {
-            get => BaseColor;
-            set => BaseColor = value;
         }
 
         public bool Default { get; set; }

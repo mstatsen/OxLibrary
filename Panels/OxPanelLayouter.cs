@@ -12,9 +12,9 @@
         public bool IsEmpty => 
             placedPanels.Count is 0;
 
-        protected override void PrepareInnerControls()
+        protected override void PrepareInnerComponents()
         {
-            base.PrepareInnerControls();
+            base.PrepareInnerComponents();
             CreateColumnsPanels();
         }
 

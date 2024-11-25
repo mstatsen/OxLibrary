@@ -46,10 +46,10 @@ namespace OxLibrary.Dialogs
 
         public DialogResult DialogResult { get; private set; }
 
-        protected override void PrepareInnerControls()
+        protected override void PrepareInnerComponents()
         {
             PrepareFooter();
-            base.PrepareInnerControls();
+            base.PrepareInnerComponents();
         }
 
         private void CreateButton(OxDialogButton dialogButton)

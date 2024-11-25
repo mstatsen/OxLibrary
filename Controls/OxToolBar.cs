@@ -2,7 +2,7 @@
 
 namespace OxLibrary.Controls
 {
-    public class OxToolBar<TButton> : OxFrame
+    public class OxToolBar<TButton> : OxPane
         where TButton : OxClickFrame, new()
     {
         private readonly OxWidth DefaultToolBarHeight = OxWh.W24;
@@ -16,16 +16,18 @@ namespace OxLibrary.Controls
 
         public void RecalcWidth()
         {
+            if (!OxDockHelper.IsVariableWidth(Dock))
+                return;
+
             OxWidth calcedWidth = OxWh.W0;
 
             foreach (TButton button in buttons)
                 calcedWidth = OxWh.Add(calcedWidth, button.Width);
 
-            foreach (OxPane separator in separators.Values)
+            foreach (OxPane separator in Separators.Values)
                 calcedWidth = OxWh.Add(calcedWidth, separator.Width);
 
             Width = calcedWidth;
-            //Width = buttons.Width();
         }
 
         protected override void AfterCreated()
@@ -35,63 +37,79 @@ namespace OxLibrary.Controls
             Size = new(Width, DefaultToolBarHeight);
         }
 
-        private readonly Dictionary<TButton, OxPane> separators = new();
+        private readonly Dictionary<TButton, OxPane> Separators = new();
+
+        protected virtual OxWidth ButtonMargin => OxWh.W1;
+        protected virtual OxWidth GroupsSeparatorWidth => OxWh.W9;
+        protected virtual OxWidth GroupSeparatorMargin => OxWh.W4;
 
         private void PlaceButtons()
         {
             TButton? lastButton = null;
+
             foreach (TButton button in buttons)
             {
-                button.Parent = this;
+                button.Parent = null;
 
-                if (button.Dock is not OxDock.Right)
-                    button.Dock = OxDock.Left;
-
-                if (button.BeginGroup && 
-                    lastButton is not null)
+                try
                 {
-                    button.Margin.Left = OxWh.W4;
-                    lastButton.Margin.Right = OxWh.W4;
+                    if (!OxDockHelper.IsHorizontal(button.Dock))
+                        button.Dock = OxDock.Left;
 
-                    if (lastButton.Dock.Equals(button.Dock))
-                        SeparateButtonsGroup(button);
+                    TButton? beginGroupButton = button.Dock is OxDock.Left ? button : lastButton;
+
+                    if (beginGroupButton is not null
+                        && beginGroupButton.BeginGroup
+                        && beginGroupButton.Dock.Equals(button.Dock))
+                        CreateSeparator(button);
+                    else
+                        button.Margin.SetSize(
+                            button.Dock,
+                            lastButton is null
+                            || !lastButton.Dock.Equals(button.Dock)
+                                ? OxWh.W0
+                                : ButtonMargin
+                        );
+
+                    lastButton = button;
                 }
-                else
-                    button.Margin.Left = 
-                        lastButton is null 
-                            ? OxWh.W0
-                            : OxWh.W1;
-
-                button.BringToFront();
-                button.VisibleChanged += ButtonVisibleChangedHandler;
-                lastButton = button;
+                finally
+                {
+                    button.Parent = this;
+                    button.VisibleChanged += ButtonVisibleChangedHandler;
+                }
             }
 
             RecalcWidth();
             SetToolBarPaddings();
         }
 
-        private void SeparateButtonsGroup(TButton startButton)
+        private OxPane CreateSeparator(TButton startButton)
         {
-            if (!separators.TryGetValue(startButton, out var separator))
+            if (!Separators.TryGetValue(startButton, out var separator))
             {
-                separator = new(new(OxWh.W1, OxWh.W1))
+                separator = new(new(GroupsSeparatorWidth, OxWh.W0))
                 {
-                    Parent = this,
-                    Dock = startButton.Dock,
-                    BackColor = BorderColor
+                    Parent = startButton.Parent,
+                    Dock = startButton.Dock
                 };
-                separators.Add(startButton, separator);
+                separator.Margin.Size = GroupSeparatorMargin;
+                startButton.ParentChanged += SynchronizeSeparatorParentHandler;
+                Separators.Add(startButton, separator);
             }
 
-            separator?.BringToFront();
+            return separator;
         }
 
-        private void ButtonVisibleChangedHandler(object? sender, EventArgs e)
+        private void SynchronizeSeparatorParentHandler(object? sender, EventArgs e)
         {
-            RecalcWidth();
-            OnButtonVisibleChange?.Invoke(sender, e);
+            if (sender is TButton button
+                && Separators.TryGetValue(button, out var separator))
+                separator.Parent = button.Parent;
         }
+
+        private void ButtonVisibleChangedHandler(object? sender, EventArgs e) =>
+            RecalcWidth();
 
         private void ClearButtons() 
         {
@@ -102,7 +120,7 @@ namespace OxLibrary.Controls
             }
         }
 
-        private void SetButtons(OxClickFrameList<TButton> buttonList)
+        protected void SetButtons(OxClickFrameList<TButton> buttonList)
         {
             ClearButtons();
             buttons = buttonList;
@@ -129,14 +147,15 @@ namespace OxLibrary.Controls
             set => SetButtons(value);
         }
 
-        public EventHandler? OnButtonVisibleChange;
-
         protected override void PrepareColors()
         {
             base.PrepareColors();
 
             foreach (TButton button in buttons)
                 button.BaseColor = BaseColor;
+
+            foreach(OxPane separator in Separators.Values)
+                separator.BaseColor = Colors.Darker(7);
         }
 
         protected override void OnEnabledChanged(EventArgs e)
@@ -147,15 +166,13 @@ namespace OxLibrary.Controls
                 button.Enabled = Enabled;
         }
 
-        public override Color GetBordersColor() => 
-            Colors.Lighter(4);
-
         public bool ExecuteDefault() =>
             Buttons.ExecuteDefault();
 
         public override bool OnSizeChanged(SizeChangedEventArgs e)
         {
-            if (!e.Changed)
+            if (!e.Changed
+                || SizeChanging)
                 return false;
 
             base.OnSizeChanged(e);
@@ -206,9 +223,19 @@ namespace OxLibrary.Controls
             return button;
         }
 
-        public TButton AddButton(TButton button)
+        public TButton AddButton(TButton button, bool? beginGroup = null, bool InsertAsFirst = false)
         {
-            Buttons.Insert(0, button);
+            if (!Buttons.Contains(button))
+            {
+                if (InsertAsFirst)
+                    Buttons.Insert(0, button);
+                else
+                    Buttons.Add(button);
+            }
+
+            if (beginGroup is bool boolBeginGroup)
+                button.BeginGroup = boolBeginGroup;
+
             PlaceButtons();
             return button;
         }

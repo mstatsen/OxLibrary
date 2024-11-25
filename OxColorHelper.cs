@@ -33,6 +33,7 @@
             get => baseColor;
             set
             {
+                BaseColorChanging?.Invoke(this, EventArgs.Empty);
                 baseColor = Color.FromArgb(value.R, value.G, value.B);
                 BaseColorChanged?.Invoke(this, EventArgs.Empty);
             }
@@ -119,5 +120,6 @@
         }
             
         public event EventHandler? BaseColorChanged;
+        public event EventHandler? BaseColorChanging;
     }
 }

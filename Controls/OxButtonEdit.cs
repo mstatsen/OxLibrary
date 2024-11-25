@@ -18,9 +18,9 @@ namespace OxLibrary.Controls
 
         public OxButtonEdit() : base(new(OxWh.W120, OxWh.W22)) { }
 
-        protected override void PrepareInnerControls() 
+        protected override void PrepareInnerComponents() 
         {
-            base.PrepareInnerControls();
+            base.PrepareInnerComponents();
             PrepareTextBox();
             PrepareButton();
         }
@@ -34,7 +34,7 @@ namespace OxLibrary.Controls
                 TextBox.Height
             );
             Button.Borders.Left = OxWh.W0;
-            Button.FixBorderColor = true;
+            Button.FixedBorderColor = true;
         }
 
         public event EventHandler OnButtonClick

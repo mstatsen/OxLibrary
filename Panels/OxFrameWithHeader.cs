@@ -4,9 +4,9 @@ namespace OxLibrary.Panels
 {
     public class OxFrameWithHeader : OxFrame, IOxFrameWithHeader
     {
-        protected override void PrepareInnerControls()
+        protected override void PrepareInnerComponents()
         {
-            base.PrepareInnerControls();
+            base.PrepareInnerComponents();
             Header.Parent = this;
         }
 

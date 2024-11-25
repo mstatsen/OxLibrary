@@ -36,9 +36,9 @@ namespace OxLibrary.Controls
             Label.TextAlign = Picture.Visible ? ContentAlignment.MiddleLeft : ContentAlignment.MiddleCenter;
         }
 
-        protected override void PrepareInnerControls()
+        protected override void PrepareInnerComponents()
         {
-            base.PrepareInnerControls();
+            base.PrepareInnerComponents();
             Label.Parent = this;
         }
 

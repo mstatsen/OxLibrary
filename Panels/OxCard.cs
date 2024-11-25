@@ -149,9 +149,9 @@ namespace OxLibrary.Panels
                 ? "Collapse" 
                 : "Expand";
 
-        protected override void PrepareInnerControls()
+        protected override void PrepareInnerComponents()
         {
-            base.PrepareInnerControls();
+            base.PrepareInnerComponents();
             ExpandButton.Size = new(OxWh.W25, OxWh.W20);
             Header.AddToolButton(ExpandButton);
         }

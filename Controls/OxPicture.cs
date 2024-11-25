@@ -94,9 +94,9 @@ namespace OxLibrary.Controls
             picture.Top = OxWh.Int(OxWh.Div(OxWh.Sub(Height, picture.Height), OxWh.W2));
         }
 
-        protected override void PrepareInnerControls()
+        protected override void PrepareInnerComponents()
         {
-            base.PrepareInnerControls();
+            base.PrepareInnerComponents();
             PreparePicture();
         }
 

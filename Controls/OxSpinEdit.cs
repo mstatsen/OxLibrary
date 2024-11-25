@@ -19,9 +19,9 @@ namespace OxLibrary.Controls
         private readonly OxIconButton DecreaseButton = CreateButton(OxIcons.Minus, OxDock.Left);
         private readonly OxIconButton IncreaseButton = CreateButton(OxIcons.Plus, OxDock.Right);
 
-        protected override void PrepareInnerControls()
+        protected override void PrepareInnerComponents()
         {
-            base.PrepareInnerControls();
+            base.PrepareInnerComponents();
             DecreaseButton.Parent = this;
             IncreaseButton.Parent = this;
             DecreaseButton.Click += (s, e) => Value -= Step;
@@ -43,7 +43,7 @@ namespace OxLibrary.Controls
             {
                 Dock = dock,
                 HiddenBorder = false,
-                FixBorderColor = true
+                FixedBorderColor = true
             };
 
         public int Value
@@ -182,7 +182,7 @@ namespace OxLibrary.Controls
             ValueChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public override Color GetBordersColor() =>
+        protected override Color GetBorderColor() =>
             Enabled
                 ? Colors.Darker(8)
                 : Colors.Lighter(2);

@@ -16,11 +16,11 @@ namespace OxLibrary.Controls
             Icon = icon;
         }
 
-        protected override void PrepareInnerControls()
+        protected override void PrepareInnerComponents()
         {
             Picture.Parent = this;
             Picture.UseDisabledStyles = UseDisabledStyles;
-            base.PrepareInnerControls();
+            base.PrepareInnerComponents();
         }
 
         protected override void PrepareColors()

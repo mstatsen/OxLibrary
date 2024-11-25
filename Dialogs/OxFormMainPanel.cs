@@ -62,9 +62,9 @@ namespace OxLibrary.Dialogs
             restoreButton.Visible = Form.CanMaximize;
         }
 
-        protected override void PrepareInnerControls()
+        protected override void PrepareInnerComponents()
         {
-            base.PrepareInnerControls();
+            base.PrepareInnerComponents();
             SetButtonsHandlers();
             SetButtonsSize();
             PlaceButtons();
@@ -72,9 +72,9 @@ namespace OxLibrary.Dialogs
 
         private void PlaceButtons()
         {
-            Header.AddToolButton(closeButton);
-            Header.AddToolButton(restoreButton);
             Header.AddToolButton(minimizeButton);
+            Header.AddToolButton(restoreButton, true);
+            Header.AddToolButton(closeButton);
         }
 
         private void SetButtonsSize()
@@ -86,12 +86,9 @@ namespace OxLibrary.Dialogs
         private void SetButtonsHandlers()
         {
             closeButton.Click += CloseButtonClickHandler;
-            closeButton.GetHoveredColor += CloseButtonGetHoveredColorHandler;
             restoreButton.Click += RestoreButtonClickHandler;
             minimizeButton.Click += MinimizeButtonClickHandler;
         }
-
-        private Color CloseButtonGetHoveredColorHandler() => Color.Red;
 
         private void MinimizeButtonClickHandler(object? sender, EventArgs e) => 
             SetFormState(FormWindowState.Minimized);
@@ -102,7 +99,8 @@ namespace OxLibrary.Dialogs
         private readonly OxIconButton closeButton = new(OxIcons.Close, OxWh.W28)
         {
             IconPadding = OxWh.W5,
-            ToolTipText = "Close"
+            ToolTipText = "Close",
+            HoveredColor = Color.Red
         };
         private readonly OxIconButton restoreButton = new(OxIcons.Restore, OxWh.W28)
         {

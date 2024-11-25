@@ -22,6 +22,48 @@
                 OxWh.S(left.Right, right.Right)
             );
 
+        public void Draw(Graphics g, OxRectangle bounds, Color color)
+        {
+            if (IsEmpty)
+                return;
+
+            foreach (var border in this)
+            {
+                if (border.Value.IsEmpty)
+                    continue;
+
+                OxRectangle borderBounds = new(bounds);
+                borderBounds.Width = OxWh.Sub(borderBounds.Width, border.Value.Size);
+                borderBounds.Height = OxWh.Sub(borderBounds.Height, border.Value.Size);
+
+                using Pen pen = new(color, OxWh.I(border.Value.Size));
+                Point startPoint = Point.Empty;
+                Point finishPoint = Point.Empty;
+
+                switch (border.Key)
+                {
+                    case OxDock.Left:
+                        startPoint = borderBounds.TopLeft.Point;
+                        finishPoint = borderBounds.BottomLeft.Point;
+                        break;
+                    case OxDock.Right:
+                        startPoint = borderBounds.TopRight.Point;
+                        finishPoint = borderBounds.BottomRight.Point;
+                        break;
+                    case OxDock.Top:
+                        startPoint = borderBounds.TopLeft.Point;
+                        finishPoint = borderBounds.TopRight.Point;
+                        break;
+                    case OxDock.Bottom:
+                        startPoint = borderBounds.BottomLeft.Point;
+                        finishPoint = borderBounds.BottomRight.Point;
+                        break;
+                }
+
+                g.DrawLine(pen, startPoint, finishPoint);
+            }
+        }
+
         private bool SizeChanging = false;
         private void NotifyAboutSizeChanged()
         {
@@ -29,7 +71,7 @@
                 SizeChanged?.Invoke(this, new BorderEventArgs());
         }
 
-        private bool SetSize(OxDock dock, OxWidth size)
+        public bool SetSize(OxDock dock, OxWidth size)
         {
             OxWidth oldSize = this[dock].Size;
 

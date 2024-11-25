@@ -10,12 +10,12 @@
             set => Borders.SetVisible(OxDock.Bottom, true); 
         }
 
-        protected override void PrepareInnerControls()
+        protected override void PrepareInnerComponents()
         {
             Borders.SetVisible(false);
             Borders.SetVisible(OxDock.Bottom, true);
             Borders.Bottom = OxWh.W1;
-            base.PrepareInnerControls();
+            base.PrepareInnerComponents();
         }
 
         public OxUnderlinedPanel(OxSize size) : base(size) { }

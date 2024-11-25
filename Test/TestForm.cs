@@ -10,10 +10,11 @@ namespace OxLibrary.Test
         public TestForm()
         {
             InitializeComponent();
-            BaseColor = Color.FromArgb(116, 138, 138);
+            BaseColor = Color.FromArgb(148, 138, 138);
             MainPanel.Header.ToolBar.Click += (s, e) => MessageBox.Show("Toolbar");
-            //MainPanel.Header.Click += (s, e) => MessageBox.Show("Header");
-            //MainPanel.Click += (s, e) => MessageBox.Show("MainPanel");
+            MainPanel.Margin.Size = OxWh.W24;
+            MainPanel.Header.Click += (s, e) => MessageBox.Show("Header");
+            MainPanel.Click += (s, e) => OxMessage.ShowInfo("MainPanel", this);
             Click += (s, e) => MessageBox.Show("Form");
             OxControlHelper.CenterForm(this);
         }

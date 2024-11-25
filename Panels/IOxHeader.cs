@@ -8,7 +8,7 @@ namespace OxLibrary.Panels
         Label Label { get; }
         ContentAlignment TitleAlign { get; set; }
         Font TitleFont { get; set; }
-        void AddToolButton(OxIconButton button);
+        void AddToolButton(OxIconButton button, bool startGroup = false);
         bool UnderlineVisible { get; set; }
     }
 }

@@ -31,9 +31,9 @@ namespace OxLibrary.Dialogs
 
         protected override HorizontalAlign FooterButtonsAlign => HorizontalAlign.Center;
 
-        protected override void PrepareInnerControls()
+        protected override void PrepareInnerComponents()
         {
-            base.PrepareInnerControls();
+            base.PrepareInnerComponents();
             MessageBox.Parent = this;
         }
 

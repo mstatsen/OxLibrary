@@ -12,7 +12,7 @@ namespace OxLibrary.Panels
         {
             manager = OxControlManager.RegisterControl<Panel>(this, OnSizeChanged);
             BorderVisible = false;
-            colors = new(DefaultColor);
+            Colors = new(DefaultColor);
             Initialized = false;
 
             SilentSizeChange(
@@ -24,8 +24,7 @@ namespace OxLibrary.Panels
                         Size = new(size);
 
                     SetBordersHandlers();
-                    PrepareInnerControls();
-                    PrepareColors();
+                    PrepareInnerComponents();
                     SetHandlers();
                     AfterCreated();
                 },
@@ -60,10 +59,10 @@ namespace OxLibrary.Panels
             set => manager.Left = value;
         }
 
-        public new OxWidth Bottom => 
+        public new OxWidth Bottom =>
             manager.Bottom;
 
-        public new OxWidth Right => 
+        public new OxWidth Right =>
             manager.Right;
 
         public new OxSize Size
@@ -78,7 +77,7 @@ namespace OxLibrary.Panels
             set => manager.ClientSize = value;
         }
 
-        public new OxPoint Location 
+        public new OxPoint Location
         {
             get => manager.Location;
             set => manager.Location = value;
@@ -105,13 +104,17 @@ namespace OxLibrary.Panels
         public new virtual IOxControlContainer? Parent
         {
             get => manager.Parent;
-            set => manager.Parent = value;
+            set
+            {
+                manager.Parent = value;
+                PrepareColors();
+            }
         }
 
-        public new OxRectangle ClientRectangle => 
+        public new OxRectangle ClientRectangle =>
             manager.ClientRectangle;
 
-        public new virtual OxRectangle DisplayRectangle => 
+        public new virtual OxRectangle DisplayRectangle =>
             manager.DisplayRectangle;
 
         public new OxRectangle Bounds
@@ -120,7 +123,7 @@ namespace OxLibrary.Panels
             set => manager.Bounds = value;
         }
 
-        public new OxSize PreferredSize => 
+        public new OxSize PreferredSize =>
             manager.PreferredSize;
 
         public new OxPoint AutoScrollOffset
@@ -179,7 +182,7 @@ namespace OxLibrary.Panels
             return true;
         }
 
-        public void RealignControls() => 
+        public void RealignControls() =>
             manager.RealignControls();
 
         protected override sealed void OnSizeChanged(EventArgs e)
@@ -212,10 +215,11 @@ namespace OxLibrary.Panels
             */
         }
 
-        private void BordersSizeChangedHandler(object sender, BorderEventArgs e) =>
-            Invalidate();
-
-        private readonly OxColorHelper colors;
+        private void BordersSizeChangedHandler(object sender, BorderEventArgs e)
+        {
+            //   Invalidate();
+            RealignControls();
+        }
 
         private readonly OxBorders padding = new();
         public new OxBorders Padding => padding;
@@ -229,8 +233,8 @@ namespace OxLibrary.Panels
         public OxBorders Borders => borders;
 
         private bool useDefaultBorderColor = true;
-        public bool UseDefaultBorderColor 
-        { 
+        public bool UseDefaultBorderColor
+        {
             get => useDefaultBorderColor;
             set
             {
@@ -239,12 +243,12 @@ namespace OxLibrary.Panels
             }
         }
 
-        private Color borderColor = Color.Black;
+        private Color borderColor = Color.Transparent;
         public Color BorderColor
         {
             get =>
                 useDefaultBorderColor
-                ? BaseColor
+                ? GetBorderColor()
                 : borderColor;
             set
             {
@@ -283,15 +287,21 @@ namespace OxLibrary.Panels
             }
         }
 
-        public virtual Color GetBordersColor() =>
+        protected virtual Color GetBorderColor() =>
             Enabled
             || !UseDisabledStyles
                 ? BaseColor
                 : Colors.Lighter(2);
 
+        protected virtual Color MarginColor =>
+            !BlurredBorder
+            && Parent is not null
+                ? Parent.BackColor
+                : BackColor;
+
         public Color BaseColor
         {
-            get => colors.BaseColor;
+            get => Colors.BaseColor;
             set
             {
                 if (BaseColorChanging)
@@ -301,7 +311,7 @@ namespace OxLibrary.Panels
 
                 try
                 {
-                    colors.BaseColor = value;
+                    Colors.BaseColor = value;
                     PrepareColors();
                 }
                 finally
@@ -322,10 +332,16 @@ namespace OxLibrary.Panels
 
         private bool BaseColorChanging = false;
 
+        protected virtual Color GetBackColor() =>
+            Colors.Lighter(Enabled || !useDisabledStyles? 7 : 8);
+
+        protected virtual Color GetForeColor() =>
+            Colors.Darker(7);
+
         protected virtual void PrepareColors()
         {
-            BackColor = Colors.Lighter(Enabled || !useDisabledStyles ? 7 : 8);
-            ForeColor = Colors.Darker(7);
+            BackColor = GetBackColor();
+            ForeColor = GetForeColor();
         }
 
         private bool useDisabledStyles = true;
@@ -339,7 +355,7 @@ namespace OxLibrary.Panels
         protected virtual void SetUseDisabledStyles(bool value) =>
             useDisabledStyles = value;
 
-        protected virtual void PrepareInnerControls() { }
+        protected virtual void PrepareInnerComponents() { }
 
         public virtual OxRectangle FullControlZone =>
             ClientRectangle 
@@ -353,52 +369,16 @@ namespace OxLibrary.Panels
         private OxRectangle BorderRectangle => 
             ClientRectangle - Margin;
 
-        private void DrawBorders(Graphics g)
-        {
-            if (Borders.IsEmpty)
-                return;
-
-            foreach (var border in Borders)
-            {
-                if (border.Value.IsEmpty)
-                    continue;
-
-                OxRectangle borderBounds = new(BorderRectangle);
-                borderBounds.Width = OxWh.Sub(borderBounds.Width, border.Value.Size);
-                borderBounds.Height = OxWh.Sub(borderBounds.Height, border.Value.Size);
-
-                using Pen pen = new(BorderColor, OxWh.I(border.Value.Size));
-                Point startPoint = Point.Empty;
-                Point finishPoint = Point.Empty;
-
-                switch (border.Key)
-                {
-                    case OxDock.Left:
-                        startPoint = borderBounds.TopLeft.Point;
-                        finishPoint = borderBounds.BottomLeft.Point;
-                        break;
-                    case OxDock.Right:
-                        startPoint = borderBounds.TopRight.Point;
-                        finishPoint = borderBounds.BottomRight.Point;
-                        break;
-                    case OxDock.Top:
-                        startPoint = borderBounds.TopLeft.Point;
-                        finishPoint = borderBounds.TopRight.Point;
-                        break;
-                    case OxDock.Bottom:
-                        startPoint = borderBounds.BottomLeft.Point;
-                        finishPoint = borderBounds.BottomRight.Point;
-                        break;
-                }
-
-                g.DrawLine(pen, startPoint, finishPoint);
-            }
-        }
-
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            DrawBorders(e.Graphics);
+
+            if (!Margin.IsEmpty
+                && !BackColor.Equals(MarginColor))
+                Margin.Draw(e.Graphics, ClientRectangle, MarginColor);
+
+            if (!Borders.IsEmpty)
+                Borders.Draw(e.Graphics, BorderRectangle, BorderColor);
         }
 
         protected virtual void SetHandlers() { }
@@ -413,7 +393,7 @@ namespace OxLibrary.Panels
             PrepareColors();
         }
 
-        public OxColorHelper Colors => colors;
+        public OxColorHelper Colors { get; }
         public virtual Color DefaultColor => Color.FromArgb(142, 142, 138);
 
         public new string Text

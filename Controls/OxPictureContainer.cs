@@ -169,9 +169,9 @@ namespace OxLibrary.Controls
             PlaceButtons();
         }
 
-        protected override void PrepareInnerControls()
+        protected override void PrepareInnerComponents()
         {
-            base.PrepareInnerControls();
+            base.PrepareInnerComponents();
             label.Parent = this;
             label.Font = Styles.Font(Font.Size + 1, FontStyle.Italic);
             picture.Parent = this;
@@ -248,6 +248,7 @@ namespace OxLibrary.Controls
 
             if (buttonsParent.IsHovered)
                 return;
+
             buttonsParent.Visible = false;
         }
 

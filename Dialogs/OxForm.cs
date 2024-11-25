@@ -19,7 +19,8 @@ namespace OxLibrary.Dialogs
 
         public virtual bool OnSizeChanged(SizeChangedEventArgs e)
         {
-            if (!e.Changed)
+            if (!Initialized || 
+                !e.Changed)
                 return false;
 
             base.OnSizeChanged(e);

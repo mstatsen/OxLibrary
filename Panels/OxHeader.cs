@@ -95,12 +95,11 @@ namespace OxLibrary.Panels
             icon.Visible = icon.Image is not null;
         }
 
-        protected override void PrepareInnerControls()
+        protected override void PrepareInnerComponents()
         {
-            base.PrepareInnerControls();
+            base.PrepareInnerComponents();
             icon.Parent = this;
             ToolBar.Parent = this;
-            ToolBar.BorderVisible = false;
             label.Parent = this;
             //SendToBack();
         }
@@ -122,7 +121,7 @@ namespace OxLibrary.Panels
             return e.Changed;
         }
 
-        public void AddToolButton(OxIconButton button) =>
-            ToolBar.AddButton(button);
+        public void AddToolButton(OxIconButton button, bool startGroup = false) =>
+            ToolBar.AddButton(button, startGroup);
     }
 }
