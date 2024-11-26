@@ -34,37 +34,35 @@
 
                 OxRectangle borderBounds = new(bounds);
 
+                /*
                 if (substractSelfSize)
                 {
                     borderBounds.Width = OxWh.Sub(borderBounds.Width, border.Value.Size);
                     borderBounds.Height = OxWh.Sub(borderBounds.Height, border.Value.Size);
                 }
+                */
 
-                using Pen pen = new(color, OxWh.I(border.Value.Size));
-                Point startPoint = Point.Empty;
-                Point finishPoint = Point.Empty;
+                //Point startPoint = Point.Empty;
+                //Point finishPoint = Point.Empty;
 
                 switch (border.Key)
                 {
-                    case OxDock.Left:
-                        startPoint = borderBounds.TopLeft.Point;
-                        finishPoint = borderBounds.BottomLeft.Point;
-                        break;
                     case OxDock.Right:
-                        startPoint = borderBounds.TopRight.Point;
-                        finishPoint = borderBounds.BottomRight.Point;
-                        break;
-                    case OxDock.Top:
-                        startPoint = borderBounds.TopLeft.Point;
-                        finishPoint = borderBounds.TopRight.Point;
+                        borderBounds.X = OxWh.S(borderBounds.Right, border.Value.Size);
                         break;
                     case OxDock.Bottom:
-                        startPoint = borderBounds.BottomLeft.Point;
-                        finishPoint = borderBounds.BottomRight.Point;
+                        borderBounds.Y = OxWh.S(borderBounds.Bottom, border.Value.Size);
                         break;
                 }
 
-                g.DrawLine(pen, startPoint, finishPoint);
+                if (OxDockHelper.IsHorizontal(border.Key))
+                    borderBounds.Width = border.Value.Size;
+                else
+                    if (OxDockHelper.IsVertical(border.Key))
+                        borderBounds.Height = border.Value.Size;
+
+                using Brush brush = new SolidBrush(color);
+                g.FillRectangle(brush, borderBounds.Rectangle);
             }
         }
 

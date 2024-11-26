@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Dialogs;
+using OxLibrary.Panels;
 
 namespace OxLibrary.Test
 {
@@ -7,12 +8,27 @@ namespace OxLibrary.Test
         public override Bitmap? FormIcon =>
             OxIcons.TestCode;
 
+        private readonly OxFrame frame;
+
         public TestForm()
         {
             InitializeComponent();
-            BaseColor = Color.FromArgb(148, 138, 138);
-            MainPanel.Margin.Size = OxWh.W24;
+            BaseColor = Color.FromArgb(135, 165, 195);
             MoveToScreenCenter();
+            frame = new OxFrame()
+            {
+                Parent = this,
+                Dock = OxDock.Fill,
+                BlurredBorder = false,
+                ToolTipText = "This is frame with Dock = Fill",
+            };
+            frame.Margin.Size = OxWh.W24;
+            frame.Click += Frame_Click;
+        }
+
+        private void Frame_Click(object? sender, EventArgs e)
+        {
+            frame.BlurredBorder = !frame.BlurredBorder;
         }
 
         private void TestFormShow(object? sender, EventArgs e)

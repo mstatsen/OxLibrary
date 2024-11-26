@@ -217,8 +217,8 @@ namespace OxLibrary.Panels
 
         private void BordersSizeChangedHandler(object sender, BorderEventArgs e)
         {
-            //   Invalidate();
-            RealignControls();
+               Invalidate();
+            //RealignControls();
         }
 
         private readonly OxBorders padding = new();
@@ -373,12 +373,10 @@ namespace OxLibrary.Panels
         {
             base.OnPaint(e);
 
-            if (!BlurredBorder
-                && !Margin.IsEmpty)
+            if (!BlurredBorder)
                 Margin.Draw(e.Graphics, ClientRectangle, MarginColor);
 
-            if (!Borders.IsEmpty)
-                Borders.Draw(e.Graphics, BorderRectangle, BorderColor, true);
+            Borders.Draw(e.Graphics, BorderRectangle, BorderColor, true);
         }
 
         protected virtual void SetHandlers() { }

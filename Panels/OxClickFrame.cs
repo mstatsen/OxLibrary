@@ -21,7 +21,7 @@
         {
             get => 
                 useDefaultHoveredColor 
-                    ? Colors.Darker(2) 
+                    ? Colors.Darker(4) 
                     : hoveredColor;
             set
             {
