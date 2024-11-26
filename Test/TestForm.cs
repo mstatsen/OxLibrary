@@ -11,12 +11,8 @@ namespace OxLibrary.Test
         {
             InitializeComponent();
             BaseColor = Color.FromArgb(148, 138, 138);
-            MainPanel.Header.ToolBar.Click += (s, e) => MessageBox.Show("Toolbar");
             MainPanel.Margin.Size = OxWh.W24;
-            MainPanel.Header.Click += (s, e) => MessageBox.Show("Header");
-            MainPanel.Click += (s, e) => OxMessage.ShowInfo("MainPanel", this);
-            Click += (s, e) => MessageBox.Show("Form");
-            OxControlHelper.CenterForm(this);
+            MoveToScreenCenter();
         }
 
         private void TestFormShow(object? sender, EventArgs e)

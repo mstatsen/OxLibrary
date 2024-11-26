@@ -38,11 +38,33 @@ namespace OxLibrary.Dialogs
         {
             manager = OxControlManager.RegisterControl<Form>(this, OnSizeChanged);
             DoubleBuffered = true;
-            //AutoSize = true;
             MainPanel = CreateMainPanel();
             SetUpForm();
             PlaceMainPanel();
             Initialized = true;
+        }
+
+        public void MoveToScreenCenter()
+        {
+            Screen screen = Screen.FromControl(this);
+            SetBounds(
+                OxWh.Add(
+                    screen.Bounds.Left,
+                    OxWh.Div(
+                        OxWh.Sub(screen.WorkingArea.Width, Width),
+                        OxWh.W2
+                    )
+                ),
+                OxWh.Add(
+                    screen.Bounds.Top,
+                    OxWh.Div(
+                        OxWh.Sub(screen.WorkingArea.Height, Height),
+                        OxWh.W2
+                    )
+                ),
+                Width,
+                Height
+            );
         }
 
         protected virtual void SetUpForm()

@@ -22,7 +22,7 @@
                 OxWh.S(left.Right, right.Right)
             );
 
-        public void Draw(Graphics g, OxRectangle bounds, Color color)
+        public void Draw(Graphics g, OxRectangle bounds, Color color, bool substractSelfSize = false)
         {
             if (IsEmpty)
                 return;
@@ -33,8 +33,12 @@
                     continue;
 
                 OxRectangle borderBounds = new(bounds);
-                borderBounds.Width = OxWh.Sub(borderBounds.Width, border.Value.Size);
-                borderBounds.Height = OxWh.Sub(borderBounds.Height, border.Value.Size);
+
+                if (substractSelfSize)
+                {
+                    borderBounds.Width = OxWh.Sub(borderBounds.Width, border.Value.Size);
+                    borderBounds.Height = OxWh.Sub(borderBounds.Height, border.Value.Size);
+                }
 
                 using Pen pen = new(color, OxWh.I(border.Value.Size));
                 Point startPoint = Point.Empty;

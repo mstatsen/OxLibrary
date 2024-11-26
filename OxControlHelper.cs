@@ -38,29 +38,6 @@ namespace OxLibrary
         public static OxSize ScreenSize(Control control) =>
             new(Screen.GetWorkingArea(control).Size);
 
-        public static void CenterForm(OxForm form)
-        {
-            Screen screen = Screen.FromControl(form);
-            form.SetBounds(
-                OxWh.Add(
-                    screen.Bounds.Left, 
-                    OxWh.Div(
-                        OxWh.Sub(screen.WorkingArea.Width, form.Width),
-                        OxWh.W2
-                    )
-                ),
-                OxWh.Add(
-                    screen.Bounds.Top,
-                    OxWh.Div(
-                        OxWh.Sub(screen.WorkingArea.Height, form.Height), 
-                        OxWh.W2
-                    )
-                ),
-                form.Width,
-                form.Height
-            );
-        }
-
         public static Control? GetControlUnderMouse(Control topControl) => 
             GetControlUnderMouse(topControl, Cursor.Position);
 

@@ -40,7 +40,7 @@ namespace OxLibrary.Controls
         private readonly Dictionary<TButton, OxPane> Separators = new();
 
         protected virtual OxWidth ButtonMargin => OxWh.W1;
-        protected virtual OxWidth GroupsSeparatorWidth => OxWh.W9;
+        protected virtual OxWidth GroupsSeparatorWidth => OxWh.W5;
         protected virtual OxWidth GroupSeparatorMargin => OxWh.W4;
 
         private void PlaceButtons()
@@ -91,9 +91,11 @@ namespace OxLibrary.Controls
                 separator = new(new(GroupsSeparatorWidth, OxWh.W0))
                 {
                     Parent = startButton.Parent,
-                    Dock = startButton.Dock
+                    Dock = startButton.Dock,
                 };
                 separator.Margin.Size = GroupSeparatorMargin;
+                separator.Margin.Top = startButton.Margin.Top;
+                separator.Margin.Bottom = startButton.Margin.Bottom;
                 startButton.ParentChanged += SynchronizeSeparatorParentHandler;
                 Separators.Add(startButton, separator);
             }

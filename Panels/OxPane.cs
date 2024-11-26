@@ -293,7 +293,7 @@ namespace OxLibrary.Panels
                 ? BaseColor
                 : Colors.Lighter(2);
 
-        protected virtual Color MarginColor =>
+        private Color MarginColor =>
             !BlurredBorder
             && Parent is not null
                 ? Parent.BackColor
@@ -373,12 +373,12 @@ namespace OxLibrary.Panels
         {
             base.OnPaint(e);
 
-            if (!Margin.IsEmpty
-                && !BackColor.Equals(MarginColor))
+            if (!BlurredBorder
+                && !Margin.IsEmpty)
                 Margin.Draw(e.Graphics, ClientRectangle, MarginColor);
 
             if (!Borders.IsEmpty)
-                Borders.Draw(e.Graphics, BorderRectangle, BorderColor);
+                Borders.Draw(e.Graphics, BorderRectangle, BorderColor, true);
         }
 
         protected virtual void SetHandlers() { }
