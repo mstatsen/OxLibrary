@@ -4,9 +4,170 @@ namespace OxLibrary.Controls
 {
     public partial class OxPicture : OxPane
     {
-        private class OxPictureBox : PictureBox
+        private class OxPictureBox : PictureBox, IOxControl<PictureBox>
         {
-            public OxPictureBox() => DoubleBuffered = true;
+            private readonly OxControlManager<PictureBox> manager;
+            public IOxControlManager Manager => manager;
+
+            public OxPictureBox()
+            {
+                manager = OxControlManager.RegisterControl<PictureBox>(this, OnSizeChanged);
+                DoubleBuffered = true;
+            }
+
+            public new OxWidth Width
+            {
+                get => manager.Width;
+                set => manager.Width = value;
+            }
+
+            public new OxWidth Height
+            {
+                get => manager.Height;
+                set => manager.Height = value;
+            }
+
+            public new OxWidth Top
+            {
+                get => manager.Top;
+                set => manager.Top = value;
+            }
+
+            public new OxWidth Left
+            {
+                get => manager.Left;
+                set => manager.Left = value;
+            }
+
+            public new OxWidth Bottom =>
+                manager.Bottom;
+
+            public new OxWidth Right =>
+                manager.Right;
+
+            public new OxSize Size
+            {
+                get => manager.Size;
+                set => manager.Size = value;
+            }
+
+            public new OxSize ClientSize
+            {
+                get => manager.ClientSize;
+                set => manager.ClientSize = value;
+            }
+
+            public new OxPoint Location
+            {
+                get => manager.Location;
+                set => manager.Location = value;
+            }
+
+            public new OxSize MinimumSize
+            {
+                get => manager.MinimumSize;
+                set => manager.MinimumSize = value;
+            }
+
+            public new OxSize MaximumSize
+            {
+                get => manager.MaximumSize;
+                set => manager.MaximumSize = value;
+            }
+
+            public new virtual OxDock Dock
+            {
+                get => manager.Dock;
+                set => manager.Dock = value;
+            }
+
+            public new virtual IOxControlContainer? Parent
+            {
+                get => manager.Parent;
+                set => manager.Parent = value;
+            }
+
+            public new OxRectangle ClientRectangle =>
+                manager.ClientRectangle;
+
+            public new virtual OxRectangle DisplayRectangle =>
+                manager.DisplayRectangle;
+
+            public new OxRectangle Bounds
+            {
+                get => manager.Bounds;
+                set => manager.Bounds = value;
+            }
+
+            public new OxSize PreferredSize =>
+                manager.PreferredSize;
+
+            public new OxPoint AutoScrollOffset
+            {
+                get => manager.AutoScrollOffset;
+                set => manager.AutoScrollOffset = value;
+            }
+            public bool SizeChanging =>
+                manager.SizeChanging;
+
+            public bool SilentSizeChange(Action method, OxSize oldSize) =>
+                manager.SilentSizeChange(method, oldSize);
+
+            public Control GetChildAtPoint(OxPoint pt, GetChildAtPointSkip skipValue) =>
+                manager.GetChildAtPoint(pt, skipValue);
+
+            public Control GetChildAtPoint(OxPoint pt) =>
+                manager.GetChildAtPoint(pt);
+
+            public OxSize GetPreferredSize(OxSize proposedSize) =>
+                manager.GetPreferredSize(proposedSize);
+
+            public void Invalidate(OxRectangle rc) =>
+                manager.Invalidate(rc);
+
+            public void Invalidate(OxRectangle rc, bool invalidateChildren) =>
+                manager.Invalidate(rc, invalidateChildren);
+
+            public OxSize LogicalToDeviceUnits(OxSize value) =>
+                manager.LogicalToDeviceUnits(value);
+
+            public OxPoint PointToClient(OxPoint p) =>
+                manager.PointToClient(p);
+
+            public OxPoint PointToScreen(OxPoint p) =>
+                manager.PointToScreen(p);
+
+            public OxRectangle RectangleToClient(OxRectangle r) =>
+                manager.RectangleToClient(r);
+
+            public OxRectangle RectangleToScreen(OxRectangle r) =>
+                manager.RectangleToScreen(r);
+
+            public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height, BoundsSpecified specified) =>
+                manager.SetBounds(x, y, width, height, specified);
+
+            public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
+                manager.SetBounds(x, y, width, height);
+
+            public virtual bool OnSizeChanged(SizeChangedEventArgs e)
+            {
+                if (!e.Changed)
+                    return false;
+
+                base.OnSizeChanged(e);
+                return true;
+            }
+
+            public void RealignControls() =>
+                manager.RealignControls();
+
+            protected override sealed void OnSizeChanged(EventArgs e)
+            {
+                if (SizeChanging)
+                    return;
+
+                base.OnSizeChanged(e);
+            }
         }
 
         public bool AlwaysEnabled { get; set; } = false;
@@ -20,12 +181,12 @@ namespace OxLibrary.Controls
 
         public bool Stretch 
         { 
-            get => picture.Dock is DockStyle.Fill;
+            get => picture.Dock is OxDock.Fill;
             set => 
                 picture.Dock = 
                     value 
-                        ? DockStyle.Fill 
-                        : DockStyle.None;
+                        ? OxDock.Fill 
+                        : OxDock.None;
         }
 
         private void SetEnabledBitmap(Bitmap? value)
@@ -52,7 +213,7 @@ namespace OxLibrary.Controls
 
         public OxWidth PictureSize
         {
-            get => OxWh.W(picture.Height);
+            get => picture.Height;
             set => SetPictureSize(value);
         }
 
@@ -75,8 +236,8 @@ namespace OxLibrary.Controls
             if (Stretch)
                 return;
             
-            picture.Width = (int)value;
-            picture.Height = (int)value;
+            picture.Width = value;
+            picture.Height = value;
             CorrectPicturePosition();
         }
 
@@ -90,8 +251,8 @@ namespace OxLibrary.Controls
             if (picturePadding < 0)
                 picturePadding = 0;
 
-            picture.Left = OxWh.Int(OxWh.Div(OxWh.Sub(Width, picture.Width), OxWh.W2));
-            picture.Top = OxWh.Int(OxWh.Div(OxWh.Sub(Height, picture.Height), OxWh.W2));
+            picture.Left = OxWh.Div(OxWh.Sub(Width, picture.Width), OxWh.W2);
+            picture.Top = OxWh.Div(OxWh.Sub(Height, picture.Height), OxWh.W2);
         }
 
         protected override void PrepareInnerComponents()
@@ -103,7 +264,7 @@ namespace OxLibrary.Controls
         private void PreparePicture()
         {
             picture.Parent = this;
-            picture.Dock = DockStyle.None;
+            picture.Dock = OxDock.None;
             picture.Click += (s, e) => InvokeOnClick(this, null);
             SetPictureSize(Height);
         }
@@ -128,7 +289,7 @@ namespace OxLibrary.Controls
         protected override void PrepareColors()
         {
             base.PrepareColors();
-            picture.BackColor = Color.Transparent;
+            picture.BackColor = BackColor;
         }
 
         private void PictureSizeChanged(object? sender, EventArgs e)
@@ -166,8 +327,8 @@ namespace OxLibrary.Controls
 
             if (!Stretch)
             {
-                picture.Width = OxWh.Int(bitmapCalcer.ImageBox.Width);
-                picture.Height = OxWh.Int(bitmapCalcer.ImageBox.Height);
+                picture.Width = bitmapCalcer.ImageBox.Width;
+                picture.Height = bitmapCalcer.ImageBox.Height;
             }
 
             EnabledBitmap = bitmapCalcer.FullBitmap;

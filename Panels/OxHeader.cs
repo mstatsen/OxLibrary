@@ -109,6 +109,7 @@ namespace OxLibrary.Panels
             base.PrepareColors();
             label.ForeColor = Colors.Darker(6);
             ToolBar.BaseColor = BaseColor;
+            icon.BaseColor = BaseColor;
         }
 
         public override bool OnSizeChanged(SizeChangedEventArgs e)

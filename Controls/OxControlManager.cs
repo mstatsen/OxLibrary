@@ -210,14 +210,15 @@ namespace OxLibrary.Controls
                     );
 
                 oxControl.Manager.SilentSizeChange(
-                    () => 
-                    { 
+                    () =>
+                    {
                         oxControl.Location = currentBounds.Location;
                         oxControl.Size = currentBounds.Size;
                     },
                     oxControl.Size
                 );
-                //oxControl.Invalidate();
+
+                oxControl.Invalidate();
                 oxControl.RealignControls();
 
                 if (ControlZone.IsEmpty)
@@ -239,9 +240,10 @@ namespace OxLibrary.Controls
                 bool changed = false;
                 OxSize oldSize = new(Size);
 
-                SilentSizeChange(
+                /*SilentSizeChange(
                     () =>
                     {
+                */
                         if (!Width.Equals(value.Width))
                         {
                             changed = true;
@@ -253,9 +255,10 @@ namespace OxLibrary.Controls
                             Height = value.Height;
                             changed = true;
                         }
-                    },
+/*                    },
                     Size
                 );
+*/
                 
                 if (changed)
                     OnSizeChanged(new(oldSize, Size));

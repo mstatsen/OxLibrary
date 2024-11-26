@@ -28,8 +28,9 @@ namespace OxLibrary.Dialogs
             //MainPanel?.SilentSizeChange(() =>
             //    {
                     MainPanel.Size = Size;
+                    MainPanel.RealignControls();
             //    },
-             //   MainPanel.Size
+            //   MainPanel.Size
             //);
             return true;
         }
@@ -82,13 +83,13 @@ namespace OxLibrary.Dialogs
 
         public void SetUpSizes(FormWindowState state)
         {
-            WindowState = state;
             MaximumSize = OxControlHelper.ScreenSize(this);
             OxSize wantedMinimumSize = WantedMinimumSize;
             MinimumSize = new(
                 OxWh.Min(wantedMinimumSize.Width, MaximumSize.Width),
                 OxWh.Min(wantedMinimumSize.Height, MaximumSize.Height)
             );
+            WindowState = state;
         }
 
         public new FormWindowState WindowState
@@ -98,6 +99,12 @@ namespace OxLibrary.Dialogs
             {
                 if (WindowState.Equals(value))
                     return;
+
+                if (value is FormWindowState.Minimized)
+                {
+                    base.WindowState = value;
+                    return;
+                }
 
                 OxSize oldSize = new(Size);
                 base.WindowState = value;
