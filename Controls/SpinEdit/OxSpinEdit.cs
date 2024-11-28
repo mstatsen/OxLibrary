@@ -160,7 +160,7 @@ namespace OxLibrary.Controls
                 }
             );
 
-        protected override void PrepareColors()
+        public override void PrepareColors()
         {
             base.PrepareColors();
             DecreaseButton.BaseColor = Colors.BaseColor;

@@ -42,13 +42,13 @@
             }
         }
 
-        protected override void PrepareInnerComponents()
+        protected override void OnColorsCreated() 
         {
-            base.PrepareInnerComponents();
+            base.OnColorsCreated();
             Colors = new(DefaultColor);
         }
 
-        protected override void PrepareColors()
+        public override void PrepareColors()
         {
             base.PrepareColors();
 
@@ -81,7 +81,7 @@
             }
         }
 
-        private bool fixedBorderColor = false;
+        private bool fixedBorderColor = true;
 
         public bool FixedBorderColor
         {

@@ -19,5 +19,6 @@
         }
 
         public OxUnderlinedPanel(OxSize size) : base(size) { }
+        public OxUnderlinedPanel() : this(OxSize.Empty) { }
     }
 }

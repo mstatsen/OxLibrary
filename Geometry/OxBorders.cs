@@ -290,12 +290,11 @@
         {
             get 
             {
-                bool result = false;
-
                 foreach (OxDock dock in Keys)
-                    result &= this[dock].IsEmpty;
+                    if (!this[dock].IsEmpty)
+                        return false;
 
-                return result;
+                return true;
             }
         }
 

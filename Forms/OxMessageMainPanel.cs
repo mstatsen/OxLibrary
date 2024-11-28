@@ -16,7 +16,7 @@ namespace OxLibrary.Forms
             Multiline = true,
         };
 
-        protected override void PrepareColors()
+        public override void PrepareColors()
         {
             base.PrepareColors();
             MessageBox.BackColor = BackColor;

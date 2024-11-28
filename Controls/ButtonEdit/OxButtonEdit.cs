@@ -66,7 +66,7 @@ namespace OxLibrary.Controls
             return e.Changed;
         }
 
-        protected override void PrepareColors()
+        public override void PrepareColors()
         {
             base.PrepareColors();
             TextBox.BackColor = Colors.Lighter(6);

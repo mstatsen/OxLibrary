@@ -104,7 +104,7 @@ namespace OxLibrary.Panels
             //SendToBack();
         }
 
-        protected override void PrepareColors()
+        public override void PrepareColors()
         {
             base.PrepareColors();
             label.ForeColor = Colors.Darker(6);
@@ -124,5 +124,7 @@ namespace OxLibrary.Panels
 
         public void AddToolButton(OxIconButton button, bool startGroup = false) =>
             ToolBar.AddButton(button, startGroup);
+
+        public override bool HandleParentPadding => false;
     }
 }

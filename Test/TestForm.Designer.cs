@@ -42,7 +42,6 @@ namespace OxLibrary.Test
             MaximumSize = new OxSize(OxWh.W(1920), OxWh.W(1080));
             Name = "TestForm";
             Text = "Test OxLibrary";
-            Shown += TestFormShow;
             ResumeLayout(false);
         }
 

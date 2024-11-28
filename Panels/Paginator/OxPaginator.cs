@@ -358,7 +358,7 @@ namespace OxLibrary.Panels
             return true;
         }
 
-        protected override void PrepareColors()
+        public override void PrepareColors()
         {
             base.PrepareColors();
             buttonsPanel.BaseColor = BaseColor;

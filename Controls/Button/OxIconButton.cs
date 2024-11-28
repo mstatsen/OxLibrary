@@ -23,7 +23,7 @@ namespace OxLibrary.Controls
             base.PrepareInnerComponents();
         }
 
-        protected override void PrepareColors()
+        public override void PrepareColors()
         {
             base.PrepareColors();
             Picture.BaseColor = BaseColor;

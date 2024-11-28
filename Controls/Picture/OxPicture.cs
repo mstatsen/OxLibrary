@@ -263,8 +263,8 @@ namespace OxLibrary.Controls
 
         private void PreparePicture()
         {
-            picture.Parent = this;
             picture.Dock = OxDock.None;
+            picture.Parent = this;
             picture.Click += (s, e) => InvokeOnClick(this, null);
             SetPictureSize(Height);
         }
@@ -286,7 +286,7 @@ namespace OxLibrary.Controls
             return e.Changed;
         }
 
-        protected override void PrepareColors()
+        public override void PrepareColors()
         {
             base.PrepareColors();
             picture.BackColor = BackColor;

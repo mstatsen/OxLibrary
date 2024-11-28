@@ -12,6 +12,14 @@ namespace OxLibrary
                 OxWh.S(OxWh.S(rect.Height, borders.Top), borders.Bottom)
             );
 
+        public static OxRectangle operator +(OxRectangle rect, OxBorders borders) =>
+            new(
+                OxWh.S(rect.X, borders.Left),
+                OxWh.S(rect.Y, borders.Top),
+                OxWh.A(OxWh.A(rect.Width, borders.Left), borders.Right),
+                OxWh.A(OxWh.A(rect.Height, borders.Top), borders.Bottom)
+            );
+
         private OxWidth x;
 
         private OxWidth y;
@@ -122,5 +130,6 @@ namespace OxLibrary
             Set(OxWh.W0, OxWh.W0, OxWh.W0, OxWh.W0);
 
         public static readonly OxRectangle Empty = new(OxWh.W0, OxWh.W0, OxWh.W0, OxWh.W0);
+        public static readonly OxRectangle Max = new(OxWh.W0, OxWh.W0, OxWh.Maximum, OxWh.Maximum);
     }
 }

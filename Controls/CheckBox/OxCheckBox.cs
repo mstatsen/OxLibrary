@@ -1,6 +1,4 @@
-﻿using OxLibrary.Panels;
-
-namespace OxLibrary.Controls
+﻿namespace OxLibrary.Controls
 {
     public class OxCheckBox : CheckBox, IOxControl<CheckBox>
     {

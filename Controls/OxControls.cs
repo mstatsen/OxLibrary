@@ -49,9 +49,9 @@ namespace OxLibrary.Controls
         private void OnControlRemoved(OxControlEventArgs e)
         {
             ControlRemoved?.Invoke(Container, e);
-            Container.RealignControls(
-                OxDockHelper.DockType(e.Control.Dock)
-            );
+
+            if (OxDockHelper.DockType(e.Control) is OxDockType.Docked)
+                Container.RealignControls();
         }
 
         public new IOxControl Remove(IOxControl control)
@@ -64,6 +64,7 @@ namespace OxLibrary.Controls
             return control;
         }
 
+        /*
         public List<IOxControl> ByPlacingPriority
         {
             get
@@ -77,5 +78,6 @@ namespace OxLibrary.Controls
                 return result;
             }
         }
+        */
     }
 }

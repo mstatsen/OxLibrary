@@ -1,6 +1,7 @@
 ﻿using OxLibrary.Controls;
 using OxLibrary.Forms;
 using OxLibrary.Panels;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace OxLibrary.Test
 {
@@ -9,64 +10,73 @@ namespace OxLibrary.Test
         public override Bitmap? FormIcon =>
             OxIcons.TestCode;
 
-        private readonly OxFrame frame;
+        private readonly OxPanel frame;
+        private readonly OxClickFrame button;
+        private readonly OxButton toolBarButton;
         private readonly OxCheckBox bluredCheckBox;
+        private readonly OxToolBar<OxButton> toolbar;
 
         public TestForm()
         {
             InitializeComponent();
             BaseColor = Color.FromArgb(135, 165, 195);
             MoveToScreenCenter();
-            frame = new()
+            toolBarButton = new OxButton("Test action", OxIcons.Cross)
+            { 
+                Enabled = false
+            };
+            toolbar = new()
+            { 
+                Dock = OxDock.Top
+            };
+            toolbar.AddButton(toolBarButton);
+            toolbar.Parent = this;
+
+            frame = new OxFrameWithHeader()
             {
-                Parent = this,
+                Dock = OxDock.Fill,
                 BlurredBorder = false,
+                Parent = this,
                 ToolTipText = "This is frame with Dock = Fill",
                 Name = "FillFrame",
-                Dock = OxDock.Fill
+                Text = "Frame with Dock = Fill"
             };
-            frame.Click += Frame_Click;
             bluredCheckBox = new()
             {
-                Left = OxWh.W0,
-                Top = OxWh.W0,
-                Parent = frame
+                Parent = frame,
+                Left = OxWh.W8,
+                Top = OxWh.W8,
+                Width = OxWh.W200,
+                Text = "Set parent margin to 4px",
+                Visible = false
             };
             bluredCheckBox.CheckedChanged += BluredCheckBox_CheckedChanged;
+
+            button = new OxButton("OxButton text", OxIcons.Go)
+            {
+                Parent = frame,
+                Enabled = false,
+            };
+            button.Click += Button_Click;
+
+            SetFrameMarginSize();
+            frame.Padding.Size = OxWh.W16;
+            MainPanel.Padding.Size = OxWh.W8;
+        }
+
+        private void Button_Click(object? sender, EventArgs e)
+        {
+            OxMessage.ShowInfo("Test click", this);
         }
 
         private void BluredCheckBox_CheckedChanged(object? sender, EventArgs e)
         {
-            frame.Margin.Size = bluredCheckBox.Checked ? OxWh.W24 : OxWh.W12;
+            SetFrameMarginSize();
         }
 
-        private void Frame_Click(object? sender, EventArgs e)
+        private void SetFrameMarginSize()
         {
-            RealignControls();
-        }
-
-        private void TestFormShow(object? sender, EventArgs e)
-        {
-            /*
-            try
-            {
-                Update();
-
-                Size screenSize = Screen.GetWorkingArea(this).Size;
-                Size = new(
-                    Math.Min(1600, screenSize.Width),
-                    Math.Min(800, screenSize.Height));
-
-                Location = new(
-                    OxWh.Div(OxWh.Sub(screenSize.Width, Width), OxWh.W2),
-                    OxWh.Div(OxWh.Sub(screenSize.Height, Height), OxWh.W2));
-                Update();
-            }
-            finally
-            {
-                SuspendLayout();
-            }
-            */
+            frame.Margin.Size = bluredCheckBox.Checked ? OxWh.W4 : OxWh.W0;
         }
     }
 }

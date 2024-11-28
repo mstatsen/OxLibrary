@@ -35,8 +35,8 @@ namespace OxLibrary.Forms
         public OxForm()
         {
             oxControls = new(this);
-            manager = OxControlManager.RegisterControl<Form>(this, OnSizeChanged);
             DoubleBuffered = true;
+            manager = OxControlManager.RegisterControl<Form>(this, OnSizeChanged);
             MainPanel = CreateMainPanel();
             SetUpForm();
             PlaceMainPanel();
@@ -100,6 +100,7 @@ namespace OxLibrary.Forms
                 OxWh.Min(wantedMinimumSize.Height, MaximumSize.Height)
             );
             WindowState = state;
+            RealignControls();
         }
 
         public new FormWindowState WindowState
@@ -288,11 +289,47 @@ namespace OxLibrary.Forms
             set => manager.Bounds = value;
         }
 
-        public OxRectangle FullControlZone =>
-            ClientRectangle;
-
         public OxRectangle ControlZone =>
             manager.ControlZone;
+
+        public bool HandleParentPadding => false;
+
+        private readonly OxBorders padding = new();
+        public new OxBorders Padding => padding;
+
+        private readonly OxBorders borders = new();
+        public OxBorders Borders => borders;
+
+        public bool UseDefaultBorderColor
+        {
+            get => true;
+            set { }
+        }
+
+        public Color BorderColor
+        {
+            get => Color.Transparent;
+            set { }
+        }
+
+        public void SetBorderWidth(OxWidth value) { }
+
+        public void SetBorderWidth(OxDock dock, OxWidth value) { }
+
+        public bool BorderVisible
+        {
+            get => false;
+            set { }
+        }
+
+        private readonly OxBorders margin = new();
+        public new OxBorders Margin => margin;
+
+        public bool BlurredBorder
+        {
+            get => true;
+            set { }
+        }
 
         public new OxSize PreferredSize =>
             manager.PreferredSize;
@@ -351,6 +388,12 @@ namespace OxLibrary.Forms
                 return;
 
             base.OnSizeChanged(e);
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            RealignControls();
         }
     }
 }

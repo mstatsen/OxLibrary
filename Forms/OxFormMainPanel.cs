@@ -72,9 +72,9 @@ namespace OxLibrary.Forms
 
         private void PlaceButtons()
         {
-            Header.AddToolButton(minimizeButton);
-            Header.AddToolButton(restoreButton, true);
             Header.AddToolButton(closeButton);
+            Header.AddToolButton(restoreButton, true);
+            Header.AddToolButton(minimizeButton);
         }
 
         private void SetButtonsSize()

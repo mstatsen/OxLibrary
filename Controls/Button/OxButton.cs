@@ -59,14 +59,13 @@
             RecalcPaddings();
         }
 
-        private void RecalcPaddings() => 
-            Padding.Left = OxWh.Max(
+        private void RecalcPaddings() =>
+            Padding.Left =
                 OxWh.Div(
                     OxWh.Sub(
                         Width,
                         RealPictureWidth | RealLabelWidth),
-                    OxWh.W2),
-                OxWh.W0);
+                    OxWh.W2);
 
         private void CalcLabelWidth()
         {
@@ -76,10 +75,14 @@
             Label.AutoSize = true;
             OxWidth calcedLabelWidth = Label.Width;
             Label.AutoSize = false;
-            calcedLabelWidth = OxWh.Less(calcedLabelWidth | RealPictureWidth, Width)
-                ? calcedLabelWidth 
-                : OxWh.Sub(Width, RealPictureWidth);
-            Label.Width = OxWh.Max(calcedLabelWidth, 0);
+            calcedLabelWidth = 
+                OxWh.Less(
+                    OxWh.Add(calcedLabelWidth, RealPictureWidth), 
+                    Width
+                )
+                    ? calcedLabelWidth 
+                    : OxWh.Sub(Width, RealPictureWidth);
+            Label.Width = OxWh.Max(calcedLabelWidth, OxWh.W0);
         }
 
         protected override void OnFontChanged(EventArgs e)

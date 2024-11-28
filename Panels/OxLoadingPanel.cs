@@ -73,7 +73,7 @@ namespace OxLibrary.Panels
 
         private bool InnerChangeBaseColor = false;
 
-        protected override void PrepareColors()
+        public override void PrepareColors()
         {
             if (InnerChangeBaseColor)
                 return;

@@ -106,7 +106,7 @@
             SetTabButtonsVisualParameters();
         }
 
-        protected override void PrepareColors()
+        public override void PrepareColors()
         {
             PrepareTabButtonsColor();
             base.PrepareColors();

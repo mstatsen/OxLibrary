@@ -30,12 +30,6 @@ namespace OxLibrary.Panels
             set => Header.Visible = value;
         }
 
-        public Font HeaderFont 
-        { 
-            get => Header.TitleFont;
-            set => Header.TitleFont = value;
-        }
-
         protected override string GetText() =>
             Header.Text;
 
@@ -52,7 +46,7 @@ namespace OxLibrary.Panels
 
         public OxFrameWithHeader(OxSize size) : base(size) { }
 
-        protected override void PrepareColors()
+        public override void PrepareColors()
         {
             base.PrepareColors();
             Header.BaseColor = 

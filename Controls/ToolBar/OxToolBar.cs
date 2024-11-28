@@ -14,7 +14,7 @@ namespace OxLibrary.Controls
         public readonly Dictionary<OxToolbarAction, TButton> Actions = new();
         public OxActionClick<OxToolbarAction>? ToolbarActionClick;
 
-        public void RecalcWidth()
+        private void RecalcWidth()
         {
             if (!OxDockHelper.IsVariableWidth(Dock))
                 return;
@@ -40,7 +40,7 @@ namespace OxLibrary.Controls
         private readonly Dictionary<TButton, OxPanel> Separators = new();
 
         protected virtual OxWidth ButtonMargin => OxWh.W1;
-        protected virtual OxWidth GroupsSeparatorWidth => OxWh.W5;
+        protected virtual OxWidth GroupsSeparatorWidth => OxWh.W9;
         protected virtual OxWidth GroupSeparatorMargin => OxWh.W4;
 
         private void PlaceButtons()
@@ -50,6 +50,7 @@ namespace OxLibrary.Controls
             foreach (TButton button in buttons)
             {
                 button.Parent = null;
+                button.FixedBorderColor = false;
 
                 try
                 {
@@ -90,8 +91,8 @@ namespace OxLibrary.Controls
             {
                 separator = new(new(GroupsSeparatorWidth, OxWh.W0))
                 {
-                    Parent = startButton.Parent,
                     Dock = startButton.Dock,
+                    Parent = startButton.Parent,
                 };
                 separator.Margin.Size = GroupSeparatorMargin;
                 separator.Margin.Top = startButton.Margin.Top;
@@ -149,7 +150,7 @@ namespace OxLibrary.Controls
             set => SetButtons(value);
         }
 
-        protected override void PrepareColors()
+        public override void PrepareColors()
         {
             base.PrepareColors();
 

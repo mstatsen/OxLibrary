@@ -252,7 +252,7 @@ namespace OxLibrary.Controls
             buttonsParent.Visible = false;
         }
 
-        protected override void PrepareColors()
+        public override void PrepareColors()
         {
             base.PrepareColors();
             label.ForeColor = hovered ? Color.Gray : Color.Silver;

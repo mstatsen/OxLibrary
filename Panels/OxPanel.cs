@@ -3,7 +3,7 @@ using OxLibrary.Forms;
 
 namespace OxLibrary.Panels
 {
-    public class OxPanel : Panel, IOxPanel, IOxControlContainer<Panel>
+    public class OxPanel : Panel, IOxPanel
     {
         private readonly OxControlManager<Panel> manager;
         public IOxControlManager Manager => manager;
@@ -14,6 +14,7 @@ namespace OxLibrary.Panels
             manager = OxControlManager.RegisterControl<Panel>(this, OnSizeChanged);
             BorderVisible = false;
             Colors = new(DefaultColor);
+            OnColorsCreated();
             Initialized = false;
 
             SilentSizeChange(
@@ -24,7 +25,6 @@ namespace OxLibrary.Panels
                     if (!size.Equals(OxSize.Empty))
                         Size = new(size);
 
-                    SetBordersHandlers();
                     PrepareInnerComponents();
                     SetHandlers();
                     AfterCreated();
@@ -35,6 +35,8 @@ namespace OxLibrary.Panels
             Initialized = true;
             Visible = true;
         }
+
+        protected virtual void OnColorsCreated() { }
 
         public new OxWidth Width
         {
@@ -194,22 +196,7 @@ namespace OxLibrary.Panels
             base.OnSizeChanged(e);
         }
 
-        private void SetBordersHandlers()
-        {
-            padding.SizeChanged += BordersSizeChangedHandler;
-            borders.SizeChanged += BordersSizeChangedHandler;
-            margin.SizeChanged += BordersSizeChangedHandler;
-        }
-
-        private void BordersSizeChangedHandler(object sender, BorderEventArgs e)
-        {
-            IOxControl parentForRealign = this;
-
-            if (Parent is not null)
-                parentForRealign = Parent;
-
-            parentForRealign.RealignControls();
-        }
+        public virtual bool HandleParentPadding => true;
 
         private readonly OxBorders padding = new();
         public new OxBorders Padding => padding;
@@ -328,10 +315,21 @@ namespace OxLibrary.Panels
         protected virtual Color GetForeColor() =>
             Colors.Darker(7);
 
-        protected virtual void PrepareColors()
+        public virtual void PrepareColors()
         {
             BackColor = GetBackColor();
             ForeColor = GetForeColor();
+            ColorizeControls();
+        }
+
+        private void ColorizeControls()
+        {
+            foreach (IOxControl control in OxControls)
+            {
+                if (control is IOxPanel panel)
+                    panel.BaseColor = BaseColor;
+                else control.BackColor = BackColor;
+            }
         }
 
         private bool useDisabledStyles = true;
@@ -346,12 +344,6 @@ namespace OxLibrary.Panels
             useDisabledStyles = value;
 
         protected virtual void PrepareInnerComponents() { }
-
-        public virtual OxRectangle FullControlZone =>
-            ClientRectangle 
-            - Padding 
-            - Borders 
-            - Margin;
 
         public virtual OxRectangle ControlZone =>
             manager.ControlZone;
@@ -444,7 +436,17 @@ namespace OxLibrary.Panels
         public Bitmap? Icon
         {
             get => GetIcon();
-            set => SetIcon(value);
+            set
+            {
+                switch (Icon)
+                {
+                    case null when value is null:
+                    case not null when Icon.Equals(value):
+                        return;
+                }
+
+                SetIcon(value);
+            }
         }
 
         protected virtual void SetIcon(Bitmap? value) { }
