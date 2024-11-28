@@ -20,7 +20,10 @@
 
         public static readonly Color FieldsColor = Color.FromArgb(195, 145, 195);
         public static readonly Color CardColor = DefaultGridRowColor;
-        public static Font DefaultFont => new(FontFamily, DefaultFontSize, FontStyle.Regular);
+
+        public static Font DefaultFont => 
+            new(FontFamily, DefaultFontSize, FontStyle.Regular);
+
         public static Font Font(float size)
         {
             if (size < 0)
@@ -29,7 +32,9 @@
             return new(FontFamily, size, FontStyle.Regular);
         }
 
-        public static Font Font(FontStyle fontStyle) => new(FontFamily, DefaultFontSize, fontStyle);
+        public static Font Font(FontStyle fontStyle) => 
+            new(FontFamily, DefaultFontSize, fontStyle);
+
         public static Font Font(float size, FontStyle fontStyle)
         {
             if (size < 0)
