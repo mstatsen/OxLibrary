@@ -1,4 +1,7 @@
-﻿namespace OxLibrary.Controls
+﻿using OxLibrary.Dock;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
+
+namespace OxLibrary.Controls
 {
     public class OxControlEventArgs : EventArgs
     { 
@@ -16,8 +19,11 @@
         public OxControls(IOxControlContainer container) => 
             Container = container;
 
-        public List<IOxControl> UndockedControls => 
-            FindAll(c => c.Dock is OxDock.None);
+        public List<IOxControl> Controls(OxDockType dockType) =>
+            FindAll(c => OxDockTypeHelper.ContainsIn(
+                OxDockHelper.DockType(c), dockType
+            )
+        );
 
         public new IOxControl Add(IOxControl control)
         {
@@ -34,17 +40,18 @@
 
         private void OnControlAdded(OxControlEventArgs e)
         {
-            if (e.Control.Dock is OxDock.None)
-                UndockedControls.Add(e.Control);
-
             ControlAdded?.Invoke(Container, e);
-            Container.RealignControls();
+            Container.RealignControls(
+                OxDockHelper.DockType(e.Control.Dock)
+            );
         }
 
         private void OnControlRemoved(OxControlEventArgs e)
         {
             ControlRemoved?.Invoke(Container, e);
-            Container.RealignControls();
+            Container.RealignControls(
+                OxDockHelper.DockType(e.Control.Dock)
+            );
         }
 
         public new IOxControl Remove(IOxControl control)

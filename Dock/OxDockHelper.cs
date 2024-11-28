@@ -82,12 +82,12 @@ namespace OxLibrary
             OxDock.None
         };
 
-        public static OxControlDockType DockType(IOxControl control) =>
+        public static OxDockType DockType(IOxControl control) =>
             DockType(control.Dock);
 
-        public static OxControlDockType DockType(OxDock dock) =>
+        public static OxDockType DockType(OxDock dock) =>
             dock is OxDock.None
-                ? OxControlDockType.Undocked
-                : OxControlDockType.Docked;
+                ? OxDockType.Undocked
+                : OxDockType.Docked;
     }
 }

@@ -1,4 +1,5 @@
-﻿using OxLibrary.Panels;
+﻿using OxLibrary.Dock;
+using OxLibrary.Panels;
 
 namespace OxLibrary.Controls
 {
@@ -131,7 +132,7 @@ namespace OxLibrary.Controls
                 ? new(OxWh.W0, OxWh.W0, OxWh.Maximum, OxWh.Maximum)
                 : Parent.ControlZone;
 
-        public void RealignControls(OxControlDockType dockType = OxControlDockType.Unknown)
+        public void RealignControls(OxDockType dockType = OxDockType.Unknown)
         {
             if (!IsControlContainer
                 || OxControlContainer!.FullControlZone.IsEmpty
@@ -143,7 +144,7 @@ namespace OxLibrary.Controls
             ControlZone = new(OxControlContainer!.FullControlZone);
             OxRectangle currentBounds = new(ControlZone);
 
-            if (dockType is not OxControlDockType.Undocked)
+            if ((dockType & OxDockType.Undocked) != OxDockType.Undocked)
                 foreach (IOxControl oxControl in OxControlContainer!.OxControls.ByPlacingPriority)
                 {
                     if (ControlZone.IsEmpty)
@@ -217,7 +218,7 @@ namespace OxLibrary.Controls
                         break;
                 }
 
-            if (dockType is not OxControlDockType.Docked)
+            if ((dockType & OxDockType.Docked) != OxDockType.Docked)
                 RealignUndockedControls(oldControlZone);
 
             OxControlContainer!.Invalidate();
@@ -228,7 +229,7 @@ namespace OxLibrary.Controls
             if (oldControlZone.Equals(ControlZone))
                 return;
 
-            foreach (IOxControl oxControl in OxControlContainer!.OxControls.UndockedControls)
+            foreach (IOxControl oxControl in OxControlContainer!.OxControls.Controls(OxDockType.Undocked))
             {
                 oxControl.Left = OxWh.Sub(((Control)oxControl).Left, oldControlZone.X);
                 oxControl.Top = OxWh.Sub(((Control)oxControl).Top, oldControlZone.Y);
@@ -316,7 +317,10 @@ namespace OxLibrary.Controls
                 return false;
 
             managingOnSizeChanged(e);
-            Parent?.RealignControls();
+
+            if (OxDockHelper.DockType(Dock) is OxDockType.Docked)
+                Parent?.RealignControls();
+
             return true;
         }
 

@@ -41,7 +41,7 @@ namespace OxLibrary.Panels
             set => ToolBar.Buttons = value;
         }
 
-        public OxHeader(string title = "") : base(new(OxWh.W240, OxWh.W26))
+        public OxHeader(string title = "") : base(new(OxWh.W0, OxWh.W26))
         {
             Dock = OxDock.Top;
             label.Text = title;

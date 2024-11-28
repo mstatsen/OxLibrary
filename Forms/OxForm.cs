@@ -342,7 +342,7 @@ namespace OxLibrary.Forms
         public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
             manager.SetBounds(x, y, width, height);
 
-        public void RealignControls(OxControlDockType dockType = OxControlDockType.Unknown) =>
+        public void RealignControls(OxDockType dockType = OxDockType.Unknown) =>
             manager.RealignControls(dockType);
 
         protected override sealed void OnSizeChanged(EventArgs e)

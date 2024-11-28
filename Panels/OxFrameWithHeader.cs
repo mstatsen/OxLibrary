@@ -74,9 +74,9 @@ namespace OxLibrary.Panels
             if (Header.Buttons.Count <= 0)
                 return;
 
-            Header.ToolBar.Parent = dialog.MainPanel.Header;
-            Header.ToolBar.BringToFront();
-            Header.ToolBar.BaseColor = dialog.MainPanel.Header.BaseColor;
+            HeaderToolBar.Parent = dialog.MainPanel.Header;
+            HeaderToolBar.BringToFront();
+            HeaderToolBar.BaseColor = dialog.MainPanel.Header.BaseColor;
 
             foreach (OxIconButton button in Header.Buttons.Cast<OxIconButton>())
             {
@@ -88,15 +88,18 @@ namespace OxLibrary.Panels
             }
         }
 
+        public OxHeaderToolBar HeaderToolBar => 
+            Header.ToolBar;
+
         public override void PutBack(OxPanelViewer dialog)
         {
             base.PutBack(dialog);
 
-            if (!Header.Equals(Header.ToolBar.Parent))
+            if (!Header.Equals(HeaderToolBar.Parent))
             {
-                Header.ToolBar.Parent = Header;
+                HeaderToolBar.Parent = Header;
 
-                foreach (OxIconButton button in Header.ToolBar.Buttons.Cast<OxIconButton>())
+                foreach (OxIconButton button in HeaderToolBar.Buttons.Cast<OxIconButton>())
                     if (!dialog.ButtonsWithBorders.Contains(button))
                         button.HiddenBorder = false;
             }

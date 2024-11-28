@@ -24,7 +24,7 @@ namespace OxLibrary.Controls
         IOxControlContainer? Parent { get; set; }
         bool SizeChanging { get; }
         bool SilentSizeChange(Action method, OxSize currentSize);
-        void RealignControls(OxControlDockType dockType = OxControlDockType.Unknown);
+        void RealignControls(OxDockType dockType = OxDockType.Unknown);
         bool OnSizeChanged(SizeChangedEventArgs e);
         void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height);
         void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height, BoundsSpecified specified);

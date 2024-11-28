@@ -156,7 +156,7 @@ namespace OxLibrary.Controls
             return true;
         }
 
-        public void RealignControls(OxControlDockType dock = OxControlDockType.Unknown) =>
+        public void RealignControls(OxDockType dock = OxDockType.Unknown) =>
             manager.RealignControls(dock);
 
         protected override sealed void OnSizeChanged(EventArgs e)
