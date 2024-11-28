@@ -15,10 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Controls\OxColorComboBox.cs">
+    <Compile Update="Controls\ComboBox\OxColorComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Update="Controls\OxPicturedComboBox.cs">
+    <Compile Update="Controls\ComboBox\OxPicturedComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Update="Test\TestForm.cs">

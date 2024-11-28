@@ -1,0 +1,172 @@
+﻿using OxLibrary.Controls;
+
+namespace OxLibrary.Panels
+{
+    public class OxTabButton : OxButton
+    {
+        public OxPanel Page { get; internal set; }
+        public OxTabControl TabControl { get; internal set; }
+
+        public OxTabButton(OxPanel page, OxTabControl tabControl, Bitmap? icon = null) 
+            : base(page.Text, icon)
+        {
+            TabControl = tabControl;
+            Page = page;
+            Text = Page.Text;
+            Parent = TabControl.Header;
+            Dock = OxDock.Left;
+            Font = TabControl.Font;
+            Size = new(tabControl.TabHeaderSize.Width, tabControl.TabHeaderSize.Height);
+        }
+
+        protected override void SetHandlers()
+        {
+            base.SetHandlers();
+            Click += (s, e) => TabControl.ActivePage = Page;
+        }
+
+        protected override void AfterCreated()
+        {
+            base.AfterCreated();
+            HiddenBorder = false;
+        }
+
+        public bool Active =>
+            Page is not null 
+            && Page.Equals(TabControl.ActivePage);
+
+        public int PageIndex =>
+            TabControl is not null 
+            && Page is not null 
+                ? TabControl.Pages.IndexOf(Page) 
+                : -1;
+
+        public bool IsFirstPage
+        {
+            get
+            {
+                if (TabControl is null)
+                    return true;
+
+                foreach (OxTabButton button in TabControl.VisibleTabButtons())
+                {
+                    if (button.Equals(this))
+                        break;
+
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        public bool IsLastPage
+        {
+            get
+            {
+                if (TabControl is null)
+                    return true;
+
+                List<OxTabButton> buttonList = TabControl.VisibleTabButtons();
+                buttonList.Reverse();
+
+                foreach (OxTabButton button in buttonList)
+                {
+                    if (button.Equals(this))
+                        break;
+
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        private bool IsPrevButton(OxTabButton? currentButton)
+        {
+            if (TabControl is null)
+                return false;
+
+            if (currentButton is null)
+                return false;
+
+            List<OxTabButton> buttonList = TabControl.VisibleTabButtons();
+            buttonList.Reverse();
+            bool nextReturn = false;
+
+            foreach (OxTabButton button in buttonList)
+            {
+                if (nextReturn)
+                    return button.Equals(this);
+
+                nextReturn = button.Equals(currentButton);
+            }
+
+            return false;
+        }
+
+        internal void SetVisualParameters()
+        {
+            if (TabControl is null)
+                return;
+
+            Font = new(
+                Font,
+                Active ? FontStyle.Bold : FontStyle.Regular);
+
+            OxDock startDock = OxDock.Left;
+            OxDock endDock = OxDock.Right;
+
+            switch (TabControl.TabPosition)
+            {
+                case OxDock.Left:
+                case OxDock.Right:
+                    startDock = OxDock.Top;
+                    endDock = OxDock.Bottom;
+                    break;
+            }
+
+            Borders[startDock].Visible =
+                Active
+                || IsFirstPage;
+
+            Borders[endDock].Visible =
+                Active
+                || IsLastPage
+                || !IsPrevButton(TabControl.ActiveTabButton);
+
+            Margin[TabControl.TabPosition].Size =
+                Active ?
+                    OxWh.W0
+                    : OxDockHelper.IsVertical(TabControl.TabPosition)
+                        ? OxWh.W4
+                        : OxWh.W24;
+            Borders[TabControl.TabPosition].Visible = true;
+            OxDock oppositeDock = OxDockHelper.Opposite(TabControl.TabPosition);
+            Margin[oppositeDock].Size = OxWh.W0;
+            Borders[oppositeDock].Visible = false;
+            Text += string.Empty; //for recalc label size
+        }
+
+        internal void SetPosition()
+        {
+            if (TabControl is null)
+                return;
+
+            OxDock buttonDock = OxDock.Left;
+
+            switch (TabControl.TabPosition)
+            {
+                case OxDock.Left:
+                case OxDock.Right:
+                    buttonDock = OxDock.Top;
+                    break;
+            }
+
+            Dock = buttonDock;
+            Width = TabControl.TabHeaderSize.Width;
+            Height = TabControl.TabHeaderSize.Height;
+            SetVisualParameters();
+        }
+    }
+}

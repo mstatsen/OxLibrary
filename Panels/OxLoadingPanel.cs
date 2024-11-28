@@ -82,7 +82,7 @@ namespace OxLibrary.Panels
             BaseColor =
                 UseParentColor 
                 && Parent is not null 
-                && Parent is OxPane paneParent
+                && Parent is OxPanel paneParent
                     ? paneParent.BaseColor
                     : DefaultColor;
             InnerChangeBaseColor = false;

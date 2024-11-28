@@ -1,4 +1,5 @@
-﻿using OxLibrary.Dialogs;
+﻿using OxLibrary.Controls;
+using OxLibrary.Forms;
 using OxLibrary.Panels;
 
 namespace OxLibrary.Test
@@ -9,26 +10,39 @@ namespace OxLibrary.Test
             OxIcons.TestCode;
 
         private readonly OxFrame frame;
+        private readonly OxCheckBox bluredCheckBox;
 
         public TestForm()
         {
             InitializeComponent();
             BaseColor = Color.FromArgb(135, 165, 195);
             MoveToScreenCenter();
-            frame = new OxFrame()
+            frame = new()
             {
                 Parent = this,
-                Dock = OxDock.Fill,
                 BlurredBorder = false,
                 ToolTipText = "This is frame with Dock = Fill",
+                Name = "FillFrame",
+                Dock = OxDock.Fill
             };
-            frame.Margin.Size = OxWh.W24;
             frame.Click += Frame_Click;
+            bluredCheckBox = new()
+            {
+                Left = OxWh.W0,
+                Top = OxWh.W0,
+                Parent = frame
+            };
+            bluredCheckBox.CheckedChanged += BluredCheckBox_CheckedChanged;
+        }
+
+        private void BluredCheckBox_CheckedChanged(object? sender, EventArgs e)
+        {
+            frame.Margin.Size = bluredCheckBox.Checked ? OxWh.W24 : OxWh.W12;
         }
 
         private void Frame_Click(object? sender, EventArgs e)
         {
-            frame.BlurredBorder = !frame.BlurredBorder;
+            RealignControls();
         }
 
         private void TestFormShow(object? sender, EventArgs e)

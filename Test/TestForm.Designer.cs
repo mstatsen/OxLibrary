@@ -1,4 +1,4 @@
-﻿using OxLibrary.Dialogs;
+﻿using OxLibrary.Forms;
 
 namespace OxLibrary.Test
 {

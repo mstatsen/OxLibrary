@@ -1,11 +1,11 @@
 ﻿using OxLibrary.Controls;
-using OxLibrary.Dialogs;
+using OxLibrary.Forms;
 
 namespace OxLibrary.Panels
 {
     public class OxPanelViewer : OxDialog
     {
-        public OxPanelViewer(OxPane contentPanel, OxDialogButton buttons) : base()
+        public OxPanelViewer(OxPanel contentPanel, OxDialogButton buttons) : base()
         {
             ButtonsWithBorders = new List<OxIconButton>();
             ContentPanel = contentPanel;
@@ -21,7 +21,7 @@ namespace OxLibrary.Panels
         public override Bitmap? FormIcon => ContentPanel.Icon;
 
         public List<OxIconButton> ButtonsWithBorders { get; }
-        private readonly OxPane ContentPanel;
+        private readonly OxPanel ContentPanel;
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {

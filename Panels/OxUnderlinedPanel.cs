@@ -1,6 +1,6 @@
 ﻿namespace OxLibrary.Panels
 {
-    public class OxUnderlinedPanel : OxPane
+    public class OxUnderlinedPanel : OxPanel
     {
         public OxBorder Underline => Borders[OxDock.Bottom];
 

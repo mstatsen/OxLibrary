@@ -1,5 +1,4 @@
 ﻿using OxLibrary.Controls;
-using OxLibrary.Dialogs;
 using OxLibrary.Panels;
 
 namespace OxLibrary
@@ -22,7 +21,7 @@ namespace OxLibrary
             aligningControl.Top = 
                 aligningControl switch
                 {
-                    OxPane => 
+                    OxPanel => 
                         baseControl.Top - (aligningControl.Height - baseControl.Height) / 2,
                     _ => 
                         baseControl is null

@@ -1,6 +1,6 @@
 ﻿namespace OxLibrary.Panels
 {
-    public class OxFrame : OxPane
+    public class OxFrame : OxPanel
     {
         public OxFrame() : this(OxSize.Empty) { }
         public OxFrame(OxSize size) : base(size)

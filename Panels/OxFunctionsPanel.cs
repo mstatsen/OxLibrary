@@ -1,5 +1,4 @@
-﻿
-namespace OxLibrary.Panels
+﻿namespace OxLibrary.Panels
 {
     public class OxFunctionsPanel : OxFrameWithHeader, IOxFrameWithHeader
     {

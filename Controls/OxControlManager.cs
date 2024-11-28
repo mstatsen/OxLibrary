@@ -20,37 +20,21 @@ namespace OxLibrary.Controls
 
             if (IsControlContainer)
             {
-                this.managingControl.ControlAdded += ControlAddedHandler;
-                this.managingControl.ControlRemoved += ControlRemovedHandler;
+                OxControlContainer!.ControlAdded += ControlAddedHandler;
+                OxControlContainer!.ControlRemoved += ControlRemovedHandler;
             }
 
             ControlZone = new(OxWh.W0, OxWh.W0, OxWh.Maximum, OxWh.Maximum);
             managingOnSizeChanged = onSizeChanged;
         }
 
-        private void ControlRemovedHandler(object? sender, ControlEventArgs e)
-        {
-            if (e.Control is not IOxControl oxControl
-                || !IsControlContainer)
-                return;
+        private void ControlRemovedHandler(object? sender, ControlEventArgs e) =>
+            OxControlContainer!.OxControls.Remove((IOxControl)e.Control);
 
-            OxControlContainer!.OxControls.Remove(oxControl);
-            OxControlContainer!.OxDockedControls.RemoveControl(oxControl);
-            RealignControls();
-        }
+        private void ControlAddedHandler(object? sender, ControlEventArgs e) =>
+            OxControlContainer!.OxControls.Add((IOxControl)e.Control);
 
-        private void ControlAddedHandler(object? sender, ControlEventArgs e)
-        {
-            if (e.Control is not IOxControl oxControl
-                || !IsControlContainer)
-                return;
-
-            OxControlContainer!.OxControls.Add(oxControl);
-            OxControlContainer!.OxDockedControls.AddControl(oxControl);
-            RealignControls();
-        }
-
-        private void ControlDisposedHandler(object? sender, EventArgs e) => 
+        private void ControlDisposedHandler(object? sender, EventArgs e) =>
             OxControlManager.UnRegisterControl(managingControl);
 
         private bool sizeChanging = false;
@@ -114,14 +98,14 @@ namespace OxLibrary.Controls
 
         public OxWidth Top
         {
-            get => OxWh.W(managingControl.Top);
-            set => managingControl.Top = OxWh.Int(value);
+            get => OxWh.Sub(managingControl.Top, ParentControlZone.Y);
+            set => managingControl.Top = OxWh.IAdd(value, ParentControlZone.Y);
         }
 
         public OxWidth Left
         {
-            get => OxWh.W(managingControl.Left);
-            set => managingControl.Left = OxWh.Int(value);
+            get => OxWh.Sub(managingControl.Left, ParentControlZone.X);
+            set => managingControl.Left = OxWh.IAdd(value, ParentControlZone.X);
         }
 
         public OxDock SavedDock = OxDock.None;
@@ -142,94 +126,128 @@ namespace OxLibrary.Controls
 
         public OxRectangle ControlZone { get; private set; }
 
-        public void RealignControls()
+        private OxRectangle ParentControlZone =>
+            Parent is null
+                ? new(OxWh.W0, OxWh.W0, OxWh.Maximum, OxWh.Maximum)
+                : Parent.ControlZone;
+
+        public void RealignControls(OxControlDockType dockType = OxControlDockType.Unknown)
         {
             if (!IsControlContainer
-                || ClientRectangle.IsEmpty
+                || OxControlContainer!.FullControlZone.IsEmpty
                 )
                 return;
+
+            OxRectangle oldControlZone = new(ControlZone);
 
             ControlZone = new(OxControlContainer!.FullControlZone);
             OxRectangle currentBounds = new(ControlZone);
 
-            foreach (IOxControl oxControl in OxControlContainer!.OxDockedControls.ByPlacingPriority)
-            {
-                if (ControlZone.IsEmpty)
-                    break;
-
-                OxDock currentDock = oxControl.Dock;
-                currentBounds = new(ControlZone);
-
-                switch (currentDock)
+            if (dockType is not OxControlDockType.Undocked)
+                foreach (IOxControl oxControl in OxControlContainer!.OxControls.ByPlacingPriority)
                 {
-                    case OxDock.None:
-                        continue;
-                    case OxDock.Fill:
-                        ControlZone.Clear();
+                    if (ControlZone.IsEmpty)
                         break;
-                    case OxDock.Left:
-                        currentBounds.Width = oxControl.Width;
-                        break;
-                    case OxDock.Right:
-                        currentBounds.X = 
-                            OxWh.A(
-                                currentBounds.X,
-                                OxWh.S(ControlZone.Width, oxControl.Width)
-                            );
-                        currentBounds.Width = oxControl.Width;
-                        break;
-                    case OxDock.Top:
-                        currentBounds.Height = oxControl.Height;
-                        break;
-                    case OxDock.Bottom:
-                        currentBounds.Y =
-                            OxWh.A(
-                                currentBounds.Y,
-                                OxWh.S(ControlZone.Height, oxControl.Height)
-                            );
-                        currentBounds.Height = oxControl.Height;
+
+                    OxDock currentDock = oxControl.Dock;
+                    currentBounds = new(ControlZone);
+
+                    switch (currentDock)
+                    {
+                        case OxDock.None:
+                            continue;
+                        case OxDock.Fill:
+                            ControlZone.Clear();
+                            break;
+                        case OxDock.Left:
+                            currentBounds.Width = oxControl.Width;
+                            break;
+                        case OxDock.Right:
+                            currentBounds.X =
+                                OxWh.A(
+                                    currentBounds.X,
+                                    OxWh.S(ControlZone.Width, oxControl.Width)
+                                );
+                            currentBounds.Width = oxControl.Width;
+                            break;
+                        case OxDock.Top:
+                            currentBounds.Height = oxControl.Height;
+                            break;
+                        case OxDock.Bottom:
+                            currentBounds.Y =
+                                OxWh.A(
+                                    currentBounds.Y,
+                                    OxWh.S(ControlZone.Height, oxControl.Height)
+                                );
+                            currentBounds.Height = oxControl.Height;
+                            break;
+                    }
+
+                    if (currentDock is not OxDock.Fill)
+                        ControlZone = new(
+                            currentDock is OxDock.Left
+                                ? OxWh.A(ControlZone.X, oxControl.Width)
+                                : ControlZone.X,
+                            currentDock is OxDock.Top
+                                ? OxWh.A(ControlZone.Y, oxControl.Height)
+                                : ControlZone.Y,
+                            currentDock is OxDock.Left
+                                        or OxDock.Right
+                                ? OxWh.S(ControlZone.Width, oxControl.Width)
+                                : ControlZone.Width,
+                            currentDock is OxDock.Top
+                                        or OxDock.Bottom
+                                ? OxWh.S(ControlZone.Height, oxControl.Height)
+                                : ControlZone.Height
+                        );
+
+                    oxControl.Manager.SilentSizeChange(
+                        () =>
+                        {
+                            oxControl.Location = currentBounds.Location;
+                            oxControl.Size = currentBounds.Size;
+                        },
+                        oxControl.Size
+                    );
+
+                    //oxControl.Invalidate();
+                    oxControl.RealignControls();
+
+                    if (ControlZone.IsEmpty)
                         break;
                 }
 
-                if (currentDock is not OxDock.Fill)
-                    ControlZone = new(
-                        currentDock is OxDock.Left
-                            ? OxWh.A(ControlZone.X, oxControl.Width)
-                            : ControlZone.X,
-                        currentDock is OxDock.Top
-                            ? OxWh.A(ControlZone.Y, oxControl.Height)
-                            : ControlZone.Y,
-                        currentDock is OxDock.Left
-                                    or OxDock.Right
-                            ? OxWh.S(ControlZone.Width, oxControl.Width)
-                            : ControlZone.Width,
-                        currentDock is OxDock.Top
-                                    or OxDock.Bottom
-                            ? OxWh.S(ControlZone.Height, oxControl.Height)
-                            : ControlZone.Height
-                    );
+            if (dockType is not OxControlDockType.Docked)
+                RealignUndockedControls(oldControlZone);
 
-                oxControl.Manager.SilentSizeChange(
-                    () =>
-                    {
-                        oxControl.Location = currentBounds.Location;
-                        oxControl.Size = currentBounds.Size;
-                    },
-                    oxControl.Size
-                );
+            OxControlContainer!.Invalidate();
+        }
 
-                oxControl.Invalidate();
-                oxControl.RealignControls();
+        private void RealignUndockedControls(OxRectangle oldControlZone)
+        {
+            if (oldControlZone.Equals(ControlZone))
+                return;
 
-                if (ControlZone.IsEmpty)
-                    break;
+            foreach (IOxControl oxControl in OxControlContainer!.OxControls.UndockedControls)
+            {
+                oxControl.Left = OxWh.Sub(((Control)oxControl).Left, oldControlZone.X);
+                oxControl.Top = OxWh.Sub(((Control)oxControl).Top, oldControlZone.Y);
             }
         }
 
         public IOxControlContainer? Parent
         {
             get => (IOxControlContainer?)managingControl.Parent;
-            set => managingControl.Parent = (Control?)value;
+            set
+            {
+                if (value is null && Parent is not null 
+                    || value is not null && value.Equals(Parent))
+                    return;
+
+                Parent?.OxControls.Remove(ManagingControl);
+                managingControl.Parent = (Control?)value;
+                value?.OxControls.Add(ManagingControl);
+            }
         }
 
         public OxSize Size
@@ -237,31 +255,11 @@ namespace OxLibrary.Controls
             get => new(Width, Height);
             set
             {
-                bool changed = false;
-                OxSize oldSize = new(Size);
+                if (!Width.Equals(value.Width))
+                    Width = value.Width;
 
-                /*SilentSizeChange(
-                    () =>
-                    {
-                */
-                        if (!Width.Equals(value.Width))
-                        {
-                            changed = true;
-                            Width = value.Width;
-                        }
-
-                        if (!Height.Equals(value.Height))
-                        {
-                            Height = value.Height;
-                            changed = true;
-                        }
-/*                    },
-                    Size
-                );
-*/
-                
-                if (changed)
-                    OnSizeChanged(new(oldSize, Size));
+                if (!Height.Equals(value.Height))
+                    Height = value.Height;
             }
         }
 
@@ -274,7 +272,10 @@ namespace OxLibrary.Controls
         public OxPoint Location
         {
             get => new(managingControl.Location);
-            set => managingControl.Location = value.Point;
+            set
+            {
+                managingControl.Location = value.Point;
+            }
         }
 
         public OxSize MinimumSize
