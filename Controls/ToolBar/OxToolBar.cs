@@ -38,10 +38,9 @@ namespace OxLibrary.Controls
         }
 
         private readonly Dictionary<TButton, OxPanel> Separators = new();
-
         protected virtual OxWidth ButtonMargin => OxWh.W1;
-        protected virtual OxWidth GroupsSeparatorWidth => OxWh.W9;
-        protected virtual OxWidth GroupSeparatorMargin => OxWh.W4;
+        protected virtual OxWidth GroupsSeparatorWidth => OxWh.W1;
+        protected virtual OxWidth GroupSeparatorMargin => OxWh.W2;
 
         private void PlaceButtons()
         {

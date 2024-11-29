@@ -28,22 +28,51 @@ namespace OxLibrary.Controls
             
             OxControlContainer.ControlAdded += ControlAddedHandler;
             OxControlContainer.ControlRemoved += ControlRemovedHandler;
-            OxControlContainer.Padding.SizeChanged += BordersSizeChangedHandler;
+            OxControlContainer.Padding.SizeChanged += PaddingSizeChangedHandler;
             OxControlContainer.Borders.SizeChanged += BordersSizeChangedHandler;
-            OxControlContainer.Margin.SizeChanged += BordersSizeChangedHandler;
+            OxControlContainer.Margin.SizeChanged += MarginSizeChangedHandler;
         }
 
-        private void BordersSizeChangedHandler(object sender, BorderEventArgs e)
+        private IOxControlContainer? GetParentForRealign()
         {
             if (OxControlContainer is null)
-                return;
+                return null;
 
-            IOxControl parentForRealign = OxControlContainer;
+            IOxControlContainer parentForRealign = OxControlContainer;
 
             if (Parent is not null)
                 parentForRealign = Parent;
 
-            parentForRealign.RealignControls();
+            return parentForRealign;
+        }
+
+        private void BordersSizeChangedHandler(object sender, BordersChangedEventArgs e) => 
+            GetParentForRealign()?.RealignControls();
+
+        private void PaddingSizeChangedHandler(object sender, BordersChangedEventArgs e) =>
+            GetParentForRealign()?.RealignControls();
+
+        private void MarginSizeChangedHandler(object sender, BordersChangedEventArgs e)
+        {
+            if (!e.Changed)
+                return;
+
+            SilentSizeChange(
+                () =>
+                {
+                    Width = 
+                        OxWh.A(
+                            OxWh.S(Width, e.OldValue.HorizontalFull), 
+                            e.NewValue.HorizontalFull
+                        );
+                    Height =
+                        OxWh.A(
+                            OxWh.S(Height, e.OldValue.VerticalFull),
+                            e.NewValue.VerticalFull
+                        );
+                }, 
+                Size
+            );
         }
 
         private void ControlRemovedHandler(object? sender, ControlEventArgs e)

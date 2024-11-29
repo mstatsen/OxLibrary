@@ -1,8 +1,20 @@
 ﻿namespace OxLibrary.Panels
 {
-    public class BorderEventArgs : EventArgs { }
+    public class BordersChangedEventArgs : EventArgs 
+    {
+        public OxBorders OldValue;
+        public OxBorders NewValue;
 
-    public delegate void BorderSizeEventHandler(object sender, BorderEventArgs e);
+        public BordersChangedEventArgs(OxBorders oldValue, OxBorders newValue)
+        { 
+            OldValue = oldValue;
+            NewValue = newValue;
+        }
+
+        public bool Changed => !NewValue.Equals(OldValue);
+    }
+
+    public delegate void BordersChangedEventHandler(object sender, BordersChangedEventArgs e);
 
     public class OxBorders : Dictionary<OxDock, OxBorder>
     {
@@ -67,10 +79,17 @@
         }
 
         private bool SizeChanging = false;
-        private void NotifyAboutSizeChanged()
+        
+        private void NotifyAboutSizeChanged(OxBorders oldBorders)
         {
-            if (!SizeChanging)
-                SizeChanged?.Invoke(this, new BorderEventArgs());
+            if (SizeChanging
+                || Equals(oldBorders))
+                return;
+
+            SizeChanged?.Invoke(
+                this, 
+                new BordersChangedEventArgs(oldBorders, this)
+            );
         }
 
         public bool SetSize(OxDock dock, OxWidth size)
@@ -80,28 +99,28 @@
             if (oldSize.Equals(size))
                 return false;
 
+            OxBorders oldBorders = new(this);
             this[dock].Size = size;
-            NotifyAboutSizeChanged();
+            NotifyAboutSizeChanged(oldBorders);
             return true;
         }
 
         private void SetSize(OxWidth size)
         {
-            bool sizeChanged = false;
             SizeChanging = true;
+            OxBorders oldBorders = new(this);
 
             try
             {
                 foreach (OxDock border in Keys)
-                    sizeChanged |= SetSize(border, size);
+                    SetSize(border, size);
             }
             finally
             {
                 SizeChanging = false;
             }
 
-            if (sizeChanged)
-                NotifyAboutSizeChanged();
+            NotifyAboutSizeChanged(oldBorders);
         }
 
         private OxWidth GetSize(OxDock dock) =>
@@ -111,6 +130,12 @@
         {
             foreach (OxDock dock in OxDockHelper.SingleDirectionDocks)
                 Add(dock, new());
+        }
+
+        public OxBorders(OxBorders prototype)
+        {
+            foreach (KeyValuePair<OxDock, OxBorder> border in prototype)
+                Add(border.Key, new(border.Value));
         }
 
         public OxBorders(OxWidth top, OxWidth left, OxWidth bottom, OxWidth right) : this() => 
@@ -253,8 +278,9 @@
 
             if (visibleChanged)
             {
+                OxBorders oldBorders = new(this);
                 this[dock].Visible = visible;
-                NotifyAboutSizeChanged();
+                NotifyAboutSizeChanged(oldBorders);
             }
 
             return visibleChanged;
@@ -262,23 +288,13 @@
 
         public void SetVisible(bool visible)
         {
-            bool visibleChanged = false;
+            OxBorders oldBorders = new(this);
 
-            foreach (OxDock dock in Keys) 
-                visibleChanged |= SetVisible(dock, visible);
+            foreach (OxDock dock in Keys)
+                SetVisible(dock, visible);
 
-            if (visibleChanged)
-                NotifyAboutSizeChanged();
+            NotifyAboutSizeChanged(oldBorders);
         }
-
-        public bool EqualsPadding(Padding padding) => 
-            padding.Left.Equals(LeftInt)
-            && padding.Right.Equals(RightInt)
-            && padding.Top.Equals(TopInt)
-            && padding.Bottom.Equals(BottomInt);
-
-        public Padding AsPadding => 
-            new(LeftInt, TopInt, RightInt, BottomInt);
 
         public bool GetVisible() =>
             this[OxDock.Top].Visible
@@ -305,7 +321,7 @@
             && Top.Equals(otherBorders.Top)
             && Bottom.Equals(otherBorders.Bottom);
 
-        public BorderSizeEventHandler? SizeChanged;
+        public BordersChangedEventHandler? SizeChanged;
 
         public override int GetHashCode()
         {

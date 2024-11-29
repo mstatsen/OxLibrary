@@ -3,6 +3,11 @@
     public class OxBorder
     {
         public OxBorder() { }
+        public OxBorder(OxBorder prototype) : this()
+        { 
+            Size = prototype.Size;
+            Visible = prototype.Visible;
+        }
 
         private OxWidth size = OxWh.W0;
         private bool visible = true;
