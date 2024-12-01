@@ -546,6 +546,7 @@ namespace OxLibrary.Controls
                     managingControl.MinimumSize = value.Size;
             }
         }
+
         public OxSize MaximumSize
         {
             get => new(managingControl.MaximumSize);
