@@ -74,19 +74,39 @@ namespace OxLibrary
         public OxRectangle() : this(Rectangle.Empty) { }
 
         public OxRectangle(int x, int y, int width, int height)
-            : this(OxWh.W(x), OxWh.W(y), OxWh.W(width), OxWh.W(height)) { }
+            : this(
+                  OxWh.W(x), 
+                  OxWh.W(y), 
+                  OxWh.W(width), 
+                  OxWh.W(height)
+            ) { }
 
         public OxRectangle(Rectangle rectangle)
-            : this(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height) { }
+            : this(
+                  rectangle.X, 
+                  rectangle.Y, 
+                  rectangle.Width, 
+                  rectangle.Height
+            ) { }
 
         public OxRectangle(OxRectangle rectangle)
             : this(rectangle.Rectangle) { }
 
         public OxRectangle(OxPoint location, OxSize size)
-            : this(location.X, location.Y, size.Width, size.Height) { }
+            : this(
+                  location.X, 
+                  location.Y, 
+                  size.Width, 
+                  size.Height
+            ) { }
 
         public Rectangle Rectangle =>
-            new(OxWh.Int(X), OxWh.Int(Y), OxWh.Int(Width), OxWh.Int(Height));
+            new(
+                OxWh.I(X), 
+                OxWh.I(Y), 
+                OxWh.I(Width), 
+                OxWh.I(Height)
+            );
 
         public OxPoint Location => new(X, Y);
         public OxSize Size => new(Width, Height);

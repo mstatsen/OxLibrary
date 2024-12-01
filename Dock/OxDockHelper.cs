@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Controls;
+using OxLibrary.Dock;
 
 namespace OxLibrary
 {
@@ -38,13 +39,26 @@ namespace OxLibrary
                 _ => OxDock.Bottom,
             };
 
+        public static OxDockVariable Variable(OxDock dock) =>
+            dock switch
+            {
+                OxDock.Left or
+                OxDock.Right =>
+                    OxDockVariable.Width,
+                OxDock.Top or
+                OxDock.Bottom =>
+                    OxDockVariable.Height,
+                OxDock.Fill =>
+                    OxDockVariable.Fill,
+                _ =>
+                    OxDockVariable.None
+            };
+
         public static bool IsVertical(OxDock dock) =>
-            dock is OxDock.Top
-                 or OxDock.Bottom;
+            Variable(dock) is OxDockVariable.Height;
 
         public static bool IsHorizontal(OxDock dock) =>
-            dock is OxDock.Left
-                 or OxDock.Right;
+            Variable(dock) is OxDockVariable.Width;
 
         public static bool IsVariableHeight(OxDock dock) =>
             IsVertical(dock)

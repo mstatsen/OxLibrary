@@ -20,7 +20,7 @@
 
         public int IntSize
         {
-            get => OxWh.Int(Size);
+            get => OxWh.I(Size);
             set => Size = OxWh.W(value);
         }
 

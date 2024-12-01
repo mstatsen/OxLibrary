@@ -1,6 +1,4 @@
-﻿using OxLibrary.Panels;
-
-namespace OxLibrary.Controls
+﻿namespace OxLibrary.Controls
 {
     /// <summary>
     /// Interface OxLibrary controls container 
@@ -15,15 +13,9 @@ namespace OxLibrary.Controls
         /// ClientRectange excluded Margin, Border and Padding
         /// </summary>
         OxRectangle ControlZone { get; }
-        OxBorders Padding { get; }
         bool HandleParentPadding { get; }
-        OxBorders Borders { get; }
-        Color BorderColor { get; set; }
-        void SetBorderWidth(OxWidth value);
-        void SetBorderWidth(OxDock dock, OxWidth value);
-        bool BorderVisible { get; set; }
-        OxBorders Margin { get; }
-        bool BlurredBorder { get; set; }
+        bool Realigning { get; }
+        void RealignControls(OxDockType dockType = OxDockType.Unknown);
     }
 
     public interface IOxControlContainer<TBaseControl> : IOxControl<TBaseControl>, IOxControlContainer

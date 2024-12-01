@@ -45,9 +45,9 @@
             SizeChanged?.Invoke(this, oldSize);
         }
 
-        public int WidthInt => OxWh.Int(Width);
+        public int WidthInt => OxWh.I(Width);
 
-        public int HeightInt => OxWh.Int(Height);
+        public int HeightInt => OxWh.I(Height);
 
         public OxSize(OxWidth width, OxWidth height)
         {

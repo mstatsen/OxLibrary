@@ -31,7 +31,10 @@
         {
             base.SetIcon(value);
             Picture.Visible = value is not null;
-            Label.TextAlign = Picture.Visible ? ContentAlignment.MiddleLeft : ContentAlignment.MiddleCenter;
+            Label.TextAlign = 
+                Picture.Visible
+                    ? ContentAlignment.MiddleLeft 
+                    : ContentAlignment.MiddleCenter;
         }
 
         protected override void PrepareInnerComponents()
@@ -44,8 +47,13 @@
         {
             base.SetHandlers();
             SetHoverHandlers(Label);
-            Label.Click += (s, e) => PerformClick();
-            ForeColorChanged += (s, e) => Label.ForeColor = ForeColor;
+            SetClickHandler(Label);
+        }
+
+        protected override void OnForeColorChanged(EventArgs e)
+        {
+            base.OnForeColorChanged(e);
+            Label.ForeColor = ForeColor;
         }
 
         protected override string GetText() => 

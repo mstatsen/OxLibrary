@@ -101,11 +101,9 @@ public new OxPoint AutoScrollOffset
     get => manager.AutoScrollOffset;
     set => manager.AutoScrollOffset = value;
 }
-public bool SizeChanging =>
-    manager.SizeChanging;
 
-public bool SilentSizeChange(Action method, OxSize oldSize) =>
-    manager.SilentSizeChange(method, oldSize);
+public void DoWithSuspendedLayout(Action method) =>
+    manager.DoWithSuspendedLayout(method);
 
 public Control GetChildAtPoint(OxPoint pt, GetChildAtPointSkip skipValue) =>
     manager.GetChildAtPoint(pt, skipValue);
@@ -155,10 +153,5 @@ public virtual bool OnSizeChanged(SizeChangedEventArgs e)
 public void RealignControls() => 
     manager.RealignControls();
 
-protected override sealed void OnSizeChanged(EventArgs e)
-{
-    if (SizeChanging)
-        return;
-
+private new void OnSizeChanged(EventArgs e) =>
     base.OnSizeChanged(e);
-}

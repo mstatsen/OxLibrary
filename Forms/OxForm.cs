@@ -1,5 +1,4 @@
 ﻿using OxLibrary.Controls;
-using OxLibrary.Panels;
 
 namespace OxLibrary.Forms
 {
@@ -16,7 +15,7 @@ namespace OxLibrary.Forms
         public OxControls OxControls => oxControls;
         public virtual bool OnSizeChanged(SizeChangedEventArgs e)
         {
-            if (!Initialized || 
+            if (!Initialized ||
                 !e.Changed)
                 return false;
 
@@ -24,8 +23,8 @@ namespace OxLibrary.Forms
 
             //MainPanel?.SilentSizeChange(() =>
             //    {
-                    MainPanel.Size = Size;
-                    MainPanel.RealignControls();
+            MainPanel.Size = Size;
+            MainPanel.RealignControls();
             //    },
             //   MainPanel.Size
             //);
@@ -52,7 +51,7 @@ namespace OxLibrary.Forms
         public new event OxControlEvent ControlRemoved
         {
             add => OxControls.ControlRemoved += value;
-            remove => OxControls.ControlRemoved-= value;
+            remove => OxControls.ControlRemoved -= value;
         }
 
         public void MoveToScreenCenter()
@@ -123,10 +122,10 @@ namespace OxLibrary.Forms
             }
         }
 
-        public virtual OxSize WantedMinimumSize => 
+        public virtual OxSize WantedMinimumSize =>
             new(OxWh.W640, OxWh.W480);
 
-        protected virtual OxFormMainPanel CreateMainPanel() => 
+        protected virtual OxFormMainPanel CreateMainPanel() =>
             new(this);
 
         private void PlaceMainPanel()
@@ -143,11 +142,18 @@ namespace OxLibrary.Forms
             else base.OnControlAdded(e);
         }
 
+        private void InitializeComponent()
+        {
+            SuspendLayout();
+            // 
+            // OxForm
+            // 
+            Name = "OxForm";
+            ResumeLayout(false);
+        }
+
         protected override void OnTextChanged(EventArgs e) =>
             MainPanel.Text = Text;
-
-        public bool SizeChanging => 
-            manager.SizeChanging;
 
         private bool canMaximize = true;
         private bool canMinimize = true;
@@ -294,43 +300,6 @@ namespace OxLibrary.Forms
 
         public bool HandleParentPadding => false;
 
-        private readonly OxBorders padding = new();
-        public new OxBorders Padding => padding;
-
-        private readonly OxBorders borders = new();
-        public OxBorders Borders => borders;
-
-        public bool UseDefaultBorderColor
-        {
-            get => true;
-            set { }
-        }
-
-        public Color BorderColor
-        {
-            get => Color.Transparent;
-            set { }
-        }
-
-        public void SetBorderWidth(OxWidth value) { }
-
-        public void SetBorderWidth(OxDock dock, OxWidth value) { }
-
-        public bool BorderVisible
-        {
-            get => false;
-            set { }
-        }
-
-        private readonly OxBorders margin = new();
-        public new OxBorders Margin => margin;
-
-        public bool BlurredBorder
-        {
-            get => true;
-            set { }
-        }
-
         public new OxSize PreferredSize =>
             manager.PreferredSize;
 
@@ -340,8 +309,8 @@ namespace OxLibrary.Forms
             set => manager.AutoScrollOffset = value;
         }
 
-        public bool SilentSizeChange(Action method, OxSize oldSize) => 
-            manager.SilentSizeChange(method, oldSize);
+        public void DoWithSuspendedLayout(Action method) =>
+            manager.DoWithSuspendedLayout(method);
 
         public Control GetChildAtPoint(OxPoint pt, GetChildAtPointSkip skipValue) =>
             manager.GetChildAtPoint(pt, skipValue);
@@ -382,13 +351,11 @@ namespace OxLibrary.Forms
         public void RealignControls(OxDockType dockType = OxDockType.Unknown) =>
             manager.RealignControls(dockType);
 
-        protected override sealed void OnSizeChanged(EventArgs e)
-        {
-            if (SizeChanging)
-                return;
+        public bool Realigning =>
+            manager.Realigning;
 
+        private new void OnSizeChanged(EventArgs e) =>
             base.OnSizeChanged(e);
-        }
 
         protected override void OnShown(EventArgs e)
         {

@@ -157,11 +157,10 @@
 
         private void SetEmptySize()
         {
-            SilentSizeChange(() =>
+            DoWithSuspendedLayout(() =>
                 {
                     Size = new();
-                },
-                Size
+                }
             );
         }
 
@@ -218,8 +217,7 @@
 
         private void ReLayoutPanelsHandler(object? sender, EventArgs e)
         {
-            if (!SizeChanging 
-                && !panelResizing)
+            if (!panelResizing)
                 LayoutPanels(placedPanels);
         }
 

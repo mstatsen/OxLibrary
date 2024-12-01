@@ -14,10 +14,9 @@ namespace OxLibrary.Panels
             manager = OxControlManager.RegisterControl<Panel>(this, OnSizeChanged);
             BorderVisible = false;
             Colors = new(DefaultColor);
-            OnColorsCreated();
             Initialized = false;
 
-            SilentSizeChange(
+            DoWithSuspendedLayout(
                 () =>
                 {
                     DoubleBuffered = true;
@@ -28,15 +27,12 @@ namespace OxLibrary.Panels
                     PrepareInnerComponents();
                     SetHandlers();
                     AfterCreated();
-                },
-                Size
+                }
             );
 
             Initialized = true;
             Visible = true;
         }
-
-        protected virtual void OnColorsCreated() { }
 
         public new OxWidth Width
         {
@@ -134,11 +130,9 @@ namespace OxLibrary.Panels
             get => manager.AutoScrollOffset;
             set => manager.AutoScrollOffset = value;
         }
-        public bool SizeChanging =>
-            manager.SizeChanging;
 
-        public bool SilentSizeChange(Action method, OxSize oldSize) =>
-            manager.SilentSizeChange(method, oldSize);
+        public void DoWithSuspendedLayout(Action method) =>
+            manager.DoWithSuspendedLayout(method);
 
         public Control GetChildAtPoint(OxPoint pt, GetChildAtPointSkip skipValue) =>
             manager.GetChildAtPoint(pt, skipValue);
@@ -188,13 +182,11 @@ namespace OxLibrary.Panels
         public void RealignControls(OxDockType dockType = OxDockType.Unknown) =>
             manager.RealignControls(dockType);
 
-        protected override sealed void OnSizeChanged(EventArgs e)
-        {
-            if (SizeChanging)
-                return;
+        public bool Realigning => 
+            manager.Realigning;
 
+        private new void OnSizeChanged(EventArgs e) => 
             base.OnSizeChanged(e);
-        }
 
         public virtual bool HandleParentPadding => true;
 
@@ -313,7 +305,7 @@ namespace OxLibrary.Panels
             Colors.Lighter(Enabled || !useDisabledStyles? 7 : 8);
 
         protected virtual Color GetForeColor() =>
-            Colors.Darker(7);
+            Colors.Darker(Enabled || !useDisabledStyles ? 7 : -3);
 
         public virtual void PrepareColors()
         {

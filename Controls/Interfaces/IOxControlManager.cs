@@ -1,6 +1,4 @@
-﻿using OxLibrary.Panels;
-
-namespace OxLibrary.Controls
+﻿namespace OxLibrary.Controls
 {
     public interface IOxControlManager
     {
@@ -22,9 +20,7 @@ namespace OxLibrary.Controls
         OxSize PreferredSize { get; }
         OxPoint AutoScrollOffset { get; set; }
         IOxControlContainer? Parent { get; set; }
-        bool SizeChanging { get; }
-        bool SilentSizeChange(Action method, OxSize currentSize);
-        void RealignControls(OxDockType dockType = OxDockType.Unknown);
+        void DoWithSuspendedLayout(Action method);
         bool OnSizeChanged(SizeChangedEventArgs e);
         void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height);
         void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height, BoundsSpecified specified);

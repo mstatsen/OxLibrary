@@ -143,7 +143,7 @@
 
         public int LeftInt
         {
-            get => OxWh.Int(Left);
+            get => OxWh.I(Left);
             set => Left = OxWh.W(value);
         }
 
@@ -165,7 +165,7 @@
 
         public OxWidth Horizontal
         {
-            get => Left;
+            get => OxWh.A(Left, Right);
             set
             {
                 Left = value;
@@ -173,15 +173,9 @@
             }
         }
 
-        public int HorizontalFullInt => 
-            LeftInt + RightInt;
-
-        public OxWidth HorizontalFull => 
-            OxWh.A(Left, Right);
-
         public int TopInt
         {
-            get => OxWh.Int(Top);
+            get => OxWh.I(Top);
             set => Top = OxWh.W(value);
         }
 
@@ -191,19 +185,9 @@
             set => SetSize(OxDock.Top, value);
         }
 
-        public int VerticalInt
-        {
-            get => LeftInt;
-            set
-            {
-                TopInt = value;
-                BottomInt = value;
-            }
-        }
-
         public OxWidth Vertical
         {
-            get => Top;
+            get => OxWh.A(Top, Bottom);
             set
             {
                 Top = value;
@@ -211,15 +195,9 @@
             }
         }
 
-        public int VerticalIntFull => 
-            TopInt + BottomInt;
-
-        public OxWidth VerticalFull =>
-            OxWh.A(Top, Bottom);
-
         public int RightInt
         {
-            get => OxWh.Int(Right);
+            get => OxWh.I(Right);
             set => Right = OxWh.W(value);
         }
 
@@ -231,7 +209,7 @@
 
         public int BottomInt
         {
-            get => OxWh.Int(Bottom);
+            get => OxWh.I(Bottom);
             set => Bottom = OxWh.W(value);
         }
 
@@ -249,7 +227,7 @@
 
         public int SizeInt
         {
-            get => OxWh.Int(Size);
+            get => OxWh.I(Size);
             set => Size = OxWh.W(value);
         }
 

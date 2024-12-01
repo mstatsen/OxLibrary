@@ -185,11 +185,11 @@ namespace OxLibrary.Controls
     /// ...<br/>
     /// public virtual bool OnSizeChanged(SizeChangedEventArgs e)<br/>
     /// {<br/>
-    ///     if (!SizeChanging &amp;&amp; e.Changed)<br/>
+    ///     if (e.Changed)<br/>
     ///         base.OnSizeChanged(e);<br/>
     ///     return e.Changed;<br/>
     /// }<br/><br/>
-    /// protected override sealed void OnSizeChanged(EventArgs e) =&gt;<br/>
+    /// private new void OnSizeChanged(EventArgs e) =&gt;<br/>
     ///     base.OnSizeChanged(e);
     /// </code><br/><br/>
     /// For full code implementaion IOxControl see IOxControl_Implementation.txt

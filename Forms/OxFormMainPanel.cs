@@ -13,6 +13,7 @@ namespace OxLibrary.Forms
         {
             Form = form;
             Form.SizeChanged += FormSizeChanged;
+            Dock = OxDock.Fill;
             SetTitleButtonsVisible();
             SetHeaderHeight(OxWh.W34);
             SetRestoreButtonIconAndTooltip();
@@ -26,7 +27,7 @@ namespace OxLibrary.Forms
         public override OxDock Dock 
         { 
             get => OxDock.Fill; 
-            set => base.Dock = value; 
+            set => base.Dock = OxDock.Fill;
         }
 
         private void FormSizeChanged(object? sender, EventArgs e) => 
@@ -161,17 +162,22 @@ namespace OxLibrary.Forms
         public bool FormIsMaximized => 
             Form.WindowState is FormWindowState.Maximized;
 
-        public override bool OnSizeChanged(SizeChangedEventArgs e) => 
-            Initialized && 
-            SilentSizeChange(() =>
+        public override bool OnSizeChanged(SizeChangedEventArgs e)
+        {
+            if (!e.Changed
+                || !Initialized)
+                return false;
+
+            DoWithSuspendedLayout(() =>
                 {
                     if (e.Changed &&
                         Form is not null)
-                        Form.Size = Size;
-                },
-                e.OldSize
-            ) 
-            && e.Changed;
+                        Form.Size = new(Size);
+                }
+            );
+
+            return true;
+        }
 
         internal void SetMarginsSize() => 
             Margin.Size = 

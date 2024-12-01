@@ -28,9 +28,9 @@
             set => Height = value;
         }
 
-        public int XInt => OxWh.Int(X);
+        public int XInt => OxWh.I(X);
 
-        public int YInt => OxWh.Int(Y);
+        public int YInt => OxWh.I(Y);
 
         public OxPoint(OxWidth x, OxWidth y) : base(x, y) { }
         public OxPoint(OxWidth x, int y) : base(x, y) { }

@@ -22,103 +22,116 @@
         public static OxWidth A(OxWidth left, OxWidth right) =>
             W(IAdd(left, right));
 
-        public static OxWidth S(OxWidth left, OxWidth right) =>
-            W(I(left) - I(right));
+        public static OxWidth A(OxWidth left, int right) =>
+            A(left, W(right));
+
+        public static OxWidth A(int left, OxWidth right) =>
+            A(right, left);
 
         public static OxWidth Add(OxWidth left, OxWidth right) =>
             A(left, right);
 
         public static OxWidth Add(OxWidth left, int right) =>
-            Add(left, W(right));
+            A(left, right);
 
         public static OxWidth Add(int left, OxWidth right) =>
-            Add(right, left);
+            A(right, left);
+
+        public static OxWidth S(OxWidth left, OxWidth right) =>
+            W(I(left) - I(right));
+
+        public static OxWidth S(OxWidth left, int right) =>
+            W(I(left) - right);
+
+        public static OxWidth S(int left, OxWidth right) =>
+            W(left - I(right));
 
         public static OxWidth Sub(OxWidth left, OxWidth right) =>
             S(left, right);
 
-        public static OxWidth SubAbs(OxWidth left, OxWidth right) => Sub(
+        public static OxWidth SubAbs(OxWidth left, OxWidth right) =>
+            S(
                 Max(left, right),
                 Min(left, right)
             );
 
         public static OxWidth Sub(OxWidth left, int right) =>
-            W(Int(left) - right);
+            S(left, right);
 
         public static OxWidth Sub(int left, OxWidth right) =>
-            W(left - Int(right));
+            S(left, right);
 
         public static OxWidth Mul(OxWidth left, OxWidth right) =>
-            W(Int(left) * Int(right));
+            W(I(left) * I(right));
 
         public static OxWidth Mul(OxWidth left, int right) =>
-            W(Int(left) * right);
+            W(I(left) * right);
 
         public static OxWidth Mul(int left, OxWidth right) =>
-            W(left * Int(right));
+            W(left * I(right));
 
         public static OxWidth Div(OxWidth left, OxWidth right) =>
-            W(Int(left) / Int(right));
+            W(I(left) / I(right));
 
         public static OxWidth Div(OxWidth left, int right) =>
-            W(Int(left) / right);
+            W(I(left) / right);
 
         public static OxWidth Div(int left, OxWidth right) =>
-            W(left / Int(right));
+            W(left / I(right));
 
         public static bool Greater(OxWidth left, OxWidth right) =>
-            Int(left) > Int(right);
+            I(left) > I(right);
 
         public static bool Greater(OxWidth left, int right) =>
-            Int(left) > right;
+            I(left) > right;
 
         public static bool Greater(int left, OxWidth right) =>
-            left > Int(right);
+            left > I(right);
 
         public static bool GreaterOrEquals(OxWidth left, OxWidth right) =>
-            Int(left) >= Int(right);
+            I(left) >= I(right);
 
         public static bool GreaterOrEquals(OxWidth left, int right) =>
-            Int(left) >= right;
+            I(left) >= right;
 
         public static bool GreaterOrEquals(int left, OxWidth right) =>
-            left >= Int(right);
+            left >= I(right);
 
         public static bool Less(OxWidth left, OxWidth right) =>
-            Int(left) < Int(right);
+            I(left) < I(right);
 
         public static bool Less(OxWidth left, int right) =>
-            Int(left) < right;
+            I(left) < right;
 
         public static bool Less(int left, OxWidth right) =>
-            left < Int(right);
+            left <  I(right);
 
         public static bool LessOrEquals(OxWidth left, OxWidth right) =>
-            Int(left) <= Int(right);
+            I(left) <= I(right);
 
         public static bool LessOrEquals(OxWidth left, int right) =>
-            Int(left) <= right;
+            I(left) <= right;
 
         public static bool LessOrEquals(int left, OxWidth right) =>
-            left <= Int(right);
+            left <= I(right);
 
         public static OxWidth Min(OxWidth left, OxWidth right) =>
-            W(Math.Min(Int(left), Int(right)));
+            W(Math.Min(I(left), I(right)));
 
         public static OxWidth Min(int left, OxWidth right) =>
-            W(Math.Min(left, Int(right)));
+            W(Math.Min(left, I(right)));
 
         public static OxWidth Min(OxWidth left, int right) =>
-            W(Math.Min(Int(left), right));
+            W(Math.Min(I(left), right));
 
         public static OxWidth Max(OxWidth left, OxWidth right) =>
-            W(Math.Max(Int(left), Int(right)));
+            W(Math.Max(I(left), I(right)));
 
         public static OxWidth Max(int left, OxWidth right) =>
-            W(Math.Max(left, Int(right)));
+            W(Math.Max(left, I(right)));
 
         public static OxWidth Max(OxWidth left, int right) =>
-            W(Math.Max(Int(left), right));
+            W(Math.Max(I(left), right));
 
 
         public static readonly OxWidth Maximum = //W(4095)

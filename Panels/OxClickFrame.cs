@@ -42,12 +42,6 @@
             }
         }
 
-        protected override void OnColorsCreated() 
-        {
-            base.OnColorsCreated();
-            Colors = new(DefaultColor);
-        }
-
         public override void PrepareColors()
         {
             base.PrepareColors();
@@ -56,9 +50,19 @@
                 Colors.BaseColor = BaseColor;
         }
 
+        protected override void OnEnabledChanged(EventArgs e)
+        {
+            base.OnEnabledChanged(e);
+            Hovered = false;
+        }
+
+        protected override Color GetForeColor() =>
+            Color.Red;
+            //Colors.Darker(Enabled || !UseDisabledStyles ? 7 : -4);
+
         private bool ClickFrameBaseColorProcess = false;
 
-        public new OxColorHelper Colors { get; private set; }
+        public new OxColorHelper Colors { get; private set; } = new(DefaultBackColor);
 
         private void SetBaseColor()
         {
@@ -71,8 +75,8 @@
                     || !UseDisabledStyles
                         ? hovered
                             || FreezeHovered
-                            ? HoveredColor
-                            : Colors.BaseColor
+                                ? HoveredColor
+                                : Colors.BaseColor
                         : Colors.Lighter(ReadOnly ? 1 : 0);
             }
             finally
@@ -151,7 +155,8 @@
 
         protected virtual void MouseEnterHandler(object? sender, EventArgs e)
         {
-            if (hovered)
+            if (!Enabled
+                || hovered)
                 return;
             
             Hovered = true;

@@ -107,11 +107,8 @@ namespace OxLibrary.Controls
                 get => manager.AutoScrollOffset;
                 set => manager.AutoScrollOffset = value;
             }
-            public bool SizeChanging =>
-                manager.SizeChanging;
-
-            public bool SilentSizeChange(Action method, OxSize oldSize) =>
-                manager.SilentSizeChange(method, oldSize);
+            public void DoWithSuspendedLayout(Action method) =>
+                manager.DoWithSuspendedLayout(method);
 
             public Control GetChildAtPoint(OxPoint pt, GetChildAtPointSkip skipValue) =>
                 manager.GetChildAtPoint(pt, skipValue);
@@ -158,16 +155,8 @@ namespace OxLibrary.Controls
                 return true;
             }
 
-            public void RealignControls(OxDockType dockType = OxDockType.Unknown) =>
-                manager.RealignControls(dockType);
-
-            protected override sealed void OnSizeChanged(EventArgs e)
-            {
-                if (SizeChanging)
-                    return;
-
+            private new void OnSizeChanged(EventArgs e) =>
                 base.OnSizeChanged(e);
-            }
         }
 
         public bool AlwaysEnabled { get; set; } = false;
