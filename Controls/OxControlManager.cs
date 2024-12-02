@@ -77,7 +77,8 @@ namespace OxLibrary.Controls
         private void ControlAddedHandler(object? sender, ControlEventArgs e)
         {
             if (AsContainer is null
-                || e.Control is not IOxControl oxControl)
+                || e.Control is not IOxControl oxControl
+                || e.Control.Equals(ManagingControl))
                 return;
 
             AsContainer.OxControls.Add(oxControl);
@@ -411,6 +412,9 @@ namespace OxLibrary.Controls
             foreach (IOxControl control in GetControls(OxDockType.Docked))
             {
                 currentBounds = new(ControlZone);
+
+                if (!control.Visible)
+                    continue;
 
                 if (control is IOxControlContainer childContainer
                     && !childContainer.HandleParentPadding

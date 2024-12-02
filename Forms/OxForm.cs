@@ -1,9 +1,10 @@
 ﻿using OxLibrary.Controls;
 using OxLibrary.Handlers;
+using OxLibrary.Interfaces;
 
 namespace OxLibrary.Forms
 {
-    public class OxForm : Form, IOxControlContainer<Form>
+    public class OxForm : Form, IOxControlContainer<Form>, IOxWithColorHelper
     {
         private readonly bool Initialized = false;
         public OxFormMainPanel MainPanel { get; internal set; }
@@ -28,7 +29,7 @@ namespace OxLibrary.Forms
                 return;
 
             MainPanel.Size = Size;
-            MainPanel.RealignControls();
+            RealignControls();
         }
 
         public new event OxLocationChanged LocationChanged
@@ -41,25 +42,21 @@ namespace OxLibrary.Forms
 
         public OxForm()
         {
-            oxControls = new(this);
-            DoubleBuffered = true;
-            manager = OxControlManager.RegisterControl<Form>(this);
-            MainPanel = CreateMainPanel();
-            SetUpForm();
-            PlaceMainPanel();
-            Initialized = true;
-        }
+            Initialized = false;
 
-        public new event OxControlEvent ControlAdded
-        {
-            add => OxControls.ControlAdded += value;
-            remove => OxControls.ControlRemoved -= value;
-        }
-
-        public new event OxControlEvent ControlRemoved
-        {
-            add => OxControls.ControlRemoved += value;
-            remove => OxControls.ControlRemoved -= value;
+            try
+            {
+                oxControls = new(this);
+                DoubleBuffered = true;
+                manager = OxControlManager.RegisterControl<Form>(this);
+                MainPanel = CreateMainPanel();
+                SetUpForm();
+                PlaceMainPanel();
+            }
+            finally
+            {
+                Initialized = true;
+            }
         }
 
         public void MoveToScreenCenter()
@@ -352,9 +349,13 @@ namespace OxLibrary.Forms
         public bool Realigning =>
             manager.Realigning;
 
+        public OxColorHelper Colors => MainPanel.Colors;
+
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
+            MainPanel.Location = new(OxPoint.Empty);
+            MainPanel.Size = new(Size);
             RealignControls();
         }
 
@@ -362,6 +363,9 @@ namespace OxLibrary.Forms
 #pragma warning disable IDE0051 // Remove unused private members
         private static new void OnLocationChanged(EventArgs e) { }
         private static new void OnSizeChanged(EventArgs e) { }
+
+        public void PrepareColors() =>
+            MainPanel.PrepareColors();
 #pragma warning restore IDE0051 // Remove unused private members
 #pragma warning restore IDE0060 // Remove unused parameter
     }

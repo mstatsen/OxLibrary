@@ -140,19 +140,8 @@ namespace OxLibrary.Forms
             restoreButton.ToolTipText = GetRestoreToopTip();
         }
 
-        public void SetFormState(FormWindowState state)
-        {
-            //ContentBox.Visible = false;
-
-            try
-            {
-                Form.SetUpSizes(state);
-            }
-            finally
-            {
-                //ContentBox.Visible = true;
-            }
-        }
+        public void SetFormState(FormWindowState state) => 
+            Form.SetUpSizes(state);
 
         private void CloseButtonClickHandler(object? sender, EventArgs e)
         {
@@ -187,7 +176,7 @@ namespace OxLibrary.Forms
                     ? OxWh.W2
                     : OxWh.W0;
 
-        protected override void OnLocationChanged(EventArgs e)
+        public override void OnLocationChanged(OxLocationChangedEventArgs e)
         {
             base.OnLocationChanged(e);
 

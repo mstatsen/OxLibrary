@@ -50,7 +50,7 @@ namespace OxLibrary.Panels
         {
             base.PrepareColors();
             Header.BaseColor = 
-                Colors.Darker(PanelViewer is null ? 0 : 3);
+                Colors.Darker(PanelViewer is null ? 1 : 3);
         }
 
         /*

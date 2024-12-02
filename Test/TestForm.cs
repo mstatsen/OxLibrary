@@ -12,6 +12,7 @@ namespace OxLibrary.Test
             OxIcons.TestCode;
 
         private readonly OxPanel frame;
+        private readonly OxPanel card;
         private readonly OxClickFrame button;
         private readonly OxButton toolBarButton;
         private readonly OxCheckBox bluredCheckBox;
@@ -23,6 +24,7 @@ namespace OxLibrary.Test
             BaseColor = Color.FromArgb(135, 165, 195);
             MoveToScreenCenter();
 
+            /*
             toolBarButton = new OxButton("Test action", OxIcons.Cross);
             toolbar = new()
             { 
@@ -33,16 +35,30 @@ namespace OxLibrary.Test
             toolbar.Parent = this;
             toolbar.BaseColor = BaseColor;
             toolbar.Margin.Left = OxWh.W4;
+            */
 
             frame = new OxFrameWithHeader
             {
                 BlurredBorder = false,
-                Parent = this,
+                Parent = MainPanel,
+                ToolTipText = "This is frame with Dock = Fill",
+                Name = "FillFrame",
+                Text = "Frame with Dock = Fill",
+                Dock = OxDock.Top,
+                Width = OxWh.W400,
+                Height = OxWh.W200
+            };
+
+            card = new OxCard
+            {
+                BlurredBorder = false,
+                Parent = MainPanel,
                 ToolTipText = "This is frame with Dock = Fill",
                 Name = "FillFrame",
                 Text = "Frame with Dock = Fill",
                 Dock = OxDock.Left,
-                Width = OxWh.W400
+                Width = OxWh.W400,
+                Height = OxWh.W300
             };
 
             bluredCheckBox = new()
@@ -65,7 +81,9 @@ namespace OxLibrary.Test
             };
             button.Click += Button_Click;
 
+            
             SetFrameMarginSize();
+            
         }
 
         private void ToolBarButton_Click(object? sender, EventArgs e)
@@ -85,7 +103,13 @@ namespace OxLibrary.Test
 
         private void SetFrameMarginSize()
         {
-            //frame.Margin.Size = bluredCheckBox.Checked ? OxWh.W40 : OxWh.W4;
+            frame.Margin.Size = bluredCheckBox.Checked ? OxWh.W40 : OxWh.W4;
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            BaseColor = Color.FromArgb(135, 165, 195);
         }
     }
 }

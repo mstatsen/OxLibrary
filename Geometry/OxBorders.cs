@@ -46,17 +46,6 @@
 
                 OxRectangle borderBounds = new(bounds);
 
-                /*
-                if (substractSelfSize)
-                {
-                    borderBounds.Width = OxWh.Sub(borderBounds.Width, border.Value.Size);
-                    borderBounds.Height = OxWh.Sub(borderBounds.Height, border.Value.Size);
-                }
-                */
-
-                //Point startPoint = Point.Empty;
-                //Point finishPoint = Point.Empty;
-
                 switch (border.Key)
                 {
                     case OxDock.Right:
@@ -129,7 +118,8 @@
         public OxBorders()
         {
             foreach (OxDock dock in OxDockHelper.All)
-                Add(dock, new());
+                if (OxDockHelper.IsSingleDirectionDock(dock))
+                    Add(dock, new());
         }
 
         public OxBorders(OxBorders prototype)
