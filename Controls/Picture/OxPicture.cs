@@ -162,8 +162,12 @@ namespace OxLibrary.Controls
             public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }
             public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
 
+#pragma warning disable IDE0060 // Remove unused parameter
+#pragma warning disable IDE0051 // Remove unused private members
             private static new void OnLocationChanged(EventArgs e) { }
             private static new void OnSizeChanged(EventArgs e) { }
+#pragma warning restore IDE0051 // Remove unused private members
+#pragma warning restore IDE0060 // Remove unused parameter
         }
 
         public bool AlwaysEnabled { get; set; } = false;

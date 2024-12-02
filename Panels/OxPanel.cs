@@ -192,9 +192,6 @@ namespace OxLibrary.Panels
         public bool Realigning => 
             manager.Realigning;
 
-        private static new void OnLocationChanged(EventArgs e) { }
-        private static new void OnSizeChanged(EventArgs e) { }
-
         public virtual bool HandleParentPadding => true;
 
         private readonly OxBorders padding = new();
@@ -486,5 +483,12 @@ namespace OxLibrary.Panels
             dialogCaption = Text;
 
         protected virtual void PrepareDialog(OxPanelViewer dialog) { }
+
+#pragma warning disable IDE0060 // Remove unused parameter
+#pragma warning disable IDE0051 // Remove unused private members
+        private static new void OnLocationChanged(EventArgs e) { }
+        private static new void OnSizeChanged(EventArgs e) { }
+#pragma warning restore IDE0051 // Remove unused private members
+#pragma warning restore IDE0060 // Remove unused parameter
     }
 }
