@@ -45,10 +45,10 @@ namespace OxLibrary.Forms
             set
             {
                 MessageBox.Text = value;
-                MessageBox.Height = Math.Max(value.Length / 2, 23) 
+                MessageBox.Height = Math.Max(value.Length / 2, 23)
                     + 23 * value.Count(c => c.Equals('\r'));
                 Size = new(
-                    OxWh.W240, 
+                    OxWh.W240,
                     OxWh.Add(MessageBox.Bottom, Padding.Bottom)
                 );
             }

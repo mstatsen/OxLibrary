@@ -7,18 +7,18 @@
             {
                 OxDialogButton.OK or
                 OxDialogButton.Apply or
-                OxDialogButton.Save => 
+                OxDialogButton.Save =>
                     DialogResult.OK,
-                OxDialogButton.ApplyForAll => 
+                OxDialogButton.ApplyForAll =>
                     DialogResult.Continue,
-                OxDialogButton.Cancel => 
+                OxDialogButton.Cancel =>
                     DialogResult.Cancel,
-                OxDialogButton.Yes => 
+                OxDialogButton.Yes =>
                     DialogResult.Yes,
                 OxDialogButton.No or
-                OxDialogButton.Discard => 
+                OxDialogButton.Discard =>
                     DialogResult.No,
-               
+
                 _ => DialogResult.None,
             };
 
@@ -68,7 +68,7 @@
             (int)Width(button);
 
         public static OxWidth Width(OxDialogButton button) =>
-            button is OxDialogButton.ApplyForAll 
+            button is OxDialogButton.ApplyForAll
                 ? OxWh.W140
                 : OxWh.W100;
     }

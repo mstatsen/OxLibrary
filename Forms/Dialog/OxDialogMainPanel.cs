@@ -130,17 +130,17 @@ namespace OxLibrary.Forms
             OxWidth rightOffset =
                 FooterButtonsAlign switch
                 {
-                    HorizontalAlign.Left => 
+                    HorizontalAlign.Left =>
                         fullButtonsWidth,
-                    HorizontalAlign.Center => 
+                    HorizontalAlign.Center =>
                         OxWh.Sub(
-                            Footer.Width, 
+                            Footer.Width,
                             OxWh.Div(
-                                OxWh.Sub(Footer.Width, fullButtonsWidth), 
+                                OxWh.Sub(Footer.Width, fullButtonsWidth),
                                 OxWh.W2
                             )
                         ),
-                    _ => 
+                    _ =>
                         OxWh.Sub(Footer.Width, DialogButtonStartSpace)
                 };
 
