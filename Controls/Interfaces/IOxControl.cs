@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using OxLibrary.Handlers;
+using System.ComponentModel;
 using System.Windows.Forms.Layout;
 using static System.Windows.Forms.Control;
 
@@ -168,6 +169,12 @@ namespace OxLibrary.Controls
         event CancelEventHandler Validating;
         event EventHandler Validated;
         event EventHandler VisibleChanged;
+
+        void OnSizeChanged(OxSizeChangedEventArgs e);
+        void OnLocationChanged(OxLocationChangedEventArgs e);
+
+        event OxSizeChanged SizeChanged;
+        event OxLocationChanged LocationChanged;
     }
 
     /// <remarks>
@@ -180,14 +187,8 @@ namespace OxLibrary.Controls
     /// <code>
     /// public new OxWidth Width { get =&gt; manager.Width; set =&gt; manager.Width = value;}<br/>
     /// ...<br/>
-    /// public virtual bool OnSizeChanged(SizeChangedEventArgs e)<br/>
-    /// {<br/>
-    ///     if (e.Changed)<br/>
-    ///         base.OnSizeChanged(e);<br/>
-    ///     return e.Changed;<br/>
-    /// }<br/><br/>
-    /// private new void OnSizeChanged(EventArgs e) =&gt;<br/>
-    ///     base.OnSizeChanged(e);
+    /// public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }<br/>
+    /// private static new void OnSizeChanged(EventArgs e) =&gt; { }<br/>
     /// </code><br/><br/>
     /// For full code implementaion IOxControl see IOxControl_Implementation.txt
     /// </remarks>

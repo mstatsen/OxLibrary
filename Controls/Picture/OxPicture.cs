@@ -12,7 +12,7 @@ namespace OxLibrary.Controls
 
             public OxPictureBox()
             {
-                manager = OxControlManager.RegisterControl<PictureBox>(this, OnSizeChanged);
+                manager = OxControlManager.RegisterControl<PictureBox>(this);
                 DoubleBuffered = true;
             }
 
@@ -153,26 +153,17 @@ namespace OxLibrary.Controls
                 remove => manager.SizeChanged -= value;
             }
 
-            public virtual bool OnSizeChanged(OxSizeChangedEventArgs e)
-            {
-                if (!e.Changed)
-                    return false;
-
-                base.OnSizeChanged(e);
-                return true;
-            }
-
-            private new void OnSizeChanged(EventArgs e) =>
-                base.OnSizeChanged(e);
-
             public new event OxLocationChanged LocationChanged
             {
                 add => manager.LocationChanged += value;
                 remove => manager.LocationChanged -= value;
             }
 
-            public bool OnLocationChanged(OxLocationChangedEventArgs e) =>
-                manager.OnLocationChanged(e);
+            public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }
+            public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
+
+            private static new void OnLocationChanged(EventArgs e) { }
+            private static new void OnSizeChanged(EventArgs e) { }
         }
 
         public bool AlwaysEnabled { get; set; } = false;
@@ -281,14 +272,12 @@ namespace OxLibrary.Controls
             SetHoverHandlers(picture);
         }
 
-        public override bool OnSizeChanged(OxSizeChangedEventArgs e)
+        public override void OnSizeChanged(OxSizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
 
             if (e.Changed)
                 CorrectPicturePosition();
-
-            return e.Changed;
         }
 
         public override void PrepareColors()

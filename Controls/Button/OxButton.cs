@@ -111,7 +111,7 @@ namespace OxLibrary.Controls
                 ? Label.Width
                 : OxWh.W0;
 
-        public override bool OnSizeChanged(OxSizeChangedEventArgs e)
+        public override void OnSizeChanged(OxSizeChangedEventArgs e)
         {
             if (e.WidthChanged)
             {
@@ -131,7 +131,7 @@ namespace OxLibrary.Controls
                 */
             }
 
-            return base.OnSizeChanged(e);
+            base.OnSizeChanged(e);
         }
 
         /*

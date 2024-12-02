@@ -194,19 +194,6 @@ namespace OxLibrary.Controls
         public bool ExecuteDefault() =>
             Buttons.ExecuteDefault();
 
-        /*
-        public override bool OnSizeChanged(SizeChangedEventArgs e)
-        {
-            if (!Initialized
-                || !e.Changed
-                || !base.OnSizeChanged(e))
-                return false;
-
-            PlaceButtons();
-            return true;
-        }
-        */
-
         public bool AllowEditingActions
         {
             get

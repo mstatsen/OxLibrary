@@ -12,14 +12,12 @@ namespace OxLibrary.Controls
         private IOxControlContainer<TBaseControl>? AsContainer =>
             managingControl as IOxControlContainer<TBaseControl>;
 
-        private readonly Func<OxSizeChangedEventArgs, bool> managingOnSizeChanged;
-        internal OxControlManager(TBaseControl managingControl, Func<OxSizeChangedEventArgs, bool> onSizeChanged)
+        internal OxControlManager(TBaseControl managingControl)
         {
             this.managingControl = managingControl;
             this.managingControl.Disposed += ControlDisposedHandler;
             SetContainerHandlers();
-            ControlZone = new(OxWh.W0, OxWh.W0, OxWh.Maximum, OxWh.Maximum);
-            managingOnSizeChanged = onSizeChanged;
+            ControlZone = OxRectangle.Max;
         }
 
         private void SetContainerHandlers()
@@ -194,9 +192,11 @@ namespace OxLibrary.Controls
             }
         }
 
-        public OxWidth Bottom => OxWh.S(managingControl.Bottom, ParentControlZone.Y);
+        public OxWidth Bottom => 
+            OxWh.S(managingControl.Bottom, ParentControlZone.Y);
 
-        public OxWidth Right => OxWh.S(managingControl.Right, ParentControlZone.X);
+        public OxWidth Right => 
+            OxWh.S(managingControl.Right, ParentControlZone.X);
 
         public OxWidth Top
         {
@@ -628,27 +628,25 @@ namespace OxLibrary.Controls
             }
         }
 
-        public bool OnSizeChanged(OxSizeChangedEventArgs e)
+        private void OnSizeChanged(OxSizeChangedEventArgs e)
         {
             if (!e.Changed)
-                return false;
+                return;
 
-            managingOnSizeChanged(e);
+            ManagingControl.OnSizeChanged(e);
             InvokeHandlers(OxHandlerType.SizeChanged, e);
 
             if (OxDockHelper.DockType(Dock) is OxDockType.Docked)
                 ParentForRealign?.RealignControls();
-
-            return true;
         }
 
-        public bool OnLocationChanged(OxLocationChangedEventArgs e)
+        private void OnLocationChanged(OxLocationChangedEventArgs e)
         {
             if (!e.Changed)
-                return false;
+                return;
 
+            ManagingControl.OnLocationChanged(e);
             InvokeHandlers(OxHandlerType.LocationChanged, e);
-            return true;
         }
 
         public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
@@ -704,11 +702,10 @@ namespace OxLibrary.Controls
         private static readonly Dictionary<Control, IOxControlManager> Controls = new();
 
         public static OxControlManager<TBaseControl> RegisterControl<TBaseControl>(
-            TBaseControl managingControl,
-            Func<OxSizeChangedEventArgs, bool> onSizeChanged)
+            TBaseControl managingControl)
             where TBaseControl : Control
         {
-            OxControlManager<TBaseControl> oxControlManager = new(managingControl, onSizeChanged);
+            OxControlManager<TBaseControl> oxControlManager = new(managingControl);
             Controls.Add(managingControl, oxControlManager);
             return oxControlManager;
         }

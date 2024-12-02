@@ -12,7 +12,7 @@ namespace OxLibrary.Panels
         public OxPanel(OxSize size)
         {
             oxControls = new(this);
-            manager = OxControlManager.RegisterControl<Panel>(this, OnSizeChanged);
+            manager = OxControlManager.RegisterControl<Panel>(this);
             BorderVisible = false;
             Colors = new(DefaultColor);
             Initialized = false;
@@ -176,8 +176,7 @@ namespace OxLibrary.Panels
             add => manager.LocationChanged += value;
             remove => manager.LocationChanged -= value;
         }
-        public bool OnLocationChanged(OxLocationChangedEventArgs e) =>
-            manager.OnLocationChanged(e);
+        public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
 
         public new event OxSizeChanged SizeChanged
         {
@@ -185,14 +184,7 @@ namespace OxLibrary.Panels
             remove => manager.SizeChanged -= value;
         }
 
-        public virtual bool OnSizeChanged(OxSizeChangedEventArgs e)
-        {
-            if (!e.Changed)
-                return false;
-
-            base.OnSizeChanged(e);
-            return true;
-        }
+        public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }
 
         public void RealignControls(OxDockType dockType = OxDockType.Unknown) =>
             manager.RealignControls(dockType);
@@ -200,8 +192,8 @@ namespace OxLibrary.Panels
         public bool Realigning => 
             manager.Realigning;
 
-        private new void OnSizeChanged(EventArgs e) => 
-            base.OnSizeChanged(e);
+        private static new void OnLocationChanged(EventArgs e) { }
+        private static new void OnSizeChanged(EventArgs e) { }
 
         public virtual bool HandleParentPadding => true;
 

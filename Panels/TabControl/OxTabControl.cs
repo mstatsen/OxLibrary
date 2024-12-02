@@ -213,14 +213,14 @@ namespace OxLibrary.Panels
                 button.BringToFront();
         }
 
-        public override bool OnSizeChanged(OxSizeChangedEventArgs e)
+        public override void OnSizeChanged(OxSizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
 
             if (e.Changed)
                 SetTabButtonsVisualParameters();
 
-            return e.Changed;
+            return;
         }
 
         public event OxTabControlEvent? ActivatePage;

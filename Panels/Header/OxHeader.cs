@@ -113,14 +113,12 @@ namespace OxLibrary.Panels
             icon.BaseColor = BaseColor;
         }
 
-        public override bool OnSizeChanged(OxSizeChangedEventArgs e)
+        public override void OnSizeChanged(OxSizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
 
             if (e.Changed)
                 icon.Width = icon.Height;
-
-            return e.Changed;
         }
 
         public void AddToolButton(OxIconButton button, bool startGroup = false) =>

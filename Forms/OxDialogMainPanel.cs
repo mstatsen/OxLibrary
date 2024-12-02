@@ -171,16 +171,15 @@ namespace OxLibrary.Forms
                 item.Value.BaseColor = BaseColor;
         }
 
-        public override bool OnSizeChanged(OxSizeChangedEventArgs e)
+        public override void OnSizeChanged(OxSizeChangedEventArgs e)
         {
             if (!e.Changed)
-                return false;
+                return;
 
             Form.ClearConstraints();
             base.OnSizeChanged(e);
             PlaceButtons();
             Form.FreezeSize();
-            return e.Changed;
         }
 
         /*

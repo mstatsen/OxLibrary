@@ -21,22 +21,14 @@ namespace OxLibrary.Forms
             remove => manager.SizeChanged -= value;
         }
 
-        public virtual bool OnSizeChanged(OxSizeChangedEventArgs e)
+        public virtual void OnSizeChanged(OxSizeChangedEventArgs e)
         {
             if (!Initialized ||
                 !e.Changed)
-                return false;
+                return;
 
-            base.OnSizeChanged(e);
-
-            //MainPanel?.SilentSizeChange(() =>
-            //    {
             MainPanel.Size = Size;
             MainPanel.RealignControls();
-            //    },
-            //   MainPanel.Size
-            //);
-            return true;
         }
 
         public new event OxLocationChanged LocationChanged
@@ -45,14 +37,13 @@ namespace OxLibrary.Forms
             remove => manager.LocationChanged -= value;
         }
 
-        public bool OnLocationChanged(OxLocationChangedEventArgs e) =>
-            manager.OnLocationChanged(e);
+        public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
 
         public OxForm()
         {
             oxControls = new(this);
             DoubleBuffered = true;
-            manager = OxControlManager.RegisterControl<Form>(this, OnSizeChanged);
+            manager = OxControlManager.RegisterControl<Form>(this);
             MainPanel = CreateMainPanel();
             SetUpForm();
             PlaceMainPanel();
@@ -361,8 +352,8 @@ namespace OxLibrary.Forms
         public bool Realigning =>
             manager.Realigning;
 
-        private new void OnSizeChanged(EventArgs e) =>
-            base.OnSizeChanged(e);
+        private static new void OnLocationChanged(EventArgs e) { }
+        private static new void OnSizeChanged(EventArgs e) { }
 
         protected override void OnShown(EventArgs e)
         {

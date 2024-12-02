@@ -68,33 +68,23 @@ namespace OxLibrary
             IsHorizontal(dock)
             || dock is OxDock.None;
 
-        public static List<OxDock> All()
+
+        private static readonly List<OxDock> all = new();
+        public static List<OxDock> All
         {
-            List<OxDock> list = new();
+            get
+            {
+                if (all.Count is 0)
+                    foreach (OxDock dock in Enum.GetValues(typeof(OxDock)))
+                        all.Add(dock);
 
-            foreach (OxDock dock in Enum.GetValues(typeof(OxDock)))
-                list.Add(dock);
-
-            return list;
+                return all;
+            }
         }
 
-        public static readonly List<OxDock> SingleDirectionDocks = new()
-        {
-            OxDock.Top,
-            OxDock.Left,
-            OxDock.Bottom,
-            OxDock.Right
-        };
-
-        public static readonly List<OxDock> ByPlacingPriority = new()
-        {
-            OxDock.Top,
-            OxDock.Bottom,
-            OxDock.Left,
-            OxDock.Right,
-            OxDock.Fill,
-            OxDock.None
-        };
+        public static bool IsSingleDirectionDock(OxDock dock) =>
+            dock is not OxDock.Fill
+                and not OxDock.None;
 
         public static OxDockType DockType(IOxControl control) =>
             DockType(control.Dock);

@@ -22,9 +22,7 @@ namespace OxLibrary.Test
             InitializeComponent();
             BaseColor = Color.FromArgb(135, 165, 195);
             MoveToScreenCenter();
-            MainPanel.Header.Label.Click += (s, e) => MessageBox.Show(((int)MainPanel.HeaderToolBar.Width).ToString());
 
-            /*
             toolBarButton = new OxButton("Test action", OxIcons.Cross);
             toolbar = new()
             { 
@@ -33,10 +31,9 @@ namespace OxLibrary.Test
             toolbar.AddButton(toolBarButton);
             toolBarButton.Click += ToolBarButton_Click;
             toolbar.Parent = this;
+            toolbar.BaseColor = BaseColor;
             toolbar.Margin.Left = OxWh.W4;
-            */
 
-            /*
             frame = new OxFrameWithHeader
             {
                 BlurredBorder = false,
@@ -69,10 +66,6 @@ namespace OxLibrary.Test
             button.Click += Button_Click;
 
             SetFrameMarginSize();
-            //MainPanel.Padding.Size = OxWh.W100;
-            MainPanel.Borders.Size = OxWh.W12;
-            MainPanel.Margin.Size = OxWh.W20;
-            */
         }
 
         private void ToolBarButton_Click(object? sender, EventArgs e)
@@ -92,7 +85,7 @@ namespace OxLibrary.Test
 
         private void SetFrameMarginSize()
         {
-            frame.Margin.Size = bluredCheckBox.Checked ? OxWh.W40 : OxWh.W4;
+            //frame.Margin.Size = bluredCheckBox.Checked ? OxWh.W40 : OxWh.W4;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace OxLibrary.Controls
 
         public OxCheckBox()
         {
-            manager = OxControlManager.RegisterControl<CheckBox>(this, OnSizeChanged);
+            manager = OxControlManager.RegisterControl<CheckBox>(this);
             DoubleBuffered = true;
         }
 
@@ -144,14 +144,11 @@ namespace OxLibrary.Controls
         public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
             manager.SetBounds(x, y, width, height);
 
-        public virtual bool OnSizeChanged(OxSizeChangedEventArgs e)
-        {
-            if (!e.Changed)
-                return false;
+        public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }
+        public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
 
-            base.OnSizeChanged(e);
-            return true;
-        }
+        private static new void OnLocationChanged(EventArgs e) { }
+        private static new void OnSizeChanged(EventArgs e) { }
 
         public new event OxSizeChanged SizeChanged
         {
@@ -164,12 +161,6 @@ namespace OxLibrary.Controls
             add => manager.LocationChanged += value;
             remove => manager.LocationChanged -= value;
         }
-
-        public bool OnLocationChanged(OxLocationChangedEventArgs e) =>
-            manager.OnLocationChanged(e);
-
-        private new void OnSizeChanged(EventArgs e) =>
-            base.OnSizeChanged(e);
 
         private bool readOnly = false;
 

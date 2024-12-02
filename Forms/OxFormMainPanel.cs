@@ -166,11 +166,11 @@ namespace OxLibrary.Forms
         public bool FormIsMaximized => 
             Form.WindowState is FormWindowState.Maximized;
 
-        public override bool OnSizeChanged(OxSizeChangedEventArgs e)
+        public override void OnSizeChanged(OxSizeChangedEventArgs e)
         {
             if (!e.Changed
                 || !Initialized)
-                return false;
+                return;
 
             DoWithSuspendedLayout(() =>
                 {
@@ -179,8 +179,6 @@ namespace OxLibrary.Forms
                         Form.Size = new(Size);
                 }
             );
-
-            return true;
         }
 
         internal void SetMarginsSize() => 

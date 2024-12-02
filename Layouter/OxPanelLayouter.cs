@@ -375,14 +375,12 @@ namespace OxLibrary.Panels
             UpdateParent();
         }
 
-        public override bool OnSizeChanged(OxSizeChangedEventArgs e)
+        public override void OnSizeChanged(OxSizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
 
             if (e.Changed)
                 SetLeftPadding();
-
-            return e.Changed;
         }
 
         public OxPanelsHorizontalAlign PanelsAlign
