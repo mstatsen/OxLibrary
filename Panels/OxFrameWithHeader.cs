@@ -93,7 +93,7 @@ namespace OxLibrary.Panels
             {
                 HeaderToolBar.Parent = Header;
 
-                foreach (OxIconButton button in HeaderToolBar.Buttons.Cast<OxIconButton>())
+                foreach (OxIconButton button in HeaderToolBar.Buttons)
                     if (!dialog.ButtonsWithBorders.Contains(button))
                         button.HiddenBorder = false;
             }

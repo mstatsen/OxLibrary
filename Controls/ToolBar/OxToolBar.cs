@@ -20,12 +20,15 @@ namespace OxLibrary.Controls
                 return;
 
             OxWidth calcedWidth = OxWh.W0;
-
-            foreach (TButton button in buttons)
-                calcedWidth = OxWh.Add(calcedWidth, button.Width);
+            calcedWidth = OxWh.A(calcedWidth, Margin.Horizontal);
+            calcedWidth = OxWh.A(calcedWidth, buttons.Width);
 
             foreach (OxPanel separator in Separators.Values)
-                calcedWidth = OxWh.Add(calcedWidth, separator.Width);
+                calcedWidth = 
+                    OxWh.A(
+                        OxWh.A(calcedWidth, separator.Width),
+                        separator.Margin.Horizontal
+                    );
 
             Width = calcedWidth;
         }
@@ -42,18 +45,31 @@ namespace OxLibrary.Controls
         protected virtual OxWidth GroupsSeparatorWidth => OxWh.W1;
         protected virtual OxWidth GroupSeparatorMargin => OxWh.W2;
 
+        protected bool PlacingButtons { get; private set; } = false;
+
         private void PlaceButtons()
         {
-            TButton? lastButton = null;
+            if (PlacingButtons)
+                return;
 
-            foreach (TButton button in buttons)
+            PlacingButtons = true;
+            SuspendLayout();
+
+            try
             {
-                button.Parent = null;
-                button.FixedBorderColor = false;
-
-                try
+                foreach (TButton button in buttons)
                 {
-                    if (!OxDockHelper.IsHorizontal(button.Dock))
+                    button.VisibleChanged -= ButtonVisibleChangedHandler;
+                    button.Parent = null;
+                }
+
+                TButton? lastButton = null;
+
+                foreach (TButton button in buttons)
+                {
+                    button.FixedBorderColor = false;
+
+                    if (OxDockHelper.Variable(button.Dock) is not OxDockVariable.Width)
                         button.Dock = OxDock.Left;
 
                     TButton? beginGroupButton = button.Dock is OxDock.Left ? button : lastButton;
@@ -73,15 +89,21 @@ namespace OxLibrary.Controls
 
                     lastButton = button;
                 }
-                finally
+
+                SetToolBarPaddings();
+                RecalcWidth();
+
+                foreach (TButton button in buttons)
                 {
-                    button.Parent = this;
                     button.VisibleChanged += ButtonVisibleChangedHandler;
+                    button.Parent = this;
                 }
             }
-
-            RecalcWidth();
-            SetToolBarPaddings();
+            finally
+            {
+                PlacingButtons = false;
+                ResumeLayout();
+            }
         }
 
         private OxPanel CreateSeparator(TButton startButton)
@@ -171,19 +193,18 @@ namespace OxLibrary.Controls
         public bool ExecuteDefault() =>
             Buttons.ExecuteDefault();
 
+        /*
         public override bool OnSizeChanged(SizeChangedEventArgs e)
         {
-            if (!e.Changed)
+            if (!Initialized
+                || !e.Changed
+                || !base.OnSizeChanged(e))
                 return false;
 
-            if (base.OnSizeChanged(e))
-            {
-                PlaceButtons();
-                SetToolBarPaddings();
-            }
-
+            PlaceButtons();
             return true;
         }
+        */
 
         public bool AllowEditingActions
         {
@@ -241,8 +262,12 @@ namespace OxLibrary.Controls
                 button.BeginGroup = boolBeginGroup;
 
             PlaceButtons();
+            button.SizeChanged += ButtonSizeChangedHandler;
             return button;
         }
+
+        private void ButtonSizeChangedHandler(OxSize newSize, OxSize oldSize) => 
+            PlaceButtons();
 
         private OxToolbarAction GetActionByButton(OxButton button)
         {
@@ -252,9 +277,5 @@ namespace OxLibrary.Controls
 
             return OxToolbarAction.Empty;
         }
-    }
-
-    public class OxToolBar : OxToolBar<OxClickFrame>
-    { 
     }
 }

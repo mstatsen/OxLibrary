@@ -1,6 +1,8 @@
 ﻿using OxLibrary.Controls;
 using OxLibrary.Forms;
 using OxLibrary.Panels;
+using System.Net.Mail;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace OxLibrary.Test
 {
@@ -20,7 +22,9 @@ namespace OxLibrary.Test
             InitializeComponent();
             BaseColor = Color.FromArgb(135, 165, 195);
             MoveToScreenCenter();
-           
+            MainPanel.Header.Label.Click += (s, e) => MessageBox.Show(((int)MainPanel.HeaderToolBar.Width).ToString());
+
+            /*
             toolBarButton = new OxButton("Test action", OxIcons.Cross);
             toolbar = new()
             { 
@@ -30,7 +34,9 @@ namespace OxLibrary.Test
             toolBarButton.Click += ToolBarButton_Click;
             toolbar.Parent = this;
             toolbar.Margin.Left = OxWh.W4;
+            */
 
+            /*
             frame = new OxFrameWithHeader
             {
                 BlurredBorder = false,
@@ -57,7 +63,8 @@ namespace OxLibrary.Test
                 Parent = frame,
                 Top = OxWh.Add(bluredCheckBox.Bottom, OxWh.W8),
                 Left = bluredCheckBox.Left,
-                Height = OxWh.W36
+                Height = OxWh.W24,
+                Width = OxWh.W140
             };
             button.Click += Button_Click;
 
@@ -65,6 +72,7 @@ namespace OxLibrary.Test
             //MainPanel.Padding.Size = OxWh.W100;
             MainPanel.Borders.Size = OxWh.W12;
             MainPanel.Margin.Size = OxWh.W20;
+            */
         }
 
         private void ToolBarButton_Click(object? sender, EventArgs e)
@@ -74,7 +82,7 @@ namespace OxLibrary.Test
 
         private void Button_Click(object? sender, EventArgs e)
         {
-            frame.Dock = frame.Dock is OxDock.Fill ? OxDock.Left : OxDock.Fill;
+            frame.Dock = frame.Dock is OxDock.Fill ? OxDock.Right : OxDock.Fill;
         }
 
         private void BluredCheckBox_CheckedChanged(object? sender, EventArgs e)

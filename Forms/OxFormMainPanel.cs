@@ -30,7 +30,7 @@ namespace OxLibrary.Forms
             set => base.Dock = OxDock.Fill;
         }
 
-        private void FormSizeChanged(object? sender, EventArgs e) => 
+        private void FormSizeChanged(OxSize newSize, OxSize oldSize) => 
             SetRestoreButtonIconAndTooltip();
 
         private void SetHeaderFont() => 
@@ -74,7 +74,7 @@ namespace OxLibrary.Forms
         private void PlaceButtons()
         {
             Header.AddToolButton(closeButton);
-            Header.AddToolButton(restoreButton, true);
+            Header.AddToolButton(restoreButton);
             Header.AddToolButton(minimizeButton);
         }
 
@@ -101,18 +101,21 @@ namespace OxLibrary.Forms
         {
             IconPadding = OxWh.W5,
             ToolTipText = "Close",
-            HoveredColor = Color.Red
+            HoveredColor = Color.Red,
+            Name = "FormCloseButton"
         };
         private readonly OxIconButton restoreButton = new(OxIcons.Restore, OxWh.W28)
         {
             IconPadding = OxWh.W5,
             ToolTipText = "Restore window",
-            Default = true
+            Default = true,
+            Name = "FormRestoreButton"
         };
         private readonly OxIconButton minimizeButton = new(OxIcons.Minimize, OxWh.W28)
         {
             IconPadding = OxWh.W5,
-            ToolTipText = "Minimize window"
+            ToolTipText = "Minimize window",
+            Name = "FormMinimizeButton"
         };
 
         private Bitmap GetRestoreIcon() =>

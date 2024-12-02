@@ -13,6 +13,13 @@ namespace OxLibrary.Forms
 
         private readonly OxControls oxControls;
         public OxControls OxControls => oxControls;
+
+        public new event OxSizeChanged SizeChanged
+        {
+            add => manager.SizeChanged += value;
+            remove => manager.SizeChanged -= value;
+        }
+
         public virtual bool OnSizeChanged(SizeChangedEventArgs e)
         {
             if (!Initialized ||
@@ -140,16 +147,6 @@ namespace OxLibrary.Forms
             if (Initialized)
                 e.Control.Parent = MainPanel;
             else base.OnControlAdded(e);
-        }
-
-        private void InitializeComponent()
-        {
-            SuspendLayout();
-            // 
-            // OxForm
-            // 
-            Name = "OxForm";
-            ResumeLayout(false);
         }
 
         protected override void OnTextChanged(EventArgs e) =>

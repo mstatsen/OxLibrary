@@ -161,6 +161,12 @@ namespace OxLibrary.Controls
             return true;
         }
 
+        public new event OxSizeChanged SizeChanged
+        {
+            add => manager.SizeChanged += value;
+            remove => manager.SizeChanged -= value;
+        }
+
         private new void OnSizeChanged(EventArgs e) =>
             base.OnSizeChanged(e);
     }

@@ -34,6 +34,8 @@
         OxPoint PointToScreen(OxPoint p);
         OxRectangle RectangleToClient(OxRectangle r);
         OxRectangle RectangleToScreen(OxRectangle r);
+
+        event OxSizeChanged SizeChanged;
     }
 
     public interface IOxControlManager<TBaseControl> : IOxControlManager

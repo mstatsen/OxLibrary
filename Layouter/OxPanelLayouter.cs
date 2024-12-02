@@ -180,7 +180,7 @@
             if (sender is null)
                 return;
 
-            Control panel = (Control)sender;
+            OxPanel panel = (OxPanel)sender;
 
             if (panel.Visible)
                 panel.SizeChanged += SizeChangeHandler;
@@ -215,7 +215,7 @@
                     CalcedColumnCount = MaximumColumnCount;
         }
 
-        private void ReLayoutPanelsHandler(object? sender, EventArgs e)
+        private void ReLayoutPanelsHandler(OxSize newSize, OxSize oldSize)
         {
             if (!panelResizing)
                 LayoutPanels(placedPanels);
@@ -285,7 +285,7 @@
             return calcedHeight;
         }
 
-        private void SizeChangeHandler(object? sender, EventArgs e) =>
+        private void SizeChangeHandler(OxSize newSize, OxSize oldSize) =>
             RecalcColumnsSize();
 
         private void RecalcColumnsSize()

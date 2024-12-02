@@ -88,7 +88,7 @@ namespace OxLibrary.Controls
             
         }
 
-        private void ButtonsParentSizeChanged(object? sender, EventArgs e) => 
+        private void ButtonsParentSizeChanged(OxSize newSize, OxSize oldSize) => 
             RecalcButtonsSize();
 
         public OxClickFrame AddButton(OxPictureAction action)
@@ -223,7 +223,7 @@ namespace OxLibrary.Controls
             picture.SizeChanged += Picture_SizeChanged;
         }
 
-        private void Picture_SizeChanged(object? sender, EventArgs e) =>
+        private void Picture_SizeChanged(OxSize newSize, OxSize oldSize) =>
             RecalcButtonsSize();
 
         protected override void MouseEnterHandler(object? sender, EventArgs e)

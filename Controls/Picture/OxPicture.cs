@@ -146,6 +146,12 @@ namespace OxLibrary.Controls
             public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
                 manager.SetBounds(x, y, width, height);
 
+            public new event OxSizeChanged SizeChanged
+            {
+                add => manager.SizeChanged += value;
+                remove => manager.SizeChanged -= value;
+            }
+
             public virtual bool OnSizeChanged(SizeChangedEventArgs e)
             {
                 if (!e.Changed)
@@ -281,7 +287,7 @@ namespace OxLibrary.Controls
             picture.BackColor = BackColor;
         }
 
-        private void PictureSizeChanged(object? sender, EventArgs e)
+        private void PictureSizeChanged(OxSize newSize, OxSize oldSize)
         {
             if (Stretch)
                 return;

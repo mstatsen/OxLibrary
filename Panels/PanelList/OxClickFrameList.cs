@@ -35,19 +35,20 @@
                 ? Last.Right 
                 : OxWh.W0;
 
-        public OxWidth Width()
+        public OxWidth Width
         {
-            TClickFrame? firstFisibleFrame = FirstVisible;
-            TClickFrame? lastVisibleFrame = LastVisible;
+            get
+            {
+                OxWidth result = OxWh.W0;
 
-            return OxWh.Sub(
-                lastVisibleFrame is null
-                    ? OxWh.W0
-                    : lastVisibleFrame.Right,
-                firstFisibleFrame is null 
-                    ? OxWh.W0 
-                    : firstFisibleFrame.Left
-            ); 
+                foreach (TClickFrame frame in this)
+                {
+                    result = OxWh.A(result, frame.Width);
+                    result = OxWh.A(result, frame.Margin.Horizontal);
+                }
+
+                return result;
+            }
         }
 
         public OxWidth Height()

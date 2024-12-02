@@ -162,7 +162,6 @@ namespace OxLibrary.Controls
         event EventHandler RegionChanged;
         event EventHandler Resize;
         event EventHandler RightToLeftChanged;
-        event EventHandler SizeChanged;
         event EventHandler StyleChanged;
         event EventHandler SystemColorsChanged;
         event EventHandler TabIndexChanged;

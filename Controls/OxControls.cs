@@ -19,11 +19,24 @@ namespace OxLibrary.Controls
         public OxControls(IOxControlContainer container) => 
             Container = container;
 
-        public List<IOxControl> Controls(OxDockType dockType) =>
-            FindAll(c => OxDockTypeHelper.ContainsIn(
-                OxDockHelper.DockType(c), dockType
-            )
-        );
+        public List<IOxControl> Controls(OxDockType dockType)
+        {
+            List<IOxControl> result = 
+                FindAll(c =>
+                    c.Dock is not OxDock.Fill
+                    && OxDockTypeHelper.ContainsIn(
+                            OxDockHelper.DockType(c),
+                            dockType
+                       )
+                );
+
+            if (OxDockTypeHelper.ContainsIn(OxDockType.Docked, dockType))
+                foreach (IOxControl control in this)
+                    if (control.Dock is OxDock.Fill)
+                        result.Add(control);
+
+            return result;
+        }
 
         public new IOxControl Add(IOxControl control)
         {

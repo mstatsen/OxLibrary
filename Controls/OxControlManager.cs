@@ -211,6 +211,15 @@ namespace OxLibrary.Controls
 
         private OxDock SavedDock = OxDock.None;
         private OxSize SavedSize = OxSize.Empty;
+
+        private List<OxSizeChanged> SizeChangedHandlersList = new();
+
+        public event OxSizeChanged SizeChanged 
+        { 
+            add => SizeChangedHandlersList.Add(value);
+            remove => SizeChangedHandlersList.Remove(value); 
+        }
+
         public bool DockCnahging { get; private set; } = false;
 
         public OxDock Dock
@@ -592,6 +601,9 @@ namespace OxLibrary.Controls
                 return false;
 
             managingOnSizeChanged(e);
+
+            foreach (OxSizeChanged handler in SizeChangedHandlersList)
+                handler.Invoke(e.NewSize, e.OldSize);
 
             if (OxDockHelper.DockType(Dock) is OxDockType.Docked)
                 ParentForRealign?.RealignControls();
