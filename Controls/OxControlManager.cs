@@ -201,13 +201,23 @@ namespace OxLibrary.Controls
         public OxWidth Top
         {
             get => OxWh.S(OriginalTop, ParentControlZone.Y);
-            set => OriginalTop = OxWh.IAdd(value, ParentControlZone.Y);
+            set
+            {
+                OxPoint oldLocation = new(Location);
+                OriginalTop = OxWh.IAdd(value, ParentControlZone.Y);
+                OnLocationChanged(new(oldLocation, Location));
+            }
         }
 
         public OxWidth Left
         {
             get => OxWh.S(OriginalLeft, ParentControlZone.X);
-            set => OriginalLeft = OxWh.IAdd(value, ParentControlZone.X);
+            set
+            {
+                OxPoint oldLocation = new(Location);
+                OriginalLeft = OxWh.IAdd(value, ParentControlZone.X);
+                OnLocationChanged(new(oldLocation, Location));
+            }
         }
 
         private OxDock SavedDock = OxDock.None;
@@ -215,10 +225,19 @@ namespace OxLibrary.Controls
 
         private readonly OxHandlers Handlers = new();
 
+        private void InvokeHandlers(OxHandlerType type, OxEventArgs args) =>
+            Handlers.Invoke(type, ManagingControl, args);
+
         public event OxSizeChanged SizeChanged 
         { 
             add => Handlers.Add(OxHandlerType.SizeChanged, value);
             remove => Handlers.Remove(OxHandlerType.SizeChanged, value); 
+        }
+
+        public event OxLocationChanged LocationChanged
+        {
+            add => Handlers.Add(OxHandlerType.LocationChanged, value);
+            remove => Handlers.Remove(OxHandlerType.LocationChanged, value);
         }
 
         public bool DockCnahging { get; private set; } = false;
@@ -544,7 +563,12 @@ namespace OxLibrary.Controls
         public OxPoint Location
         {
             get => new(Left, Top);
-            set => managingControl.Location = value.Point;
+            set
+            {
+                OxPoint oldLocation = new(Location);
+                managingControl.Location = value.Point;
+                OnLocationChanged(new(oldLocation, Location));
+            }
         }
 
         public OxSize MinimumSize
@@ -552,8 +576,12 @@ namespace OxLibrary.Controls
             get => new(managingControl.MinimumSize);
             set
             {
-                if (!MinimumSize.Equals(value))
-                    managingControl.MinimumSize = value.Size;
+                if (MinimumSize.Equals(value))
+                    return;
+
+                OxSize oldSize = new(Size);
+                managingControl.MinimumSize = value.Size;
+                OnSizeChanged(new(oldSize, Size));
             }
         }
 
@@ -562,8 +590,12 @@ namespace OxLibrary.Controls
             get => new(managingControl.MaximumSize);
             set
             {
-                if (!MaximumSize.Equals(value))
-                    managingControl.MaximumSize = value.Size;
+                if (MaximumSize.Equals(value))
+                    return;
+
+                OxSize oldSize = new(Size);
+                managingControl.MaximumSize = value.Size;
+                OnSizeChanged(new(oldSize, Size));
             }
         }
 
@@ -602,11 +634,20 @@ namespace OxLibrary.Controls
                 return false;
 
             managingOnSizeChanged(e);
-            Handlers.Invoke(OxHandlerType.SizeChanged, ManagingControl, e);
+            InvokeHandlers(OxHandlerType.SizeChanged, e);
 
             if (OxDockHelper.DockType(Dock) is OxDockType.Docked)
                 ParentForRealign?.RealignControls();
 
+            return true;
+        }
+
+        public bool OnLocationChanged(OxLocationChangedEventArgs e)
+        {
+            if (!e.Changed)
+                return false;
+
+            InvokeHandlers(OxHandlerType.LocationChanged, e);
             return true;
         }
 

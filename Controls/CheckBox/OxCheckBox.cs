@@ -159,6 +159,15 @@ namespace OxLibrary.Controls
             remove => manager.SizeChanged -= value;
         }
 
+        public new event OxLocationChanged LocationChanged
+        {
+            add => manager.LocationChanged += value;
+            remove => manager.LocationChanged -= value;
+        }
+
+        public bool OnLocationChanged(OxLocationChangedEventArgs e) =>
+            manager.OnLocationChanged(e);
+
         private new void OnSizeChanged(EventArgs e) =>
             base.OnSizeChanged(e);
 

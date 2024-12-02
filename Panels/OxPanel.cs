@@ -171,6 +171,14 @@ namespace OxLibrary.Panels
         public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
             manager.SetBounds(x, y, width, height);
 
+        public new event OxLocationChanged LocationChanged
+        {
+            add => manager.LocationChanged += value;
+            remove => manager.LocationChanged -= value;
+        }
+        public bool OnLocationChanged(OxLocationChangedEventArgs e) =>
+            manager.OnLocationChanged(e);
+
         public new event OxSizeChanged SizeChanged
         {
             add => manager.SizeChanged += value;

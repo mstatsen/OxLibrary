@@ -2,7 +2,8 @@
 {
     public enum OxHandlerType
     {
-        SizeChanged
+        LocationChanged,
+        SizeChanged,
     }
 
     public class OxHandlers : Dictionary<OxHandlerType, List<Delegate>>

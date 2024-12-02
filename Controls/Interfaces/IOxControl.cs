@@ -111,7 +111,6 @@ namespace OxLibrary.Controls
         event EventHandler BindingContextChanged;
         event EventHandler CausesValidationChanged;
         event UICuesEventHandler ChangeUICues;
-        event EventHandler ClientSizeChanged;
         event EventHandler Click;
         event EventHandler ContextMenuStripChanged;
         event ControlEventHandler ControlAdded;
@@ -141,7 +140,6 @@ namespace OxLibrary.Controls
         event KeyEventHandler KeyUp;
         event LayoutEventHandler Layout;
         event EventHandler Leave;
-        event EventHandler LocationChanged;
         event EventHandler LostFocus;
         event MouseEventHandler MouseClick;
         event MouseEventHandler MouseDoubleClick;

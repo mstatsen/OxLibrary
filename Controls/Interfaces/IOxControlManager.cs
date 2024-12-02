@@ -24,6 +24,7 @@ namespace OxLibrary.Controls
         IOxControlContainer? Parent { get; set; }
         void DoWithSuspendedLayout(Action method);
         bool OnSizeChanged(OxSizeChangedEventArgs e);
+        bool OnLocationChanged(OxLocationChangedEventArgs e);
         void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height);
         void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height, BoundsSpecified specified);
         Control GetChildAtPoint(OxPoint pt, GetChildAtPointSkip skipValue);
@@ -38,6 +39,7 @@ namespace OxLibrary.Controls
         OxRectangle RectangleToScreen(OxRectangle r);
 
         event OxSizeChanged SizeChanged;
+        event OxLocationChanged LocationChanged;
     }
 
     public interface IOxControlManager<TBaseControl> : IOxControlManager
