@@ -9,7 +9,7 @@ namespace OxLibrary.Forms
         {
             Dock = DockStyle.Top,
             TextAlign = HorizontalAlignment.Center,
-            Font = Styles.Font(Styles.DefaultFontSize + 1.15f),
+            Font = OxStyles.Font(OxStyles.DefaultFontSize + 1.15f),
             ForeColor = Color.FromArgb(60, 55, 54),
             BorderStyle = BorderStyle.None,
             WordWrap = true,

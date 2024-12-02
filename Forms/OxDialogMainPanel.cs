@@ -1,5 +1,5 @@
 ﻿using OxLibrary.Controls;
-using OxLibrary.Controls.Handlers;
+using OxLibrary.Handlers;
 using OxLibrary.Panels;
 using System.Windows.Forms.VisualStyles;
 
@@ -62,7 +62,7 @@ namespace OxLibrary.Forms
             {
                 Parent = Footer,
                 Top = FooterButtonVerticalMargin,
-                Font = Styles.Font(Styles.DefaultFontSize + 0.5f, FontStyle.Bold),
+                Font = OxStyles.Font(OxStyles.DefaultFontSize + 0.5f, FontStyle.Bold),
                 Anchor = AnchorStyles.Top | AnchorStyles.Right,
                 Visible = (dialogButtons & dialogButton).Equals(dialogButton),
                 Size = new(

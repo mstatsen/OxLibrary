@@ -1,6 +1,6 @@
-﻿namespace OxLibrary.Controls
+﻿namespace OxLibrary.Handlers
 {
-    public class OxActionEventArgs<TAction>
+    public class OxActionEventArgs<TAction> : OxEventArgs
         where TAction : notnull, Enum
     {
         public TAction Action { get; internal set; }
@@ -8,7 +8,7 @@
             Action = action;
     }
 
-    public delegate void OxActionClick<TAction>(object? sender, 
+    public delegate void OxActionClick<TAction>(object? sender,
         OxActionEventArgs<TAction> EventArgs)
         where TAction : notnull, Enum;
 }

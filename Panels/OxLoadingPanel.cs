@@ -68,7 +68,7 @@ namespace OxLibrary.Panels
         {
             get => LoadingLabel.Font.Size;
             set => LoadingLabel.Font =
-                Styles.Font(value, FontStyle.Bold | FontStyle.Italic);
+                OxStyles.Font(value, FontStyle.Bold | FontStyle.Italic);
         }
 
         private bool InnerChangeBaseColor = false;

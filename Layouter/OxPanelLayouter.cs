@@ -1,4 +1,4 @@
-﻿using OxLibrary.Controls.Handlers;
+﻿using OxLibrary.Handlers;
 
 namespace OxLibrary.Panels
 {
@@ -167,7 +167,7 @@ namespace OxLibrary.Panels
         }
 
         private OxDock GetColumnDock() =>
-            panelsAlign is PanelsHorizontalAlign.OneColumn
+            panelsAlign is OxPanelsHorizontalAlign.OneColumn
                 ? OxDock.Top
                 : OxDock.Left;
 
@@ -191,7 +191,7 @@ namespace OxLibrary.Panels
 
         private void RecalcColumnsCount()
         {
-            if (panelsAlign is PanelsHorizontalAlign.OneColumn)
+            if (panelsAlign is OxPanelsHorizontalAlign.OneColumn)
             {
                 CalcedColumnCount = 1;
                 return;
@@ -280,7 +280,7 @@ namespace OxLibrary.Panels
                     maxWidth = OxWh.Max(maxWidth, panel.Width);
                 }
 
-            if (panelsAlign is PanelsHorizontalAlign.OneColumn)
+            if (panelsAlign is OxPanelsHorizontalAlign.OneColumn)
                 calcedHeight |= OxWh.W48;
 
             column.Size = new(maxWidth, calcedHeight);
@@ -342,14 +342,14 @@ namespace OxLibrary.Panels
         {
             switch (panelsAlign)
             {
-                case PanelsHorizontalAlign.Left:
+                case OxPanelsHorizontalAlign.Left:
                     Padding.LeftInt = 0;
                     break;
-                case PanelsHorizontalAlign.Center:
-                case PanelsHorizontalAlign.Right:
+                case OxPanelsHorizontalAlign.Center:
+                case OxPanelsHorizontalAlign.Right:
                     Padding.LeftInt = (Width - GetSumColumnsSize().Width) / 2;
                     break;
-                case PanelsHorizontalAlign.OneColumn:
+                case OxPanelsHorizontalAlign.OneColumn:
                     Padding.HorizontalInt = 0;
                     break;
             }
@@ -385,13 +385,13 @@ namespace OxLibrary.Panels
             return e.Changed;
         }
 
-        public PanelsHorizontalAlign PanelsAlign
+        public OxPanelsHorizontalAlign PanelsAlign
         {
             get => panelsAlign;
             set => SetPanelsAlign(value);
         }
 
-        private void SetPanelsAlign(PanelsHorizontalAlign value)
+        private void SetPanelsAlign(OxPanelsHorizontalAlign value)
         {
             panelsAlign = value;
             SetTopPadding();
@@ -400,14 +400,14 @@ namespace OxLibrary.Panels
 
         private void SetTopPadding() => 
             Padding.TopInt =
-                panelsAlign is PanelsHorizontalAlign.OneColumn
+                panelsAlign is OxPanelsHorizontalAlign.OneColumn
                     ? 16
                     : 18;
 
         protected void UpdateParent() =>
             Parent?.Update();
 
-        private PanelsHorizontalAlign panelsAlign = PanelsHorizontalAlign.Center;
+        private OxPanelsHorizontalAlign panelsAlign = OxPanelsHorizontalAlign.Center;
 
         public override Color DefaultColor => Color.GhostWhite;
 

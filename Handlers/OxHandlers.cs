@@ -1,7 +1,7 @@
-﻿namespace OxLibrary.Controls.Handlers
+﻿namespace OxLibrary.Handlers
 {
     public enum OxHandlerType
-    { 
+    {
         SizeChanged
     }
 
@@ -14,7 +14,7 @@
         {
 
             if (!TryGetValue(type, out List<Delegate>? list))
-            { 
+            {
                 list = new List<Delegate>();
                 Add(type, list);
             }
@@ -31,13 +31,19 @@
             list.Remove(handler);
         }
 
-        public void Invoke(OxHandlerType type, object sender, EventArgs args)
+        public void Invoke(OxHandlerType type, object sender, OxEventArgs args)
         {
             if (!TryGetValue(type, out List<Delegate>? list))
                 return;
 
             foreach (Delegate handler in list)
+            {
+                if (args is OxChangingEventArgs changingEventArgs
+                    && changingEventArgs.Cancel)
+                    return;
+
                 handler.DynamicInvoke(sender, args);
+            }
         }
     }
 }

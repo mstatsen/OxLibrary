@@ -43,7 +43,7 @@
             action switch
             {
                 OxToolbarAction.Update => OxWh.W140,
-                _ => Styles.ToolBarButtonWidth
+                _ => OxStyles.ToolBarButtonWidth
             };
     }
 }

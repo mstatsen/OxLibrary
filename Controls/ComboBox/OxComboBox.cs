@@ -106,7 +106,7 @@
                 Point textStartPosition = GetTextStartPosition(e.Bounds);
 
                 e.Graphics.DrawString(itemString,
-                    e.Font ?? Styles.Font(10),
+                    e.Font ?? OxStyles.Font(10),
                     new SolidBrush(Color.Black),
                     new Point(textStartPosition.X, textStartPosition.Y));
 

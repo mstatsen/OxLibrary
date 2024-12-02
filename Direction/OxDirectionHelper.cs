@@ -14,6 +14,7 @@ namespace OxLibrary
                 _ => OxDirection.None,
             };
 
+        //TODO: replace "OxPanel border" with "OxPoint location"
         public static OxDirection GetDirection(OxPanel border, OxPoint position)
         {
             OxDirection direction = GetDirection(border.Dock);

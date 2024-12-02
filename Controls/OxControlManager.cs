@@ -1,4 +1,4 @@
-﻿using OxLibrary.Controls.Handlers;
+﻿using OxLibrary.Handlers;
 using OxLibrary.Interfaces;
 using OxLibrary.Panels;
 

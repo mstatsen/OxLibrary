@@ -1,8 +1,8 @@
 ﻿namespace OxLibrary.Data.Countries
 {
-    public class Country
+    public class OxCountry
     {
-        public Country() { }
+        public OxCountry() { }
 
         private string shortName = string.Empty;
         private string fullName = string.Empty;
@@ -22,24 +22,24 @@
         public string Alpha2 { get; set; } = string.Empty;
         public string Alpha3 { get; set; } = string.Empty;
         public string ISO { get; set; } = "000";
-        public CountryLocation Location { get; set; } = CountryLocation.Other;
+        public OxCountryLocation Location { get; set; } = OxCountryLocation.Other;
         public Bitmap? Flag { get; set; }
         public bool IsPSN { get; set; }
 
-        public object? this[CountryField field]
+        public object? this[OxCountryField field]
         {
             get =>
                 field switch
                 {
-                    CountryField.Name => Name,
-                    CountryField.ShortName => ShortName,
-                    CountryField.FullName => FullName,
-                    CountryField.Alpha2 => Alpha2,
-                    CountryField.Alpha3 => Alpha3,
-                    CountryField.ISO => ISO,
-                    CountryField.Location => Location,
-                    CountryField.Flag => Flag,
-                    CountryField.IsPSN => IsPSN,
+                    OxCountryField.Name => Name,
+                    OxCountryField.ShortName => ShortName,
+                    OxCountryField.FullName => FullName,
+                    OxCountryField.Alpha2 => Alpha2,
+                    OxCountryField.Alpha3 => Alpha3,
+                    OxCountryField.ISO => ISO,
+                    OxCountryField.Location => Location,
+                    OxCountryField.Flag => Flag,
+                    OxCountryField.IsPSN => IsPSN,
                     _ => null,
                 };
             set
@@ -51,31 +51,31 @@
 
                 switch (field)
                 {
-                    case CountryField.Name: 
+                    case OxCountryField.Name: 
                         Name = stringValue;
                         break;
-                    case CountryField.ShortName:
+                    case OxCountryField.ShortName:
                         ShortName = stringValue;
                         break;
-                    case CountryField.FullName:
+                    case OxCountryField.FullName:
                         fullName = stringValue;
                         break;
-                    case CountryField.Alpha2:
+                    case OxCountryField.Alpha2:
                         Alpha2 = stringValue;
                         break;
-                    case CountryField.Alpha3:
+                    case OxCountryField.Alpha3:
                         Alpha3 = stringValue;
                         break;
-                    case CountryField.ISO:
+                    case OxCountryField.ISO:
                         ISO = stringValue;
                         break;
-                    case CountryField.Location:
-                        Location = value is CountryLocation countryLocation ? countryLocation : CountryLocation.Other;
+                    case OxCountryField.Location:
+                        Location = value is OxCountryLocation countryLocation ? countryLocation : OxCountryLocation.Other;
                         break;
-                    case CountryField.Flag:
+                    case OxCountryField.Flag:
                         Flag = value is Bitmap bitmap ? bitmap : null;
                         break;
-                    case CountryField.IsPSN:
+                    case OxCountryField.IsPSN:
                         IsPSN = bool.Parse(stringValue);
                         break;
                 }

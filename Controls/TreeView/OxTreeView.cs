@@ -1,6 +1,6 @@
 ﻿namespace OxLibrary.Controls
 {
-    public class OxTreeView : TreeView, IItemsContainer
+    public class OxTreeView : TreeView, IOxItemsContainer
     {
         public OxTreeView() : base()
         {
@@ -235,7 +235,7 @@
 
         public void Clear() => Nodes.Clear();
 
-        private void MoveNode(MoveDirection direction)
+        private void MoveNode(OxUpDown direction)
         {
             if (SelectedNode is null)
                 return;
@@ -245,7 +245,7 @@
                     ? SelectedNode.Parent.Nodes 
                     : Nodes;
 
-            int newIndex = SelectedIndex + MoveDirectionHelper.Delta(direction);
+            int newIndex = SelectedIndex + OxUpDownHelper.Delta(direction);
 
             if (newIndex < 0 || newIndex >= parentNodes.Count)
                 return;
@@ -256,9 +256,9 @@
             SelectedNode = node;
         }
 
-        public void MoveUp() => MoveNode(MoveDirection.Up);
+        public void MoveUp() => MoveNode(OxUpDown.Up);
 
-        public void MoveDown() => MoveNode(MoveDirection.Down);
+        public void MoveDown() => MoveNode(OxUpDown.Down);
 
         public Control AsControl() => this;
 

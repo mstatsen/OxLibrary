@@ -2,12 +2,12 @@
 {
     public class OxMessage : OxDialog
     {
-        private readonly MessageType MessageType;
-        public OxMessage(MessageType messageType) : base()
+        private readonly OxMessageType MessageType;
+        public OxMessage(OxMessageType messageType) : base()
         { 
             MessageType = messageType;
-            Text = MessageTypeHelper.Caption(messageType);
-            MainPanel.BaseColor = MessageTypeHelper.BaseColor(messageType);
+            Text = OxMessageTypeHelper.Caption(messageType);
+            MainPanel.BaseColor = OxMessageTypeHelper.BaseColor(messageType);
             MainPanel.SetIcon();
         }
 
@@ -26,9 +26,9 @@
         }
 
         public override Bitmap FormIcon =>
-            MessageTypeHelper.Icon(MessageType);
+            OxMessageTypeHelper.Icon(MessageType);
 
-        private static DialogResult ShowMessage(MessageType messageType,
+        private static DialogResult ShowMessage(OxMessageType messageType,
             string message, Control owner, OxDialogButton buttons)
         {
             OxMessage messageForm = new(messageType)
@@ -49,7 +49,7 @@
 
         public static void ShowInfo(string Info, Control owner) =>
             ShowMessage(
-                MessageType.Info,
+                OxMessageType.Info,
                 Info,
                 owner,
                 OxDialogButton.OK
@@ -57,7 +57,7 @@
 
         public static DialogResult ShowError(string Error, Control owner, OxDialogButton buttons = OxDialogButton.OK) =>
             ShowMessage(
-                MessageType.Error,
+                OxMessageType.Error,
                 Error,
                 owner,
                 buttons
@@ -66,7 +66,7 @@
         public static DialogResult ShowWarning(string Warning, Control owner, 
             OxDialogButton buttons = OxDialogButton.Yes | OxDialogButton.No | OxDialogButton.Cancel) =>
             ShowMessage(
-                MessageType.Warning,
+                OxMessageType.Warning,
                 Warning,
                 owner,
                 buttons
@@ -75,7 +75,7 @@
         public static DialogResult ShowConfirm(string Confirm, Control owner, 
             OxDialogButton buttons = OxDialogButton.Yes | OxDialogButton.No) =>
             ShowMessage(
-                MessageType.Confirmation,
+                OxMessageType.Confirmation,
                 Confirm,
                 owner,
                 buttons
@@ -89,8 +89,8 @@
             base.OnKeyUp(e);
 
             if (!e.Handled
-                && (MessageType is MessageType.Error 
-                                or MessageType.Info)
+                && (MessageType is OxMessageType.Error 
+                                or OxMessageType.Info)
                 && (e.KeyCode is Keys.Enter 
                               or Keys.Space))
                 DialogResult = DialogResult.OK;

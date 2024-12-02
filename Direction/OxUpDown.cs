@@ -1,7 +1,7 @@
 ﻿
 namespace OxLibrary.Controls
 {
-    public enum MoveDirection
+    public enum OxUpDown
     {
         Up,
         Down

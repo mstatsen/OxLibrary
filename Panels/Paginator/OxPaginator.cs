@@ -1,5 +1,5 @@
 ﻿using OxLibrary.Controls;
-using OxLibrary.Controls.Handlers;
+using OxLibrary.Handlers;
 
 namespace OxLibrary.Panels
 {
@@ -25,7 +25,7 @@ namespace OxLibrary.Panels
             Dock = OxDock.Right,
             Width = OxWh.W120,
             TextAlign = ContentAlignment.MiddleRight,
-            Font = Styles.Font(FontStyle.Bold | FontStyle.Italic)
+            Font = OxStyles.Font(FontStyle.Bold | FontStyle.Italic)
         };
 
         private readonly OxButton PrevButton = CreateNavigateButton(OxIcons.Left, "Previous page");
@@ -276,7 +276,7 @@ namespace OxLibrary.Panels
                 Text = "...",
                 AutoSize = false,
                 TextAlign = textAlign,
-                Font = Styles.Font(FontStyle.Bold)
+                Font = OxStyles.Font(FontStyle.Bold)
             };
 
             return button;

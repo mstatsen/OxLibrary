@@ -1,6 +1,6 @@
 ﻿namespace OxLibrary.Forms
 {
-    public enum MessageType
+    public enum OxMessageType
     { 
         Info,
         Warning,

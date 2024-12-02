@@ -1,6 +1,6 @@
 ﻿namespace OxLibrary.Data.Countries
 {
-    public enum CountryField
+    public enum OxCountryField
     {
         Name,
         ShortName,

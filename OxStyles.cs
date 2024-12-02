@@ -1,6 +1,6 @@
 ﻿namespace OxLibrary
 {
-    public static class Styles
+    public static class OxStyles
     {
         public const string FontFamily = "Calibri Light";
         public const float DefaultFontSize = 11;
@@ -43,7 +43,7 @@
             return new(FontFamily, size, fontStyle);
         }
 
-        static Styles()
+        static OxStyles()
         {
             Cell_LeftAlignment = Cell_Default.Clone();
             Cell_LeftAlignment.Alignment = DataGridViewContentAlignment.MiddleLeft;

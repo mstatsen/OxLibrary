@@ -1,7 +1,7 @@
 ﻿
 namespace OxLibrary.Controls
 {
-    public partial class OxListBox : ListBox, IItemsContainer
+    public partial class OxListBox : ListBox, IOxItemsContainer
     {
         private IsHighPriorityItem? checkIsHighPriorityItem;
         private IsHighPriorityItem? checkIsMandatoryItem;
@@ -47,7 +47,7 @@ namespace OxLibrary.Controls
             if (IsMandatoryItem(Items[e.Index]))
                 fontStyle |= FontStyle.Bold;
 
-            Font itemFont = new(e.Font ?? Styles.Font(11), fontStyle);
+            Font itemFont = new(e.Font ?? OxStyles.Font(11), fontStyle);
 
             if ((e.State & DrawItemState.Selected) is DrawItemState.Selected)
                 e = new DrawItemEventArgs(
@@ -77,13 +77,13 @@ namespace OxLibrary.Controls
             e.DrawFocusRectangle();
         }
 
-        private void MoveItem(MoveDirection direction)
+        private void MoveItem(OxUpDown direction)
         {
             if (SelectedItem is null 
                 || SelectedIndex < 0)
                 return; 
 
-            int newIndex = SelectedIndex + MoveDirectionHelper.Delta(direction);
+            int newIndex = SelectedIndex + OxUpDownHelper.Delta(direction);
 
             if (newIndex < 0 || newIndex >= Items.Count)
                 return; 
@@ -95,8 +95,8 @@ namespace OxLibrary.Controls
             SetSelected(newIndex, true);
         }
 
-        public void MoveUp() => MoveItem(MoveDirection.Up);
-        public void MoveDown() => MoveItem(MoveDirection.Down);
+        public void MoveUp() => MoveItem(OxUpDown.Up);
+        public void MoveDown() => MoveItem(OxUpDown.Down);
 
         public void UpdateSelectedItem(object item) =>
             Items[SelectedIndex] = item;

@@ -4,7 +4,8 @@ namespace OxLibrary.Controls
 {
     public delegate bool IsHighPriorityItem(object item);
 
-    public interface IItemsContainer : IComponent
+    //TODO: replace inherits from IComonent with IOxControlContainer
+    public interface IOxItemsContainer : IComponent
     {
         object? SelectedItem { get; set; }
         int SelectedIndex { get; set; }
@@ -31,18 +32,13 @@ namespace OxLibrary.Controls
         List<object> ObjectList { get; }
 
         int Height { get; set; }
-
         void MoveUp();
         void MoveDown();
-
         bool AvailableMoveUp { get; }
         bool AvailableMoveDown { get; }
-
         DockStyle Dock { get; set; }
-
         BorderStyle BorderStyle { get; set; }
         Control AsControl();
-
         bool AvailableChilds { get; }
     }
 }

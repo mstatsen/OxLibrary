@@ -1,11 +1,11 @@
 ﻿namespace OxLibrary.Data.Countries
 {
-    public class Flags
+    public class OxContriesFlags
     {
 
         private static readonly System.Resources.ResourceManager resourceMan = new("OxLibrary.Properties.Flags", typeof(Properties.Flags).Assembly);
 
-        internal Flags()
+        internal OxContriesFlags()
         {
         }
 

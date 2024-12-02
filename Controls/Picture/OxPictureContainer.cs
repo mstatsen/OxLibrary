@@ -1,4 +1,4 @@
-﻿using OxLibrary.Controls.Handlers;
+﻿using OxLibrary.Handlers;
 using OxLibrary.Panels;
 using System.Drawing.Imaging;
 
@@ -174,7 +174,7 @@ namespace OxLibrary.Controls
         {
             base.PrepareInnerComponents();
             label.Parent = this;
-            label.Font = Styles.Font(Font.Size + 1, FontStyle.Italic);
+            label.Font = OxStyles.Font(Font.Size + 1, FontStyle.Italic);
             picture.Parent = this;
             buttonsParent.Parent = this;
         }

@@ -1,6 +1,6 @@
 ﻿namespace OxLibrary.Data.Countries
 {
-    public enum CountryLocation
+    public enum OxCountryLocation
     {
         Africa,
         Antarctica,

@@ -2,11 +2,11 @@
 
 namespace OxLibrary.Controls
 {
-    public class OxCountryComboBox : OxPicturedComboBox<Country>
+    public class OxCountryComboBox : OxPicturedComboBox<OxCountry>
     {
         public OxCountryComboBox() { }
 
-        protected override void OnGetToolTip(Country item, out string toolTipTitle, out string toolTipText)
+        protected override void OnGetToolTip(OxCountry item, out string toolTipTitle, out string toolTipText)
         {
             base.OnGetToolTip(item, out toolTipTitle, out toolTipText);
 
@@ -14,7 +14,7 @@ namespace OxLibrary.Controls
             {
                 toolTipTitle = SelectedItem.FullName;
                 toolTipText =
-                    $"Region: {CountryLocationHelper.Name(SelectedItem.Location)}\n" +
+                    $"Region: {OxCountryLocationHelper.Name(SelectedItem.Location)}\n" +
                     $"Alpha3: {SelectedItem.Alpha3}\n" +
                     $"Alpha2: {SelectedItem.Alpha2}\n" +
                     $"ISO: {SelectedItem.ISO}\n";
@@ -25,19 +25,19 @@ namespace OxLibrary.Controls
         {
             Items.Clear();
 
-            foreach (Country country in CountryList.Countries)
+            foreach (OxCountry country in OxCountryList.Countries)
                 Items.Add(country);
         }
 
-        public void LoadCountries(CountryField field, object value)
+        public void LoadCountries(OxCountryField field, object value)
         {
             Items.Clear();
 
-            foreach (Country country in CountryList.GetCountries(field, value))
+            foreach (OxCountry country in OxCountryList.GetCountries(field, value))
                 Items.Add(country);
         }
 
-        protected override Bitmap? OnGetPicture(Country item) => 
+        protected override Bitmap? OnGetPicture(OxCountry item) => 
             base.OnGetPicture(item) ?? item.Flag;
     }
 }

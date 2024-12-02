@@ -1,6 +1,6 @@
 ﻿namespace OxLibrary.Panels
 {
-    public enum PanelsHorizontalAlign
+    public enum OxPanelsHorizontalAlign
     {
         Left,
         Center,
