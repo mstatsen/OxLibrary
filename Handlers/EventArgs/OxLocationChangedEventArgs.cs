@@ -1,7 +1,5 @@
 ﻿namespace OxLibrary.Handlers
 {
-    public delegate void OxLocationChanged(object sender, OxLocationChangedEventArgs args);
-
     public class OxLocationChangedEventArgs : OxEventArgs
     {
         public OxLocationChangedEventArgs(OxWidth oldX, OxWidth oldY, OxWidth newX, OxWidth newY)

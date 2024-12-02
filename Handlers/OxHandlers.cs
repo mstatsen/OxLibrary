@@ -1,10 +1,11 @@
 ﻿namespace OxLibrary.Handlers
 {
-    public enum OxHandlerType
-    {
-        LocationChanged,
-        SizeChanged,
-    }
+
+    public delegate void OxLocationChanged(object sender, OxLocationChangedEventArgs args);
+    public delegate void OxSizeChanged(object sender, OxSizeChangedEventArgs args);
+    public delegate void OxActionClick<TAction>(object sender,
+        OxActionEventArgs<TAction> EventArgs)
+        where TAction : notnull, Enum;
 
     public class OxHandlers : Dictionary<OxHandlerType, List<Delegate>>
     {

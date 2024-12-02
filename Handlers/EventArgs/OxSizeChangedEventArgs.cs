@@ -1,7 +1,5 @@
 ﻿namespace OxLibrary.Handlers
 {
-    public delegate void OxSizeChanged(object sender, OxSizeChangedEventArgs args);
-
     public class OxSizeChangedEventArgs : OxEventArgs
     {
         public OxSizeChangedEventArgs(OxWidth oldWidth, OxWidth oldHeight, OxWidth newWidth, OxWidth newHeight)
