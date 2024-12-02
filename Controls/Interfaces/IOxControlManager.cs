@@ -1,4 +1,6 @@
-﻿namespace OxLibrary.Controls
+﻿using OxLibrary.Controls.Handlers;
+
+namespace OxLibrary.Controls
 {
     public interface IOxControlManager
     {
@@ -21,7 +23,7 @@
         OxPoint AutoScrollOffset { get; set; }
         IOxControlContainer? Parent { get; set; }
         void DoWithSuspendedLayout(Action method);
-        bool OnSizeChanged(SizeChangedEventArgs e);
+        bool OnSizeChanged(OxSizeChangedEventArgs e);
         void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height);
         void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height, BoundsSpecified specified);
         Control GetChildAtPoint(OxPoint pt, GetChildAtPointSkip skipValue);

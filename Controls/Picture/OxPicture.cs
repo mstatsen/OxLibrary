@@ -1,4 +1,5 @@
-﻿using OxLibrary.Panels;
+﻿using OxLibrary.Controls.Handlers;
+using OxLibrary.Panels;
 
 namespace OxLibrary.Controls
 {
@@ -152,7 +153,7 @@ namespace OxLibrary.Controls
                 remove => manager.SizeChanged -= value;
             }
 
-            public virtual bool OnSizeChanged(SizeChangedEventArgs e)
+            public virtual bool OnSizeChanged(OxSizeChangedEventArgs e)
             {
                 if (!e.Changed)
                     return false;
@@ -271,7 +272,7 @@ namespace OxLibrary.Controls
             SetHoverHandlers(picture);
         }
 
-        public override bool OnSizeChanged(SizeChangedEventArgs e)
+        public override bool OnSizeChanged(OxSizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
 
@@ -287,7 +288,7 @@ namespace OxLibrary.Controls
             picture.BackColor = BackColor;
         }
 
-        private void PictureSizeChanged(OxSize newSize, OxSize oldSize)
+        private void PictureSizeChanged(object sender, OxSizeChangedEventArgs e)
         {
             if (Stretch)
                 return;

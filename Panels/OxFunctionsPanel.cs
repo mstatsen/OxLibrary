@@ -1,4 +1,6 @@
-﻿namespace OxLibrary.Panels
+﻿using OxLibrary.Controls.Handlers;
+
+namespace OxLibrary.Panels
 {
     public class OxFunctionsPanel : OxFrameWithHeader, IOxFrameWithHeader
     {
@@ -17,7 +19,7 @@
             SetTitleAlign();
         }
 
-        public override bool OnSizeChanged(SizeChangedEventArgs e)
+        public override bool OnSizeChanged(OxSizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
             SetTitleAlign();

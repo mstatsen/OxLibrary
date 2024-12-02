@@ -1,4 +1,6 @@
-﻿namespace OxLibrary.Controls
+﻿using OxLibrary.Controls.Handlers;
+
+namespace OxLibrary.Controls
 {
     public class OxCheckBox : CheckBox, IOxControl<CheckBox>
     {
@@ -142,7 +144,7 @@
         public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
             manager.SetBounds(x, y, width, height);
 
-        public virtual bool OnSizeChanged(SizeChangedEventArgs e)
+        public virtual bool OnSizeChanged(OxSizeChangedEventArgs e)
         {
             if (!e.Changed)
                 return false;

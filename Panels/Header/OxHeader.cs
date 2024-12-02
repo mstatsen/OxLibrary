@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Controls;
+using OxLibrary.Controls.Handlers;
 
 namespace OxLibrary.Panels
 {
@@ -112,7 +113,7 @@ namespace OxLibrary.Panels
             icon.BaseColor = BaseColor;
         }
 
-        public override bool OnSizeChanged(SizeChangedEventArgs e)
+        public override bool OnSizeChanged(OxSizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
 

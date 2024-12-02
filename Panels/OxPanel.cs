@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Controls;
+using OxLibrary.Controls.Handlers;
 using OxLibrary.Forms;
 
 namespace OxLibrary.Panels
@@ -176,7 +177,7 @@ namespace OxLibrary.Panels
             remove => manager.SizeChanged -= value;
         }
 
-        public virtual bool OnSizeChanged(SizeChangedEventArgs e)
+        public virtual bool OnSizeChanged(OxSizeChangedEventArgs e)
         {
             if (!e.Changed)
                 return false;

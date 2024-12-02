@@ -1,7 +1,7 @@
-﻿namespace OxLibrary
-{
-    public delegate void OxSizeChanged(OxSize newSize, OxSize oldSize);
+﻿using OxLibrary.Controls.Handlers;
 
+namespace OxLibrary
+{
     public class OxSize
     {
         private OxWidth width;
@@ -42,7 +42,7 @@
             if (Creating)
                 return;
 
-            SizeChanged?.Invoke(this, oldSize);
+            SizeChanged?.Invoke(this, new OxSizeChangedEventArgs(oldSize, this));
         }
 
         public int WidthInt => OxWh.I(Width);

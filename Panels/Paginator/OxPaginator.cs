@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Controls;
+using OxLibrary.Controls.Handlers;
 
 namespace OxLibrary.Panels
 {
@@ -308,17 +309,15 @@ namespace OxLibrary.Panels
             Height = OxWh.W40;
         }
 
-        public override bool OnSizeChanged(SizeChangedEventArgs e)
+        public override bool OnSizeChanged(OxSizeChangedEventArgs e)
         {
-            base.OnSizeChanged(e);
+            if (!e.Changed
+                || !base.OnSizeChanged(e))
+                return false;
 
-            if (e.Changed)
-            {
-                SetButtonsPanelLeft();
-                SetButtonsTop();
-            }
-
-            return e.Changed;
+            SetButtonsPanelLeft();
+            SetButtonsTop();
+            return true;
         }
 
         private void SetButtonTop(OxPanel button) =>

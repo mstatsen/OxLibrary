@@ -1,4 +1,5 @@
-﻿using OxLibrary.Panels;
+﻿using OxLibrary.Controls.Handlers;
+using OxLibrary.Panels;
 
 namespace OxLibrary.Controls
 {
@@ -266,7 +267,7 @@ namespace OxLibrary.Controls
             return button;
         }
 
-        private void ButtonSizeChangedHandler(OxSize newSize, OxSize oldSize) => 
+        private void ButtonSizeChangedHandler(object sender, OxSizeChangedEventArgs args) =>
             PlaceButtons();
 
         private OxToolbarAction GetActionByButton(OxButton button)

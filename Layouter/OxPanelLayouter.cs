@@ -1,4 +1,6 @@
-﻿namespace OxLibrary.Panels
+﻿using OxLibrary.Controls.Handlers;
+
+namespace OxLibrary.Panels
 {
     public class OxPanelLayouter : OxPanel
     {
@@ -215,7 +217,7 @@
                     CalcedColumnCount = MaximumColumnCount;
         }
 
-        private void ReLayoutPanelsHandler(OxSize newSize, OxSize oldSize)
+        private void ReLayoutPanelsHandler(object sender, OxSizeChangedEventArgs args)
         {
             if (!panelResizing)
                 LayoutPanels(placedPanels);
@@ -285,7 +287,7 @@
             return calcedHeight;
         }
 
-        private void SizeChangeHandler(OxSize newSize, OxSize oldSize) =>
+        private void SizeChangeHandler(object sender, OxSizeChangedEventArgs args) =>
             RecalcColumnsSize();
 
         private void RecalcColumnsSize()
@@ -373,7 +375,7 @@
             UpdateParent();
         }
 
-        public override bool OnSizeChanged(SizeChangedEventArgs e)
+        public override bool OnSizeChanged(OxSizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
 

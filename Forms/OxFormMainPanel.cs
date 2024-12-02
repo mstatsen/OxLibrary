@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Controls;
+using OxLibrary.Controls.Handlers;
 using OxLibrary.Panels;
 
 namespace OxLibrary.Forms
@@ -30,7 +31,7 @@ namespace OxLibrary.Forms
             set => base.Dock = OxDock.Fill;
         }
 
-        private void FormSizeChanged(OxSize newSize, OxSize oldSize) => 
+        private void FormSizeChanged(object sender, OxSizeChangedEventArgs args) => 
             SetRestoreButtonIconAndTooltip();
 
         private void SetHeaderFont() => 
@@ -165,7 +166,7 @@ namespace OxLibrary.Forms
         public bool FormIsMaximized => 
             Form.WindowState is FormWindowState.Maximized;
 
-        public override bool OnSizeChanged(SizeChangedEventArgs e)
+        public override bool OnSizeChanged(OxSizeChangedEventArgs e)
         {
             if (!e.Changed
                 || !Initialized)

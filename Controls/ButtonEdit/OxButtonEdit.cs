@@ -1,4 +1,5 @@
-﻿using OxLibrary.Panels;
+﻿using OxLibrary.Controls.Handlers;
+using OxLibrary.Panels;
 
 namespace OxLibrary.Controls
 {
@@ -57,7 +58,7 @@ namespace OxLibrary.Controls
             TextBox.WordWrap = true;
         }
 
-        public override bool OnSizeChanged(SizeChangedEventArgs e)
+        public override bool OnSizeChanged(OxSizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
             OxWidth calcedButtonWidth = OxWh.Min(OxWh.W22, TextBox.Height - 4);

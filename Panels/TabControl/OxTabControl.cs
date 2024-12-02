@@ -1,4 +1,6 @@
-﻿namespace OxLibrary.Panels
+﻿using OxLibrary.Controls.Handlers;
+
+namespace OxLibrary.Panels
 {
     public class OxTabControl : OxFrameWithHeader
     {
@@ -211,7 +213,7 @@
                 button.BringToFront();
         }
 
-        public override bool OnSizeChanged(SizeChangedEventArgs e)
+        public override bool OnSizeChanged(OxSizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
 

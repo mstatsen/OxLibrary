@@ -1,4 +1,5 @@
-﻿using OxLibrary.Interfaces;
+﻿using OxLibrary.Controls.Handlers;
+using OxLibrary.Interfaces;
 using OxLibrary.Panels;
 
 namespace OxLibrary.Controls
@@ -11,8 +12,8 @@ namespace OxLibrary.Controls
         private IOxControlContainer<TBaseControl>? AsContainer =>
             managingControl as IOxControlContainer<TBaseControl>;
 
-        private readonly Func<SizeChangedEventArgs, bool> managingOnSizeChanged;
-        internal OxControlManager(TBaseControl managingControl, Func<SizeChangedEventArgs, bool> onSizeChanged)
+        private readonly Func<OxSizeChangedEventArgs, bool> managingOnSizeChanged;
+        internal OxControlManager(TBaseControl managingControl, Func<OxSizeChangedEventArgs, bool> onSizeChanged)
         {
             this.managingControl = managingControl;
             this.managingControl.Disposed += ControlDisposedHandler;
@@ -212,12 +213,12 @@ namespace OxLibrary.Controls
         private OxDock SavedDock = OxDock.None;
         private OxSize SavedSize = OxSize.Empty;
 
-        private List<OxSizeChanged> SizeChangedHandlersList = new();
+        private readonly OxHandlers Handlers = new();
 
         public event OxSizeChanged SizeChanged 
         { 
-            add => SizeChangedHandlersList.Add(value);
-            remove => SizeChangedHandlersList.Remove(value); 
+            add => Handlers.Add(OxHandlerType.SizeChanged, value);
+            remove => Handlers.Remove(OxHandlerType.SizeChanged, value); 
         }
 
         public bool DockCnahging { get; private set; } = false;
@@ -595,15 +596,13 @@ namespace OxLibrary.Controls
             }
         }
 
-        public bool OnSizeChanged(SizeChangedEventArgs e)
+        public bool OnSizeChanged(OxSizeChangedEventArgs e)
         {
             if (!e.Changed)
                 return false;
 
             managingOnSizeChanged(e);
-
-            foreach (OxSizeChanged handler in SizeChangedHandlersList)
-                handler.Invoke(e.NewSize, e.OldSize);
+            Handlers.Invoke(OxHandlerType.SizeChanged, ManagingControl, e);
 
             if (OxDockHelper.DockType(Dock) is OxDockType.Docked)
                 ParentForRealign?.RealignControls();
@@ -665,7 +664,7 @@ namespace OxLibrary.Controls
 
         public static OxControlManager<TBaseControl> RegisterControl<TBaseControl>(
             TBaseControl managingControl,
-            Func<SizeChangedEventArgs, bool> onSizeChanged)
+            Func<OxSizeChangedEventArgs, bool> onSizeChanged)
             where TBaseControl : Control
         {
             OxControlManager<TBaseControl> oxControlManager = new(managingControl, onSizeChanged);

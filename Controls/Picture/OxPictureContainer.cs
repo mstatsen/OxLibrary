@@ -1,4 +1,5 @@
-﻿using OxLibrary.Panels;
+﻿using OxLibrary.Controls.Handlers;
+using OxLibrary.Panels;
 using System.Drawing.Imaging;
 
 namespace OxLibrary.Controls
@@ -88,7 +89,7 @@ namespace OxLibrary.Controls
             
         }
 
-        private void ButtonsParentSizeChanged(OxSize newSize, OxSize oldSize) => 
+        private void ButtonsParentSizeChanged(object sender, OxSizeChangedEventArgs args) => 
             RecalcButtonsSize();
 
         public OxClickFrame AddButton(OxPictureAction action)
@@ -220,10 +221,10 @@ namespace OxLibrary.Controls
             SetHoverHandlers(label);
             SetHoverHandlers(picture);
             SetHoverHandlers(buttonsParent);
-            picture.SizeChanged += Picture_SizeChanged;
+            picture.SizeChanged += PictureSizeChangedHandler;
         }
 
-        private void Picture_SizeChanged(OxSize newSize, OxSize oldSize) =>
+        private void PictureSizeChangedHandler(object sender, OxSizeChangedEventArgs args) =>
             RecalcButtonsSize();
 
         protected override void MouseEnterHandler(object? sender, EventArgs e)

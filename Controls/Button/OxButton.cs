@@ -1,4 +1,6 @@
-﻿namespace OxLibrary.Controls
+﻿using OxLibrary.Controls.Handlers;
+
+namespace OxLibrary.Controls
 {
     public class OxButton : OxIconButton
     {
@@ -109,7 +111,7 @@
                 ? Label.Width
                 : OxWh.W0;
 
-        public override bool OnSizeChanged(SizeChangedEventArgs e)
+        public override bool OnSizeChanged(OxSizeChangedEventArgs e)
         {
             if (e.WidthChanged)
             {

@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Controls;
+using OxLibrary.Controls.Handlers;
 using OxLibrary.Panels;
 using System.Windows.Forms.VisualStyles;
 
@@ -170,7 +171,7 @@ namespace OxLibrary.Forms
                 item.Value.BaseColor = BaseColor;
         }
 
-        public override bool OnSizeChanged(SizeChangedEventArgs e)
+        public override bool OnSizeChanged(OxSizeChangedEventArgs e)
         {
             if (!e.Changed)
                 return false;

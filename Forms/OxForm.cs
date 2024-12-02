@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Controls;
+using OxLibrary.Controls.Handlers;
 
 namespace OxLibrary.Forms
 {
@@ -20,7 +21,7 @@ namespace OxLibrary.Forms
             remove => manager.SizeChanged -= value;
         }
 
-        public virtual bool OnSizeChanged(SizeChangedEventArgs e)
+        public virtual bool OnSizeChanged(OxSizeChangedEventArgs e)
         {
             if (!Initialized ||
                 !e.Changed)
