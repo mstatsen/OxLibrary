@@ -53,10 +53,10 @@
     <Compile Update="Controls\TreeView\OxTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Update="Forms\OxDialog.cs">
+    <Compile Update="Forms\Dialog\OxDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\OxDialogMainPanel.cs">
+    <Compile Update="Forms\Dialog\OxDialogMainPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Update="Forms\OxForm.cs">
@@ -65,10 +65,10 @@
     <Compile Update="Forms\OxFormMainPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Update="Forms\OxMessage.cs">
+    <Compile Update="Forms\Message\OxMessage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\OxMessageMainPanel.cs">
+    <Compile Update="Forms\Message\OxMessageMainPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Update="Panels\OxCard.cs">

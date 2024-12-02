@@ -39,7 +39,7 @@
         {
             base.OnKeyUp(e);
 
-            if (!e.Handled && 
+            if (!e.Handled &&
                 e.KeyCode is Keys.Escape)
                 DialogResult = DialogResult.Cancel;
         }
@@ -69,11 +69,11 @@
             {
                 DialogResult.OK or
                 DialogResult.Yes or
-                DialogResult.Continue => 
+                DialogResult.Continue =>
                     !CanOKClose(),
-                DialogResult.Cancel => 
+                DialogResult.Cancel =>
                     !CanCancelClose(),
-                _ => 
+                _ =>
                     false,
             };
         }

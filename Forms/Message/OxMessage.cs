@@ -4,7 +4,7 @@
     {
         private readonly OxMessageType MessageType;
         public OxMessage(OxMessageType messageType) : base()
-        { 
+        {
             MessageType = messageType;
             Text = OxMessageTypeHelper.Caption(messageType);
             MainPanel.BaseColor = OxMessageTypeHelper.BaseColor(messageType);
@@ -63,7 +63,7 @@
                 buttons
             );
 
-        public static DialogResult ShowWarning(string Warning, Control owner, 
+        public static DialogResult ShowWarning(string Warning, Control owner,
             OxDialogButton buttons = OxDialogButton.Yes | OxDialogButton.No | OxDialogButton.Cancel) =>
             ShowMessage(
                 OxMessageType.Warning,
@@ -72,7 +72,7 @@
                 buttons
             );
 
-        public static DialogResult ShowConfirm(string Confirm, Control owner, 
+        public static DialogResult ShowConfirm(string Confirm, Control owner,
             OxDialogButton buttons = OxDialogButton.Yes | OxDialogButton.No) =>
             ShowMessage(
                 OxMessageType.Confirmation,
@@ -89,10 +89,10 @@
             base.OnKeyUp(e);
 
             if (!e.Handled
-                && (MessageType is OxMessageType.Error 
-                                or OxMessageType.Info)
-                && (e.KeyCode is Keys.Enter 
-                              or Keys.Space))
+                && MessageType is OxMessageType.Error
+                                or OxMessageType.Info
+                && e.KeyCode is Keys.Enter
+                              or Keys.Space)
                 DialogResult = DialogResult.OK;
         }
     }
