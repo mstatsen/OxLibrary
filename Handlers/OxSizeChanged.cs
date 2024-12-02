@@ -25,5 +25,7 @@
 
         public bool HeightChanged =>
             !OldSize.Height.Equals(NewSize.Height);
+
+        public static readonly new OxSizeChangedEventArgs Empty = new(OxSize.Empty, OxSize.Empty);
     }
 }
