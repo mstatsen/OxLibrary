@@ -33,114 +33,6 @@ namespace OxLibrary.Panels
             Visible = true;
         }
 
-        public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
-        public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
-        public virtual void OnParentChanged(OxParentChangedEventArgs e) { }
-        public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }
-
-        public virtual bool HandleParentPadding => true;
-
-        private readonly OxBorders padding = new();
-        public new OxBorders Padding => padding;
-
-        private readonly OxBorders borders =
-            new()
-            {
-                Size = OxWh.W1
-            };
-
-        public OxBorders Borders => borders;
-
-        private bool useDefaultBorderColor = true;
-        public bool UseDefaultBorderColor
-        {
-            get => useDefaultBorderColor;
-            set
-            {
-                useDefaultBorderColor = value;
-                Invalidate();
-            }
-        }
-
-        private Color borderColor = Color.Transparent;
-        public Color BorderColor
-        {
-            get =>
-                useDefaultBorderColor
-                ? GetBorderColor()
-                : borderColor;
-            set
-            {
-                useDefaultBorderColor = false;
-                borderColor = value;
-                Invalidate();
-            }
-        }
-
-        public void SetBorderWidth(OxWidth value) =>
-            Borders.Size = value;
-
-        public void SetBorderWidth(OxDock dock, OxWidth value) =>
-            Borders[dock].Size = value;
-
-        public bool BorderVisible
-        {
-            get => Borders.GetVisible();
-            set => Borders.SetVisible(value);
-        }
-
-        private readonly OxBorders margin = new();
-
-        public new OxBorders Margin => margin;
-
-        private bool blurredBorder = false;
-        public bool BlurredBorder
-        {
-            get => blurredBorder;
-            set
-            {
-                blurredBorder = value;
-
-                if (!margin.IsEmpty)
-                    Invalidate();
-            }
-        }
-
-        protected virtual Color GetBorderColor() =>
-            Enabled
-            || !UseDisabledStyles
-                ? BaseColor
-                : Colors.Lighter(2);
-
-        private Color MarginColor =>
-            !BlurredBorder
-            && Parent is not null
-                ? Parent.BackColor
-                : BackColor;
-
-        public Color BaseColor
-        {
-            get => Colors.BaseColor;
-            set
-            {
-                if (BaseColorChanging)
-                    return;
-
-                BaseColorChanging = true;
-
-                try
-                {
-                    Colors.BaseColor = value;
-                    PrepareColors();
-                }
-                finally
-                { 
-                    BaseColorChanging = false;
-                    Invalidate();
-                }
-            }
-        }
-
         protected bool IsVariableWidth =>
             Parent is null
             || OxDockHelper.IsVariableWidth(Dock);
@@ -149,30 +41,6 @@ namespace OxLibrary.Panels
             Parent is null
             || OxDockHelper.IsVariableHeight(Dock);
 
-        private bool BaseColorChanging = false;
-
-        protected virtual Color GetBackColor() =>
-            Colors.Lighter(Enabled || !useDisabledStyles? 7 : 8);
-
-        protected virtual Color GetForeColor() =>
-            Colors.Darker(Enabled || !useDisabledStyles ? 7 : -3);
-
-        public virtual void PrepareColors()
-        {
-            BackColor = GetBackColor();
-            ForeColor = GetForeColor();
-            ColorizeControls();
-        }
-
-        private void ColorizeControls()
-        {
-            foreach (IOxControl control in OxControls)
-            {
-                if (control is IOxPanel panel)
-                    panel.BaseColor = BaseColor;
-                else control.BackColor = BackColor;
-            }
-        }
 
         private bool useDisabledStyles = true;
 
@@ -187,7 +55,7 @@ namespace OxLibrary.Panels
 
         protected virtual void PrepareInnerComponents() { }
 
-        private OxRectangle BorderRectangle => 
+        private OxRectangle BorderRectangle =>
             ClientRectangle - Margin;
 
         protected override void OnPaint(PaintEventArgs e)
@@ -212,7 +80,6 @@ namespace OxLibrary.Panels
             PrepareColors();
         }
 
-        public OxColorHelper Colors { get; }
         public virtual Color DefaultColor => Color.FromArgb(142, 142, 138);
 
         public new string Text
@@ -242,13 +109,13 @@ namespace OxLibrary.Panels
 
         public bool IsHovered
         {
-            get 
+            get
             {
                 Point thisPoint = PointToClient(Cursor.Position);
-                return (thisPoint.X >= 0) && 
-                    (thisPoint.X <= Size.WidthInt) && 
-                    (thisPoint.Y >= 0) && 
-                    (thisPoint.Y <= Size.HeightInt);
+                return (thisPoint.X >= 0)
+                    && (thisPoint.X <= Size.WidthInt)
+                    && (thisPoint.Y >= 0)
+                    && (thisPoint.Y <= Size.HeightInt);
             }
         }
 
@@ -266,29 +133,15 @@ namespace OxLibrary.Panels
             set => SetToolTipText(value);
         }
 
-        protected virtual void SetToolTipText(string value) => 
+        protected virtual void SetToolTipText(string value) =>
             ToolTip.SetToolTip(this, value);
 
-        #region IWithIcon implementation
-        public Bitmap? Icon
-        {
-            get => GetIcon();
-            set
-            {
-                switch (Icon)
-                {
-                    case null when value is null:
-                    case not null when Icon.Equals(value):
-                        return;
-                }
+        public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
+        public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
+        public virtual void OnParentChanged(OxParentChangedEventArgs e) { }
+        public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }
 
-                SetIcon(value);
-            }
-        }
-        #endregion
-
-        protected virtual void SetIcon(Bitmap? value) { }
-        protected virtual Bitmap? GetIcon() => null;
+        public virtual bool HandleParentPadding => true;
 
         public virtual void PutBack(OxPanelViewer viewer)
         {
@@ -335,6 +188,162 @@ namespace OxLibrary.Panels
                 PrepareColors();
             }
         }
+
+        #region IOxWithPadding implementaion
+        private readonly OxBorders padding = new();
+        public new OxBorders Padding => padding;
+        #endregion
+
+        #region IOxWithBorder implementation
+        private readonly OxBorders borders =
+            new()
+            {
+                Size = OxWh.W1
+            };
+
+        public OxBorders Borders => borders;
+
+        private bool useDefaultBorderColor = true;
+        public bool UseDefaultBorderColor
+        {
+            get => useDefaultBorderColor;
+            set
+            {
+                useDefaultBorderColor = value;
+                Invalidate();
+            }
+        }
+
+        private Color borderColor = Color.Transparent;
+        public Color BorderColor
+        {
+            get =>
+                useDefaultBorderColor
+                ? GetBorderColor()
+                : borderColor;
+            set
+            {
+                useDefaultBorderColor = false;
+                borderColor = value;
+                Invalidate();
+            }
+        }
+
+        public void SetBorderWidth(OxWidth value) =>
+            Borders.Size = value;
+
+        public void SetBorderWidth(OxDock dock, OxWidth value) =>
+            Borders[dock].Size = value;
+
+        public bool BorderVisible
+        {
+            get => Borders.GetVisible();
+            set => Borders.SetVisible(value);
+        }
+
+        protected virtual Color GetBorderColor() =>
+            Enabled
+            || !UseDisabledStyles
+                ? BaseColor
+                : Colors.Lighter(2);
+        #endregion
+
+        #region IOxWithMargin implementation
+        private readonly OxBorders margin = new();
+
+        public new OxBorders Margin => margin;
+
+        private bool blurredBorder = false;
+        public bool BlurredBorder
+        {
+            get => blurredBorder;
+            set
+            {
+                blurredBorder = value;
+
+                if (!margin.IsEmpty)
+                    Invalidate();
+            }
+        }
+
+        private Color MarginColor =>
+            !BlurredBorder
+            && Parent is not null
+                ? Parent.BackColor
+                : BackColor;
+        #endregion
+
+        #region IOxWithColorHelper implementation
+        public OxColorHelper Colors { get; }
+        public Color BaseColor
+        {
+            get => Colors.BaseColor;
+            set
+            {
+                if (BaseColorChanging)
+                    return;
+
+                BaseColorChanging = true;
+
+                try
+                {
+                    Colors.BaseColor = value;
+                    PrepareColors();
+                }
+                finally
+                { 
+                    BaseColorChanging = false;
+                    Invalidate();
+                }
+            }
+        }
+
+        private bool BaseColorChanging = false;
+
+        protected virtual Color GetBackColor() =>
+            Colors.Lighter(Enabled || !useDisabledStyles ? 7 : 8);
+
+        protected virtual Color GetForeColor() =>
+            Colors.Darker(Enabled || !useDisabledStyles ? 7 : -3);
+
+        public virtual void PrepareColors()
+        {
+            BackColor = GetBackColor();
+            ForeColor = GetForeColor();
+            ColorizeControls();
+        }
+
+        private void ColorizeControls()
+        {
+            foreach (IOxControl control in OxControls)
+            {
+                if (control is IOxPanel panel)
+                    panel.BaseColor = BaseColor;
+                else control.BackColor = BackColor;
+            }
+        }
+        #endregion
+
+        #region IWithIcon implementation
+        public Bitmap? Icon
+        {
+            get => GetIcon();
+            set
+            {
+                switch (Icon)
+                {
+                    case null when value is null:
+                    case not null when Icon.Equals(value):
+                        return;
+                }
+
+                SetIcon(value);
+            }
+        }
+
+        protected virtual void SetIcon(Bitmap? value) { }
+        protected virtual Bitmap? GetIcon() => null;
+        #endregion
 
         #region Implemention of IOxContainer using IOxContainerManager
         public new OxWidth Width
