@@ -41,15 +41,4 @@ namespace OxLibrary.Controls
         event OxLocationChangedEvent LocationChanged;
         event OxParentChangedEvent ParentChanged;
     }
-
-    public interface IOxControlManager<TBaseControl> : IOxControlManager
-        where TBaseControl : Control
-    {
-    }
-
-    public interface IOxControlManagerForManager<TBaseControl> : IOxControlManager
-        where TBaseControl : Control
-    {
-        IOxControl<TBaseControl> ManagingControl { get; }
-    }
 }

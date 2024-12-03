@@ -3,19 +3,18 @@ using OxLibrary.Interfaces;
 
 namespace OxLibrary.Controls
 {
-    public class OxContainerManager<TContainer> :
-        OxControlManager<TContainer>,
-        IOxContainerManagerForManager<TContainer>
-        where TContainer : Control, new()
+    public class OxContainerManager :
+        OxControlManager,
+        IOxContainerManager
     {
-        public OxContainerManager(TContainer managingControl) : base(managingControl)
+        public OxContainerManager(Control managingControl) : base(managingControl)
         {
-            OxControls = new(ManagingControl);
-            Aligner = new(ManagingControl);
+            OxControls = new(Container);
+            Aligner = new(Container);
         }
 
-        public new IOxControlContainer<TContainer> ManagingControl =>
-            (IOxControlContainer<TContainer>)base.ManagingControl;
+        public IOxContainer Container =>
+            (IOxContainer)ManagingControl;
 
         private readonly OxControlAligner Aligner;
 
@@ -30,16 +29,16 @@ namespace OxLibrary.Controls
 
         protected override void SetHandlers()
         {
-            ManagingControl.ControlAdded += ControlAddedHandler;
-            ManagingControl.ControlRemoved += ControlRemovedHandler;
+            Container.ControlAdded += ControlAddedHandler;
+            Container.ControlRemoved += ControlRemovedHandler;
 
-            if (ManagingControl is IOxWithPadding controlWithPadding)
+            if (Container is IOxWithPadding controlWithPadding)
                 controlWithPadding.Padding.SizeChanged += PaddingSizeChangedHandler;
 
-            if (ManagingControl is IOxWithBorders controlWithBorders)
+            if (Container is IOxWithBorders controlWithBorders)
                 controlWithBorders.Borders.SizeChanged += BordersSizeChangedHandler;
 
-            if (ManagingControl is IOxWithMargin controlWithMargin)
+            if (Container is IOxWithMargin controlWithMargin)
                 controlWithMargin.Margin.SizeChanged += MarginSizeChangedHandler;
 
             base.SetHandlers();
@@ -56,13 +55,21 @@ namespace OxLibrary.Controls
         private void ControlAddedHandler(object? sender, ControlEventArgs e)
         {
             if (e.Control is not IOxControl oxControl
-                || e.Control.Equals(ManagingControl))
+                || e.Control.Equals(Container))
                 return;
 
             OxControls.Add(oxControl);
 
-            if (ManagingControl is IOxWithColorHelper colorHelperControl)
+            if (Container is IOxWithColorHelper colorHelperControl)
                 colorHelperControl.PrepareColors();
+        }
+
+        protected override void RealignParent()
+        {
+            if (Parent is null)
+                RealignControls();
+            else
+                base.RealignParent();
         }
 
         private void BordersSizeChangedHandler(object sender, OxBordersChangedEventArgs e) =>
@@ -91,21 +98,21 @@ namespace OxLibrary.Controls
         {
             get
             {
-                OxRectangle outerZone = new(ManagingControl.ClientRectangle);
+                OxRectangle outerZone = new(Container.ClientRectangle);
 
-                if (ManagingControl is IOxWithPadding controlWithPadding)
+                if (Container is IOxWithPadding controlWithPadding)
                     outerZone -= controlWithPadding.Padding;
 
-                if (ManagingControl is IOxWithBorders controlWithBorders)
+                if (Container is IOxWithBorders controlWithBorders)
                     outerZone -= controlWithBorders.Borders;
 
-                if (ManagingControl is IOxWithMargin controlWithMargin)
+                if (Container is IOxWithMargin controlWithMargin)
                     outerZone -= controlWithMargin.Margin;
 
                 return outerZone;
             }
         }
 
-        public bool HandleParentPadding => ManagingControl.HandleParentPadding;
+        public bool HandleParentPadding => Container.HandleParentPadding;
     }
 }

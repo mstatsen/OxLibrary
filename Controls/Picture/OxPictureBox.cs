@@ -2,174 +2,173 @@
 
 namespace OxLibrary.Controls
 {
-    public class OxPictureBox : PictureBox, IOxControl<PictureBox>
+    public class OxPictureBox : PictureBox, IOxControl
     {
-        private readonly OxControlManager<PictureBox> manager;
-        public IOxControlManager<PictureBox> Manager => manager;
+        public IOxControlManager Manager { get; }
 
         public OxPictureBox()
         {
-            manager = OxControlManager.RegisterControl<PictureBox>(this);
+            Manager = OxControlManagers.RegisterControl(this);
             DoubleBuffered = true;
         }
 
         public new OxWidth Width
         {
-            get => manager.Width;
-            set => manager.Width = value;
+            get => Manager.Width;
+            set => Manager.Width = value;
         }
 
         public new OxWidth Height
         {
-            get => manager.Height;
-            set => manager.Height = value;
+            get => Manager.Height;
+            set => Manager.Height = value;
         }
 
         public new OxWidth Top
         {
-            get => manager.Top;
-            set => manager.Top = value;
+            get => Manager.Top;
+            set => Manager.Top = value;
         }
 
         public new OxWidth Left
         {
-            get => manager.Left;
-            set => manager.Left = value;
+            get => Manager.Left;
+            set => Manager.Left = value;
         }
 
         public new OxWidth Bottom =>
-            manager.Bottom;
+            Manager.Bottom;
 
         public new OxWidth Right =>
-            manager.Right;
+            Manager.Right;
 
         public new OxSize Size
         {
-            get => manager.Size;
-            set => manager.Size = value;
+            get => Manager.Size;
+            set => Manager.Size = value;
         }
 
         public new OxSize ClientSize
         {
-            get => manager.ClientSize;
-            set => manager.ClientSize = value;
+            get => Manager.ClientSize;
+            set => Manager.ClientSize = value;
         }
 
         public new OxPoint Location
         {
-            get => manager.Location;
-            set => manager.Location = value;
+            get => Manager.Location;
+            set => Manager.Location = value;
         }
 
         public new OxSize MinimumSize
         {
-            get => manager.MinimumSize;
-            set => manager.MinimumSize = value;
+            get => Manager.MinimumSize;
+            set => Manager.MinimumSize = value;
         }
 
         public new OxSize MaximumSize
         {
-            get => manager.MaximumSize;
-            set => manager.MaximumSize = value;
+            get => Manager.MaximumSize;
+            set => Manager.MaximumSize = value;
         }
 
         public new virtual OxDock Dock
         {
-            get => manager.Dock;
-            set => manager.Dock = value;
+            get => Manager.Dock;
+            set => Manager.Dock = value;
         }
 
         public new virtual IOxContainer? Parent
         {
-            get => manager.Parent;
-            set => manager.Parent = value;
+            get => Manager.Parent;
+            set => Manager.Parent = value;
         }
 
         public new OxRectangle ClientRectangle =>
-            manager.ClientRectangle;
+            Manager.ClientRectangle;
 
         public new virtual OxRectangle DisplayRectangle =>
-            manager.DisplayRectangle;
+            Manager.DisplayRectangle;
 
         public new OxRectangle Bounds
         {
-            get => manager.Bounds;
-            set => manager.Bounds = value;
+            get => Manager.Bounds;
+            set => Manager.Bounds = value;
         }
 
         public new OxSize PreferredSize =>
-            manager.PreferredSize;
+            Manager.PreferredSize;
 
         public new OxPoint AutoScrollOffset
         {
-            get => manager.AutoScrollOffset;
-            set => manager.AutoScrollOffset = value;
+            get => Manager.AutoScrollOffset;
+            set => Manager.AutoScrollOffset = value;
         }
         public void DoWithSuspendedLayout(Action method) =>
-            manager.DoWithSuspendedLayout(method);
+            Manager.DoWithSuspendedLayout(method);
 
         public Control GetChildAtPoint(OxPoint pt, GetChildAtPointSkip skipValue) =>
-            manager.GetChildAtPoint(pt, skipValue);
+            Manager.GetChildAtPoint(pt, skipValue);
 
         public Control GetChildAtPoint(OxPoint pt) =>
-            manager.GetChildAtPoint(pt);
+            Manager.GetChildAtPoint(pt);
 
         public OxSize GetPreferredSize(OxSize proposedSize) =>
-            manager.GetPreferredSize(proposedSize);
+            Manager.GetPreferredSize(proposedSize);
 
         public void Invalidate(OxRectangle rc) =>
-            manager.Invalidate(rc);
+            Manager.Invalidate(rc);
 
         public void Invalidate(OxRectangle rc, bool invalidateChildren) =>
-            manager.Invalidate(rc, invalidateChildren);
+            Manager.Invalidate(rc, invalidateChildren);
 
         public OxSize LogicalToDeviceUnits(OxSize value) =>
-            manager.LogicalToDeviceUnits(value);
+            Manager.LogicalToDeviceUnits(value);
 
         public OxPoint PointToClient(OxPoint p) =>
-            manager.PointToClient(p);
+            Manager.PointToClient(p);
 
         public OxPoint PointToScreen(OxPoint p) =>
-            manager.PointToScreen(p);
+            Manager.PointToScreen(p);
 
         public OxRectangle RectangleToClient(OxRectangle r) =>
-            manager.RectangleToClient(r);
+            Manager.RectangleToClient(r);
 
         public OxRectangle RectangleToScreen(OxRectangle r) =>
-            manager.RectangleToScreen(r);
+            Manager.RectangleToScreen(r);
 
         public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height, BoundsSpecified specified) =>
-            manager.SetBounds(x, y, width, height, specified);
+            Manager.SetBounds(x, y, width, height, specified);
 
         public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
-            manager.SetBounds(x, y, width, height);
+            Manager.SetBounds(x, y, width, height);
 
         public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
         public new event OxDockChangedEvent DockChanged
         {
-            add => manager.DockChanged += value;
-            remove => manager.DockChanged -= value;
+            add => Manager.DockChanged += value;
+            remove => Manager.DockChanged -= value;
         }
 
         public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
         public new event OxLocationChangedEvent LocationChanged
         {
-            add => manager.LocationChanged += value;
-            remove => manager.LocationChanged -= value;
+            add => Manager.LocationChanged += value;
+            remove => Manager.LocationChanged -= value;
         }
 
         public virtual void OnParentChanged(OxParentChangedEventArgs e) { }
         public new event OxParentChangedEvent ParentChanged
         {
-            add => manager.ParentChanged += value;
-            remove => manager.ParentChanged -= value;
+            add => Manager.ParentChanged += value;
+            remove => Manager.ParentChanged -= value;
         }
 
         public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }
         public new event OxSizeChangedEvent SizeChanged
         {
-            add => manager.SizeChanged += value;
-            remove => manager.SizeChanged -= value;
+            add => Manager.SizeChanged += value;
+            remove => Manager.SizeChanged -= value;
         }
 
         #region Hidden base methods

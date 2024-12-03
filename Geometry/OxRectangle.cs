@@ -157,7 +157,7 @@ namespace OxLibrary
             Set(OxWh.W0, OxWh.W0, OxWh.W0, OxWh.W0);
 
         public override string ToString() =>
-            $"X = {OxWh.I(X)}, Y = {OxWh.I(Y)}, Width = {OxWh.I(Width)}, Width = {OxWh.I(Height)}";
+            $"X = {OxWh.I(X)}, Y = {OxWh.I(Y)}, Width = {OxWh.I(Width)}, Height = {OxWh.I(Height)}";
 
         public static readonly OxRectangle Empty = new(OxWh.W0, OxWh.W0, OxWh.W0, OxWh.W0);
         public static readonly OxRectangle Max = new(OxWh.W0, OxWh.W0, OxWh.Maximum, OxWh.Maximum);

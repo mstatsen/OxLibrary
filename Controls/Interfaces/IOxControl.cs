@@ -5,7 +5,7 @@ using static System.Windows.Forms.Control;
 
 namespace OxLibrary.Controls
 {
-    public interface IOxBaseControl: IOxControlManager
+    public interface IOxControl: IOxControlManager
     {
         AccessibleObject AccessibilityObject { get; }
         string AccessibleDefaultActionDescription { get; set; }
@@ -171,20 +171,10 @@ namespace OxLibrary.Controls
         void OnLocationChanged(OxLocationChangedEventArgs e);
         void OnParentChanged(OxParentChangedEventArgs e);
         void OnSizeChanged(OxSizeChangedEventArgs e);
-        
     }
 
-    public interface IOxControl<TBaseControl, TManager> : IOxBaseControl
+    public interface IOxManagingControl : IOxControl
     {
-        TManager Manager { get; }
-    }
-
-    public interface IOxControl<TBaseControl> : IOxControl<TBaseControl, IOxControlManager<TBaseControl>>
-        where TBaseControl : Control
-    {
-    }
-
-    public interface IOxControl : IOxControl<Control>
-    {
+        IOxControlManager Manager { get; }
     }
 }

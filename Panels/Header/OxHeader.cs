@@ -5,8 +5,6 @@ namespace OxLibrary.Panels
 {
     public class OxHeader : OxUnderlinedPanel, IOxHeader
     {
-        private const string DefaultFontFamily = "Calibri Light";
-        private const float DefaultFontSize = 11;
 
         private readonly OxPicture icon = new()
         {
@@ -21,8 +19,8 @@ namespace OxLibrary.Panels
             Dock = OxDock.Fill,
             Text = string.Empty,
             Font = new(
-                DefaultFontFamily, 
-                DefaultFontSize + 0.5f, 
+                OxStyles.FontFamily,
+                OxStyles.DefaultFontSize + 0.5f, 
                 FontStyle.Bold | FontStyle.Italic
             ),
             TextAlign = ContentAlignment.MiddleLeft

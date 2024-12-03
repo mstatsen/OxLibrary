@@ -2,13 +2,13 @@
 
 namespace OxLibrary.Controls
 {
-    public class OxCheckBox : CheckBox, IOxControl<CheckBox>
+    public class OxCheckBox : CheckBox, IOxControl
     {
-        public IOxControlManager<CheckBox> Manager { get; }
+        public IOxControlManager Manager { get; }
 
         public OxCheckBox()
         {
-            Manager = OxControlManager.RegisterControl<CheckBox>(this);
+            Manager = OxControlManagers.RegisterControl(this);
             DoubleBuffered = true;
         }
 

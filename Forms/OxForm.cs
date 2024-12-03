@@ -4,7 +4,9 @@ using OxLibrary.Interfaces;
 
 namespace OxLibrary.Forms
 {
-    public class OxForm : Form, IOxControlContainer<Form>, IOxWithColorHelper
+    public class OxForm : Form,
+        IOxContainer,
+        IOxWithColorHelper
     {
         private readonly bool Initialized = false;
         public OxFormMainPanel MainPanel { get; internal set; }
@@ -57,7 +59,7 @@ namespace OxLibrary.Forms
             try
             {
                 DoubleBuffered = true;
-                Manager = OxControlManager.RegisterContainer<Form>(this);
+                Manager = OxControlManagers.RegisterContainer(this);
                 MainPanel = CreateMainPanel();
                 MainPanel.Colors.BaseColorChanged += BaseColorChangedHandler;
                 SetUpForm();

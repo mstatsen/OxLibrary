@@ -3,55 +3,30 @@ using OxLibrary.Interfaces;
 
 namespace OxLibrary.Controls
 {
-    public class OxControlManager<TBaseControl> : IOxControlManager<TBaseControl>
-        where TBaseControl : Control
+    public class OxControlManager : IOxControlManager
     {
-        private readonly TBaseControl managingControl;
-        public IOxBaseControl ManagingControl => (IOxBaseControl)managingControl;
-        private IOxControlContainer<TBaseControl>? AsContainer =>
-            managingControl as IOxControlContainer<TBaseControl>;
+        protected readonly Control ManagingControl;
+        public IOxControl ManagingOxControl => (IOxControl)ManagingControl;
 
-        internal OxControlManager(TBaseControl managingControl)
+        internal OxControlManager(Control managingControl)
         {
-            this.managingControl = managingControl;
-            this.managingControl.Disposed += ControlDisposedHandler;
+            ManagingControl = managingControl;
+            ManagingControl.Disposed += ControlDisposedHandler;
             SetHandlers();
             ControlZone = OxRectangle.Max;
         }
 
         protected virtual void SetHandlers() { }
 
-        protected void RealignParent() =>
+        protected virtual void RealignParent() => 
             Parent?.RealignControls();
 
-        private void ControlRemovedHandler(object? sender, ControlEventArgs e)
-        {
-            if (AsContainer is null
-                || e.Control is not IOxControl oxControl)
-                return;
-
-            AsContainer.OxControls.Remove(oxControl);
-        }
-
-        private void ControlAddedHandler(object? sender, ControlEventArgs e)
-        {
-            if (AsContainer is null
-                || e.Control is not IOxControl oxControl
-                || e.Control.Equals(ManagingControl))
-                return;
-
-            AsContainer.OxControls.Add(oxControl);
-
-            if (AsContainer is IOxWithColorHelper colorHelperControl)
-                colorHelperControl.PrepareColors();
-        }
-
         private void ControlDisposedHandler(object? sender, EventArgs e) =>
-            OxControlManager.UnRegisterControl(managingControl);
+            OxControlManagers.UnRegisterControl(ManagingControl);
 
         public void DoWithSuspendedLayout(Action method)
         {
-            managingControl.SuspendLayout();
+            ManagingControl.SuspendLayout();
 
             try
             {
@@ -59,32 +34,32 @@ namespace OxLibrary.Controls
             }
             finally
             {
-                managingControl.ResumeLayout();
+                ManagingControl.ResumeLayout();
             }
         }
 
         protected int OriginalLeft
         {
-            get => managingControl.Left;
-            set => managingControl.Left = value;
+            get => ManagingControl.Left;
+            set => ManagingControl.Left = value;
         }
 
         protected int OriginalTop
         {
-            get => managingControl.Top;
-            set => managingControl.Top = value;
+            get => ManagingControl.Top;
+            set => ManagingControl.Top = value;
         }
 
         protected int OriginalWidth
         {
-            get => managingControl.Width;
-            set => managingControl.Width = value;
+            get => ManagingControl.Width;
+            set => ManagingControl.Width = value;
         }
 
         protected int OriginalHeight
         {
-            get => managingControl.Height;
-            set => managingControl.Height = value;
+            get => ManagingControl.Height;
+            set => ManagingControl.Height = value;
         }
 
         public OxWidth Width
@@ -94,7 +69,7 @@ namespace OxLibrary.Controls
                 OxWidth width = OxWh.W(OriginalWidth);
 
                 if (OxDockHelper.Variable(Dock) is OxDockVariable.Width
-                    && ManagingControl is IOxWithMargin controlWithMargin
+                    && ManagingOxControl is IOxWithMargin controlWithMargin
                     && !controlWithMargin.Margin.IsEmpty)
                     width = OxWh.S(width, controlWithMargin.Margin.Horizontal);
 
@@ -109,7 +84,7 @@ namespace OxLibrary.Controls
                 OriginalWidth =
                     OxWh.IAdd(value,
                         OxDockHelper.Variable(Dock) is OxDockVariable.Width
-                        && ManagingControl is IOxWithMargin controlWithMargin
+                        && ManagingOxControl is IOxWithMargin controlWithMargin
                         && !controlWithMargin.Margin.IsEmpty
                             ? controlWithMargin.Margin.Horizontal
                             : OxWh.W0
@@ -126,7 +101,7 @@ namespace OxLibrary.Controls
                 OxWidth height = OxWh.W(OriginalHeight);
 
                 if (OxDockHelper.Variable(Dock) is OxDockVariable.Height
-                    && ManagingControl is IOxWithMargin controlWithMargin
+                    && ManagingOxControl is IOxWithMargin controlWithMargin
                     && !controlWithMargin.Margin.IsEmpty)
                     height = OxWh.S(height, controlWithMargin.Margin.Vertical);
 
@@ -142,7 +117,7 @@ namespace OxLibrary.Controls
                     OxWh.IAdd(
                         value,
                         OxDockHelper.Variable(Dock) is OxDockVariable.Height
-                        && ManagingControl is IOxWithMargin controlWithMargin
+                        && ManagingOxControl is IOxWithMargin controlWithMargin
                         && controlWithMargin.Margin.IsEmpty
                             ? controlWithMargin.Margin.Vertical
                             : OxWh.W0
@@ -153,10 +128,10 @@ namespace OxLibrary.Controls
         }
 
         public OxWidth Bottom => 
-            OxWh.S(managingControl.Bottom, ParentControlZone.Y);
+            OxWh.S(ManagingControl.Bottom, ParentControlZone.Y);
 
         public OxWidth Right => 
-            OxWh.S(managingControl.Right, ParentControlZone.X);
+            OxWh.S(ManagingControl.Right, ParentControlZone.X);
 
         public OxWidth Top
         {
@@ -186,7 +161,7 @@ namespace OxLibrary.Controls
         private readonly OxHandlers Handlers = new();
 
         private void InvokeHandlers(OxHandlerType type, OxEventArgs args) =>
-            Handlers.Invoke(type, ManagingControl, args);
+            Handlers.Invoke(type, ManagingOxControl, args);
 
         private void AddHandler(OxHandlerType type, Delegate handler) =>
             Handlers.Add(type, handler);
@@ -229,7 +204,7 @@ namespace OxLibrary.Controls
                     return;
 
                 OxDock oldDock = SavedDock;
-                managingControl.Dock = DockStyle.None;
+                ManagingControl.Dock = DockStyle.None;
                 SavedDock = value;
                 OnDockChanged(new(oldDock, SavedDock));
             }
@@ -273,7 +248,7 @@ namespace OxLibrary.Controls
 
         public IOxContainer? Parent
         {
-            get => (IOxContainer?)managingControl.Parent;
+            get => (IOxContainer?)ManagingControl.Parent;
             set
             {
                 if (value is null && Parent is not null 
@@ -283,7 +258,7 @@ namespace OxLibrary.Controls
                 IOxContainer? oldParent = Parent;
                 //Parent?.OxControls.Remove(ManagingControl);
                 //OxPoint controlLocation = new(Left, Top);
-                managingControl.Parent = (Control?)value;
+                ManagingControl.Parent = (Control?)value;
                 OnParentChanged(new(oldParent, Parent));
                 //Parent?.OxControls.Add(ManagingControl);
                 //Left = controlLocation.X;
@@ -306,11 +281,11 @@ namespace OxLibrary.Controls
 
         public OxSize ClientSize
         {
-            get => new(managingControl.ClientSize);
+            get => new(ManagingControl.ClientSize);
             set
             {
                 if (!ClientSize.Equals(value))
-                    managingControl.ClientSize = value.Size;
+                    ManagingControl.ClientSize = value.Size;
             }
         }
 
@@ -320,65 +295,65 @@ namespace OxLibrary.Controls
             set
             {
                 OxPoint oldLocation = new(Location);
-                managingControl.Location = value.Point;
+                ManagingControl.Location = value.Point;
                 OnLocationChanged(new(oldLocation, Location));
             }
         }
 
         public OxSize MinimumSize
         {
-            get => new(managingControl.MinimumSize);
+            get => new(ManagingControl.MinimumSize);
             set
             {
                 if (MinimumSize.Equals(value))
                     return;
 
                 OxSize oldSize = new(Size);
-                managingControl.MinimumSize = value.Size;
+                ManagingControl.MinimumSize = value.Size;
                 OnSizeChanged(new(oldSize, Size));
             }
         }
 
         public OxSize MaximumSize
         {
-            get => new(managingControl.MaximumSize);
+            get => new(ManagingControl.MaximumSize);
             set
             {
                 if (MaximumSize.Equals(value))
                     return;
 
                 OxSize oldSize = new(Size);
-                managingControl.MaximumSize = value.Size;
+                ManagingControl.MaximumSize = value.Size;
                 OnSizeChanged(new(oldSize, Size));
             }
         }
 
         public OxRectangle ClientRectangle =>
-            new(managingControl.ClientRectangle);
+            new(ManagingControl.ClientRectangle);
 
         public OxRectangle DisplayRectangle =>
-            new(managingControl.DisplayRectangle);
+            new(ManagingControl.DisplayRectangle);
 
         public OxRectangle Bounds
         {
-            get => new(managingControl.Bounds);
+            get => new(ManagingControl.Bounds);
             set
             {
                 if (!Bounds.Equals(value))
-                    managingControl.Bounds = value.Rectangle;
+                    ManagingControl.Bounds = value.Rectangle;
             }
         }
 
         public OxSize PreferredSize =>
-            new(managingControl.Size);
+            new(ManagingControl.Size);
 
         public OxPoint AutoScrollOffset
         {
-            get => new(managingControl.AutoScrollOffset);
+            get => new(ManagingControl.AutoScrollOffset);
             set
             {
                 if (!AutoScrollOffset.Equals(value))
-                    managingControl.AutoScrollOffset = value.Point;
+                    ManagingControl.AutoScrollOffset = value.Point;
             }
         }
 
@@ -392,7 +367,7 @@ namespace OxLibrary.Controls
             try
             {
                 RestoreSize();
-                ManagingControl.OnDockChanged(e);
+                ManagingOxControl.OnDockChanged(e);
                 InvokeHandlers(OxHandlerType.DockChanged, e);
                 RealignParent();
             }
@@ -407,7 +382,7 @@ namespace OxLibrary.Controls
             if (!e.Changed)
                 return;
 
-            ManagingControl.OnLocationChanged(e);
+            ManagingOxControl.OnLocationChanged(e);
             InvokeHandlers(OxHandlerType.LocationChanged, e);
         }
 
@@ -416,7 +391,7 @@ namespace OxLibrary.Controls
             if (!e.Changed)
                 return;
 
-            ManagingControl.OnParentChanged(e);
+            ManagingOxControl.OnParentChanged(e);
             InvokeHandlers(OxHandlerType.ParentChanged, e);
             e.NewParent?.RealignControls();
         }
@@ -426,7 +401,7 @@ namespace OxLibrary.Controls
             if (!e.Changed)
                 return;
 
-            ManagingControl.OnSizeChanged(e);
+            ManagingOxControl.OnSizeChanged(e);
             InvokeHandlers(OxHandlerType.SizeChanged, e);
 
             if (OxDockHelper.DockType(Dock) is OxDockType.Docked)
@@ -434,7 +409,7 @@ namespace OxLibrary.Controls
         }
 
         public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
-            managingControl.SetBounds(
+            ManagingControl.SetBounds(
                 OxWh.I(x),
                 OxWh.I(y),
                 OxWh.I(width),
@@ -442,7 +417,7 @@ namespace OxLibrary.Controls
             );
 
         public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height, BoundsSpecified specified) =>
-            managingControl.SetBounds(
+            ManagingControl.SetBounds(
                 OxWh.I(x),
                 OxWh.I(y),
                 OxWh.I(width),
@@ -451,57 +426,64 @@ namespace OxLibrary.Controls
             );
 
         public Control GetChildAtPoint(OxPoint pt, GetChildAtPointSkip skipValue) =>
-            managingControl.GetChildAtPoint(pt.Point, skipValue);
+            ManagingControl.GetChildAtPoint(pt.Point, skipValue);
 
         public Control GetChildAtPoint(OxPoint pt) =>
-            managingControl.GetChildAtPoint(pt.Point);
+            ManagingControl.GetChildAtPoint(pt.Point);
 
         public OxSize GetPreferredSize(OxSize proposedSize) =>
-            new(managingControl.GetPreferredSize(proposedSize.Size));
+            new(ManagingControl.GetPreferredSize(proposedSize.Size));
 
         public void Invalidate(OxRectangle rc) =>
-            managingControl.Invalidate(rc.Rectangle);
+            ManagingControl.Invalidate(rc.Rectangle);
 
         public void Invalidate(OxRectangle rc, bool invalidateChildren) =>
-            managingControl.Invalidate(rc.Rectangle, invalidateChildren);
+            ManagingControl.Invalidate(rc.Rectangle, invalidateChildren);
 
         public OxSize LogicalToDeviceUnits(OxSize value) =>
-            new(managingControl.LogicalToDeviceUnits(value.Size));
+            new(ManagingControl.LogicalToDeviceUnits(value.Size));
 
         public OxPoint PointToClient(OxPoint p) =>
-            new(managingControl.PointToClient(p.Point));
+            new(ManagingControl.PointToClient(p.Point));
 
         public OxPoint PointToScreen(OxPoint p) =>
-            new(managingControl.PointToScreen(p.Point));
+            new(ManagingControl.PointToScreen(p.Point));
 
         public OxRectangle RectangleToClient(OxRectangle r) =>
-            new(managingControl.RectangleToClient(r.Rectangle));
+            new(ManagingControl.RectangleToClient(r.Rectangle));
 
         public OxRectangle RectangleToScreen(OxRectangle r) =>
-            new(managingControl.RectangleToScreen(r.Rectangle));
+            new(ManagingControl.RectangleToScreen(r.Rectangle));
     }
 
-    public static class OxControlManager
+    public static class OxControlManagers
     {
-        private static readonly Dictionary<Control, IOxControlManager> Controls = new();
-
-        public static OxControlManager<TBaseControl> RegisterControl<TBaseControl>(
-            TBaseControl managingControl)
-            where TBaseControl : Control
+        private class OxControlManagerCache : Dictionary<Control, IOxControlManager>
         {
-            OxControlManager<TBaseControl> oxControlManager = new(managingControl);
-            Controls.Add(managingControl, oxControlManager);
-            return oxControlManager;
+            public IOxControlManager AddControl(Control control)
+            {
+                if (!ContainsKey(control))
+                    Add(control, new OxControlManager(control));
+
+                return this[control];
+            }
+
+            public IOxContainerManager AddContainer(Control control)
+            {
+                if (!ContainsKey(control))
+                    Add(control, new OxContainerManager(control));
+
+                return (IOxContainerManager)this[control];
+            }
         }
 
-        public static OxContainerManager<TBaseControl> RegisterContainer<TBaseControl>(
-            TBaseControl managingControl)
-            where TBaseControl : Control, new()
-        {
-            OxContainerManager<TBaseControl> oxControlManager = new(managingControl);
-            Controls.Add(managingControl, oxControlManager);
-            return oxControlManager;
-        }
+        private static readonly OxControlManagerCache Controls = new();
+
+        public static IOxControlManager RegisterControl(Control baseControl) =>
+            Controls.AddControl(baseControl);
+
+        public static IOxContainerManager RegisterContainer(Control baseContainer) =>
+            Controls.AddContainer(baseContainer);
 
         public static void UnRegisterControl(Control control) =>
             Controls.Remove(control);

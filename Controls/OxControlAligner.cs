@@ -1,4 +1,5 @@
-﻿using OxLibrary.Interfaces;
+﻿using OxLibrary.Dock;
+using OxLibrary.Interfaces;
 
 namespace OxLibrary.Controls
 {
@@ -15,8 +16,7 @@ namespace OxLibrary.Controls
 
         public void RealignControls(OxDockType dockType = OxDockType.Unknown)
         {
-            if (Container is null
-                || OuterControlZone.IsEmpty
+            if (OuterControlZone.IsEmpty
                 || Realigning)
                 return;
 
@@ -26,28 +26,25 @@ namespace OxLibrary.Controls
             {
                 ControlZone.CopyFrom(OuterControlZone);
                 OxRectangle oldControlZone = new(ControlZone);
-                bool needRealignDockedControls =
-                    dockType is OxDockType.Unknown
-                    || (dockType & OxDockType.Docked) is OxDockType.Docked;
-                bool needRealignUndockedControls = 
-                    dockType is OxDockType.Unknown
-                    || (dockType & OxDockType.Undocked) is OxDockType.Undocked;
-
-                bool isControlZoneFilled = false;
 
                 Container.DoWithSuspendedLayout(() =>
                 {
-                    if (needRealignDockedControls)
-                        isControlZoneFilled = RealignDockedControls();
+                    try
+                    {
+                        if (OxDockTypeHelper.ContainsIn(OxDockType.Docked, dockType))
+                            if (RealignDockedControls())
+                                return;
 
-                    if (!isControlZoneFilled
-                        && needRealignUndockedControls)
-                        RealignUndockedControls(
-                            oldControlZone,
-                            dockType is OxDockType.Undocked
-                        );
-
-                    Container.Invalidate();
+                        if (OxDockTypeHelper.ContainsIn(OxDockType.Undocked, dockType))
+                            RealignUndockedControls(
+                                oldControlZone,
+                                dockType is OxDockType.Undocked
+                            );
+                    }
+                    finally
+                    {
+                        Container.Invalidate();
+                    }
                 });
             }
             finally
@@ -58,9 +55,6 @@ namespace OxLibrary.Controls
 
         private OxSize GetRealControlSize(IOxControl control)
         {
-            if (Container is null)
-                return control.Size;
-
             OxDockVariable dockVariable = OxDockHelper.Variable(control.Dock);
             OxWidth realWidth =
                 dockVariable is OxDockVariable.Width
@@ -92,26 +86,23 @@ namespace OxLibrary.Controls
         }
 
         private List<IOxControl> GetControls(OxDockType dockType) =>
-            Container is null
-                ? new()
-                : Container.OxControls.Controls(dockType);
+            Container.OxControls.Controls(dockType);
 
         private bool RealignDockedControls()
         {
-            if (Container is null
-                || ControlZone.IsEmpty)
-                return false;
-
             OxRectangle currentBounds;
 
             foreach (IOxControl control in GetControls(OxDockType.Docked))
             {
+                if (ControlZone.IsEmpty)
+                    return false;
+
                 currentBounds = new(ControlZone);
 
                 if (!control.Visible)
                     continue;
 
-                if (control is IOxControlContainer childContainer
+                if (control is IOxContainer childContainer
                     && !childContainer.HandleParentPadding
                     && Container is IOxWithPadding containerWithPadding
                     && !containerWithPadding.Padding.IsEmpty)
@@ -140,10 +131,6 @@ namespace OxLibrary.Controls
                 }
 
                 SetControlBounds(control, currentBounds);
-
-                if (control.Dock is OxDock.Fill)
-                    return false;
-
                 SubstractControlFromControlZone(control, realControlSize);
             }
 
@@ -152,7 +139,7 @@ namespace OxLibrary.Controls
 
         private static void SetControlBounds(IOxControl control, OxRectangle newBounds)
         {
-            control.Manager.DoWithSuspendedLayout(
+            control.DoWithSuspendedLayout(
                 () =>
                 {
                     if (!control.Location.Equals(newBounds.Location))
@@ -163,7 +150,7 @@ namespace OxLibrary.Controls
                 }
             );
 
-            if (control is IOxControlContainer container)
+            if (control is IOxContainer container)
                 container.RealignControls();
 
             control.Invalidate();
@@ -173,6 +160,9 @@ namespace OxLibrary.Controls
         {
             switch (control.Dock)
             {
+                case OxDock.Fill:
+                    ControlZone.Clear();
+                    return;
                 case OxDock.Left:
                     ControlZone.X = OxWh.A(ControlZone.X, realControlSize.Width);
                     break;
@@ -194,9 +184,8 @@ namespace OxLibrary.Controls
 
         private void RealignUndockedControls(OxRectangle oldControlZone, bool force)
         {
-            if (Container is null
-                || (!force
-                    && oldControlZone.Equals(ControlZone)))
+            if (!force
+                && oldControlZone.Equals(ControlZone))
                 return;
 
             foreach (IOxControl oxControl in GetControls(OxDockType.Undocked))
