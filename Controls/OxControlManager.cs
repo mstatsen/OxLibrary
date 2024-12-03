@@ -413,7 +413,7 @@ namespace OxLibrary.Controls
 
             ManagingOxControl.OnParentChanged(e);
             InvokeHandlers(OxHandlerType.ParentChanged, e);
-            e.NewParent?.RealignControls();
+            e.NewValue?.RealignControls();
         }
 
         protected virtual void OnSizeChanged(OxSizeChangedEventArgs e)

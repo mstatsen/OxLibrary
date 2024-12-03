@@ -1,28 +1,16 @@
 ﻿namespace OxLibrary.Handlers
 {
-    public class OxSizeChangedEventArgs : OxEventArgs
+    public class OxSizeChangedEventArgs : OxNotNullEventArgs<OxSize>
     {
-        public OxSizeChangedEventArgs(OxWidth oldWidth, OxWidth oldHeight, OxWidth newWidth, OxWidth newHeight)
-        {
-            OldSize = new(oldWidth, oldHeight);
-            NewSize = new(newWidth, newHeight);
-        }
-
         public OxSizeChangedEventArgs(OxSize oldSize, OxSize newSize) :
-            this(oldSize.Width, oldSize.Height, newSize.Width, newSize.Height)
+            base(new(oldSize), new(newSize))
         { }
 
-        public readonly OxSize OldSize;
-        public readonly OxSize NewSize;
-
-        public override bool Changed =>
-            !OldSize.Equals(NewSize);
-
         public bool WidthChanged =>
-            !OldSize.Width.Equals(NewSize.Width);
+            !OldValue!.Width.Equals(NewValue!.Width);
 
         public bool HeightChanged =>
-            !OldSize.Height.Equals(NewSize.Height);
+            !OldValue!.Height.Equals(NewValue!.Height);
 
         public static readonly new OxSizeChangedEventArgs Empty = new(OxSize.Empty, OxSize.Empty);
     }

@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Handlers;
+using OxLibrary.Interfaces;
 
 namespace OxLibrary.Panels
 {
@@ -24,6 +25,7 @@ namespace OxLibrary.Panels
         {
             if (IsEmpty)
                 return;
+
 
             foreach (var border in this)
             {

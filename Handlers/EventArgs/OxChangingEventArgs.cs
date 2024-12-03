@@ -2,6 +2,6 @@
 {
     public class OxChangingEventArgs : OxEventArgs
     {
-        public bool Cancel { get; set; }
+        public bool Cancel { get; set; } = false;
     }
 }

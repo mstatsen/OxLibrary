@@ -1,4 +1,6 @@
-﻿namespace OxLibrary
+﻿using OxLibrary.Interfaces;
+
+namespace OxLibrary
 {
     public enum OxDock
     {

@@ -2,17 +2,9 @@
 
 namespace OxLibrary.Handlers
 {
-    public class OxBordersChangedEventArgs : OxEventArgs
+    public class OxBordersChangedEventArgs : OxNotNullEventArgs<OxBorders>
     {
-        public OxBorders OldValue;
-        public OxBorders NewValue;
-
-        public OxBordersChangedEventArgs(OxBorders oldValue, OxBorders newValue)
-        {
-            OldValue = oldValue;
-            NewValue = newValue;
-        }
-
-        public override bool Changed => !NewValue.Equals(OldValue);
+        public OxBordersChangedEventArgs(OxBorders oldValue, OxBorders newValue) :
+            base(new(oldValue), new(newValue)) { }
     }
 }
