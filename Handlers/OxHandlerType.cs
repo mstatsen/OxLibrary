@@ -4,6 +4,7 @@
     {
         DockChanged,
         LocationChanged,
+        ParentChanged,
         SizeChanged,
     }
 }

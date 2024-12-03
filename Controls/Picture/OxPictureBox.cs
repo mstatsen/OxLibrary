@@ -2,14 +2,14 @@
 
 namespace OxLibrary.Controls
 {
-    public class OxCheckBox : CheckBox, IOxControl<CheckBox>
+    public class OxPictureBox : PictureBox, IOxControl<PictureBox>
     {
-        private readonly OxControlManager<CheckBox> manager;
+        private readonly OxControlManager<PictureBox> manager;
         public IOxControlManager Manager => manager;
 
-        public OxCheckBox()
+        public OxPictureBox()
         {
-            manager = OxControlManager.RegisterControl<CheckBox>(this);
+            manager = OxControlManager.RegisterControl<PictureBox>(this);
             DoubleBuffered = true;
         }
 
@@ -152,7 +152,6 @@ namespace OxLibrary.Controls
         }
 
         public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
-
         public new event OxLocationChanged LocationChanged
         {
             add => manager.LocationChanged += value;
@@ -160,7 +159,6 @@ namespace OxLibrary.Controls
         }
 
         public virtual void OnParentChanged(OxParentChangedEventArgs e) { }
-
         public new event OxParentChanged ParentChanged
         {
             add => manager.ParentChanged += value;
@@ -168,33 +166,10 @@ namespace OxLibrary.Controls
         }
 
         public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }
-
         public new event OxSizeChanged SizeChanged
         {
             add => manager.SizeChanged += value;
             remove => manager.SizeChanged -= value;
-        }
-
-        private bool readOnly = false;
-
-        public bool ReadOnly 
-        { 
-            get => readOnly; 
-            set => readOnly = value; 
-        }
-
-        protected override void OnCheckedChanged(EventArgs e)
-        {
-            if (!readOnly)
-                base.OnCheckedChanged(e);
-        }
-
-        protected override void OnClick(EventArgs e)
-        {
-            if (readOnly)
-                Checked = !Checked;
-
-            base.OnClick(e);
         }
 
         #region Hidden base methods

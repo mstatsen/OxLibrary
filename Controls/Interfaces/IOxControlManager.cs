@@ -39,6 +39,7 @@ namespace OxLibrary.Controls
         event OxDockChanged DockChanged;
         event OxSizeChanged SizeChanged;
         event OxLocationChanged LocationChanged;
+        event OxParentChanged ParentChanged;
     }
 
     public interface IOxControlManager<TBaseControl> : IOxControlManager

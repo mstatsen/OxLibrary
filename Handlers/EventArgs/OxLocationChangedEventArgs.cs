@@ -15,7 +15,7 @@
         public readonly OxPoint OldLocation;
         public readonly OxPoint NewLocation;
 
-        public bool Changed =>
+        public override bool Changed =>
             !OldLocation.Equals(NewLocation);
 
         public bool XChanged =>

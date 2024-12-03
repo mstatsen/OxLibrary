@@ -153,7 +153,6 @@ namespace OxLibrary.Controls
         event MouseEventHandler MouseWheel;
         event EventHandler Move;
         event PaintEventHandler Paint;
-        event EventHandler ParentChanged;
         event PreviewKeyDownEventHandler PreviewKeyDown;
         event QueryContinueDragEventHandler QueryContinueDrag;
         event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp;
@@ -170,8 +169,10 @@ namespace OxLibrary.Controls
         event EventHandler VisibleChanged;
 
         void OnDockChanged(OxDockChangedEventArgs e);
-        void OnSizeChanged(OxSizeChangedEventArgs e);
         void OnLocationChanged(OxLocationChangedEventArgs e);
+        void OnParentChanged(OxParentChangedEventArgs e);
+        void OnSizeChanged(OxSizeChangedEventArgs e);
+        
     }
 
     /// <remarks>

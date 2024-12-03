@@ -15,7 +15,7 @@
         public readonly OxSize OldSize;
         public readonly OxSize NewSize;
 
-        public bool Changed =>
+        public override bool Changed =>
             !OldSize.Equals(NewSize);
 
         public bool WidthChanged =>

@@ -22,7 +22,6 @@ namespace OxLibrary.Test
             //BaseColor = Color.FromArgb(135, 165, 195);
             MoveToScreenCenter();
 
-            /*
             toolBarButton = new OxButton("Test action", OxIcons.Cross);
             toolbar = new()
             { 
@@ -30,10 +29,10 @@ namespace OxLibrary.Test
             };
             toolbar.AddButton(toolBarButton);
             toolBarButton.Click += ToolBarButton_Click;
+            toolBarButton.Height = OxWh.W36;
             toolbar.Parent = this;
             toolbar.BaseColor = BaseColor;
             toolbar.Margin.Left = OxWh.W4;
-            */
 
             frame = new OxFrameWithHeader
             {
@@ -56,9 +55,10 @@ namespace OxLibrary.Test
                 Text = "Left docked card",
                 Dock = OxDock.Left,
                 Width = OxWh.W200,
-                Height = OxWh.W300
+                Height = OxWh.W300,
+                Icon = OxIcons.Tag
             };
-            card.Margin.Size = OxWh.W4;
+            card.Margin.Size = OxWh.W40;
             card.Margin.Right = OxWh.W0;
             card.BaseColor = Color.Red;
 
@@ -67,7 +67,7 @@ namespace OxLibrary.Test
                 Parent = frame,
                 Left = OxWh.W8,
                 Top = OxWh.W8,
-                Width = OxWh.W200,
+                //AutoSize = true,
                 Text = "Set parent margin to 4px",
             };
             bluredCheckBox.CheckedChanged += BluredCheckBox_CheckedChanged;

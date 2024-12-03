@@ -6,6 +6,7 @@
     public delegate void OxBordersChanged(object sender, OxBordersChangedEventArgs e);
     public delegate void OxDockChanged(object sender, OxDockChangedEventArgs args);
     public delegate void OxLocationChanged(object sender, OxLocationChangedEventArgs args);
+    public delegate void OxParentChanged(object sender, OxParentChangedEventArgs args);
     public delegate void OxSizeChanged(object sender, OxSizeChangedEventArgs args);
 
     public class OxHandlers : Dictionary<OxHandlerType, List<Delegate>>

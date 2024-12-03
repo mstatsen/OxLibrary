@@ -13,6 +13,6 @@ namespace OxLibrary.Handlers
             NewValue = newValue;
         }
 
-        public bool Changed => !NewValue.Equals(OldValue);
+        public override bool Changed => !NewValue.Equals(OldValue);
     }
 }

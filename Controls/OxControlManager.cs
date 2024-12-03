@@ -228,22 +228,34 @@ namespace OxLibrary.Controls
         private void InvokeHandlers(OxHandlerType type, OxEventArgs args) =>
             Handlers.Invoke(type, ManagingControl, args);
 
+        private void AddHandler(OxHandlerType type, Delegate handler) =>
+            Handlers.Add(type, handler);
+
+        private void RemoveHandler(OxHandlerType type, Delegate handler) =>
+            Handlers.Remove(type, handler);
+
         public event OxDockChanged DockChanged
         {
-            add => Handlers.Add(OxHandlerType.DockChanged, value);
-            remove => Handlers.Remove(OxHandlerType.DockChanged, value);
-        }
-
-        public event OxSizeChanged SizeChanged 
-        { 
-            add => Handlers.Add(OxHandlerType.SizeChanged, value);
-            remove => Handlers.Remove(OxHandlerType.SizeChanged, value); 
+            add => AddHandler(OxHandlerType.DockChanged, value);
+            remove => RemoveHandler(OxHandlerType.DockChanged, value);
         }
 
         public event OxLocationChanged LocationChanged
         {
-            add => Handlers.Add(OxHandlerType.LocationChanged, value);
-            remove => Handlers.Remove(OxHandlerType.LocationChanged, value);
+            add => AddHandler(OxHandlerType.LocationChanged, value);
+            remove => RemoveHandler(OxHandlerType.LocationChanged, value);
+        }
+
+        public event OxParentChanged ParentChanged
+        {
+            add => AddHandler(OxHandlerType.ParentChanged, value);
+            remove => RemoveHandler(OxHandlerType.ParentChanged, value);
+        }
+
+        public event OxSizeChanged SizeChanged 
+        { 
+            add => AddHandler(OxHandlerType.SizeChanged, value);
+            remove => RemoveHandler(OxHandlerType.SizeChanged, value); 
         }
 
         public bool DockCnahging { get; private set; } = false;
@@ -527,12 +539,14 @@ namespace OxLibrary.Controls
                     || value is not null && value.Equals(Parent))
                     return;
 
-                Parent?.OxControls.Remove(ManagingControl);
-                OxPoint controlLocation = new(Left, Top);
+                IOxControlContainer? oldParent = Parent;
+                //Parent?.OxControls.Remove(ManagingControl);
+                //OxPoint controlLocation = new(Left, Top);
                 managingControl.Parent = (Control?)value;
-                value?.OxControls.Add(ManagingControl);
-                Left = controlLocation.X;
-                Top = controlLocation.Y;
+                OnParentChanged(new(oldParent, Parent));
+                //Parent?.OxControls.Add(ManagingControl);
+                //Left = controlLocation.X;
+                //Top = controlLocation.Y;
             }
         }
 
@@ -647,6 +661,25 @@ namespace OxLibrary.Controls
             }
         }
 
+        private void OnLocationChanged(OxLocationChangedEventArgs e)
+        {
+            if (!e.Changed)
+                return;
+
+            ManagingControl.OnLocationChanged(e);
+            InvokeHandlers(OxHandlerType.LocationChanged, e);
+        }
+
+        private void OnParentChanged(OxParentChangedEventArgs e)
+        {
+            if (!e.Changed)
+                return;
+
+            ManagingControl.OnParentChanged(e);
+            InvokeHandlers(OxHandlerType.ParentChanged, e);
+            e.NewParent?.RealignControls();
+        }
+
         private void OnSizeChanged(OxSizeChangedEventArgs e)
         {
             if (!e.Changed)
@@ -657,15 +690,6 @@ namespace OxLibrary.Controls
 
             if (OxDockHelper.DockType(Dock) is OxDockType.Docked)
                 ParentForRealign?.RealignControls();
-        }
-
-        private void OnLocationChanged(OxLocationChangedEventArgs e)
-        {
-            if (!e.Changed)
-                return;
-
-            ManagingControl.OnLocationChanged(e);
-            InvokeHandlers(OxHandlerType.LocationChanged, e);
         }
 
         public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>

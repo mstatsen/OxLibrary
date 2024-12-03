@@ -30,6 +30,13 @@ namespace OxLibrary.Forms
             remove => manager.LocationChanged -= value;
         }
 
+        public virtual void OnParentChanged(OxParentChangedEventArgs e) { }
+        public new event OxParentChanged ParentChanged
+        {
+            add => manager.ParentChanged += value;
+            remove => manager.ParentChanged -= value;
+        }
+
         public virtual void OnSizeChanged(OxSizeChangedEventArgs e)
         {
             if (!Initialized ||
@@ -373,13 +380,10 @@ namespace OxLibrary.Forms
             MainPanel.PrepareColors();
 
         #region Hidden base methods
-#pragma warning disable IDE0060 // Remove unused parameter
-#pragma warning disable IDE0051 // Remove unused private members
-        private static new void OnDockChanged(EventArgs e) { }
-        private static new void OnLocationChanged(EventArgs e) { }
-        private static new void OnSizeChanged(EventArgs e) { }
-#pragma warning restore IDE0051 // Remove unused private members
-#pragma warning restore IDE0060 // Remove unused parameter
+        protected sealed override void OnDockChanged(EventArgs e) { }
+        protected sealed override void OnLocationChanged(EventArgs e) { }
+        protected sealed override void OnParentChanged(EventArgs e) { }
+        protected sealed override void OnSizeChanged(EventArgs e) { }
         #endregion
     }
 }

@@ -1,19 +1,24 @@
-﻿namespace OxLibrary.Handlers
+﻿using OxLibrary.Controls;
+
+namespace OxLibrary.Handlers
 {
-    public class OxDockChangedEventArgs : OxEventArgs
+    public class OxParentChangedEventArgs : OxEventArgs
     {
-        public OxDockChangedEventArgs(OxDock oldDock, OxDock newDock)
+        public OxParentChangedEventArgs(IOxControlContainer? oldParent, IOxControlContainer? newParent)
         {
-            OldDock = oldDock;
-            NewDock = newDock;
+            OldParent = oldParent;
+            NewParent = newParent;
         }
 
-        public readonly OxDock OldDock;
-        public readonly OxDock NewDock;
+        public readonly IOxControlContainer? OldParent;
+        public readonly IOxControlContainer? NewParent;
 
-        public bool Changed =>
-            !OldDock.Equals(NewDock);
+        public override bool Changed =>
+            (OldParent is null
+                && NewParent is not null)
+            || (OldParent is not null
+                && !OldParent.Equals(NewParent));
 
-        public static readonly new OxDockChangedEventArgs Empty = new(OxDock.None, OxDock.None);
+        public static readonly new OxParentChangedEventArgs Empty = new(null, null);
     }
 }
