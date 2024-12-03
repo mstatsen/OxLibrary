@@ -1,5 +1,6 @@
 ﻿using OxLibrary.Handlers;
 using OxLibrary.Interfaces;
+using System.ComponentModel;
 
 namespace OxLibrary.Controls
 {
@@ -16,7 +17,31 @@ namespace OxLibrary.Controls
             ControlZone = OxRectangle.Max;
         }
 
-        protected virtual void SetHandlers() { }
+        private void BordersSizeChangedHandler(object sender, OxBordersChangedEventArgs e) =>
+            RealignParent();
+
+        private void MarginSizeChangedHandler(object sender, OxBordersChangedEventArgs e)
+        {
+            if (!e.Changed)
+                return;
+
+            if (OxDockHelper.IsVariableWidth(Dock))
+                Width = OxWh.S(OriginalWidth, e.OldValue.Horizontal);
+
+            if (OxDockHelper.IsVariableHeight(Dock))
+                Height = OxWh.S(OriginalHeight, e.OldValue.Vertical);
+
+            RealignParent();
+        }
+
+        protected virtual void SetHandlers() 
+        {
+            if (ManagingOxControl is IOxWithBorders controlWithBorders)
+                controlWithBorders.Borders.SizeChanged += BordersSizeChangedHandler;
+
+            if (ManagingOxControl is IOxWithMargin controlWithMargin)
+                controlWithMargin.Margin.SizeChanged += MarginSizeChangedHandler;
+        }
 
         protected virtual void RealignParent() => 
             Parent?.RealignControls();
@@ -256,13 +281,8 @@ namespace OxLibrary.Controls
                     return;
 
                 IOxContainer? oldParent = Parent;
-                //Parent?.OxControls.Remove(ManagingControl);
-                //OxPoint controlLocation = new(Left, Top);
                 ManagingControl.Parent = (Control?)value;
                 OnParentChanged(new(oldParent, Parent));
-                //Parent?.OxControls.Add(ManagingControl);
-                //Left = controlLocation.X;
-                //Top = controlLocation.Y;
             }
         }
 

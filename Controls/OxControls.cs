@@ -21,9 +21,7 @@ namespace OxLibrary.Controls
                 );
 
             if (OxDockTypeHelper.ContainsIn(OxDockType.Docked, dockType))
-                foreach (IOxControl control in this)
-                    if (control.Dock is OxDock.Fill)
-                        result.Add(control);
+                result.AddRange(FindAll(c => c.Dock is OxDock.Fill));
 
             return result;
         }

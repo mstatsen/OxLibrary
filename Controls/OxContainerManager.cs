@@ -35,14 +35,11 @@ namespace OxLibrary.Controls
             if (Container is IOxWithPadding controlWithPadding)
                 controlWithPadding.Padding.SizeChanged += PaddingSizeChangedHandler;
 
-            if (Container is IOxWithBorders controlWithBorders)
-                controlWithBorders.Borders.SizeChanged += BordersSizeChangedHandler;
-
-            if (Container is IOxWithMargin controlWithMargin)
-                controlWithMargin.Margin.SizeChanged += MarginSizeChangedHandler;
-
             base.SetHandlers();
         }
+
+        private void PaddingSizeChangedHandler(object sender, OxBordersChangedEventArgs e) =>
+            RealignControls();
 
         private void ControlRemovedHandler(object? sender, ControlEventArgs e)
         {
@@ -70,26 +67,6 @@ namespace OxLibrary.Controls
                 RealignControls();
             else
                 base.RealignParent();
-        }
-
-        private void BordersSizeChangedHandler(object sender, OxBordersChangedEventArgs e) =>
-            RealignParent();
-
-        private void PaddingSizeChangedHandler(object sender, OxBordersChangedEventArgs e) =>
-            RealignControls();
-
-        private void MarginSizeChangedHandler(object sender, OxBordersChangedEventArgs e)
-        {
-            if (!e.Changed)
-                return;
-
-            if (OxDockHelper.IsVariableWidth(Dock))
-                Width = OxWh.S(OriginalWidth, e.OldValue.Horizontal);
-
-            if (OxDockHelper.IsVariableHeight(Dock))
-                Height = OxWh.S(OriginalHeight, e.OldValue.Vertical);
-
-            RealignParent();
         }
 
         public OxControls OxControls { get; private set; }
