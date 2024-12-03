@@ -33,182 +33,10 @@ namespace OxLibrary.Panels
             Visible = true;
         }
 
-        public new OxWidth Width
-        {
-            get => Manager.Width;
-            set => Manager.Width = value;
-        }
-
-        public new OxWidth Height
-        {
-            get => Manager.Height;
-            set => Manager.Height = value;
-        }
-
-        public new OxWidth Top
-        {
-            get => Manager.Top;
-            set => Manager.Top = value;
-        }
-
-        public new OxWidth Left
-        {
-            get => Manager.Left;
-            set => Manager.Left = value;
-        }
-
-        public new OxWidth Bottom =>
-            Manager.Bottom;
-
-        public new OxWidth Right =>
-            Manager.Right;
-
-        public new OxSize Size
-        {
-            get => Manager.Size;
-            set => Manager.Size = value;
-        }
-
-        public new OxSize ClientSize
-        {
-            get => Manager.ClientSize;
-            set => Manager.ClientSize = value;
-        }
-
-        public new OxPoint Location
-        {
-            get => Manager.Location;
-            set => Manager.Location = value;
-        }
-
-        public new OxSize MinimumSize
-        {
-            get => Manager.MinimumSize;
-            set => Manager.MinimumSize = value;
-        }
-
-        public new OxSize MaximumSize
-        {
-            get => Manager.MaximumSize;
-            set => Manager.MaximumSize = value;
-        }
-
-        public new virtual OxDock Dock
-        {
-            get => Manager.Dock;
-            set => Manager.Dock = value;
-        }
-
-        public new virtual IOxContainer? Parent
-        {
-            get => Manager.Parent;
-            set
-            {
-                Manager.Parent = value;
-                PrepareColors();
-            }
-        }
-
-        public new OxRectangle ClientRectangle =>
-            Manager.ClientRectangle;
-
-        public new virtual OxRectangle DisplayRectangle =>
-            Manager.DisplayRectangle;
-
-        public new OxRectangle Bounds
-        {
-            get => Manager.Bounds;
-            set => Manager.Bounds = value;
-        }
-
-        public new OxSize PreferredSize =>
-            Manager.PreferredSize;
-
-        public new OxPoint AutoScrollOffset
-        {
-            get => Manager.AutoScrollOffset;
-            set => Manager.AutoScrollOffset = value;
-        }
-
-        public void DoWithSuspendedLayout(Action method) =>
-            Manager.DoWithSuspendedLayout(method);
-
-        public Control GetChildAtPoint(OxPoint pt, GetChildAtPointSkip skipValue) =>
-            Manager.GetChildAtPoint(pt, skipValue);
-
-        public Control GetChildAtPoint(OxPoint pt) =>
-            Manager.GetChildAtPoint(pt);
-
-        public OxSize GetPreferredSize(OxSize proposedSize) =>
-            Manager.GetPreferredSize(proposedSize);
-
-        public void Invalidate(OxRectangle rc) =>
-            Manager.Invalidate(rc);
-
-        public void Invalidate(OxRectangle rc, bool invalidateChildren) =>
-            Manager.Invalidate(rc, invalidateChildren);
-
-        public OxSize LogicalToDeviceUnits(OxSize value) =>
-            Manager.LogicalToDeviceUnits(value);
-
-        public OxPoint PointToClient(OxPoint p) =>
-            Manager.PointToClient(p);
-
-        public OxPoint PointToScreen(OxPoint p) =>
-            Manager.PointToScreen(p);
-
-        public OxRectangle RectangleToClient(OxRectangle r) =>
-            Manager.RectangleToClient(r);
-
-        public OxRectangle RectangleToScreen(OxRectangle r) =>
-            Manager.RectangleToScreen(r);
-
-        public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height, BoundsSpecified specified) =>
-            Manager.SetBounds(x, y, width, height, specified);
-
-        public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
-            Manager.SetBounds(x, y, width, height);
-
-        public new event OxDockChangedEvent DockChanged
-        {
-            add => Manager.DockChanged += value;
-            remove => Manager.DockChanged -= value;
-        }
-
         public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
-
-        public new event OxLocationChangedEvent LocationChanged
-        {
-            add => Manager.LocationChanged += value;
-            remove => Manager.LocationChanged -= value;
-        }
-
         public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
-
-        public new event OxParentChangedEvent ParentChanged
-        {
-            add => Manager.ParentChanged += value;
-            remove => Manager.ParentChanged -= value;
-        }
-
         public virtual void OnParentChanged(OxParentChangedEventArgs e) { }
-
-        public new event OxSizeChangedEvent SizeChanged
-        {
-            add => Manager.SizeChanged += value;
-            remove => Manager.SizeChanged -= value;
-        }
-
-        public OxRectangle OuterControlZone =>
-            Manager.OuterControlZone;
-
         public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }
-
-        public void RealignControls(OxDockType dockType = OxDockType.Unknown) =>
-            Manager.RealignControls(dockType);
-
-        public bool Realigning => 
-            Manager.Realigning;
 
         public virtual bool HandleParentPadding => true;
 
@@ -359,9 +187,6 @@ namespace OxLibrary.Panels
 
         protected virtual void PrepareInnerComponents() { }
 
-        public virtual OxRectangle ControlZone =>
-            Manager.ControlZone;
-
         private OxRectangle BorderRectangle => 
             ClientRectangle - Margin;
 
@@ -415,9 +240,6 @@ namespace OxLibrary.Panels
         protected virtual void SetVisible(bool value) =>
             base.Visible = value;
 
-        public OxControls OxControls =>
-            Manager.OxControls;
-
         public bool IsHovered
         {
             get 
@@ -447,6 +269,7 @@ namespace OxLibrary.Panels
         protected virtual void SetToolTipText(string value) => 
             ToolTip.SetToolTip(this, value);
 
+        #region IWithIcon implementation
         public Bitmap? Icon
         {
             get => GetIcon();
@@ -462,6 +285,7 @@ namespace OxLibrary.Panels
                 SetIcon(value);
             }
         }
+        #endregion
 
         protected virtual void SetIcon(Bitmap? value) { }
         protected virtual Bitmap? GetIcon() => null;
@@ -502,7 +326,185 @@ namespace OxLibrary.Panels
 
         protected virtual void PrepareDialog(OxPanelViewer dialog) { }
 
-#region Hidden base methods
+        public new virtual IOxContainer? Parent
+        {
+            get => Manager.Parent;
+            set
+            {
+                Manager.Parent = value;
+                PrepareColors();
+            }
+        }
+
+        #region Implemention of IOxContainer using IOxContainerManager
+        public new OxWidth Width
+        {
+            get => Manager.Width;
+            set => Manager.Width = value;
+        }
+
+        public new OxWidth Height
+        {
+            get => Manager.Height;
+            set => Manager.Height = value;
+        }
+
+        public new OxWidth Top
+        {
+            get => Manager.Top;
+            set => Manager.Top = value;
+        }
+
+        public new OxWidth Left
+        {
+            get => Manager.Left;
+            set => Manager.Left = value;
+        }
+
+        public new OxWidth Bottom =>
+            Manager.Bottom;
+
+        public new OxWidth Right =>
+            Manager.Right;
+
+        public new OxSize Size
+        {
+            get => Manager.Size;
+            set => Manager.Size = value;
+        }
+
+        public new OxSize ClientSize
+        {
+            get => Manager.ClientSize;
+            set => Manager.ClientSize = value;
+        }
+
+        public new OxPoint Location
+        {
+            get => Manager.Location;
+            set => Manager.Location = value;
+        }
+
+        public new OxSize MinimumSize
+        {
+            get => Manager.MinimumSize;
+            set => Manager.MinimumSize = value;
+        }
+
+        public new OxSize MaximumSize
+        {
+            get => Manager.MaximumSize;
+            set => Manager.MaximumSize = value;
+        }
+
+        public new virtual OxDock Dock
+        {
+            get => Manager.Dock;
+            set => Manager.Dock = value;
+        }
+
+        public new OxRectangle ClientRectangle =>
+            Manager.ClientRectangle;
+
+        public new virtual OxRectangle DisplayRectangle =>
+            Manager.DisplayRectangle;
+
+        public new OxRectangle Bounds
+        {
+            get => Manager.Bounds;
+            set => Manager.Bounds = value;
+        }
+
+        public new OxSize PreferredSize =>
+            Manager.PreferredSize;
+
+        public new OxPoint AutoScrollOffset
+        {
+            get => Manager.AutoScrollOffset;
+            set => Manager.AutoScrollOffset = value;
+        }
+
+        public void DoWithSuspendedLayout(Action method) =>
+            Manager.DoWithSuspendedLayout(method);
+
+        public Control GetChildAtPoint(OxPoint pt, GetChildAtPointSkip skipValue) =>
+            Manager.GetChildAtPoint(pt, skipValue);
+
+        public Control GetChildAtPoint(OxPoint pt) =>
+            Manager.GetChildAtPoint(pt);
+
+        public OxSize GetPreferredSize(OxSize proposedSize) =>
+            Manager.GetPreferredSize(proposedSize);
+
+        public void Invalidate(OxRectangle rc) =>
+            Manager.Invalidate(rc);
+
+        public void Invalidate(OxRectangle rc, bool invalidateChildren) =>
+            Manager.Invalidate(rc, invalidateChildren);
+
+        public OxSize LogicalToDeviceUnits(OxSize value) =>
+            Manager.LogicalToDeviceUnits(value);
+
+        public OxPoint PointToClient(OxPoint p) =>
+            Manager.PointToClient(p);
+
+        public OxPoint PointToScreen(OxPoint p) =>
+            Manager.PointToScreen(p);
+
+        public OxRectangle RectangleToClient(OxRectangle r) =>
+            Manager.RectangleToClient(r);
+
+        public OxRectangle RectangleToScreen(OxRectangle r) =>
+            Manager.RectangleToScreen(r);
+
+        public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height, BoundsSpecified specified) =>
+            Manager.SetBounds(x, y, width, height, specified);
+
+        public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
+            Manager.SetBounds(x, y, width, height);
+
+        public new event OxDockChangedEvent DockChanged
+        {
+            add => Manager.DockChanged += value;
+            remove => Manager.DockChanged -= value;
+        }
+
+        public new event OxLocationChangedEvent LocationChanged
+        {
+            add => Manager.LocationChanged += value;
+            remove => Manager.LocationChanged -= value;
+        }
+
+
+        public new event OxParentChangedEvent ParentChanged
+        {
+            add => Manager.ParentChanged += value;
+            remove => Manager.ParentChanged -= value;
+        }
+
+        public new event OxSizeChangedEvent SizeChanged
+        {
+            add => Manager.SizeChanged += value;
+            remove => Manager.SizeChanged -= value;
+        }
+
+        public OxRectangle OuterControlZone =>
+            Manager.OuterControlZone;
+
+        public void RealignControls(OxDockType dockType = OxDockType.Unknown) =>
+            Manager.RealignControls(dockType);
+
+        public bool Realigning =>
+            Manager.Realigning;
+
+        public virtual OxRectangle ControlZone =>
+            Manager.ControlZone;
+
+        public OxControls OxControls =>
+            Manager.OxControls;
+        #endregion
+
+        #region Hidden base methods
         protected sealed override void OnDockChanged(EventArgs e) { }
         protected sealed override void OnLocationChanged(EventArgs e) { }
         protected sealed override void OnParentChanged(EventArgs e) { }
