@@ -72,6 +72,12 @@ namespace OxLibrary.Forms
             PlaceButtons();
         }
 
+        public override void PrepareColors()
+        {
+            base.PrepareColors();
+            Form?.PrepareColors();
+        }
+
         private void PlaceButtons()
         {
             Header.AddToolButton(closeButton);

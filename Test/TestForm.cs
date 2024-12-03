@@ -1,8 +1,6 @@
 ﻿using OxLibrary.Controls;
 using OxLibrary.Forms;
 using OxLibrary.Panels;
-using System.Net.Mail;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace OxLibrary.Test
 {
@@ -21,7 +19,7 @@ namespace OxLibrary.Test
         public TestForm()
         {
             InitializeComponent();
-            BaseColor = Color.FromArgb(135, 165, 195);
+            //BaseColor = Color.FromArgb(135, 165, 195);
             MoveToScreenCenter();
 
             /*
@@ -43,8 +41,8 @@ namespace OxLibrary.Test
                 Parent = MainPanel,
                 ToolTipText = "This is frame with Dock = Fill",
                 Name = "FillFrame",
-                Text = "Frame with Dock = Fill",
-                Dock = OxDock.Top,
+                Text = "Fill-docked frame with header",
+                Dock = OxDock.Fill,
                 Width = OxWh.W400,
                 Height = OxWh.W200
             };
@@ -55,11 +53,14 @@ namespace OxLibrary.Test
                 Parent = MainPanel,
                 ToolTipText = "This is frame with Dock = Fill",
                 Name = "FillFrame",
-                Text = "Frame with Dock = Fill",
+                Text = "Left docked card",
                 Dock = OxDock.Left,
-                Width = OxWh.W400,
+                Width = OxWh.W200,
                 Height = OxWh.W300
             };
+            card.Margin.Size = OxWh.W4;
+            card.Margin.Right = OxWh.W0;
+            card.BaseColor = Color.Red;
 
             bluredCheckBox = new()
             {
@@ -83,7 +84,6 @@ namespace OxLibrary.Test
 
             
             SetFrameMarginSize();
-            
         }
 
         private void ToolBarButton_Click(object? sender, EventArgs e)
@@ -110,6 +110,12 @@ namespace OxLibrary.Test
         {
             base.OnShown(e);
             BaseColor = Color.FromArgb(135, 165, 195);
+        }
+
+        public override void PrepareColors()
+        {
+            if (card is not null)
+                card.BaseColor = Color.FromArgb(195, 165, 135);
         }
     }
 }

@@ -50,6 +50,7 @@ namespace OxLibrary.Forms
                 DoubleBuffered = true;
                 manager = OxControlManager.RegisterControl<Form>(this);
                 MainPanel = CreateMainPanel();
+                MainPanel.Colors.BaseColorChanged += BaseColorChangedHandler;
                 SetUpForm();
                 PlaceMainPanel();
             }
@@ -58,6 +59,9 @@ namespace OxLibrary.Forms
                 Initialized = true;
             }
         }
+
+        private void BaseColorChangedHandler(object? sender, EventArgs e) =>
+            PrepareColors();
 
         public void MoveToScreenCenter()
         {
@@ -359,13 +363,13 @@ namespace OxLibrary.Forms
             RealignControls();
         }
 
+        public virtual void PrepareColors() =>
+            MainPanel.PrepareColors();
+
 #pragma warning disable IDE0060 // Remove unused parameter
 #pragma warning disable IDE0051 // Remove unused private members
         private static new void OnLocationChanged(EventArgs e) { }
         private static new void OnSizeChanged(EventArgs e) { }
-
-        public void PrepareColors() =>
-            MainPanel.PrepareColors();
 #pragma warning restore IDE0051 // Remove unused private members
 #pragma warning restore IDE0060 // Remove unused parameter
     }
