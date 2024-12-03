@@ -286,5 +286,11 @@ namespace OxLibrary.Panels
 
             return result;
         }
+
+        public override string ToString() =>
+            $"Left = {OxWh.I(Left)}\n"
+            + $"Top = {OxWh.I(Top)}\n"
+            + $"Right = {OxWh.I(Right)}\n"
+            + $"Bottom = {OxWh.I(Bottom)}\n";
     }
 }

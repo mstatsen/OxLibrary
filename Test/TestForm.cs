@@ -1,6 +1,7 @@
 ﻿using OxLibrary.Controls;
 using OxLibrary.Forms;
 using OxLibrary.Panels;
+using System.Reflection.Metadata.Ecma335;
 
 namespace OxLibrary.Test
 {
@@ -10,8 +11,9 @@ namespace OxLibrary.Test
             OxIcons.TestCode;
 
         private readonly OxPanel frame;
-        private readonly OxPanel card;
-        private readonly OxClickFrame button;
+        private readonly OxCard card;
+        private readonly OxClickFrame setMarginButton;
+        private readonly OxClickFrame hideCardButton;
         private readonly OxButton toolBarButton;
         private readonly OxCheckBox bluredCheckBox;
         private readonly OxToolBar<OxButton> toolbar;
@@ -21,7 +23,7 @@ namespace OxLibrary.Test
             InitializeComponent();
             //BaseColor = Color.FromArgb(135, 165, 195);
             MoveToScreenCenter();
-
+            /*
             toolBarButton = new OxButton("Test action", OxIcons.Cross);
             toolbar = new()
             { 
@@ -34,24 +36,11 @@ namespace OxLibrary.Test
             toolbar.BaseColor = BaseColor;
             toolbar.Margin.Left = OxWh.W4;
 
-            frame = new OxFrameWithHeader
-            {
-                BlurredBorder = false,
-                Parent = MainPanel,
-                ToolTipText = "This is frame with Dock = Fill",
-                Name = "FillFrame",
-                Text = "Fill-docked frame with header",
-                Dock = OxDock.Fill,
-                Width = OxWh.W400,
-                Height = OxWh.W200
-            };
-
             card = new OxCard
             {
                 BlurredBorder = false,
                 Parent = MainPanel,
-                ToolTipText = "This is frame with Dock = Fill",
-                Name = "FillFrame",
+                Name = "LeftCard",
                 Text = "Left docked card",
                 Dock = OxDock.Left,
                 Width = OxWh.W200,
@@ -61,18 +50,31 @@ namespace OxLibrary.Test
             card.Margin.Size = OxWh.W40;
             card.Margin.Right = OxWh.W0;
             card.BaseColor = Color.Red;
+            card.Click += Card_Click;
+
+            frame = new OxFrameWithHeader
+            {
+                BlurredBorder = false,
+                Parent = MainPanel,
+                Name = "FillFrame",
+                Text = "Fill-docked frame with header",
+                Dock = OxDock.Fill,
+                Width = OxWh.W400,
+                Height = OxWh.W200
+            };
+
+            
 
             bluredCheckBox = new()
             {
                 Parent = frame,
                 Left = OxWh.W8,
                 Top = OxWh.W8,
-                //AutoSize = true,
                 Text = "Set parent margin to 4px",
             };
             bluredCheckBox.CheckedChanged += BluredCheckBox_CheckedChanged;
 
-            button = new OxButton("OxButton text", OxIcons.Go)
+            setMarginButton = new OxButton("Set frame dock as Right", OxIcons.Go)
             {
                 Parent = frame,
                 Top = OxWh.Add(bluredCheckBox.Bottom, OxWh.W8),
@@ -80,20 +82,48 @@ namespace OxLibrary.Test
                 Height = OxWh.W24,
                 Width = OxWh.W140
             };
-            button.Click += Button_Click;
+            setMarginButton.Click += Button_Click;
 
-            
+            hideCardButton = new OxButton("Hide card", OxIcons.Go)
+            {
+                Parent = frame,
+                Top = OxWh.Add(setMarginButton.Bottom, OxWh.W8),
+                Left = setMarginButton.Left,
+                Height = OxWh.W24,
+                Width = OxWh.W140
+            };
+            hideCardButton.Click += HideCardButton_Click;
+
             SetFrameMarginSize();
+            frame.Click += Frame_Click;
+            */
+        }
+
+        private void Card_Click(object? sender, EventArgs e)
+        {
+            MessageBox.Show($"Location: {card.Location}\nSize: {card.Size}");
+        }
+
+        private void Frame_Click(object? sender, EventArgs e)
+        {
+            MessageBox.Show($"Location: {frame.Location}\nSize: {frame.Size}");
+        }
+
+        private void HideCardButton_Click(object? sender, EventArgs e)
+        {
+            card.Visible = !card.Visible;
+            hideCardButton.Text = card.Visible ? "Hide card" : "Show card";
         }
 
         private void ToolBarButton_Click(object? sender, EventArgs e)
         {
-            button.Enabled = !button.Enabled;
+            setMarginButton.Enabled = !setMarginButton.Enabled;
         }
 
         private void Button_Click(object? sender, EventArgs e)
         {
             frame.Dock = frame.Dock is OxDock.Fill ? OxDock.Right : OxDock.Fill;
+            setMarginButton.Text = frame.Dock is OxDock.Fill ? "Set frame dock as Right" : "Set frame dock as Fill";
         }
 
         private void BluredCheckBox_CheckedChanged(object? sender, EventArgs e)

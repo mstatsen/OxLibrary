@@ -47,11 +47,13 @@
             base.Equals(obj)
             || obj is OxPoint otherPoint
                 && X.Equals(otherPoint.X)
-                && Y.Equals(otherPoint.Y)
-                ;
+                && Y.Equals(otherPoint.Y);
 
         public override int GetHashCode() =>
             X.GetHashCode() ^ Y.GetHashCode();
+
+        public override string ToString() =>
+            $"X = {OxWh.I(X)}, Y = {OxWh.I(Y)}";
 
         public new static readonly OxPoint Empty = new(0, 0);
     }

@@ -99,6 +99,9 @@ namespace OxLibrary
         public override int GetHashCode() =>
             WidthInt.GetHashCode() ^ HeightInt.GetHashCode();
 
+        public override string ToString() =>
+            $"Width = {OxWh.I(Width)}, Height = {OxWh.I(Height)}";
+
         public bool IsEmpty =>
             Width is OxWidth.None
             && Height is OxWidth.None;

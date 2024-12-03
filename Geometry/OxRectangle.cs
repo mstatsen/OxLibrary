@@ -90,7 +90,8 @@ namespace OxLibrary
             ) { }
 
         public OxRectangle(OxRectangle rectangle)
-            : this(rectangle.Rectangle) { }
+            : this() =>
+            CopyFrom(rectangle);
 
         public OxRectangle(OxPoint location, OxSize size)
             : this(
@@ -140,14 +141,23 @@ namespace OxLibrary
             ^ Width.GetHashCode()
             ^ Height.GetHashCode();
 
-        public bool IsEmpty =>
-            X is OxWidth.None
-            && Y is OxWidth.None
-            && Width is OxWidth.None
-            && Height is OxWidth.None;
+        public void CopyFrom(OxRectangle other)
+        { 
+            X = other.X;
+            Y = other.Y;
+            Width = other.Width;
+            Height = other.Height;
+        }
+
+        public bool IsEmpty => 
+            OxWh.S(Width, X) is OxWidth.None
+            || OxWh.S(Height, Y) is OxWidth.None;
 
         public void Clear() =>
             Set(OxWh.W0, OxWh.W0, OxWh.W0, OxWh.W0);
+
+        public override string ToString() =>
+            $"X = {OxWh.I(X)}, Y = {OxWh.I(Y)}, Width = {OxWh.I(Width)}, Width = {OxWh.I(Height)}";
 
         public static readonly OxRectangle Empty = new(OxWh.W0, OxWh.W0, OxWh.W0, OxWh.W0);
         public static readonly OxRectangle Max = new(OxWh.W0, OxWh.W0, OxWh.Maximum, OxWh.Maximum);

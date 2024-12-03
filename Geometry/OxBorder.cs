@@ -39,5 +39,8 @@
 
         public override int GetHashCode() => 
             Size.GetHashCode();
+
+        public override string ToString() =>
+            $"Size = {OxWh.I(Size)}";
     }
 }
