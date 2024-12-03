@@ -171,11 +171,20 @@ namespace OxLibrary.Panels
         public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
             manager.SetBounds(x, y, width, height);
 
+        public new event OxDockChanged DockChanged
+        {
+            add => manager.DockChanged += value;
+            remove => manager.DockChanged -= value;
+        }
+
+        public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
+
         public new event OxLocationChanged LocationChanged
         {
             add => manager.LocationChanged += value;
             remove => manager.LocationChanged -= value;
         }
+
         public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
 
         public new event OxSizeChanged SizeChanged
@@ -484,11 +493,14 @@ namespace OxLibrary.Panels
 
         protected virtual void PrepareDialog(OxPanelViewer dialog) { }
 
+#region Hidden base methods
 #pragma warning disable IDE0060 // Remove unused parameter
 #pragma warning disable IDE0051 // Remove unused private members
+        protected sealed override void OnDockChanged(EventArgs e) { }
         private static new void OnLocationChanged(EventArgs e) { }
         private static new void OnSizeChanged(EventArgs e) { }
 #pragma warning restore IDE0051 // Remove unused private members
 #pragma warning restore IDE0060 // Remove unused parameter
+#endregion
     }
 }

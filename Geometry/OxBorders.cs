@@ -1,21 +1,7 @@
-﻿namespace OxLibrary.Panels
+﻿using OxLibrary.Handlers;
+
+namespace OxLibrary.Panels
 {
-    public class BordersChangedEventArgs : EventArgs 
-    {
-        public OxBorders OldValue;
-        public OxBorders NewValue;
-
-        public BordersChangedEventArgs(OxBorders oldValue, OxBorders newValue)
-        { 
-            OldValue = oldValue;
-            NewValue = newValue;
-        }
-
-        public bool Changed => !NewValue.Equals(OldValue);
-    }
-
-    public delegate void BordersChangedEventHandler(object sender, BordersChangedEventArgs e);
-
     public class OxBorders : Dictionary<OxDock, OxBorder>
     {
         public static OxBorders operator +(OxBorders left, OxBorders right) =>
@@ -77,7 +63,7 @@
 
             SizeChanged?.Invoke(
                 this, 
-                new BordersChangedEventArgs(oldBorders, this)
+                new OxBordersChangedEventArgs(oldBorders, this)
             );
         }
 
@@ -289,7 +275,7 @@
             && Top.Equals(otherBorders.Top)
             && Bottom.Equals(otherBorders.Bottom);
 
-        public BordersChangedEventHandler? SizeChanged;
+        public OxBordersChanged? SizeChanged;
 
         public override int GetHashCode()
         {

@@ -2,6 +2,7 @@
 {
     public enum OxHandlerType
     {
+        DockChanged,
         LocationChanged,
         SizeChanged,
     }

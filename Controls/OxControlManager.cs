@@ -1,6 +1,5 @@
 ﻿using OxLibrary.Handlers;
 using OxLibrary.Interfaces;
-using OxLibrary.Panels;
 
 namespace OxLibrary.Controls
 {
@@ -45,13 +44,13 @@ namespace OxLibrary.Controls
                     ? Parent
                     : AsContainer;
 
-        private void BordersSizeChangedHandler(object sender, BordersChangedEventArgs e) =>
+        private void BordersSizeChangedHandler(object sender, OxBordersChangedEventArgs e) =>
             ParentForRealign?.RealignControls();
 
-        private void PaddingSizeChangedHandler(object sender, BordersChangedEventArgs e) =>
+        private void PaddingSizeChangedHandler(object sender, OxBordersChangedEventArgs e) =>
             ParentForRealign?.RealignControls();
 
-        private void MarginSizeChangedHandler(object sender, BordersChangedEventArgs e)
+        private void MarginSizeChangedHandler(object sender, OxBordersChangedEventArgs e)
         {
             if (!e.Changed)
                 return;
@@ -229,6 +228,12 @@ namespace OxLibrary.Controls
         private void InvokeHandlers(OxHandlerType type, OxEventArgs args) =>
             Handlers.Invoke(type, ManagingControl, args);
 
+        public event OxDockChanged DockChanged
+        {
+            add => Handlers.Add(OxHandlerType.DockChanged, value);
+            remove => Handlers.Remove(OxHandlerType.DockChanged, value);
+        }
+
         public event OxSizeChanged SizeChanged 
         { 
             add => Handlers.Add(OxHandlerType.SizeChanged, value);
@@ -251,20 +256,10 @@ namespace OxLibrary.Controls
                 if (SavedDock.Equals(value))
                     return;
 
+                OxDock oldDock = SavedDock;
                 managingControl.Dock = DockStyle.None;
                 SavedDock = value;
-                DockCnahging = true;
-
-                try
-                {
-                    RestoreSize();
-                    ParentForRealign?.RealignControls();
-                }
-
-                finally
-                {
-                    DockCnahging = false;
-                }
+                OnDockChanged(new(oldDock, SavedDock));
             }
         }
 
@@ -629,6 +624,26 @@ namespace OxLibrary.Controls
             {
                 if (!AutoScrollOffset.Equals(value))
                     managingControl.AutoScrollOffset = value.Point;
+            }
+        }
+
+        private void OnDockChanged(OxDockChangedEventArgs e)
+        {
+            if (!e.Changed)
+                return;
+
+            DockCnahging = true;
+
+            try
+            {
+                RestoreSize();
+                ManagingControl.OnDockChanged(e);
+                InvokeHandlers(OxHandlerType.DockChanged, e);
+                ParentForRealign?.RealignControls();
+            }
+            finally
+            {
+                DockCnahging = false;
             }
         }
 

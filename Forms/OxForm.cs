@@ -16,10 +16,18 @@ namespace OxLibrary.Forms
         private readonly OxControls oxControls;
         public OxControls OxControls => oxControls;
 
-        public new event OxSizeChanged SizeChanged
+        public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
+        public new event OxDockChanged DockChanged
         {
-            add => manager.SizeChanged += value;
-            remove => manager.SizeChanged -= value;
+            add => manager.DockChanged += value;
+            remove => manager.DockChanged -= value;
+        }
+
+        public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
+        public new event OxLocationChanged LocationChanged
+        {
+            add => manager.LocationChanged += value;
+            remove => manager.LocationChanged -= value;
         }
 
         public virtual void OnSizeChanged(OxSizeChangedEventArgs e)
@@ -32,13 +40,11 @@ namespace OxLibrary.Forms
             RealignControls();
         }
 
-        public new event OxLocationChanged LocationChanged
+        public new event OxSizeChanged SizeChanged
         {
-            add => manager.LocationChanged += value;
-            remove => manager.LocationChanged -= value;
+            add => manager.SizeChanged += value;
+            remove => manager.SizeChanged -= value;
         }
-
-        public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
 
         public OxForm()
         {
@@ -366,11 +372,14 @@ namespace OxLibrary.Forms
         public virtual void PrepareColors() =>
             MainPanel.PrepareColors();
 
+        #region Hidden base methods
 #pragma warning disable IDE0060 // Remove unused parameter
 #pragma warning disable IDE0051 // Remove unused private members
+        private static new void OnDockChanged(EventArgs e) { }
         private static new void OnLocationChanged(EventArgs e) { }
         private static new void OnSizeChanged(EventArgs e) { }
 #pragma warning restore IDE0051 // Remove unused private members
 #pragma warning restore IDE0060 // Remove unused parameter
+        #endregion
     }
 }

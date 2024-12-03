@@ -222,7 +222,7 @@ namespace OxLibrary.Controls
                 BeginGroup = beginGroup,
                 Dock = dockStyle
             };
-            button.Click += (s, e) => ToolbarActionClick?.Invoke(s,
+            button.Click += (s, e) => ToolbarActionClick?.Invoke(s!,
                 new OxActionEventArgs<OxToolbarAction>(
                     s is null
                         ? OxToolbarAction.Empty

@@ -118,7 +118,6 @@ namespace OxLibrary.Controls
         event ControlEventHandler ControlRemoved;
         event EventHandler CursorChanged;
         event EventHandler? Disposed;
-        event EventHandler DockChanged;
         event EventHandler DoubleClick;
         event EventHandler DpiChangedAfterParent;
         event EventHandler DpiChangedBeforeParent;
@@ -170,11 +169,9 @@ namespace OxLibrary.Controls
         event EventHandler Validated;
         event EventHandler VisibleChanged;
 
+        void OnDockChanged(OxDockChangedEventArgs e);
         void OnSizeChanged(OxSizeChangedEventArgs e);
         void OnLocationChanged(OxLocationChangedEventArgs e);
-
-        event OxSizeChanged SizeChanged;
-        event OxLocationChanged LocationChanged;
     }
 
     /// <remarks>

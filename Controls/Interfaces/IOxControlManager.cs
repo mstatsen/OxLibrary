@@ -35,6 +35,10 @@ namespace OxLibrary.Controls
         OxPoint PointToScreen(OxPoint p);
         OxRectangle RectangleToClient(OxRectangle r);
         OxRectangle RectangleToScreen(OxRectangle r);
+
+        event OxDockChanged DockChanged;
+        event OxSizeChanged SizeChanged;
+        event OxLocationChanged LocationChanged;
     }
 
     public interface IOxControlManager<TBaseControl> : IOxControlManager
