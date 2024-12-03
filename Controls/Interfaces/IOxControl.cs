@@ -5,9 +5,8 @@ using static System.Windows.Forms.Control;
 
 namespace OxLibrary.Controls
 {
-    public interface IOxControl : IOxControlManager
+    public interface IOxBaseControl: IOxControlManager
     {
-        IOxControlManager Manager { get; }
         AccessibleObject AccessibilityObject { get; }
         string AccessibleDefaultActionDescription { get; set; }
         string AccessibleDescription { get; set; }
@@ -175,23 +174,17 @@ namespace OxLibrary.Controls
         
     }
 
-    /// <remarks>
-    /// The Control interface that is supposed to be used in the OxDaoEngine component system.
-    /// In addition to implementing IOxControl, it is also necessary 
-    /// to implement the parent interface IOxControlManager.<br/><br/>
-    /// <b>Firstly:</b> you need registry manager as OxControlManager&lt;BaseControl&gt; by call 
-    /// <code>manager = OxControlManager.RegisterControl&lt;BaseControlClass&gt;(this,OnSizeChanged);</code>
-    /// <b>Secondly:</b> add to your class code, like following:<br/><br/>
-    /// <code>
-    /// public new OxWidth Width { get =&gt; manager.Width; set =&gt; manager.Width = value;}<br/>
-    /// ...<br/>
-    /// public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }<br/>
-    /// private static new void OnSizeChanged(EventArgs e) =&gt; { }<br/>
-    /// </code><br/><br/>
-    /// For full code implementaion IOxControl see IOxControl_Implementation.txt
-    /// </remarks>
-    public interface IOxControl<TBaseControl> : IOxControl
+    public interface IOxControl<TBaseControl, TManager> : IOxBaseControl
+    {
+        TManager Manager { get; }
+    }
+
+    public interface IOxControl<TBaseControl> : IOxControl<TBaseControl, IOxControlManager<TBaseControl>>
         where TBaseControl : Control
+    {
+    }
+
+    public interface IOxControl : IOxControl<Control>
     {
     }
 }

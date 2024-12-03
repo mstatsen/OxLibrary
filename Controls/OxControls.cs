@@ -1,22 +1,12 @@
 ﻿using OxLibrary.Dock;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
+using OxLibrary.Handlers;
 
 namespace OxLibrary.Controls
 {
-    public class OxControlEventArgs : EventArgs
-    { 
-        public readonly IOxControl Control;
-
-        public OxControlEventArgs(IOxControl control) =>
-            Control = control;
-    }
-
-    public delegate void OxControlEvent(IOxControlContainer sender, OxControlEventArgs EventArgs);
-
     public class OxControls : List<IOxControl>
     {
-        public readonly IOxControlContainer Container;
-        public OxControls(IOxControlContainer container) => 
+        public readonly IOxContainer Container;
+        public OxControls(IOxContainer container) => 
             Container = container;
 
         public List<IOxControl> Controls(OxDockType dockType)

@@ -275,7 +275,7 @@ namespace OxLibrary.Panels
             && Top.Equals(otherBorders.Top)
             && Bottom.Equals(otherBorders.Bottom);
 
-        public OxBordersChanged? SizeChanged;
+        public OxBordersChangedEvent? SizeChanged;
 
         public override int GetHashCode()
         {

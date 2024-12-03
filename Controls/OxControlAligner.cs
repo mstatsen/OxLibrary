@@ -4,13 +4,13 @@ namespace OxLibrary.Controls
 {
     public class OxControlAligner
     {
-        private readonly IOxControlContainer Container;
+        private readonly IOxContainer Container;
         public OxRectangle ControlZone => Container.ControlZone;
         public OxRectangle OuterControlZone => Container.OuterControlZone;
 
         public bool Realigning { get; private set; } = false;
 
-        public OxControlAligner(IOxControlContainer container) =>
+        public OxControlAligner(IOxContainer container) =>
             Container = container;
 
         public void RealignControls(OxDockType dockType = OxDockType.Unknown)

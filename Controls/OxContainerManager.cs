@@ -3,10 +3,12 @@ using OxLibrary.Interfaces;
 
 namespace OxLibrary.Controls
 {
-    public class OxControlContainerManager<TContainer> : OxControlManager<TContainer>, IOxControlContainerManager
+    public class OxContainerManager<TContainer> :
+        OxControlManager<TContainer>,
+        IOxContainerManagerForManager<TContainer>
         where TContainer : Control, new()
     {
-        public OxControlContainerManager(TContainer managingControl) : base(managingControl)
+        public OxContainerManager(TContainer managingControl) : base(managingControl)
         {
             OxControls = new(ManagingControl);
             Aligner = new(ManagingControl);

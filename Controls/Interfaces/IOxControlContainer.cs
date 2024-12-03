@@ -1,15 +1,22 @@
-﻿using OxLibrary.Interfaces;
-
-namespace OxLibrary.Controls
+﻿namespace OxLibrary.Controls
 {
-    /// <summary>
-    /// Interface OxLibrary controls container 
-    /// </summary>
-    public interface IOxControlContainer : IOxControl, IOxControlContainerManager
+    public interface IOxContainer : IOxBaseControl, IOxContainerManager
+    { 
+    }
+
+    public interface IOxControlContainer : IOxControl,
+        IOxContainer,
+        IOxContainerManager
     {
     }
 
-    public interface IOxControlContainer<TBaseControl> : IOxControl<TBaseControl>, IOxControlContainer
+    /// <summary>
+    /// Interface OxLibrary controls container 
+    /// </summary>
+    public interface IOxControlContainer<TBaseControl> :
+        IOxControl<TBaseControl, IOxContainerManager>,
+        IOxContainer,
+        IOxContainerManager
         where TBaseControl : Control
     { 
     }

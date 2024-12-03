@@ -7,7 +7,7 @@ namespace OxLibrary.Controls
         where TBaseControl : Control
     {
         private readonly TBaseControl managingControl;
-        public IOxControl ManagingControl => (IOxControl)managingControl;
+        public IOxBaseControl ManagingControl => (IOxBaseControl)managingControl;
         private IOxControlContainer<TBaseControl>? AsContainer =>
             managingControl as IOxControlContainer<TBaseControl>;
 
@@ -194,25 +194,25 @@ namespace OxLibrary.Controls
         private void RemoveHandler(OxHandlerType type, Delegate handler) =>
             Handlers.Remove(type, handler);
 
-        public event OxDockChanged DockChanged
+        public event OxDockChangedEvent DockChanged
         {
             add => AddHandler(OxHandlerType.DockChanged, value);
             remove => RemoveHandler(OxHandlerType.DockChanged, value);
         }
 
-        public event OxLocationChanged LocationChanged
+        public event OxLocationChangedEvent LocationChanged
         {
             add => AddHandler(OxHandlerType.LocationChanged, value);
             remove => RemoveHandler(OxHandlerType.LocationChanged, value);
         }
 
-        public event OxParentChanged ParentChanged
+        public event OxParentChangedEvent ParentChanged
         {
             add => AddHandler(OxHandlerType.ParentChanged, value);
             remove => RemoveHandler(OxHandlerType.ParentChanged, value);
         }
 
-        public event OxSizeChanged SizeChanged 
+        public event OxSizeChangedEvent SizeChanged 
         { 
             add => AddHandler(OxHandlerType.SizeChanged, value);
             remove => RemoveHandler(OxHandlerType.SizeChanged, value); 
@@ -271,16 +271,16 @@ namespace OxLibrary.Controls
             Parent is not null 
             && Parent.Realigning;
 
-        public IOxControlContainer? Parent
+        public IOxContainer? Parent
         {
-            get => (IOxControlContainer?)managingControl.Parent;
+            get => (IOxContainer?)managingControl.Parent;
             set
             {
                 if (value is null && Parent is not null 
                     || value is not null && value.Equals(Parent))
                     return;
 
-                IOxControlContainer? oldParent = Parent;
+                IOxContainer? oldParent = Parent;
                 //Parent?.OxControls.Remove(ManagingControl);
                 //OxPoint controlLocation = new(Left, Top);
                 managingControl.Parent = (Control?)value;
@@ -494,11 +494,11 @@ namespace OxLibrary.Controls
             return oxControlManager;
         }
 
-        public static OxControlContainerManager<TBaseControl> RegisterContainer<TBaseControl>(
+        public static OxContainerManager<TBaseControl> RegisterContainer<TBaseControl>(
             TBaseControl managingControl)
             where TBaseControl : Control, new()
         {
-            OxControlContainerManager<TBaseControl> oxControlManager = new(managingControl);
+            OxContainerManager<TBaseControl> oxControlManager = new(managingControl);
             Controls.Add(managingControl, oxControlManager);
             return oxControlManager;
         }

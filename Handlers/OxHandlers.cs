@@ -1,13 +1,17 @@
-﻿namespace OxLibrary.Handlers
+﻿using OxLibrary.Controls;
+
+namespace OxLibrary.Handlers
 {
-    public delegate void OxActionClick<TAction>(object sender,
+    public delegate void OxActionClick<TAction>(
+        object sender,
         OxActionEventArgs<TAction> EventArgs)
         where TAction : notnull, Enum;
-    public delegate void OxBordersChanged(object sender, OxBordersChangedEventArgs e);
-    public delegate void OxDockChanged(object sender, OxDockChangedEventArgs args);
-    public delegate void OxLocationChanged(object sender, OxLocationChangedEventArgs args);
-    public delegate void OxParentChanged(object sender, OxParentChangedEventArgs args);
-    public delegate void OxSizeChanged(object sender, OxSizeChangedEventArgs args);
+    public delegate void OxBordersChangedEvent(object sender, OxBordersChangedEventArgs e);
+    public delegate void OxControlEvent(IOxContainer sender, OxControlEventArgs EventArgs);
+    public delegate void OxDockChangedEvent(object sender, OxDockChangedEventArgs args);
+    public delegate void OxLocationChangedEvent(object sender, OxLocationChangedEventArgs args);
+    public delegate void OxParentChangedEvent(object sender, OxParentChangedEventArgs args);
+    public delegate void OxSizeChangedEvent(object sender, OxSizeChangedEventArgs args);
 
     public class OxHandlers : Dictionary<OxHandlerType, List<Delegate>>
     {

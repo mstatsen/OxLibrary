@@ -21,7 +21,7 @@ namespace OxLibrary.Controls
         OxDock Dock { get; set; }
         OxSize PreferredSize { get; }
         OxPoint AutoScrollOffset { get; set; }
-        IOxControlContainer? Parent { get; set; }
+        IOxContainer? Parent { get; set; }
         void DoWithSuspendedLayout(Action method);
         void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height);
         void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height, BoundsSpecified specified);
@@ -36,15 +36,20 @@ namespace OxLibrary.Controls
         OxRectangle RectangleToClient(OxRectangle r);
         OxRectangle RectangleToScreen(OxRectangle r);
 
-        event OxDockChanged DockChanged;
-        event OxSizeChanged SizeChanged;
-        event OxLocationChanged LocationChanged;
-        event OxParentChanged ParentChanged;
+        event OxDockChangedEvent DockChanged;
+        event OxSizeChangedEvent SizeChanged;
+        event OxLocationChangedEvent LocationChanged;
+        event OxParentChangedEvent ParentChanged;
     }
 
     public interface IOxControlManager<TBaseControl> : IOxControlManager
         where TBaseControl : Control
-    { 
-        IOxControl ManagingControl { get; }
+    {
+    }
+
+    public interface IOxControlManagerForManager<TBaseControl> : IOxControlManager
+        where TBaseControl : Control
+    {
+        IOxControl<TBaseControl> ManagingControl { get; }
     }
 }

@@ -34,7 +34,7 @@ namespace OxLibrary
             }
         }
 
-        public OxSizeChanged? SizeChanged;
+        public OxSizeChangedEvent? SizeChanged;
 
         private readonly bool Creating = false;
         private void OnSizeChanged(OxSize oldSize)

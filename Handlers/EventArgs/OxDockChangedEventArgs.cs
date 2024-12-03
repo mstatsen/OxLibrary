@@ -4,14 +4,14 @@ namespace OxLibrary.Handlers
 {
     public class OxParentChangedEventArgs : OxEventArgs
     {
-        public OxParentChangedEventArgs(IOxControlContainer? oldParent, IOxControlContainer? newParent)
+        public OxParentChangedEventArgs(IOxContainer? oldParent, IOxContainer? newParent)
         {
             OldParent = oldParent;
             NewParent = newParent;
         }
 
-        public readonly IOxControlContainer? OldParent;
-        public readonly IOxControlContainer? NewParent;
+        public readonly IOxContainer? OldParent;
+        public readonly IOxContainer? NewParent;
 
         public override bool Changed =>
             (OldParent is null

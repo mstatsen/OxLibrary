@@ -6,12 +6,11 @@ namespace OxLibrary.Panels
 {
     public class OxPanel : Panel, IOxPanel
     {
-        private readonly OxControlContainerManager<Panel> manager;
-        public IOxControlContainerManager Manager => manager;
+        private readonly OxContainerManager<Panel> manager;
+        public IOxContainerManager Manager => manager;
         public OxPanel() : this(OxSize.Empty) { }
         public OxPanel(OxSize size)
         {
-            oxControls = new(this);
             manager = OxControlManager.RegisterContainer<Panel>(this);
             BorderVisible = false;
             Colors = new(DefaultColor);
@@ -101,7 +100,7 @@ namespace OxLibrary.Panels
             set => manager.Dock = value;
         }
 
-        public new virtual IOxControlContainer? Parent
+        public new virtual IOxContainer? Parent
         {
             get => manager.Parent;
             set
@@ -171,7 +170,7 @@ namespace OxLibrary.Panels
         public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
             manager.SetBounds(x, y, width, height);
 
-        public new event OxDockChanged DockChanged
+        public new event OxDockChangedEvent DockChanged
         {
             add => manager.DockChanged += value;
             remove => manager.DockChanged -= value;
@@ -179,7 +178,7 @@ namespace OxLibrary.Panels
 
         public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
 
-        public new event OxLocationChanged LocationChanged
+        public new event OxLocationChangedEvent LocationChanged
         {
             add => manager.LocationChanged += value;
             remove => manager.LocationChanged -= value;
@@ -187,7 +186,7 @@ namespace OxLibrary.Panels
 
         public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
 
-        public new event OxParentChanged ParentChanged
+        public new event OxParentChangedEvent ParentChanged
         {
             add => manager.ParentChanged += value;
             remove => manager.ParentChanged -= value;
@@ -195,11 +194,14 @@ namespace OxLibrary.Panels
 
         public virtual void OnParentChanged(OxParentChangedEventArgs e) { }
 
-        public new event OxSizeChanged SizeChanged
+        public new event OxSizeChangedEvent SizeChanged
         {
             add => manager.SizeChanged += value;
             remove => manager.SizeChanged -= value;
         }
+
+        public OxRectangle OuterControlZone =>
+            Manager.OuterControlZone;
 
         public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }
 
@@ -414,8 +416,8 @@ namespace OxLibrary.Panels
         protected virtual void SetVisible(bool value) =>
             base.Visible = value;
 
-        private readonly OxControls oxControls;
-        public OxControls OxControls => oxControls;
+        public OxControls OxControls =>
+            Manager.OxControls;
 
         public bool IsHovered
         {
