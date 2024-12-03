@@ -6,13 +6,13 @@ namespace OxLibrary.Panels
 {
     public class OxPanel : Panel, IOxPanel
     {
-        private readonly OxControlManager<Panel> manager;
-        public IOxControlManager Manager => manager;
+        private readonly OxControlContainerManager<Panel> manager;
+        public IOxControlContainerManager Manager => manager;
         public OxPanel() : this(OxSize.Empty) { }
         public OxPanel(OxSize size)
         {
             oxControls = new(this);
-            manager = OxControlManager.RegisterControl<Panel>(this);
+            manager = OxControlManager.RegisterContainer<Panel>(this);
             BorderVisible = false;
             Colors = new(DefaultColor);
             Initialized = false;
