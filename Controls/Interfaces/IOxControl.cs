@@ -172,10 +172,4 @@ namespace OxLibrary.Controls
         void OnParentChanged(OxParentChangedEventArgs e);
         void OnSizeChanged(OxSizeChangedEventArgs e);
     }
-
-    public interface IOxManagingControl<TManager>
-        where TManager : IOxControlManager
-    {
-        TManager Manager { get; }
-    }
 }

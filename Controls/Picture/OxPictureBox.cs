@@ -4,15 +4,25 @@ namespace OxLibrary.Controls
 {
     public class OxPictureBox :
         PictureBox,
-        IOxControl,
-        IOxManagingControl<OxControlManager>
+        IOxControlWithManager
     {
-        public OxControlManager Manager { get; }
+        public IOxControlManager Manager { get; }
 
         public OxPictureBox()
         {
-            Manager = OxControlManagers.RegisterControl<OxPictureBox>(this);
+            Manager = OxControlManagers.RegisterControl(this);
             DoubleBuffered = true;
+        }
+
+        #region Implemention of IOxControl using IOxControlManager
+        public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
+        public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
+        public virtual void OnParentChanged(OxParentChangedEventArgs e) { }
+        public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }
+        public new IOxBox? Parent
+        {
+            get => Manager.Parent;
+            set => Manager.Parent = value;
         }
 
         public new OxWidth Width
@@ -81,26 +91,14 @@ namespace OxLibrary.Controls
             set => Manager.Dock = value;
         }
 
-        public new virtual IOxBox? Parent
-        {
-            get => Manager.Parent;
-            set => Manager.Parent = value;
-        }
-
         public new OxRectangle ClientRectangle =>
             Manager.ClientRectangle;
-
-        public new virtual OxRectangle DisplayRectangle =>
-            Manager.DisplayRectangle;
 
         public new OxRectangle Bounds
         {
             get => Manager.Bounds;
             set => Manager.Bounds = value;
         }
-
-        public new OxSize PreferredSize =>
-            Manager.PreferredSize;
 
         public new OxPoint AutoScrollOffset
         {
@@ -111,23 +109,11 @@ namespace OxLibrary.Controls
         public void DoWithSuspendedLayout(Action method) =>
             Manager.DoWithSuspendedLayout(method);
 
-        public Control GetChildAtPoint(OxPoint pt, GetChildAtPointSkip skipValue) =>
-            Manager.GetChildAtPoint(pt, skipValue);
-
         public Control GetChildAtPoint(OxPoint pt) =>
             Manager.GetChildAtPoint(pt);
 
-        public OxSize GetPreferredSize(OxSize proposedSize) =>
-            Manager.GetPreferredSize(proposedSize);
-
         public void Invalidate(OxRectangle rc) =>
             Manager.Invalidate(rc);
-
-        public void Invalidate(OxRectangle rc, bool invalidateChildren) =>
-            Manager.Invalidate(rc, invalidateChildren);
-
-        public OxSize LogicalToDeviceUnits(OxSize value) =>
-            Manager.LogicalToDeviceUnits(value);
 
         public OxPoint PointToClient(OxPoint p) =>
             Manager.PointToClient(p);
@@ -141,41 +127,49 @@ namespace OxLibrary.Controls
         public OxRectangle RectangleToScreen(OxRectangle r) =>
             Manager.RectangleToScreen(r);
 
-        public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height, BoundsSpecified specified) =>
-            Manager.SetBounds(x, y, width, height, specified);
-
-        public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
-            Manager.SetBounds(x, y, width, height);
-
-        public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
         public new event OxDockChangedEvent DockChanged
         {
             add => Manager.DockChanged += value;
             remove => Manager.DockChanged -= value;
         }
 
-        public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
         public new event OxLocationChangedEvent LocationChanged
         {
             add => Manager.LocationChanged += value;
             remove => Manager.LocationChanged -= value;
         }
 
-        public virtual void OnParentChanged(OxParentChangedEventArgs e) { }
         public new event OxParentChangedEvent ParentChanged
         {
             add => Manager.ParentChanged += value;
             remove => Manager.ParentChanged -= value;
         }
 
-        public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }
         public new event OxSizeChangedEvent SizeChanged
         {
             add => Manager.SizeChanged += value;
             remove => Manager.SizeChanged -= value;
         }
+        #endregion
 
         #region Hidden base methods
+#pragma warning disable IDE0051 // Remove unused private members
+        private new void SetBounds(int x, int y, int width, int height) =>
+            base.SetBounds(x, y, width, height);
+
+        private new Size PreferredSize => base.PreferredSize;
+        private new Rectangle DisplayRectangle => base.DisplayRectangle;
+        private new Size GetPreferredSize(Size proposedSize) => base.GetPreferredSize(proposedSize);
+        private new Size LogicalToDeviceUnits(Size value) => base.LogicalToDeviceUnits(value);
+        private new void SetBounds(int x, int y, int width, int height, BoundsSpecified specified) =>
+            base.SetBounds(x, y, width, height, specified);
+        private new Control GetChildAtPoint(Point pt, GetChildAtPointSkip skipValue) =>
+            base.GetChildAtPoint(pt, skipValue);
+
+#pragma warning disable IDE0060 // Remove unused parameter
+        private new void Invalidate(Rectangle rc, bool invalidateChildren) => Invalidate(true);
+#pragma warning restore IDE0060 // Remove unused parameter
+#pragma warning restore IDE0051 // Remove unused private members
         protected sealed override void OnDockChanged(EventArgs e) { }
         protected sealed override void OnLocationChanged(EventArgs e) { }
         protected sealed override void OnParentChanged(EventArgs e) { }

@@ -3,20 +3,15 @@ using OxLibrary.Interfaces;
 
 namespace OxLibrary.Controls
 {
-    public class OxControlAligner<TOxControl>
-        where TOxControl :
-            Control,
-            IOxManagingControl<IOxBoxManager<TOxControl>>,
-            IOxManagingControl<IOxControlManager>,
-            IOxBox<TOxControl>
+    public class OxControlAligner
     {
-        private readonly TOxControl Box;
+        private readonly IOxBox Box;
         public OxRectangle ControlZone => Box.ControlZone;
         public OxRectangle OuterControlZone => Box.OuterControlZone;
 
         public bool Realigning { get; private set; } = false;
 
-        public OxControlAligner(TOxControl box) =>
+        public OxControlAligner(IOxBox box) =>
             Box = box;
 
         public void RealignControls(OxDockType dockType = OxDockType.Unknown)

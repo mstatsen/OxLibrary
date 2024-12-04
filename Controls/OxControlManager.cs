@@ -475,45 +475,4 @@ namespace OxLibrary.Controls
         public OxRectangle RectangleToScreen(OxRectangle r) =>
             new(ManagingControl.RectangleToScreen(r.Rectangle));
     }
-
-    public static class OxControlManagers
-    {
-        private class OxControlManagerCache : Dictionary<Control, IOxControlManager>
-        {
-            public TManager AddManager<TManager>(Control control, TManager manager)
-                where TManager : OxControlManager
-            {
-                if (!ContainsKey(control))
-                    Add(
-                        control, manager
-                    );
-
-                return (TManager)this[control];
-            }
-        }
-
-        private static readonly OxControlManagerCache Controls = new();
-
-        public static OxControlManager RegisterControl<TOxControl>(Control baseControl) =>
-            Controls.AddManager<OxControlManager>(
-                baseControl,
-                new OxControlManager(baseControl)
-            );
-
-        public static IOxBoxManager<TOxControl> RegisterBox<TOxControl>(Control baseBox)
-            where TOxControl :
-                    Control,
-                    IOxManagingControl<IOxBoxManager<TOxControl>>,
-                    IOxManagingControl<IOxControlManager>,
-                    IOxControlManager,
-                    IOxBox<TOxControl>
-            =>
-            Controls.AddManager(
-                baseBox,
-                    new OxBoxManager<TOxControl>(baseBox)
-                );
-
-        public static void UnRegisterControl(Control control) =>
-            Controls.Remove(control);
-    }
 }

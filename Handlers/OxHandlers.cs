@@ -4,19 +4,14 @@ namespace OxLibrary.Handlers
 {
     public delegate void OxActionClick<TAction>(
         object sender,
-        OxActionEventArgs<TAction> EventArgs)
+        OxActionEventArgs<TAction> e)
         where TAction : notnull, Enum;
     public delegate void OxBordersChangedEvent(object sender, OxBordersChangedEventArgs e);
-    public delegate void OxControlEvent<TOxControl>(IOxBox<TOxControl> sender, OxControlEventArgs EventArgs)
-        where TOxControl :
-            Control,
-            IOxManagingControl<IOxBoxManager<TOxControl>>,
-            IOxManagingControl<IOxControlManager>,
-            IOxBox<TOxControl>;
-    public delegate void OxDockChangedEvent(object sender, OxDockChangedEventArgs args);
-    public delegate void OxLocationChangedEvent(object sender, OxLocationChangedEventArgs args);
-    public delegate void OxParentChangedEvent(object sender, OxParentChangedEventArgs args);
-    public delegate void OxSizeChangedEvent(object sender, OxSizeChangedEventArgs args);
+    public delegate void OxControlEvent(IOxBox sender, OxControlEventArgs e);
+    public delegate void OxDockChangedEvent(object sender, OxDockChangedEventArgs e);
+    public delegate void OxLocationChangedEvent(object sender, OxLocationChangedEventArgs e);
+    public delegate void OxParentChangedEvent(object sender, OxParentChangedEventArgs e);
+    public delegate void OxSizeChangedEvent(object sender, OxSizeChangedEventArgs e);
 
     public class OxHandlers : Dictionary<OxHandlerType, List<Delegate>>
     {

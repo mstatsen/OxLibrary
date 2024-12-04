@@ -3,15 +3,10 @@ using OxLibrary.Handlers;
 
 namespace OxLibrary.Controls
 {
-    public class OxControls<TOxControl> : List<IOxControl>
-        where TOxControl :
-            Control,
-            IOxManagingControl<IOxBoxManager<TOxControl>>,
-            IOxManagingControl<IOxControlManager>,
-            IOxBox<TOxControl>
+    public class OxControls : List<IOxControl>
     {
-        public readonly IOxBox<TOxControl> Box;
-        public OxControls(IOxBox<TOxControl> box) => 
+        public readonly IOxBox Box;
+        public OxControls(IOxBox box) => 
             Box = box;
 
         public List<IOxControl> Controls(OxDockType dockType)
@@ -41,8 +36,8 @@ namespace OxLibrary.Controls
             return control;
         }
 
-        public event OxControlEvent<TOxControl>? ControlAdded;
-        public event OxControlEvent<TOxControl>? ControlRemoved;
+        public event OxControlEvent? ControlAdded;
+        public event OxControlEvent? ControlRemoved;
 
         private void OnControlAdded(OxControlEventArgs e)
         {

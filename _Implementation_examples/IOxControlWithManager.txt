@@ -1,39 +1,16 @@
-﻿using OxLibrary.Handlers;
+1. Inherit your class from base control (class from System.Windows namespace) and IOxControlWithManager
 
-namespace OxLibrary.Controls
-{
-    public class OxCheckBox :
-        CheckBox, 
-        IOxControlWithManager
-    {
+2. Declare control manager like in following code
+
         public IOxControlManager Manager { get; }
 
-        public OxCheckBox()
+        public CUSTOM_CONTROL()
         {
             Manager = OxControlManagers.RegisterControl(this);
-            DoubleBuffered = true;
-        }
-        private bool readOnly = false;
-
-        public bool ReadOnly
-        {
-            get => readOnly;
-            set => readOnly = value;
+            ...
         }
 
-        protected override void OnCheckedChanged(EventArgs e)
-        {
-            if (!readOnly)
-                base.OnCheckedChanged(e);
-        }
-
-        protected override void OnClick(EventArgs e)
-        {
-            if (readOnly)
-                Checked = !Checked;
-
-            base.OnClick(e);
-        }
+3. Insert following code in your class
 
         #region Implemention of IOxControl using IOxControlManager
         public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
@@ -196,5 +173,3 @@ namespace OxLibrary.Controls
         protected sealed override void OnParentChanged(EventArgs e) { }
         protected sealed override void OnSizeChanged(EventArgs e) { }
         #endregion
-    }
-}

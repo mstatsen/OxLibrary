@@ -1,0 +1,34 @@
+// 1. Inherit the IOxBox<CUSTOM_CONTROL>, where CUSTOM_CONTROL - your control
+
+// 2. Implement IOxControl (see IOxControlWithManager.txt)
+
+// 3. Your control manager necessecy implement like following code
+
+        public IOxBoxManager Manager { get; }
+
+        public CUSTOM_CONTROL()
+        {
+            Manager = OxControlManagers.RegisterBox(this);
+            ...
+        }
+
+// 4. Insert following code in your class
+
+        #region Implemention of IOxBox using IOxBoxManager
+        public virtual bool HandleParentPadding => true;
+
+        public OxRectangle OuterControlZone =>
+            Manager.OuterControlZone;
+
+        public void RealignControls(OxDockType dockType = OxDockType.Unknown) =>
+            Manager.RealignControls(dockType);
+
+        public bool Realigning =>
+            Manager.Realigning;
+
+        public OxRectangle ControlZone =>
+            Manager.ControlZone;
+
+        public OxControls OxControls =>
+            Manager.OxControls;
+        #endregion
