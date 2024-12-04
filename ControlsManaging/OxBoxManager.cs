@@ -18,11 +18,8 @@ public class OxBoxManager :
 
     private readonly OxControlAligner Aligner;
 
-    public void RealignControls(OxDockType dockType = OxDockType.Unknown)
-    {
+    public void RealignControls(OxDockType dockType = OxDockType.Unknown) =>
         Aligner.RealignControls(dockType);
-        //ControlZone.CopyFrom(Aligner.ControlZone);
-    }
 
     public bool Realigning =>
         Aligner.Realigning;

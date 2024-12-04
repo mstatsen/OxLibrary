@@ -48,7 +48,6 @@ public partial class OxPicture : OxPanel
         BackColor = Color.Transparent;
         Width = OxWh.W24;
         Height = OxWh.W24;
-        //Padding.SizeChanged += PaddingSizeChangedHandler;
         Padding.Size = OxWh.W0;
     }
 
@@ -113,7 +112,6 @@ public partial class OxPicture : OxPanel
         picture.Parent = this;
         picture.Click += (s, e) => InvokeOnClick(this, null);
         CorrectPicturePosition();
-        //SetPictureSize(Height);
     }
 
     protected override void SetHandlers()

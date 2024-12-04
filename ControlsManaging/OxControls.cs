@@ -65,20 +65,4 @@ public class OxControls : List<IOxControl>
         OnControlRemoved(new(control));
         return control;
     }
-
-    /*
-    public List<IOxControl> ByPlacingPriority
-    {
-        get
-        {
-            List<IOxControl> result = new();
-
-            foreach (OxDock dock in OxDockHelper.ByPlacingPriority)
-                foreach (IOxControl oxControl in FindAll(c => c.Dock.Equals(dock)))
-                    result.Add(oxControl);
-
-            return result;
-        }
-    }
-    */
 }

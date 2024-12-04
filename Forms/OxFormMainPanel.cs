@@ -106,21 +106,18 @@ public partial class OxFormMainPanel : OxFrameWithHeader
 
     private readonly OxIconButton closeButton = new(OxIcons.Close, OxWh.W28)
     {
-//        IconPadding = OxWh.W5,
         ToolTipText = "Close",
         HoveredColor = Color.Red,
         Name = "FormCloseButton"
     };
     private readonly OxIconButton restoreButton = new(OxIcons.Restore, OxWh.W28)
     {
-//        IconPadding = OxWh.W5,
         ToolTipText = "Restore window",
         Default = true,
         Name = "FormRestoreButton"
     };
     private readonly OxIconButton minimizeButton = new(OxIcons.Minimize, OxWh.W28)
     {
-//        IconPadding = OxWh.W5,
         ToolTipText = "Minimize window",
         Name = "FormMinimizeButton"
     };
