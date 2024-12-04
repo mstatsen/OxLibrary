@@ -1,199 +1,198 @@
-﻿namespace OxLibrary.Controls
+﻿namespace OxLibrary.Controls;
+
+public class OxCheckData<T>
 {
-    public class OxCheckData<T>
-    {
-        public event EventHandler? CheckChanged;
+    public event EventHandler? CheckChanged;
 
-        private bool _checked = false;
-        public bool Checked 
-        { 
-            get => _checked;
-            set
-            {
-                _checked = value;
-                CheckChanged?.Invoke(this, EventArgs.Empty);
-            }
+    private bool _checked = false;
+    public bool Checked 
+    { 
+        get => _checked;
+        set
+        {
+            _checked = value;
+            CheckChanged?.Invoke(this, EventArgs.Empty);
         }
-
-        public T Data { get; set; }
-
-        public OxCheckData(T data) =>
-            Data = data;
-
-        public override string? ToString() => Data?.ToString();
     }
 
-    public class OxCheckDataList<T> : List<OxCheckData<T>>
+    public T Data { get; set; }
+
+    public OxCheckData(T data) =>
+        Data = data;
+
+    public override string? ToString() => Data?.ToString();
+}
+
+public class OxCheckDataList<T> : List<OxCheckData<T>>
+{
+    public event EventHandler? CheckChanged;
+    private readonly ComboBox.ObjectCollection Items;
+
+    public OxCheckDataList(ComboBox.ObjectCollection items) =>
+        Items = items;
+
+    public new OxCheckData<T> Add(OxCheckData<T> item)
     {
-        public event EventHandler? CheckChanged;
-        private readonly ComboBox.ObjectCollection Items;
+        base.Add(item);
+        Items.Add(item);
+        item.CheckChanged += CheckChanged;
+        return item;
+    }
 
-        public OxCheckDataList(ComboBox.ObjectCollection items) =>
-            Items = items;
-
-        public new OxCheckData<T> Add(OxCheckData<T> item)
+    public List<T>? CheckedList
+    {
+        get
         {
-            base.Add(item);
-            Items.Add(item);
-            item.CheckChanged += CheckChanged;
-            return item;
+            List<T> checkedItems = new();
+
+            foreach (OxCheckData<T> checkedItem in FindAll(c => c.Checked))
+                checkedItems.Add(checkedItem.Data);
+
+            return checkedItems;
         }
-
-        public List<T>? CheckedList
+        set
         {
-            get
-            {
-                List<T> checkedItems = new();
-
-                foreach (OxCheckData<T> checkedItem in FindAll(c => c.Checked))
-                    checkedItems.Add(checkedItem.Data);
-
-                return checkedItems;
-            }
-            set
-            {
-                foreach (OxCheckData<T> checkedItem in this)
-                    checkedItem.Checked = 
-                        value is not null 
-                        && value.Contains(checkedItem.Data);
-            }
+            foreach (OxCheckData<T> checkedItem in this)
+                checkedItem.Checked = 
+                    value is not null 
+                    && value.Contains(checkedItem.Data);
         }
+    }
 
-        public T? Item(OxCheckData<T>? checkItem)
-        {
-            OxCheckData<T>? item = Find(c => c.Equals(checkItem));
-            return 
-                item is not null 
-                    ? item.Data 
-                    : default;
-        }
+    public T? Item(OxCheckData<T>? checkItem)
+    {
+        OxCheckData<T>? item = Find(c => c.Equals(checkItem));
+        return 
+            item is not null 
+                ? item.Data 
+                : default;
+    }
 
-        public OxCheckData<T>? CheckItem(T? item) =>
-            Find(c => 
-                item is not null 
-                && item.Equals(c.Data)
-            );
+    public OxCheckData<T>? CheckItem(T? item) =>
+        Find(c => 
+            item is not null 
+            && item.Equals(c.Data)
+        );
 
-        public OxCheckData<T> Add(T item) =>
-            Add(new OxCheckData<T>(item));
+    public OxCheckData<T> Add(T item) =>
+        Add(new OxCheckData<T>(item));
 
-        public void AddRange(IEnumerable<T> collection)
-        {
-            foreach (T item in collection)
-                Add(item);
-        }
+    public void AddRange(IEnumerable<T> collection)
+    {
+        foreach (T item in collection)
+            Add(item);
+    }
 
-        public new void Remove(OxCheckData<T>? item)
-        {
-            if (item is null)
-                return;
+    public new void Remove(OxCheckData<T>? item)
+    {
+        if (item is null)
+            return;
 
-            base.Remove(item);
+        base.Remove(item);
+        item.CheckChanged -= CheckChanged;
+        Items.Remove(item);
+    }
+
+    public void Remove(T item) => Remove(CheckItem(item));
+
+    public new void Clear()
+    {
+        foreach (OxCheckData<T> item in this)
             item.CheckChanged -= CheckChanged;
-            Items.Remove(item);
-        }
 
-        public void Remove(T item) => Remove(CheckItem(item));
+        base.Clear();
+        Items.Clear();
+    }
 
-        public new void Clear()
-        {
-            foreach (OxCheckData<T> item in this)
-                item.CheckChanged -= CheckChanged;
+    public new OxCheckData<T>? Insert(int index, OxCheckData<T>? item)
+    {
+        if (item is null)
+            return null;
 
-            base.Clear();
-            Items.Clear();
-        }
+        base.Insert(index, item);
+        Items.Insert(index, item);
+        item.CheckChanged += CheckChanged;
+        return item;
+    }
 
-        public new OxCheckData<T>? Insert(int index, OxCheckData<T>? item)
-        {
-            if (item is null)
-                return null;
+    public OxCheckData<T>? Insert(int index, T item) => Insert(index, CheckItem(item));
 
-            base.Insert(index, item);
-            Items.Insert(index, item);
+    public new void InsertRange(int index, IEnumerable<OxCheckData<T>> collection) { }
+
+    public new int RemoveAll(Predicate<OxCheckData<T>> match)
+    {
+        foreach (OxCheckData<T> item in this)
+            item.CheckChanged -= CheckChanged;
+
+        int removed = base.RemoveAll(match);
+
+        foreach (OxCheckData<T> item in this)
             item.CheckChanged += CheckChanged;
-            return item;
-        }
 
-        public OxCheckData<T>? Insert(int index, T item) => Insert(index, CheckItem(item));
+        RenumerateItems();
+        return removed;
+    }
 
-        public new void InsertRange(int index, IEnumerable<OxCheckData<T>> collection) { }
+    private void RenumerateItems()
+    {
+        Items.Clear();
 
-        public new int RemoveAll(Predicate<OxCheckData<T>> match)
-        {
-            foreach (OxCheckData<T> item in this)
-                item.CheckChanged -= CheckChanged;
+        foreach (OxCheckData<T> data in this)
+            Items.Add(data);
+    }
 
-            int removed = base.RemoveAll(match);
+    public new void RemoveAt(int index)
+    {
+        this[index].CheckChanged -= CheckChanged;
+        base.RemoveAt(index);
+        Items.RemoveAt(index);
+    }
 
-            foreach (OxCheckData<T> item in this)
-                item.CheckChanged += CheckChanged;
+    public new void RemoveRange(int index, int count)
+    {
+        foreach (OxCheckData<T> item in this)
+            item.CheckChanged -= CheckChanged;
 
-            RenumerateItems();
-            return removed;
-        }
+        base.RemoveRange(index, count);
+        RenumerateItems();
 
-        private void RenumerateItems()
-        {
-            Items.Clear();
+        foreach (OxCheckData<T> item in this)
+            item.CheckChanged += CheckChanged;
+    }
 
-            foreach (OxCheckData<T> data in this)
-                Items.Add(data);
-        }
+    public new void Reverse()
+    {
+        base.Reverse();
+        RenumerateItems();
+    }
 
-        public new void RemoveAt(int index)
-        {
-            this[index].CheckChanged -= CheckChanged;
-            base.RemoveAt(index);
-            Items.RemoveAt(index);
-        }
+    public new void Reverse(int index, int count)
+    {
+        base.Reverse(index, count);
+        RenumerateItems();
+    }
 
-        public new void RemoveRange(int index, int count)
-        {
-            foreach (OxCheckData<T> item in this)
-                item.CheckChanged -= CheckChanged;
+    public new void Sort()
+    {
+        base.Sort();
+        RenumerateItems();
+    }
 
-            base.RemoveRange(index, count);
-            RenumerateItems();
+    public new void Sort(IComparer<OxCheckData<T>> comparer)
+    {
+        base.Sort(comparer);
+        RenumerateItems();
+    }
 
-            foreach (OxCheckData<T> item in this)
-                item.CheckChanged += CheckChanged;
-        }
+    public new void Sort(int index, int count, IComparer<OxCheckData<T>> comparer)
+    {
+        base.Sort(index, count, comparer);
+        RenumerateItems();
+    }
 
-        public new void Reverse()
-        {
-            base.Reverse();
-            RenumerateItems();
-        }
-
-        public new void Reverse(int index, int count)
-        {
-            base.Reverse(index, count);
-            RenumerateItems();
-        }
-
-        public new void Sort()
-        {
-            base.Sort();
-            RenumerateItems();
-        }
-
-        public new void Sort(IComparer<OxCheckData<T>> comparer)
-        {
-            base.Sort(comparer);
-            RenumerateItems();
-        }
-
-        public new void Sort(int index, int count, IComparer<OxCheckData<T>> comparer)
-        {
-            base.Sort(index, count, comparer);
-            RenumerateItems();
-        }
-
-        public new void Sort(Comparison<OxCheckData<T>> comparison)
-        {
-            base.Sort(comparison);
-            RenumerateItems();
-        }
+    public new void Sort(Comparison<OxCheckData<T>> comparison)
+    {
+        base.Sort(comparison);
+        RenumerateItems();
     }
 }

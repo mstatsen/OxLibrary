@@ -2,316 +2,315 @@
 using OxLibrary.Handlers;
 using OxLibrary.Panels;
 
-namespace OxLibrary.Forms
+namespace OxLibrary.Forms;
+
+public partial class OxFormMainPanel : OxFrameWithHeader
 {
-    public partial class OxFormMainPanel : OxFrameWithHeader
+    public OxForm Form { get; internal set; }
+
+    private OxFormMover formMover = default!;
+
+    public OxFormMainPanel(OxForm form) : base()
     {
-        public OxForm Form { get; internal set; }
+        Form = form;
+        Form.SizeChanged += FormSizeChanged;
+        Dock = OxDock.Fill;
+        SetTitleButtonsVisible();
+        SetHeaderHeight(OxWh.W34);
+        SetRestoreButtonIconAndTooltip();
+        SetBordersSize();
+        SetHeaderFont();
+        SetMarginsSize();
+        CreateFormMover();
+        BlurredBorder = true;
+    }
 
-        private OxFormMover formMover = default!;
+    public override OxDock Dock 
+    { 
+        get => OxDock.Fill; 
+        set => base.Dock = OxDock.Fill;
+    }
 
-        public OxFormMainPanel(OxForm form) : base()
-        {
-            Form = form;
-            Form.SizeChanged += FormSizeChanged;
-            Dock = OxDock.Fill;
-            SetTitleButtonsVisible();
-            SetHeaderHeight(OxWh.W34);
-            SetRestoreButtonIconAndTooltip();
-            SetBordersSize();
-            SetHeaderFont();
-            SetMarginsSize();
-            CreateFormMover();
-            BlurredBorder = true;
-        }
+    private void FormSizeChanged(object sender, OxSizeChangedEventArgs args) => 
+        SetRestoreButtonIconAndTooltip();
 
-        public override OxDock Dock 
-        { 
-            get => OxDock.Fill; 
-            set => base.Dock = OxDock.Fill;
-        }
+    private void SetHeaderFont() => 
+        Header.TitleFont = 
+            new(Header.TitleFont.FontFamily, Header.TitleFont.Size + 1, FontStyle.Bold);
 
-        private void FormSizeChanged(object sender, OxSizeChangedEventArgs args) => 
-            SetRestoreButtonIconAndTooltip();
+    private void SetBordersSize() => 
+        Borders.Size = OxWh.W1;
 
-        private void SetHeaderFont() => 
-            Header.TitleFont = 
-                new(Header.TitleFont.FontFamily, Header.TitleFont.Size + 1, FontStyle.Bold);
+    private void CreateFormMover() => 
+        formMover = new OxFormMover(Form, Header.Label);
 
-        private void SetBordersSize() => 
-            Borders.Size = OxWh.W1;
+    public void SetHeaderHeight(OxWidth height)
+    {
+        HeaderHeight = height;
+        SetButtonsSize();
+    }
 
-        private void CreateFormMover() => 
-            formMover = new OxFormMover(Form, Header.Label);
+    public void SetIcon()
+    {
+        Header.Icon = Form.FormIcon;
 
-        public void SetHeaderHeight(OxWidth height)
-        {
-            HeaderHeight = height;
-            SetButtonsSize();
-        }
+        if (Form.FormIcon is not null)
+            Form.Icon = System.Drawing.Icon.FromHandle(Form.FormIcon.GetHicon());
+    }
 
-        public void SetIcon()
-        {
-            Header.Icon = Form.FormIcon;
+    internal void SetTitleButtonsVisible()
+    {
+        minimizeButton.Visible = Form.CanMinimize;
+        restoreButton.Visible = Form.CanMaximize;
+    }
 
-            if (Form.FormIcon is not null)
-                Form.Icon = System.Drawing.Icon.FromHandle(Form.FormIcon.GetHicon());
-        }
+    protected override void PrepareInnerComponents()
+    {
+        base.PrepareInnerComponents();
+        SetButtonsHandlers();
+        SetButtonsSize();
+        PlaceButtons();
+    }
 
-        internal void SetTitleButtonsVisible()
-        {
-            minimizeButton.Visible = Form.CanMinimize;
-            restoreButton.Visible = Form.CanMaximize;
-        }
+    public override void PrepareColors()
+    {
+        base.PrepareColors();
+        Form?.PrepareColors();
+    }
 
-        protected override void PrepareInnerComponents()
-        {
-            base.PrepareInnerComponents();
-            SetButtonsHandlers();
-            SetButtonsSize();
-            PlaceButtons();
-        }
+    private void PlaceButtons()
+    {
+        Header.AddToolButton(closeButton);
+        Header.AddToolButton(restoreButton);
+        Header.AddToolButton(minimizeButton);
+    }
 
-        public override void PrepareColors()
-        {
-            base.PrepareColors();
-            Form?.PrepareColors();
-        }
+    private void SetButtonsSize()
+    {
+        foreach (OxClickFrame button in Header.Buttons)
+            button.Size = new(OxWh.W36, OxWh.W28);
+    }
 
-        private void PlaceButtons()
-        {
-            Header.AddToolButton(closeButton);
-            Header.AddToolButton(restoreButton);
-            Header.AddToolButton(minimizeButton);
-        }
+    private void SetButtonsHandlers()
+    {
+        closeButton.Click += CloseButtonClickHandler;
+        restoreButton.Click += RestoreButtonClickHandler;
+        minimizeButton.Click += MinimizeButtonClickHandler;
+    }
 
-        private void SetButtonsSize()
-        {
-            foreach (OxClickFrame button in Header.Buttons)
-                button.Size = new(OxWh.W36, OxWh.W28);
-        }
+    private void MinimizeButtonClickHandler(object? sender, EventArgs e) => 
+        SetFormState(FormWindowState.Minimized);
 
-        private void SetButtonsHandlers()
-        {
-            closeButton.Click += CloseButtonClickHandler;
-            restoreButton.Click += RestoreButtonClickHandler;
-            minimizeButton.Click += MinimizeButtonClickHandler;
-        }
+    private void RestoreButtonClickHandler(object? sender, EventArgs e) => 
+        SetFormState(FormIsMaximized ? FormWindowState.Normal : FormWindowState.Maximized);
 
-        private void MinimizeButtonClickHandler(object? sender, EventArgs e) => 
-            SetFormState(FormWindowState.Minimized);
+    private readonly OxIconButton closeButton = new(OxIcons.Close, OxWh.W28)
+    {
+        IconPadding = OxWh.W5,
+        ToolTipText = "Close",
+        HoveredColor = Color.Red,
+        Name = "FormCloseButton"
+    };
+    private readonly OxIconButton restoreButton = new(OxIcons.Restore, OxWh.W28)
+    {
+        IconPadding = OxWh.W5,
+        ToolTipText = "Restore window",
+        Default = true,
+        Name = "FormRestoreButton"
+    };
+    private readonly OxIconButton minimizeButton = new(OxIcons.Minimize, OxWh.W28)
+    {
+        IconPadding = OxWh.W5,
+        ToolTipText = "Minimize window",
+        Name = "FormMinimizeButton"
+    };
 
-        private void RestoreButtonClickHandler(object? sender, EventArgs e) => 
-            SetFormState(FormIsMaximized ? FormWindowState.Normal : FormWindowState.Maximized);
+    private Bitmap GetRestoreIcon() =>
+        Form is not null 
+        && FormIsMaximized
+            ? OxIcons.Restore
+            : OxIcons.Maximize;
 
-        private readonly OxIconButton closeButton = new(OxIcons.Close, OxWh.W28)
-        {
-            IconPadding = OxWh.W5,
-            ToolTipText = "Close",
-            HoveredColor = Color.Red,
-            Name = "FormCloseButton"
-        };
-        private readonly OxIconButton restoreButton = new(OxIcons.Restore, OxWh.W28)
-        {
-            IconPadding = OxWh.W5,
-            ToolTipText = "Restore window",
-            Default = true,
-            Name = "FormRestoreButton"
-        };
-        private readonly OxIconButton minimizeButton = new(OxIcons.Minimize, OxWh.W28)
-        {
-            IconPadding = OxWh.W5,
-            ToolTipText = "Minimize window",
-            Name = "FormMinimizeButton"
-        };
+    private string GetRestoreToopTip() =>
+        Form is not null
+        && FormIsMaximized
+            ? "Restore window"
+            : "Maximize window";
 
-        private Bitmap GetRestoreIcon() =>
-            Form is not null 
-            && FormIsMaximized
-                ? OxIcons.Restore
-                : OxIcons.Maximize;
+    private void SetRestoreButtonIconAndTooltip()
+    {
+        if (!Initialized)
+            return;
 
-        private string GetRestoreToopTip() =>
-            Form is not null
-            && FormIsMaximized
-                ? "Restore window"
-                : "Maximize window";
+        restoreButton.Icon = GetRestoreIcon();
+        restoreButton.ToolTipText = GetRestoreToopTip();
+    }
 
-        private void SetRestoreButtonIconAndTooltip()
-        {
-            if (!Initialized)
-                return;
+    public void SetFormState(FormWindowState state) => 
+        Form.SetUpSizes(state);
 
-            restoreButton.Icon = GetRestoreIcon();
-            restoreButton.ToolTipText = GetRestoreToopTip();
-        }
+    private void CloseButtonClickHandler(object? sender, EventArgs e)
+    {
+        Form.DialogResult = DialogResult.Cancel;
+        Form.Close();
+    }
 
-        public void SetFormState(FormWindowState state) => 
-            Form.SetUpSizes(state);
+    public override Color DefaultColor =>
+        Color.FromArgb(146, 143, 140);
 
-        private void CloseButtonClickHandler(object? sender, EventArgs e)
-        {
-            Form.DialogResult = DialogResult.Cancel;
-            Form.Close();
-        }
+    public bool FormIsMaximized => 
+        Form.WindowState is FormWindowState.Maximized;
 
-        public override Color DefaultColor =>
-            Color.FromArgb(146, 143, 140);
+    public override void OnSizeChanged(OxSizeChangedEventArgs e)
+    {
+        if (!e.Changed
+            || !Initialized)
+            return;
 
-        public bool FormIsMaximized => 
-            Form.WindowState is FormWindowState.Maximized;
-
-        public override void OnSizeChanged(OxSizeChangedEventArgs e)
-        {
-            if (!e.Changed
-                || !Initialized)
-                return;
-
-            DoWithSuspendedLayout(() =>
-                {
-                    if (e.Changed &&
-                        Form is not null)
-                        Form.Size = new(Size);
-                }
-            );
-        }
-
-        internal void SetMarginsSize() => 
-            Margin.Size = 
-                Form.Sizeble 
-                    ? OxWh.W2
-                    : OxWh.W0;
-
-        public override void OnLocationChanged(OxLocationChangedEventArgs e)
-        {
-            base.OnLocationChanged(e);
-
-            if (formMover.Processing)
-                return;
-
-            Form.Left |= Left;
-            Form.Top |= Top;
-        }
-                                             
-        protected override void SetHandlers()
-        {
-            base.SetHandlers();
-            MouseDown += ResizerMouseDown;
-            MouseUp += MarginMouseUpHandler;
-            MouseMove += ResizeHandler;
-            MouseLeave += MarginMouseLeaveHandler;
-        }
-
-        private void MarginMouseLeaveHandler(object? sender, EventArgs e) =>
-            Cursor = Cursors.Default;
-
-        private void MarginMouseUpHandler(object? sender, MouseEventArgs e) =>
-            LastDirection = OxDirection.None;
-
-        private void ResizerMouseDown(object? sender, MouseEventArgs e)
-        {
-            if (sender is not OxPanel border)
-                return;
-
-            LastMousePosition = new(border.PointToScreen(e.Location));
-            LastDirection = OxDirectionHelper.GetDirection(border, new(e.Location));
-        }
-
-        private void SetSizerCursor(OxDirection direction) => 
-            Cursor = OxDirectionHelper.GetSizerCursor(direction);
-
-        private OxPoint LastMousePosition = new(-1, -1);
-        private OxDirection LastDirection = OxDirection.None;
-        private bool ResizeProcessing = false;
-
-        private void ResizeHandler(object? sender, MouseEventArgs e)
-        {
-            if (!Form.Sizeble)
-                return;
-
-            if (ResizeProcessing)
-                return;
-
-            OxPanel? border = (OxPanel?)sender;
-
-            if (border is null)
-                return;
-
-            if (LastDirection.Equals(OxDirection.None))
+        DoWithSuspendedLayout(() =>
             {
-                SetSizerCursor(
-                    OxDirectionHelper.GetDirection(border, new(e.Location))
-                );
-                return;
+                if (e.Changed &&
+                    Form is not null)
+                    Form.Size = new(Size);
             }
+        );
+    }
 
-            if (LastMousePosition.Equals(e.Location))
-                return;
+    internal void SetMarginsSize() => 
+        Margin.Size = 
+            Form.Sizeble 
+                ? OxWh.W2
+                : OxWh.W0;
 
-            OxPoint newLastMousePosition = new(border.PointToScreen(e.Location));
-            OxPoint oldSize = new(Width, Height);
-            OxPoint newSize = new(oldSize.X, oldSize.Y);
-            OxPoint delta = new(
-                newLastMousePosition.X - LastMousePosition.X,
-                newLastMousePosition.Y - LastMousePosition.Y
+    public override void OnLocationChanged(OxLocationChangedEventArgs e)
+    {
+        base.OnLocationChanged(e);
+
+        if (formMover.Processing)
+            return;
+
+        Form.Left |= Left;
+        Form.Top |= Top;
+    }
+                                         
+    protected override void SetHandlers()
+    {
+        base.SetHandlers();
+        MouseDown += ResizerMouseDown;
+        MouseUp += MarginMouseUpHandler;
+        MouseMove += ResizeHandler;
+        MouseLeave += MarginMouseLeaveHandler;
+    }
+
+    private void MarginMouseLeaveHandler(object? sender, EventArgs e) =>
+        Cursor = Cursors.Default;
+
+    private void MarginMouseUpHandler(object? sender, MouseEventArgs e) =>
+        LastDirection = OxDirection.None;
+
+    private void ResizerMouseDown(object? sender, MouseEventArgs e)
+    {
+        if (sender is not OxPanel border)
+            return;
+
+        LastMousePosition = new(border.PointToScreen(e.Location));
+        LastDirection = OxDirectionHelper.GetDirection(border, new(e.Location));
+    }
+
+    private void SetSizerCursor(OxDirection direction) => 
+        Cursor = OxDirectionHelper.GetSizerCursor(direction);
+
+    private OxPoint LastMousePosition = new(-1, -1);
+    private OxDirection LastDirection = OxDirection.None;
+    private bool ResizeProcessing = false;
+
+    private void ResizeHandler(object? sender, MouseEventArgs e)
+    {
+        if (!Form.Sizeble)
+            return;
+
+        if (ResizeProcessing)
+            return;
+
+        OxPanel? border = (OxPanel?)sender;
+
+        if (border is null)
+            return;
+
+        if (LastDirection.Equals(OxDirection.None))
+        {
+            SetSizerCursor(
+                OxDirectionHelper.GetDirection(border, new(e.Location))
             );
+            return;
+        }
 
-            if (OxDirectionHelper.ContainsRight(LastDirection))
-                newSize.X |= delta.X;
+        if (LastMousePosition.Equals(e.Location))
+            return;
 
-            if (OxDirectionHelper.ContainsBottom(LastDirection))
-                newSize.Y |= delta.Y;
+        OxPoint newLastMousePosition = new(border.PointToScreen(e.Location));
+        OxPoint oldSize = new(Width, Height);
+        OxPoint newSize = new(oldSize.X, oldSize.Y);
+        OxPoint delta = new(
+            newLastMousePosition.X - LastMousePosition.X,
+            newLastMousePosition.Y - LastMousePosition.Y
+        );
+
+        if (OxDirectionHelper.ContainsRight(LastDirection))
+            newSize.X |= delta.X;
+
+        if (OxDirectionHelper.ContainsBottom(LastDirection))
+            newSize.Y |= delta.Y;
+
+        if (OxDirectionHelper.ContainsLeft(LastDirection))
+            newSize.X -= delta.X;
+
+        if (OxDirectionHelper.ContainsTop(LastDirection))
+            newSize.Y -= delta.Y;
+
+        LastMousePosition = newLastMousePosition;
+
+        if (OxWh.LessOrEquals(newSize.X, Form.MinimumSize.Width))
+            newSize.X = Form.MinimumSize.Width;
+
+        if (OxWh.LessOrEquals(newSize.Y, Form.MinimumSize.Height))
+            newSize.Y = Form.MinimumSize.Height;
+
+        List<OxPoint> sizePoints = OxFormMover.WayPoints(oldSize, newSize, 30);
+
+        ResizeProcessing = true;
+        Form.SuspendLayout();
+        SuspendLayout();
+
+        foreach (OxPoint point in sizePoints)
+        {
+            OxPoint newLocationStep = new(Form.Left, Form.Top);
 
             if (OxDirectionHelper.ContainsLeft(LastDirection))
-                newSize.X -= delta.X;
+                newLocationStep.X =
+                    OxWh.Sub(
+                        newLocationStep.X, 
+                        OxWh.Sub(point.X, Width)
+                    );
 
             if (OxDirectionHelper.ContainsTop(LastDirection))
-                newSize.Y -= delta.Y;
+                newLocationStep.Y =
+                    OxWh.Sub(
+                        newLocationStep.Y,
+                        OxWh.Sub(point.Y, Height)
+                    );
 
-            LastMousePosition = newLastMousePosition;
+            if (!Form.Location.Equals(newLocationStep))
+                Form.Location = newLocationStep;
 
-            if (OxWh.LessOrEquals(newSize.X, Form.MinimumSize.Width))
-                newSize.X = Form.MinimumSize.Width;
+            OxSize newSizeStep = new(point);
 
-            if (OxWh.LessOrEquals(newSize.Y, Form.MinimumSize.Height))
-                newSize.Y = Form.MinimumSize.Height;
-
-            List<OxPoint> sizePoints = OxFormMover.WayPoints(oldSize, newSize, 30);
-
-            ResizeProcessing = true;
-            Form.SuspendLayout();
-            SuspendLayout();
-
-            foreach (OxPoint point in sizePoints)
-            {
-                OxPoint newLocationStep = new(Form.Left, Form.Top);
-
-                if (OxDirectionHelper.ContainsLeft(LastDirection))
-                    newLocationStep.X =
-                        OxWh.Sub(
-                            newLocationStep.X, 
-                            OxWh.Sub(point.X, Width)
-                        );
-
-                if (OxDirectionHelper.ContainsTop(LastDirection))
-                    newLocationStep.Y =
-                        OxWh.Sub(
-                            newLocationStep.Y,
-                            OxWh.Sub(point.Y, Height)
-                        );
-
-                if (!Form.Location.Equals(newLocationStep))
-                    Form.Location = newLocationStep;
-
-                OxSize newSizeStep = new(point);
-
-                if (!Size.Equals(newSizeStep))
-                    Size = newSizeStep;
-            }
-
-            ResumeLayout();
-            Form.ResumeLayout();
-            ResizeProcessing = false;
+            if (!Size.Equals(newSizeStep))
+                Size = newSizeStep;
         }
+
+        ResumeLayout();
+        Form.ResumeLayout();
+        ResizeProcessing = false;
     }
 }

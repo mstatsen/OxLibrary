@@ -1,12 +1,11 @@
-﻿namespace OxLibrary
+﻿namespace OxLibrary;
+
+[Flags]
+public enum OxDirection
 {
-    [Flags]
-    public enum OxDirection
-    {
-        None = 0,
-        Left = 1,
-        Top = 2,
-        Right = 4,
-        Bottom = 8
-    }
+    None = 0,
+    Left = 1,
+    Top = 2,
+    Right = 4,
+    Bottom = 8
 }

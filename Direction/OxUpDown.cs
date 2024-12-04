@@ -1,9 +1,7 @@
-﻿
-namespace OxLibrary.Controls
+﻿namespace OxLibrary.Controls;
+
+public enum OxUpDown
 {
-    public enum OxUpDown
-    {
-        Up,
-        Down
-    };
-}
+    Up,
+    Down
+};

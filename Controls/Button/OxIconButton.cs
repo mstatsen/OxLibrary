@@ -1,70 +1,69 @@
 ﻿using OxLibrary.Panels;
 
-namespace OxLibrary.Controls
+namespace OxLibrary.Controls;
+
+public class OxIconButton : OxClickFrame
 {
-    public class OxIconButton : OxClickFrame
+    public readonly OxPicture Picture = 
+        new()
+        {
+            Dock = OxDock.Fill
+        };
+
+    public OxIconButton() : base() { }
+    public OxIconButton(Bitmap? icon, OxWidth Size) : base(new(Size, Size))
     {
-        public readonly OxPicture Picture = 
-            new()
-            {
-                Dock = OxDock.Fill
-            };
+        Icon = icon;
+    }
 
-        public OxIconButton() : base() { }
-        public OxIconButton(Bitmap? icon, OxWidth Size) : base(new(Size, Size))
-        {
-            Icon = icon;
-        }
+    protected override void PrepareInnerComponents()
+    {
+        Picture.Parent = this;
+        Picture.UseDisabledStyles = UseDisabledStyles;
+        base.PrepareInnerComponents();
+    }
 
-        protected override void PrepareInnerComponents()
-        {
-            Picture.Parent = this;
-            Picture.UseDisabledStyles = UseDisabledStyles;
-            base.PrepareInnerComponents();
-        }
+    public override void PrepareColors()
+    {
+        base.PrepareColors();
+        Picture.BaseColor = BaseColor;
+    }
 
-        public override void PrepareColors()
-        {
-            base.PrepareColors();
-            Picture.BaseColor = BaseColor;
-        }
+    protected override Bitmap? GetIcon() => (Bitmap?)Picture.Image;
 
-        protected override Bitmap? GetIcon() => (Bitmap?)Picture.Image;
+    protected override void SetIcon(Bitmap? value) => 
+        Picture.Image = value;
 
-        protected override void SetIcon(Bitmap? value) => 
-            Picture.Image = value;
+    public OxWidth IconPadding
+    {
+        get => Picture.PicturePadding;
+        set => Picture.PicturePadding = value;
+    }
 
-        public OxWidth IconPadding
-        {
-            get => Picture.PicturePadding;
-            set => Picture.PicturePadding = value;
-        }
+    protected override void SetUseDisabledStyles(bool value)
+    {
+        base.SetUseDisabledStyles(value);
+        Picture.UseDisabledStyles = UseDisabledStyles;
+    }
 
-        protected override void SetUseDisabledStyles(bool value)
-        {
-            base.SetUseDisabledStyles(value);
-            Picture.UseDisabledStyles = UseDisabledStyles;
-        }
+    protected override void SetHandlers()
+    {
+        base.SetHandlers();
+        SetHoverHandlers(Picture);
+        SetClickHandler(Picture);
+    }
 
-        protected override void SetHandlers()
-        {
-            base.SetHandlers();
-            SetHoverHandlers(Picture);
-            SetClickHandler(Picture);
-        }
+    protected override void OnEnabledChanged(EventArgs e)
+    {
+        base.OnEnabledChanged(e);
+        Picture.Enabled = Enabled;
+        PrepareColors();
+    }
 
-        protected override void OnEnabledChanged(EventArgs e)
-        {
-            base.OnEnabledChanged(e);
-            Picture.Enabled = Enabled;
-            PrepareColors();
-        }
-
-        protected override void SetToolTipText(string value)
-        {
-            base.SetToolTipText(value);
-            ToolTip.SetToolTip(Picture, value);
-            ToolTip.SetToolTip(Picture.Picture, value);
-        }
+    protected override void SetToolTipText(string value)
+    {
+        base.SetToolTipText(value);
+        ToolTip.SetToolTip(Picture, value);
+        ToolTip.SetToolTip(Picture.Picture, value);
     }
 }

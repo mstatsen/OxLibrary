@@ -1,10 +1,9 @@
-﻿namespace OxLibrary.Forms
+﻿namespace OxLibrary.Forms;
+
+public enum OxMessageType
 {
-    public enum OxMessageType
-    {
-        Info,
-        Warning,
-        Error,
-        Confirmation
-    }
+    Info,
+    Warning,
+    Error,
+    Confirmation
 }

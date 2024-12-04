@@ -1,4 +1,4 @@
-﻿using OxLibrary.Controls;
+﻿using OxLibrary.Interfaces;
 
 namespace OxLibrary.Handlers
 {

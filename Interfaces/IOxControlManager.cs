@@ -1,6 +1,6 @@
 ﻿using OxLibrary.Handlers;
 
-namespace OxLibrary.Controls
+namespace OxLibrary.Interfaces
 {
     public interface IOxControlManager
     {

@@ -1,399 +1,397 @@
-﻿using OxLibrary.Controls;
-using OxLibrary.Handlers;
+﻿using OxLibrary.Handlers;
 using OxLibrary.Interfaces;
 
-namespace OxLibrary.Forms
+namespace OxLibrary.Forms;
+
+public class OxForm : Form,
+    IOxBox<OxForm>,
+    IOxWithColorHelper
 {
-    public class OxForm : Form,
-        IOxBox<OxForm>,
-        IOxWithColorHelper
+    private readonly bool Initialized = false;
+    public OxFormMainPanel MainPanel { get; internal set; }
+
+    public IOxBoxManager Manager { get; }
+
+    public OxForm()
     {
-        private readonly bool Initialized = false;
-        public OxFormMainPanel MainPanel { get; internal set; }
+        Initialized = false;
 
-        public IOxBoxManager Manager { get; }
-
-        public OxForm()
+        try
         {
-            Initialized = false;
-
-            try
-            {
-                DoubleBuffered = true;
-                Manager = OxControlManagers.RegisterBox(this);
-                MainPanel = CreateMainPanel();
-                MainPanel.Colors.BaseColorChanged += BaseColorChangedHandler;
-                SetUpForm();
-                PlaceMainPanel();
-            }
-            finally
-            {
-                Initialized = true;
-            }
+            DoubleBuffered = true;
+            Manager = OxControlManagers.RegisterBox(this);
+            MainPanel = CreateMainPanel();
+            MainPanel.Colors.BaseColorChanged += BaseColorChangedHandler;
+            SetUpForm();
+            PlaceMainPanel();
         }
-
-        private void BaseColorChangedHandler(object? sender, EventArgs e) =>
-            PrepareColors();
-
-        public void MoveToScreenCenter()
+        finally
         {
-            Screen screen = Screen.FromControl(this);
-            Location = new(
-                OxWh.Add(
-                    OxWh.W(screen.Bounds.Left),
-                    OxWh.Div(
-                        OxWh.Sub(screen.WorkingArea.Width, Width),
-                        OxWh.W2
-                    )
-                ),
-                OxWh.Add(
-                    OxWh.W(screen.Bounds.Top),
-                    OxWh.Div(
-                        OxWh.Sub(screen.WorkingArea.Height, Height),
-                        OxWh.W2
-                    )
+            Initialized = true;
+        }
+    }
+
+    private void BaseColorChangedHandler(object? sender, EventArgs e) =>
+        PrepareColors();
+
+    public void MoveToScreenCenter()
+    {
+        Screen screen = Screen.FromControl(this);
+        Location = new(
+            OxWh.Add(
+                OxWh.W(screen.Bounds.Left),
+                OxWh.Div(
+                    OxWh.Sub(screen.WorkingArea.Width, Width),
+                    OxWh.W2
                 )
-            );
-            Size = new(
-                OxWh.I(Width),
-                OxWh.I(Height)
-            );
-        }
+            ),
+            OxWh.Add(
+                OxWh.W(screen.Bounds.Top),
+                OxWh.Div(
+                    OxWh.Sub(screen.WorkingArea.Height, Height),
+                    OxWh.W2
+                )
+            )
+        );
+        Size = new(
+            OxWh.I(Width),
+            OxWh.I(Height)
+        );
+    }
 
-        protected virtual void SetUpForm()
-        {
-            FormBorderStyle = FormBorderStyle.None;
-            SetUpSizes(WindowState);
-            StartPosition = FormStartPosition.CenterParent;
-        }
+    protected virtual void SetUpForm()
+    {
+        FormBorderStyle = FormBorderStyle.None;
+        SetUpSizes(WindowState);
+        StartPosition = FormStartPosition.CenterParent;
+    }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            MainPanel.SetIcon();
-        }
+    protected override void OnLoad(EventArgs e)
+    {
+        base.OnLoad(e);
+        MainPanel.SetIcon();
+    }
 
-        public void SetUpSizes(FormWindowState state)
-        {
-            MaximumSize = OxControlHelper.ScreenSize(this);
-            OxSize wantedMinimumSize = WantedMinimumSize;
-            MinimumSize = new(
-                OxWh.Min(wantedMinimumSize.Width, MaximumSize.Width),
-                OxWh.Min(wantedMinimumSize.Height, MaximumSize.Height)
-            );
-            WindowState = state;
-            RealignControls();
-        }
+    public void SetUpSizes(FormWindowState state)
+    {
+        MaximumSize = OxControlHelper.ScreenSize(this);
+        OxSize wantedMinimumSize = WantedMinimumSize;
+        MinimumSize = new(
+            OxWh.Min(wantedMinimumSize.Width, MaximumSize.Width),
+            OxWh.Min(wantedMinimumSize.Height, MaximumSize.Height)
+        );
+        WindowState = state;
+        RealignControls();
+    }
 
-        public new FormWindowState WindowState
+    public new FormWindowState WindowState
+    {
+        get => base.WindowState;
+        set
         {
-            get => base.WindowState;
-            set
+            if (WindowState.Equals(value))
+                return;
+
+            if (value is FormWindowState.Minimized)
             {
-                if (WindowState.Equals(value))
-                    return;
-
-                if (value is FormWindowState.Minimized)
-                {
-                    base.WindowState = value;
-                    return;
-                }
-
-                OxSize oldSize = new(Size);
                 base.WindowState = value;
-                OnSizeChanged(new(oldSize, Size));
-            }
-        }
-
-        public virtual OxSize WantedMinimumSize =>
-            new(OxWh.W640, OxWh.W480);
-
-        protected virtual OxFormMainPanel CreateMainPanel() =>
-            new(this);
-
-        private void PlaceMainPanel()
-        {
-            MainPanel.Parent = this;
-            MainPanel.Location = new(OxWh.W0, OxWh.W0);
-            MainPanel.Size = new(Width, Height);
-        }
-
-        protected override void OnControlAdded(ControlEventArgs e)
-        {
-            if (Initialized)
-                e.Control.Parent = MainPanel;
-            else base.OnControlAdded(e);
-        }
-
-        protected override void OnTextChanged(EventArgs e) =>
-            MainPanel.Text = Text;
-
-        private bool canMaximize = true;
-        private bool canMinimize = true;
-
-        public bool CanMaximize
-        {
-            get => canMaximize;
-            set
-            {
-                canMaximize = value;
-                MainPanel.SetTitleButtonsVisible();
-            }
-        }
-
-        public bool CanMinimize
-        {
-            get => canMinimize;
-            set
-            {
-                canMinimize = value;
-                MainPanel.SetTitleButtonsVisible();
-            }
-        }
-
-
-        private bool sizeble = true;
-        public bool Sizeble
-        {
-            get => sizeble;
-            set
-            {
-                sizeble = value;
-                MainPanel.SetMarginsSize();
-            }
-        }
-
-        protected override void OnShown(EventArgs e)
-        {
-            base.OnShown(e);
-            MainPanel.Location = new(OxPoint.Empty);
-            MainPanel.Size = new(Size);
-            RealignControls();
-        }
-
-        public virtual Bitmap? FormIcon => null;
-
-        public void ClearConstraints()
-        {
-            MinimumSize = OxSize.Empty;
-            MaximumSize = MinimumSize;
-        }
-
-        public void FreezeSize()
-        {
-            if (MainPanel is null)
                 return;
+            }
 
-            MinimumSize = MainPanel.Size;
-            MaximumSize = MinimumSize;
+            OxSize oldSize = new(Size);
+            base.WindowState = value;
+            OnSizeChanged(new(oldSize, Size));
         }
+    }
 
-        public Color BaseColor
+    public virtual OxSize WantedMinimumSize =>
+        new(OxWh.W640, OxWh.W480);
+
+    protected virtual OxFormMainPanel CreateMainPanel() =>
+        new(this);
+
+    private void PlaceMainPanel()
+    {
+        MainPanel.Parent = this;
+        MainPanel.Location = new(OxWh.W0, OxWh.W0);
+        MainPanel.Size = new(Width, Height);
+    }
+
+    protected override void OnControlAdded(ControlEventArgs e)
+    {
+        if (Initialized)
+            e.Control.Parent = MainPanel;
+        else base.OnControlAdded(e);
+    }
+
+    protected override void OnTextChanged(EventArgs e) =>
+        MainPanel.Text = Text;
+
+    private bool canMaximize = true;
+    private bool canMinimize = true;
+
+    public bool CanMaximize
+    {
+        get => canMaximize;
+        set
         {
-            get => MainPanel.BaseColor;
-            set => MainPanel.BaseColor = value;
+            canMaximize = value;
+            MainPanel.SetTitleButtonsVisible();
         }
+    }
 
-        public OxColorHelper Colors => MainPanel.Colors;
-
-        public virtual void PrepareColors() =>
-            MainPanel.PrepareColors();
-
-        #region Implemention of IOxBox using IOxBoxManager
-        public virtual bool HandleParentPadding => false;
-        public OxRectangle OuterControlZone =>
-            Manager.OuterControlZone;
-
-        public void RealignControls(OxDockType dockType = OxDockType.Unknown) =>
-            Manager.RealignControls(dockType);
-
-        public bool Realigning =>
-            Manager.Realigning;
-
-        public OxRectangle ControlZone =>
-            Manager.ControlZone;
-
-        public OxControls OxControls =>
-            Manager.OxControls;
-        #endregion
-
-        #region Implemention of IOxControl using IOxControlManager
-        public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
-        public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
-        public virtual void OnParentChanged(OxParentChangedEventArgs e) { }
-        public virtual void OnSizeChanged(OxSizeChangedEventArgs e)
+    public bool CanMinimize
+    {
+        get => canMinimize;
+        set
         {
-            if (!Initialized ||
-                !e.Changed)
-                return;
-
-            MainPanel.Size = Size;
-            RealignControls();
+            canMinimize = value;
+            MainPanel.SetTitleButtonsVisible();
         }
+    }
 
-        public new IOxBox? Parent
+
+    private bool sizeble = true;
+    public bool Sizeble
+    {
+        get => sizeble;
+        set
         {
-            get => Manager.Parent;
-            set => Manager.Parent = value;
+            sizeble = value;
+            MainPanel.SetMarginsSize();
         }
+    }
 
-        public OxPoint PointToScreen(OxPoint p) =>
-            Manager.PointToScreen(p);
+    protected override void OnShown(EventArgs e)
+    {
+        base.OnShown(e);
+        MainPanel.Location = new(OxPoint.Empty);
+        MainPanel.Size = new(Size);
+        RealignControls();
+    }
 
-        public new OxWidth Width
-        {
-            get => Manager.Width;
-            set => Manager.Width = value;
-        }
+    public virtual Bitmap? FormIcon => null;
 
-        public new OxWidth Height
-        {
-            get => Manager.Height;
-            set => Manager.Height = value;
-        }
+    public void ClearConstraints()
+    {
+        MinimumSize = OxSize.Empty;
+        MaximumSize = MinimumSize;
+    }
 
-        public new OxWidth Top
-        {
-            get => Manager.Top;
-            set => Manager.Top = value;
-        }
+    public void FreezeSize()
+    {
+        if (MainPanel is null)
+            return;
 
-        public new OxWidth Left
-        {
-            get => Manager.Left;
-            set => Manager.Left = value;
-        }
+        MinimumSize = MainPanel.Size;
+        MaximumSize = MinimumSize;
+    }
 
-        public new OxWidth Bottom =>
-            Manager.Bottom;
+    public Color BaseColor
+    {
+        get => MainPanel.BaseColor;
+        set => MainPanel.BaseColor = value;
+    }
 
-        public new OxWidth Right =>
-            Manager.Right;
+    public OxColorHelper Colors => MainPanel.Colors;
 
-        public new OxSize Size
-        {
-            get => Manager.Size;
-            set => Manager.Size = value;
-        }
+    public virtual void PrepareColors() =>
+        MainPanel.PrepareColors();
 
-        public new OxSize ClientSize
-        {
-            get => Manager.ClientSize;
-            set => Manager.ClientSize = value;
-        }
+    #region Implemention of IOxBox using IOxBoxManager
+    public virtual bool HandleParentPadding => false;
+    public OxRectangle OuterControlZone =>
+        Manager.OuterControlZone;
 
-        public new OxPoint Location
-        {
-            get => Manager.Location;
-            set => Manager.Location = value;
-        }
+    public void RealignControls(OxDockType dockType = OxDockType.Unknown) =>
+        Manager.RealignControls(dockType);
 
-        public new OxSize MinimumSize
-        {
-            get => Manager.MinimumSize;
-            set => Manager.MinimumSize = value;
-        }
+    public bool Realigning =>
+        Manager.Realigning;
 
-        public new OxSize MaximumSize
-        {
-            get => Manager.MaximumSize;
-            set => Manager.MaximumSize = value;
-        }
+    public OxRectangle ControlZone =>
+        Manager.ControlZone;
 
-        public new virtual OxDock Dock
-        {
-            get => Manager.Dock;
-            set => Manager.Dock = value;
-        }
+    public OxControls OxControls =>
+        Manager.OxControls;
+    #endregion
 
-        public new OxRectangle ClientRectangle =>
-            Manager.ClientRectangle;
+    #region Implemention of IOxControl using IOxControlManager
+    public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
+    public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
+    public virtual void OnParentChanged(OxParentChangedEventArgs e) { }
+    public virtual void OnSizeChanged(OxSizeChangedEventArgs e)
+    {
+        if (!Initialized ||
+            !e.Changed)
+            return;
 
-        public new OxRectangle Bounds
-        {
-            get => Manager.Bounds;
-            set => Manager.Bounds = value;
-        }
+        MainPanel.Size = Size;
+        RealignControls();
+    }
 
-        public new OxPoint AutoScrollOffset
-        {
-            get => Manager.AutoScrollOffset;
-            set => Manager.AutoScrollOffset = value;
-        }
+    public new IOxBox? Parent
+    {
+        get => Manager.Parent;
+        set => Manager.Parent = value;
+    }
 
-        public void DoWithSuspendedLayout(Action method) =>
-            Manager.DoWithSuspendedLayout(method);
+    public OxPoint PointToScreen(OxPoint p) =>
+        Manager.PointToScreen(p);
 
-        public Control GetChildAtPoint(OxPoint pt) =>
-            Manager.GetChildAtPoint(pt);
+    public new OxWidth Width
+    {
+        get => Manager.Width;
+        set => Manager.Width = value;
+    }
 
-        public void Invalidate(OxRectangle rc) =>
-            Manager.Invalidate(rc);
+    public new OxWidth Height
+    {
+        get => Manager.Height;
+        set => Manager.Height = value;
+    }
 
-        public OxPoint PointToClient(OxPoint p) =>
-            Manager.PointToClient(p);
+    public new OxWidth Top
+    {
+        get => Manager.Top;
+        set => Manager.Top = value;
+    }
 
-        public OxRectangle RectangleToClient(OxRectangle r) =>
-            Manager.RectangleToClient(r);
+    public new OxWidth Left
+    {
+        get => Manager.Left;
+        set => Manager.Left = value;
+    }
 
-        public OxRectangle RectangleToScreen(OxRectangle r) =>
-            Manager.RectangleToScreen(r);
+    public new OxWidth Bottom =>
+        Manager.Bottom;
 
-        public new event OxDockChangedEvent DockChanged
-        {
-            add => Manager.DockChanged += value;
-            remove => Manager.DockChanged -= value;
-        }
+    public new OxWidth Right =>
+        Manager.Right;
 
-        public new event OxLocationChangedEvent LocationChanged
-        {
-            add => Manager.LocationChanged += value;
-            remove => Manager.LocationChanged -= value;
-        }
+    public new OxSize Size
+    {
+        get => Manager.Size;
+        set => Manager.Size = value;
+    }
 
-        public new event OxParentChangedEvent ParentChanged
-        {
-            add => Manager.ParentChanged += value;
-            remove => Manager.ParentChanged -= value;
-        }
+    public new OxSize ClientSize
+    {
+        get => Manager.ClientSize;
+        set => Manager.ClientSize = value;
+    }
 
-        public new event OxSizeChangedEvent SizeChanged
-        {
-            add => Manager.SizeChanged += value;
-            remove => Manager.SizeChanged -= value;
-        }
-        #endregion
+    public new OxPoint Location
+    {
+        get => Manager.Location;
+        set => Manager.Location = value;
+    }
 
-        #region Hidden base methods
+    public new OxSize MinimumSize
+    {
+        get => Manager.MinimumSize;
+        set => Manager.MinimumSize = value;
+    }
+
+    public new OxSize MaximumSize
+    {
+        get => Manager.MaximumSize;
+        set => Manager.MaximumSize = value;
+    }
+
+    public new virtual OxDock Dock
+    {
+        get => Manager.Dock;
+        set => Manager.Dock = value;
+    }
+
+    public new OxRectangle ClientRectangle =>
+        Manager.ClientRectangle;
+
+    public new OxRectangle Bounds
+    {
+        get => Manager.Bounds;
+        set => Manager.Bounds = value;
+    }
+
+    public new OxPoint AutoScrollOffset
+    {
+        get => Manager.AutoScrollOffset;
+        set => Manager.AutoScrollOffset = value;
+    }
+
+    public void DoWithSuspendedLayout(Action method) =>
+        Manager.DoWithSuspendedLayout(method);
+
+    public Control GetChildAtPoint(OxPoint pt) =>
+        Manager.GetChildAtPoint(pt);
+
+    public void Invalidate(OxRectangle rc) =>
+        Manager.Invalidate(rc);
+
+    public OxPoint PointToClient(OxPoint p) =>
+        Manager.PointToClient(p);
+
+    public OxRectangle RectangleToClient(OxRectangle r) =>
+        Manager.RectangleToClient(r);
+
+    public OxRectangle RectangleToScreen(OxRectangle r) =>
+        Manager.RectangleToScreen(r);
+
+    public new event OxDockChangedEvent DockChanged
+    {
+        add => Manager.DockChanged += value;
+        remove => Manager.DockChanged -= value;
+    }
+
+    public new event OxLocationChangedEvent LocationChanged
+    {
+        add => Manager.LocationChanged += value;
+        remove => Manager.LocationChanged -= value;
+    }
+
+    public new event OxParentChangedEvent ParentChanged
+    {
+        add => Manager.ParentChanged += value;
+        remove => Manager.ParentChanged -= value;
+    }
+
+    public new event OxSizeChangedEvent SizeChanged
+    {
+        add => Manager.SizeChanged += value;
+        remove => Manager.SizeChanged -= value;
+    }
+    #endregion
+
+    #region Hidden base methods
 #pragma warning disable IDE0051 // Remove unused private members
-        private new void SetBounds(int x, int y, int width, int height) =>
-            base.SetBounds(x, y, width, height);
+    private new void SetBounds(int x, int y, int width, int height) =>
+        base.SetBounds(x, y, width, height);
 
-        private new Size PreferredSize =>
-            base.PreferredSize;
+    private new Size PreferredSize =>
+        base.PreferredSize;
 
-        private new Rectangle DisplayRectangle =>
-            base.DisplayRectangle;
+    private new Rectangle DisplayRectangle =>
+        base.DisplayRectangle;
 
-        private new Size GetPreferredSize(Size proposedSize) =>
-            base.GetPreferredSize(proposedSize);
+    private new Size GetPreferredSize(Size proposedSize) =>
+        base.GetPreferredSize(proposedSize);
 
-        private new Size LogicalToDeviceUnits(Size value) =>
-            base.LogicalToDeviceUnits(value);
-        private new void SetBounds(int x, int y, int width, int height, BoundsSpecified specified) =>
-            base.SetBounds(x, y, width, height, specified);
-        private new Control GetChildAtPoint(Point pt, GetChildAtPointSkip skipValue) =>
-            base.GetChildAtPoint(pt, skipValue);
+    private new Size LogicalToDeviceUnits(Size value) =>
+        base.LogicalToDeviceUnits(value);
+    private new void SetBounds(int x, int y, int width, int height, BoundsSpecified specified) =>
+        base.SetBounds(x, y, width, height, specified);
+    private new Control GetChildAtPoint(Point pt, GetChildAtPointSkip skipValue) =>
+        base.GetChildAtPoint(pt, skipValue);
 
 #pragma warning disable IDE0060 // Remove unused parameter
-        private new void Invalidate(Rectangle rc, bool invalidateChildren) =>
-            Invalidate(true);
+    private new void Invalidate(Rectangle rc, bool invalidateChildren) =>
+        Invalidate(true);
 #pragma warning restore IDE0060 // Remove unused parameter
 #pragma warning restore IDE0051 // Remove unused private members
-        protected sealed override void OnDockChanged(EventArgs e) { }
-        protected sealed override void OnLocationChanged(EventArgs e) { }
-        protected sealed override void OnParentChanged(EventArgs e) { }
-        protected sealed override void OnSizeChanged(EventArgs e) { }
-        #endregion
-    }
+    protected sealed override void OnDockChanged(EventArgs e) { }
+    protected sealed override void OnLocationChanged(EventArgs e) { }
+    protected sealed override void OnParentChanged(EventArgs e) { }
+    protected sealed override void OnSizeChanged(EventArgs e) { }
+    #endregion
 }

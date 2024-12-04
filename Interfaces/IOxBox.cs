@@ -1,4 +1,4 @@
-﻿namespace OxLibrary.Controls
+﻿namespace OxLibrary.Interfaces
 {
     public interface IOxBox :
         IOxControl,

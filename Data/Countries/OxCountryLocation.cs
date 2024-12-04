@@ -1,15 +1,14 @@
-﻿namespace OxLibrary.Data.Countries
+﻿namespace OxLibrary.Data.Countries;
+
+public enum OxCountryLocation
 {
-    public enum OxCountryLocation
-    {
-        Africa,
-        Antarctica,
-        Asia,
-        Australia,
-        Europe,
-        NorthAmerica,
-        Oceania,
-        SouthAmerica,
-        Other
-    }
+    Africa,
+    Antarctica,
+    Asia,
+    Australia,
+    Europe,
+    NorthAmerica,
+    Oceania,
+    SouthAmerica,
+    Other
 }

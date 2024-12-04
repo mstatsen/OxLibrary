@@ -3,9 +3,9 @@ using System.ComponentModel;
 using System.Windows.Forms.Layout;
 using static System.Windows.Forms.Control;
 
-namespace OxLibrary.Controls
+namespace OxLibrary.Interfaces
 {
-    public interface IOxControl: IOxControlManager
+    public interface IOxControl : IOxControlManager
     {
         AccessibleObject AccessibilityObject { get; }
         string AccessibleDefaultActionDescription { get; set; }

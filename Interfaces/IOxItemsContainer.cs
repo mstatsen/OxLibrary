@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace OxLibrary.Controls
+namespace OxLibrary.Interfaces
 {
     public delegate bool IsHighPriorityItem(object item);
 

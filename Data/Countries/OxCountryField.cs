@@ -1,15 +1,14 @@
-﻿namespace OxLibrary.Data.Countries
+﻿namespace OxLibrary.Data.Countries;
+
+public enum OxCountryField
 {
-    public enum OxCountryField
-    {
-        Name,
-        ShortName,
-        FullName,
-        Alpha2,
-        Alpha3,
-        ISO,
-        Location,
-        Flag,
-        IsPSN
-    }
+    Name,
+    ShortName,
+    FullName,
+    Alpha2,
+    Alpha3,
+    ISO,
+    Location,
+    Flag,
+    IsPSN
 }

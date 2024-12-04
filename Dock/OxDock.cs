@@ -1,14 +1,11 @@
-﻿using OxLibrary.Interfaces;
+﻿namespace OxLibrary;
 
-namespace OxLibrary
+public enum OxDock
 {
-    public enum OxDock
-    {
-        Left,
-        Right,
-        Top,
-        Bottom,
-        Fill,
-        None
-    }
+    Left,
+    Right,
+    Top,
+    Bottom,
+    Fill,
+    None
 }

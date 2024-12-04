@@ -1,4 +1,4 @@
-﻿namespace OxLibrary.Controls
+﻿namespace OxLibrary.Interfaces
 {
     public interface IOxControlWithManager<TManager> : IOxControl
         where TManager : IOxControlManager

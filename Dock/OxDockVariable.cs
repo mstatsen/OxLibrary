@@ -1,10 +1,9 @@
-﻿namespace OxLibrary
+﻿namespace OxLibrary;
+
+public enum OxDockVariable
 {
-    public enum OxDockVariable
-    {
-        None,
-        Width,
-        Height,
-        Fill
-    }
+    None,
+    Width,
+    Height,
+    Fill
 }
