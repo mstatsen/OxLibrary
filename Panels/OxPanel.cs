@@ -4,13 +4,13 @@ using OxLibrary.Handlers;
 
 namespace OxLibrary.Panels
 {
-    public class OxPanel : Panel, IOxPanel
+    public class OxPanel : Panel, IOxPanel, IOxManagingControl<IOxBoxManager<OxPanel>>
     {
-        public IOxBoxManager Manager { get; }
+        public IOxBoxManager<OxPanel> Manager { get; }
         public OxPanel() : this(OxSize.Empty) { }
         public OxPanel(OxSize size)
         {
-            Manager = OxControlManagers.RegisterBox(this);
+            Manager = OxControlManagers.RegisterBox<OxPanel>(this);
             BorderVisible = false;
             Colors = new(DefaultColor);
             Initialized = false;
@@ -509,8 +509,11 @@ namespace OxLibrary.Panels
         public virtual OxRectangle ControlZone =>
             Manager.ControlZone;
 
-        public OxControls OxControls =>
+        public OxControls<OxPanel> OxControls =>
             Manager.OxControls;
+
+        IOxControlManager IOxManagingControl<IOxControlManager>.Manager => throw new NotImplementedException();
+
         #endregion
 
         #region Hidden base methods

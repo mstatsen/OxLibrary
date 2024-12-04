@@ -3,10 +3,16 @@ using OxLibrary.Interfaces;
 
 namespace OxLibrary.Controls
 {
-    public class OxControlManager : IOxControlManager
+    public class OxControlManager<TOxControl> : IOxControlManager
+        where TOxControl :
+            Control,
+            IOxManagingControl<IOxControlManager>,
+            IOxControlManager
     {
         protected readonly Control ManagingControl;
-        public IOxControl ManagingOxControl => (IOxControl)ManagingControl;
+
+        public virtual IOxControl OxControl => (IOxControl)ManagingControl;
+        public virtual TOxControl OxManagingControl => (TOxControl)ManagingControl;
 
         internal OxControlManager(Control managingControl)
         {
@@ -35,10 +41,10 @@ namespace OxLibrary.Controls
 
         protected virtual void SetHandlers() 
         {
-            if (ManagingOxControl is IOxWithBorders controlWithBorders)
+            if (OxManagingControl is IOxWithBorders controlWithBorders)
                 controlWithBorders.Borders.SizeChanged += BordersSizeChangedHandler;
 
-            if (ManagingOxControl is IOxWithMargin controlWithMargin)
+            if (OxManagingControl is IOxWithMargin controlWithMargin)
                 controlWithMargin.Margin.SizeChanged += MarginSizeChangedHandler;
         }
 
@@ -62,25 +68,25 @@ namespace OxLibrary.Controls
             }
         }
 
-        protected int OriginalLeft
+        internal int OriginalLeft
         {
             get => ManagingControl.Left;
             set => ManagingControl.Left = value;
         }
 
-        protected int OriginalTop
+        internal int OriginalTop
         {
             get => ManagingControl.Top;
             set => ManagingControl.Top = value;
         }
 
-        protected int OriginalWidth
+        internal int OriginalWidth
         {
             get => ManagingControl.Width;
             set => ManagingControl.Width = value;
         }
 
-        protected int OriginalHeight
+        internal int OriginalHeight
         {
             get => ManagingControl.Height;
             set => ManagingControl.Height = value;
@@ -93,7 +99,7 @@ namespace OxLibrary.Controls
                 OxWidth width = OxWh.W(OriginalWidth);
 
                 if (OxDockHelper.Variable(Dock) is OxDockVariable.Width
-                    && ManagingOxControl is IOxWithMargin controlWithMargin
+                    && OxManagingControl is IOxWithMargin controlWithMargin
                     && !controlWithMargin.Margin.IsEmpty)
                     width = OxWh.S(width, controlWithMargin.Margin.Horizontal);
 
@@ -108,7 +114,7 @@ namespace OxLibrary.Controls
                 OriginalWidth =
                     OxWh.IAdd(value,
                         OxDockHelper.Variable(Dock) is OxDockVariable.Width
-                        && ManagingOxControl is IOxWithMargin controlWithMargin
+                        && OxManagingControl is IOxWithMargin controlWithMargin
                         && !controlWithMargin.Margin.IsEmpty
                             ? controlWithMargin.Margin.Horizontal
                             : OxWh.W0
@@ -125,7 +131,7 @@ namespace OxLibrary.Controls
                 OxWidth height = OxWh.W(OriginalHeight);
 
                 if (OxDockHelper.Variable(Dock) is OxDockVariable.Height
-                    && ManagingOxControl is IOxWithMargin controlWithMargin
+                    && OxManagingControl is IOxWithMargin controlWithMargin
                     && !controlWithMargin.Margin.IsEmpty)
                     height = OxWh.S(height, controlWithMargin.Margin.Vertical);
 
@@ -141,7 +147,7 @@ namespace OxLibrary.Controls
                     OxWh.IAdd(
                         value,
                         OxDockHelper.Variable(Dock) is OxDockVariable.Height
-                        && ManagingOxControl is IOxWithMargin controlWithMargin
+                        && OxManagingControl is IOxWithMargin controlWithMargin
                         && controlWithMargin.Margin.IsEmpty
                             ? controlWithMargin.Margin.Vertical
                             : OxWh.W0
@@ -185,7 +191,7 @@ namespace OxLibrary.Controls
         private readonly OxHandlers Handlers = new();
 
         private void InvokeHandlers(OxHandlerType type, OxEventArgs args) =>
-            Handlers.Invoke(type, ManagingOxControl, args);
+            Handlers.Invoke(type, OxManagingControl, args);
 
         private void AddHandler(OxHandlerType type, Delegate handler) =>
             Handlers.Add(type, handler);
@@ -386,7 +392,7 @@ namespace OxLibrary.Controls
             try
             {
                 RestoreSize();
-                ManagingOxControl.OnDockChanged(e);
+                OxControl.OnDockChanged(e);
                 InvokeHandlers(OxHandlerType.DockChanged, e);
                 RealignParent();
             }
@@ -401,7 +407,7 @@ namespace OxLibrary.Controls
             if (!e.Changed)
                 return;
 
-            ManagingOxControl.OnLocationChanged(e);
+            OxControl.OnLocationChanged(e);
             InvokeHandlers(OxHandlerType.LocationChanged, e);
         }
 
@@ -410,7 +416,7 @@ namespace OxLibrary.Controls
             if (!e.Changed)
                 return;
 
-            ManagingOxControl.OnParentChanged(e);
+            OxControl.OnParentChanged(e);
             InvokeHandlers(OxHandlerType.ParentChanged, e);
             e.NewValue?.RealignControls();
         }
@@ -420,7 +426,7 @@ namespace OxLibrary.Controls
             if (!e.Changed)
                 return;
 
-            ManagingOxControl.OnSizeChanged(e);
+            OxControl.OnSizeChanged(e);
             InvokeHandlers(OxHandlerType.SizeChanged, e);
 
             if (OxDockHelper.DockType(Dock) is OxDockType.Docked)
@@ -479,15 +485,16 @@ namespace OxLibrary.Controls
     {
         private class OxControlManagerCache : Dictionary<Control, IOxControlManager>
         {
-            public TManager Add<TManager>(Control control)
-                where TManager : IOxControlManager
+            public TManager AddManager<TManager, TOxControl>(Control control, TManager manager)
+                where TOxControl :
+                    Control,
+                    IOxManagingControl<IOxControlManager>,
+                    IOxControlManager
+                where TManager : OxControlManager<TOxControl>
             {
                 if (!ContainsKey(control))
                     Add(
-                        control,
-                        control is IOxBox
-                            ? new OxBoxManager(control)
-                            : new OxControlManager(control)
+                        control, manager
                     );
 
                 return (TManager)this[control];
@@ -496,11 +503,29 @@ namespace OxLibrary.Controls
 
         private static readonly OxControlManagerCache Controls = new();
 
-        public static IOxControlManager RegisterControl(Control baseControl) =>
-            Controls.Add<IOxControlManager>(baseControl);
+        public static OxControlManager<TOxControl> RegisterControl<TOxControl>(Control baseControl)
+            where TOxControl :
+                    Control,
+                    IOxManagingControl<IOxControlManager>,
+                    IOxControlManager 
+            =>
+            Controls.AddManager<OxControlManager<TOxControl>, TOxControl>(
+                baseControl,
+                new OxControlManager<TOxControl>(baseControl)
+            );
 
-        public static IOxBoxManager RegisterBox(Control baseBox) =>
-            Controls.Add<IOxBoxManager>(baseBox);
+        public static IOxBoxManager<TOxControl> RegisterBox<TOxControl>(Control baseBox)
+            where TOxControl :
+                    Control,
+                    IOxManagingControl<IOxBoxManager<TOxControl>>,
+                    IOxManagingControl<IOxControlManager>,
+                    IOxControlManager,
+                    IOxBox<TOxControl>
+            =>
+            Controls.AddManager<OxBoxManager<TOxControl>, TOxControl>(
+                baseBox,
+                    new OxBoxManager<TOxControl>(baseBox)
+                );
 
         public static void UnRegisterControl(Control control) =>
             Controls.Remove(control);

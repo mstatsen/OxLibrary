@@ -7,7 +7,12 @@ namespace OxLibrary.Handlers
         OxActionEventArgs<TAction> EventArgs)
         where TAction : notnull, Enum;
     public delegate void OxBordersChangedEvent(object sender, OxBordersChangedEventArgs e);
-    public delegate void OxControlEvent(IOxBox sender, OxControlEventArgs EventArgs);
+    public delegate void OxControlEvent<TOxControl>(IOxBox<TOxControl> sender, OxControlEventArgs EventArgs)
+        where TOxControl :
+            Control,
+            IOxManagingControl<IOxBoxManager<TOxControl>>,
+            IOxManagingControl<IOxControlManager>,
+            IOxBox<TOxControl>;
     public delegate void OxDockChangedEvent(object sender, OxDockChangedEventArgs args);
     public delegate void OxLocationChangedEvent(object sender, OxLocationChangedEventArgs args);
     public delegate void OxParentChangedEvent(object sender, OxParentChangedEventArgs args);

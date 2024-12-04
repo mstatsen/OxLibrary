@@ -3,15 +3,20 @@ using OxLibrary.Interfaces;
 
 namespace OxLibrary.Controls
 {
-    public class OxControlAligner
+    public class OxControlAligner<TOxControl>
+        where TOxControl :
+            Control,
+            IOxManagingControl<IOxBoxManager<TOxControl>>,
+            IOxManagingControl<IOxControlManager>,
+            IOxBox<TOxControl>
     {
-        private readonly IOxBox Box;
+        private readonly TOxControl Box;
         public OxRectangle ControlZone => Box.ControlZone;
         public OxRectangle OuterControlZone => Box.OuterControlZone;
 
         public bool Realigning { get; private set; } = false;
 
-        public OxControlAligner(IOxBox box) =>
+        public OxControlAligner(TOxControl box) =>
             Box = box;
 
         public void RealignControls(OxDockType dockType = OxDockType.Unknown)
@@ -102,7 +107,7 @@ namespace OxLibrary.Controls
                 if (!control.Visible)
                     continue;
 
-                if (control is IOxBox childBox
+                if (control is IOxBoxManager childBox
                     && !childBox.HandleParentPadding
                     && Box is IOxWithPadding boxWithPadding
                     && !boxWithPadding.Padding.IsEmpty)
@@ -150,7 +155,7 @@ namespace OxLibrary.Controls
                 }
             );
 
-            if (control is IOxBox box)
+            if (control is IOxBoxManager box)
                 box.RealignControls();
 
             control.Invalidate();

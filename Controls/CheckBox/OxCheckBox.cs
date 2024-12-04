@@ -2,13 +2,17 @@
 
 namespace OxLibrary.Controls
 {
-    public class OxCheckBox : CheckBox, IOxControl
+    public class OxCheckBox :
+        CheckBox, 
+        IOxControl,
+        IOxManagingControl<OxControlManager<OxCheckBox>>,
+        IOxManagingControl<IOxControlManager>
     {
-        public IOxControlManager Manager { get; }
+        public OxControlManager<OxCheckBox> Manager { get; }
 
         public OxCheckBox()
         {
-            Manager = OxControlManagers.RegisterControl(this);
+            Manager = OxControlManagers.RegisterControl<OxCheckBox>(this);
             DoubleBuffered = true;
         }
 
@@ -181,6 +185,8 @@ namespace OxLibrary.Controls
             get => readOnly; 
             set => readOnly = value; 
         }
+
+        IOxControlManager IOxManagingControl<IOxControlManager>.Manager => throw new NotImplementedException();
 
         protected override void OnCheckedChanged(EventArgs e)
         {

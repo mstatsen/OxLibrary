@@ -3,9 +3,14 @@ using OxLibrary.Interfaces;
 
 namespace OxLibrary.Controls
 {
-    public class OxBoxManager :
-        OxControlManager,
-        IOxBoxManager
+    public class OxBoxManager<TOxControl> :
+        OxControlManager<TOxControl>,
+        IOxBoxManager<TOxControl>
+        where TOxControl :
+            Control,
+            IOxManagingControl<IOxBoxManager<TOxControl>>,
+            IOxManagingControl<IOxControlManager>,
+            IOxBox<TOxControl>
     {
         public OxBoxManager(Control managingBox) : base(managingBox)
         {
@@ -13,10 +18,10 @@ namespace OxLibrary.Controls
             Aligner = new(Box);
         }
 
-        public IOxBox Box =>
-            (IOxBox)ManagingControl;
+        public TOxControl Box =>
+            (TOxControl)ManagingControl;
 
-        private readonly OxControlAligner Aligner;
+        private readonly OxControlAligner<TOxControl> Aligner;
 
         public void RealignControls(OxDockType dockType = OxDockType.Unknown)
         {
@@ -69,7 +74,7 @@ namespace OxLibrary.Controls
                 base.RealignParent();
         }
 
-        public OxControls OxControls { get; private set; }
+        public OxControls<TOxControl> OxControls { get; private set; }
 
         public OxRectangle OuterControlZone
         {

@@ -2,13 +2,17 @@
 
 namespace OxLibrary.Controls
 {
-    public class OxPictureBox : PictureBox, IOxControl
+    public class OxPictureBox :
+        PictureBox,
+        IOxControl,
+        IOxManagingControl<OxControlManager<OxCheckBox>>,
+        IOxManagingControl<IOxControlManager>
     {
         public IOxControlManager Manager { get; }
 
         public OxPictureBox()
         {
-            Manager = OxControlManagers.RegisterControl(this);
+            Manager = OxControlManagers.RegisterControl<OxPictureBox>(this);
             DoubleBuffered = true;
         }
 
@@ -104,6 +108,9 @@ namespace OxLibrary.Controls
             get => Manager.AutoScrollOffset;
             set => Manager.AutoScrollOffset = value;
         }
+
+        OxControlManager<OxCheckBox> IOxManagingControl<OxControlManager<OxCheckBox>>.Manager => throw new NotImplementedException();
+
         public void DoWithSuspendedLayout(Action method) =>
             Manager.DoWithSuspendedLayout(method);
 

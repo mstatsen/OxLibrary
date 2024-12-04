@@ -1,11 +1,19 @@
 ﻿namespace OxLibrary.Controls
 {
-    /// <summary>
-    /// Interface OxLibrary controls box 
-    /// </summary>
-    
-    public interface IOxBox : IOxControl, IOxBoxManager
+    public interface IOxBox :
+        IOxControl,
+        IOxBoxManager
     {
-        IOxBoxManager Manager { get; }
+    }
+
+    public interface IOxBox<TOxControl> :
+        IOxBox,
+        IOxBoxManager<TOxControl>,
+        IOxManagingControl<IOxBoxManager<TOxControl>>
+        where TOxControl : Control,
+            IOxManagingControl<IOxBoxManager<TOxControl>>,
+            IOxManagingControl<IOxControlManager>,
+            IOxBox<TOxControl>
+    {
     }
 }

@@ -2,13 +2,17 @@
 
 namespace OxLibrary.Controls
 {
-    public class OxLabel : Label, IOxControl
+    public class OxLabel :
+        Label,
+        IOxControl,
+        IOxManagingControl<OxControlManager<OxLabel>>,
+        IOxManagingControl<IOxControlManager>
     {
-        public IOxControlManager Manager { get; }
+        public OxControlManager<OxLabel> Manager { get; }
 
         public OxLabel()
         {
-            Manager = OxControlManagers.RegisterControl(this);
+            Manager = OxControlManagers.RegisterControl<OxLabel>(this);
             DoubleBuffered = true;
             AutoSize = true;
         }
@@ -111,6 +115,8 @@ namespace OxLibrary.Controls
             get => Manager.AutoScrollOffset;
             set => Manager.AutoScrollOffset = value;
         }
+
+        IOxControlManager IOxManagingControl<IOxControlManager>.Manager => throw new NotImplementedException();
 
         public void DoWithSuspendedLayout(Action method) =>
             Manager.DoWithSuspendedLayout(method);

@@ -5,15 +5,16 @@ using OxLibrary.Interfaces;
 namespace OxLibrary.Forms
 {
     public class OxForm : Form,
-        IOxBox,
+        IOxBox<OxForm>,
+        IOxManagingControl<IOxControlManager>,
         IOxWithColorHelper
     {
         private readonly bool Initialized = false;
         public OxFormMainPanel MainPanel { get; internal set; }
 
-        public IOxBoxManager Manager { get; }
+        public IOxBoxManager<OxForm> Manager { get; }
 
-        public OxControls OxControls => Manager.OxControls;
+        public OxControls<OxForm> OxControls => Manager.OxControls;
 
         public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
         public new event OxDockChangedEvent DockChanged
@@ -59,7 +60,7 @@ namespace OxLibrary.Forms
             try
             {
                 DoubleBuffered = true;
-                Manager = OxControlManagers.RegisterBox(this);
+                Manager = OxControlManagers.RegisterBox<OxForm>(this);
                 MainPanel = CreateMainPanel();
                 MainPanel.Colors.BaseColorChanged += BaseColorChangedHandler;
                 SetUpForm();
@@ -367,6 +368,8 @@ namespace OxLibrary.Forms
         public OxColorHelper Colors => MainPanel.Colors;
 
         public OxRectangle OuterControlZone => Manager.OuterControlZone;
+
+        IOxControlManager IOxManagingControl<IOxControlManager>.Manager => throw new NotImplementedException();
 
         protected override void OnShown(EventArgs e)
         {
