@@ -5,10 +5,10 @@ namespace OxLibrary.Controls
     public class OxLabel :
         Label,
         IOxControl,
-        IOxManagingControl<OxControlManager<OxLabel>>,
+        IOxManagingControl<OxControlManager>,
         IOxManagingControl<IOxControlManager>
     {
-        public OxControlManager<OxLabel> Manager { get; }
+        public OxControlManager Manager { get; }
 
         public OxLabel()
         {

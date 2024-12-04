@@ -5,10 +5,10 @@ namespace OxLibrary.Controls
     public class OxCheckBox :
         CheckBox, 
         IOxControl,
-        IOxManagingControl<OxControlManager<OxCheckBox>>,
+        IOxManagingControl<OxControlManager>,
         IOxManagingControl<IOxControlManager>
     {
-        public OxControlManager<OxCheckBox> Manager { get; }
+        public OxControlManager Manager { get; }
 
         public OxCheckBox()
         {

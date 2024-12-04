@@ -3,16 +3,11 @@ using OxLibrary.Interfaces;
 
 namespace OxLibrary.Controls
 {
-    public class OxControlManager<TOxControl> : IOxControlManager
-        where TOxControl :
-            Control,
-            IOxManagingControl<IOxControlManager>,
-            IOxControlManager
+    public class OxControlManager : IOxControlManager
     {
         protected readonly Control ManagingControl;
 
         public virtual IOxControl OxControl => (IOxControl)ManagingControl;
-        public virtual TOxControl OxManagingControl => (TOxControl)ManagingControl;
 
         internal OxControlManager(Control managingControl)
         {
@@ -41,10 +36,10 @@ namespace OxLibrary.Controls
 
         protected virtual void SetHandlers() 
         {
-            if (OxManagingControl is IOxWithBorders controlWithBorders)
+            if (OxControl is IOxWithBorders controlWithBorders)
                 controlWithBorders.Borders.SizeChanged += BordersSizeChangedHandler;
 
-            if (OxManagingControl is IOxWithMargin controlWithMargin)
+            if (OxControl is IOxWithMargin controlWithMargin)
                 controlWithMargin.Margin.SizeChanged += MarginSizeChangedHandler;
         }
 
@@ -99,7 +94,7 @@ namespace OxLibrary.Controls
                 OxWidth width = OxWh.W(OriginalWidth);
 
                 if (OxDockHelper.Variable(Dock) is OxDockVariable.Width
-                    && OxManagingControl is IOxWithMargin controlWithMargin
+                    && OxControl is IOxWithMargin controlWithMargin
                     && !controlWithMargin.Margin.IsEmpty)
                     width = OxWh.S(width, controlWithMargin.Margin.Horizontal);
 
@@ -114,7 +109,7 @@ namespace OxLibrary.Controls
                 OriginalWidth =
                     OxWh.IAdd(value,
                         OxDockHelper.Variable(Dock) is OxDockVariable.Width
-                        && OxManagingControl is IOxWithMargin controlWithMargin
+                        && OxControl is IOxWithMargin controlWithMargin
                         && !controlWithMargin.Margin.IsEmpty
                             ? controlWithMargin.Margin.Horizontal
                             : OxWh.W0
@@ -131,7 +126,7 @@ namespace OxLibrary.Controls
                 OxWidth height = OxWh.W(OriginalHeight);
 
                 if (OxDockHelper.Variable(Dock) is OxDockVariable.Height
-                    && OxManagingControl is IOxWithMargin controlWithMargin
+                    && OxControl is IOxWithMargin controlWithMargin
                     && !controlWithMargin.Margin.IsEmpty)
                     height = OxWh.S(height, controlWithMargin.Margin.Vertical);
 
@@ -147,7 +142,7 @@ namespace OxLibrary.Controls
                     OxWh.IAdd(
                         value,
                         OxDockHelper.Variable(Dock) is OxDockVariable.Height
-                        && OxManagingControl is IOxWithMargin controlWithMargin
+                        && OxControl is IOxWithMargin controlWithMargin
                         && controlWithMargin.Margin.IsEmpty
                             ? controlWithMargin.Margin.Vertical
                             : OxWh.W0
@@ -191,7 +186,7 @@ namespace OxLibrary.Controls
         private readonly OxHandlers Handlers = new();
 
         private void InvokeHandlers(OxHandlerType type, OxEventArgs args) =>
-            Handlers.Invoke(type, OxManagingControl, args);
+            Handlers.Invoke(type, OxControl, args);
 
         private void AddHandler(OxHandlerType type, Delegate handler) =>
             Handlers.Add(type, handler);
@@ -485,12 +480,8 @@ namespace OxLibrary.Controls
     {
         private class OxControlManagerCache : Dictionary<Control, IOxControlManager>
         {
-            public TManager AddManager<TManager, TOxControl>(Control control, TManager manager)
-                where TOxControl :
-                    Control,
-                    IOxManagingControl<IOxControlManager>,
-                    IOxControlManager
-                where TManager : OxControlManager<TOxControl>
+            public TManager AddManager<TManager>(Control control, TManager manager)
+                where TManager : OxControlManager
             {
                 if (!ContainsKey(control))
                     Add(
@@ -503,15 +494,10 @@ namespace OxLibrary.Controls
 
         private static readonly OxControlManagerCache Controls = new();
 
-        public static OxControlManager<TOxControl> RegisterControl<TOxControl>(Control baseControl)
-            where TOxControl :
-                    Control,
-                    IOxManagingControl<IOxControlManager>,
-                    IOxControlManager 
-            =>
-            Controls.AddManager<OxControlManager<TOxControl>, TOxControl>(
+        public static OxControlManager RegisterControl<TOxControl>(Control baseControl) =>
+            Controls.AddManager<OxControlManager>(
                 baseControl,
-                new OxControlManager<TOxControl>(baseControl)
+                new OxControlManager(baseControl)
             );
 
         public static IOxBoxManager<TOxControl> RegisterBox<TOxControl>(Control baseBox)
@@ -522,7 +508,7 @@ namespace OxLibrary.Controls
                     IOxControlManager,
                     IOxBox<TOxControl>
             =>
-            Controls.AddManager<OxBoxManager<TOxControl>, TOxControl>(
+            Controls.AddManager(
                 baseBox,
                     new OxBoxManager<TOxControl>(baseBox)
                 );

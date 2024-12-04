@@ -4,7 +4,7 @@ using OxLibrary.Interfaces;
 namespace OxLibrary.Controls
 {
     public class OxBoxManager<TOxControl> :
-        OxControlManager<TOxControl>,
+        OxControlManager,
         IOxBoxManager<TOxControl>
         where TOxControl :
             Control,
@@ -37,7 +37,7 @@ namespace OxLibrary.Controls
             Box.ControlAdded += ControlAddedHandler;
             Box.ControlRemoved += ControlRemovedHandler;
 
-            if (Box is IOxWithPadding controlWithPadding)
+            if (OxControl is IOxWithPadding controlWithPadding)
                 controlWithPadding.Padding.SizeChanged += PaddingSizeChangedHandler;
 
             base.SetHandlers();
@@ -57,12 +57,12 @@ namespace OxLibrary.Controls
         private void ControlAddedHandler(object? sender, ControlEventArgs e)
         {
             if (e.Control is not IOxControl oxControl
-                || e.Control.Equals(Box))
+                || e.Control.Equals(OxControl))
                 return;
 
             OxControls.Add(oxControl);
 
-            if (Box is IOxWithColorHelper colorHelperControl)
+            if (OxControl is IOxWithColorHelper colorHelperControl)
                 colorHelperControl.PrepareColors();
         }
 
@@ -80,15 +80,15 @@ namespace OxLibrary.Controls
         {
             get
             {
-                OxRectangle outerZone = new(Box.ClientRectangle);
+                OxRectangle outerZone = new(OxControl.ClientRectangle);
 
-                if (Box is IOxWithPadding controlWithPadding)
+                if (OxControl is IOxWithPadding controlWithPadding)
                     outerZone -= controlWithPadding.Padding;
 
-                if (Box is IOxWithBorders controlWithBorders)
+                if (OxControl is IOxWithBorders controlWithBorders)
                     outerZone -= controlWithBorders.Borders;
 
-                if (Box is IOxWithMargin controlWithMargin)
+                if (OxControl is IOxWithMargin controlWithMargin)
                     outerZone -= controlWithMargin.Margin;
 
                 return outerZone;

@@ -4,7 +4,7 @@ using OxLibrary.Handlers;
 
 namespace OxLibrary.Panels
 {
-    public class OxPanel : Panel, IOxPanel, IOxManagingControl<IOxBoxManager<OxPanel>>
+    public class OxPanel : Panel, IOxPanel
     {
         public IOxBoxManager<OxPanel> Manager { get; }
         public OxPanel() : this(OxSize.Empty) { }
