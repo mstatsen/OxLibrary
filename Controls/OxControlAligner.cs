@@ -5,14 +5,14 @@ namespace OxLibrary.Controls
 {
     public class OxControlAligner
     {
-        private readonly IOxContainer Container;
-        public OxRectangle ControlZone => Container.ControlZone;
-        public OxRectangle OuterControlZone => Container.OuterControlZone;
+        private readonly IOxBox Box;
+        public OxRectangle ControlZone => Box.ControlZone;
+        public OxRectangle OuterControlZone => Box.OuterControlZone;
 
         public bool Realigning { get; private set; } = false;
 
-        public OxControlAligner(IOxContainer container) =>
-            Container = container;
+        public OxControlAligner(IOxBox box) =>
+            Box = box;
 
         public void RealignControls(OxDockType dockType = OxDockType.Unknown)
         {
@@ -27,7 +27,7 @@ namespace OxLibrary.Controls
                 ControlZone.CopyFrom(OuterControlZone);
                 OxRectangle oldControlZone = new(ControlZone);
 
-                Container.DoWithSuspendedLayout(() =>
+                Box.DoWithSuspendedLayout(() =>
                 {
                     try
                     {
@@ -43,7 +43,7 @@ namespace OxLibrary.Controls
                     }
                     finally
                     {
-                        Container.Invalidate();
+                        Box.Invalidate();
                     }
                 });
             }
@@ -86,7 +86,7 @@ namespace OxLibrary.Controls
         }
 
         private List<IOxControl> GetControls(OxDockType dockType) =>
-            Container.OxControls.Controls(dockType);
+            Box.OxControls.Controls(dockType);
 
         private bool RealignDockedControls()
         {
@@ -102,11 +102,11 @@ namespace OxLibrary.Controls
                 if (!control.Visible)
                     continue;
 
-                if (control is IOxContainer childContainer
-                    && !childContainer.HandleParentPadding
-                    && Container is IOxWithPadding containerWithPadding
-                    && !containerWithPadding.Padding.IsEmpty)
-                    currentBounds += containerWithPadding.Padding;
+                if (control is IOxBox childBox
+                    && !childBox.HandleParentPadding
+                    && Box is IOxWithPadding boxWithPadding
+                    && !boxWithPadding.Padding.IsEmpty)
+                    currentBounds += boxWithPadding.Padding;
 
                 OxSize realControlSize = GetRealControlSize(control);
 
@@ -150,8 +150,8 @@ namespace OxLibrary.Controls
                 }
             );
 
-            if (control is IOxContainer container)
-                container.RealignControls();
+            if (control is IOxBox box)
+                box.RealignControls();
 
             control.Invalidate();
         }

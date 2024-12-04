@@ -2,9 +2,9 @@
 
 namespace OxLibrary.Handlers
 {
-    public class OxParentChangedEventArgs : OxEventArgs<IOxContainer>
+    public class OxParentChangedEventArgs : OxEventArgs<IOxBox>
     {
-        public OxParentChangedEventArgs(IOxContainer? oldValue, IOxContainer? newValue) :
+        public OxParentChangedEventArgs(IOxBox? oldValue, IOxBox? newValue) :
             base(oldValue, newValue)
         { }
     }

@@ -1,6 +1,6 @@
 ﻿namespace OxLibrary.Controls
 {
-    public interface IOxContainerManager : IOxControlManager
+    public interface IOxBoxManager : IOxControlManager
     {
         OxControls OxControls { get; }
         OxRectangle ControlZone { get; }

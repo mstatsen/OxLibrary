@@ -78,7 +78,7 @@ namespace OxLibrary.Controls
             set => Manager.Dock = value;
         }
 
-        public new virtual IOxContainer? Parent
+        public new virtual IOxBox? Parent
         {
             get => Manager.Parent;
             set => Manager.Parent = value;

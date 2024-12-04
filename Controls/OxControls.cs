@@ -5,9 +5,9 @@ namespace OxLibrary.Controls
 {
     public class OxControls : List<IOxControl>
     {
-        public readonly IOxContainer Container;
-        public OxControls(IOxContainer container) => 
-            Container = container;
+        public readonly IOxBox Box;
+        public OxControls(IOxBox box) => 
+            Box = box;
 
         public List<IOxControl> Controls(OxDockType dockType)
         {
@@ -41,18 +41,18 @@ namespace OxLibrary.Controls
 
         private void OnControlAdded(OxControlEventArgs e)
         {
-            ControlAdded?.Invoke(Container, e);
-            Container.RealignControls(
+            ControlAdded?.Invoke(Box, e);
+            Box.RealignControls(
                 OxDockHelper.DockType(e.Control.Dock)
             );
         }
 
         private void OnControlRemoved(OxControlEventArgs e)
         {
-            ControlRemoved?.Invoke(Container, e);
+            ControlRemoved?.Invoke(Box, e);
 
             if (OxDockHelper.DockType(e.Control) is OxDockType.Docked)
-                Container.RealignControls();
+                Box.RealignControls();
         }
 
         public new IOxControl Remove(IOxControl control)

@@ -3,18 +3,18 @@ using OxLibrary.Interfaces;
 
 namespace OxLibrary.Controls
 {
-    public class OxContainerManager :
+    public class OxBoxManager :
         OxControlManager,
-        IOxContainerManager
+        IOxBoxManager
     {
-        public OxContainerManager(Control managingControl) : base(managingControl)
+        public OxBoxManager(Control managingBox) : base(managingBox)
         {
-            OxControls = new(Container);
-            Aligner = new(Container);
+            OxControls = new(Box);
+            Aligner = new(Box);
         }
 
-        public IOxContainer Container =>
-            (IOxContainer)ManagingControl;
+        public IOxBox Box =>
+            (IOxBox)ManagingControl;
 
         private readonly OxControlAligner Aligner;
 
@@ -29,10 +29,10 @@ namespace OxLibrary.Controls
 
         protected override void SetHandlers()
         {
-            Container.ControlAdded += ControlAddedHandler;
-            Container.ControlRemoved += ControlRemovedHandler;
+            Box.ControlAdded += ControlAddedHandler;
+            Box.ControlRemoved += ControlRemovedHandler;
 
-            if (Container is IOxWithPadding controlWithPadding)
+            if (Box is IOxWithPadding controlWithPadding)
                 controlWithPadding.Padding.SizeChanged += PaddingSizeChangedHandler;
 
             base.SetHandlers();
@@ -52,12 +52,12 @@ namespace OxLibrary.Controls
         private void ControlAddedHandler(object? sender, ControlEventArgs e)
         {
             if (e.Control is not IOxControl oxControl
-                || e.Control.Equals(Container))
+                || e.Control.Equals(Box))
                 return;
 
             OxControls.Add(oxControl);
 
-            if (Container is IOxWithColorHelper colorHelperControl)
+            if (Box is IOxWithColorHelper colorHelperControl)
                 colorHelperControl.PrepareColors();
         }
 
@@ -75,21 +75,21 @@ namespace OxLibrary.Controls
         {
             get
             {
-                OxRectangle outerZone = new(Container.ClientRectangle);
+                OxRectangle outerZone = new(Box.ClientRectangle);
 
-                if (Container is IOxWithPadding controlWithPadding)
+                if (Box is IOxWithPadding controlWithPadding)
                     outerZone -= controlWithPadding.Padding;
 
-                if (Container is IOxWithBorders controlWithBorders)
+                if (Box is IOxWithBorders controlWithBorders)
                     outerZone -= controlWithBorders.Borders;
 
-                if (Container is IOxWithMargin controlWithMargin)
+                if (Box is IOxWithMargin controlWithMargin)
                     outerZone -= controlWithMargin.Margin;
 
                 return outerZone;
             }
         }
 
-        public bool HandleParentPadding => Container.HandleParentPadding;
+        public bool HandleParentPadding => Box.HandleParentPadding;
     }
 }

@@ -1,6 +1,5 @@
 ﻿using OxLibrary.Handlers;
 using OxLibrary.Interfaces;
-using System.ComponentModel;
 
 namespace OxLibrary.Controls
 {
@@ -271,16 +270,16 @@ namespace OxLibrary.Controls
             Parent is not null 
             && Parent.Realigning;
 
-        public IOxContainer? Parent
+        public IOxBox? Parent
         {
-            get => (IOxContainer?)ManagingControl.Parent;
+            get => (IOxBox?)ManagingControl.Parent;
             set
             {
                 if (value is null && Parent is not null 
                     || value is not null && value.Equals(Parent))
                     return;
 
-                IOxContainer? oldParent = Parent;
+                IOxBox? oldParent = Parent;
                 ManagingControl.Parent = (Control?)value;
                 OnParentChanged(new(oldParent, Parent));
             }
@@ -480,30 +479,28 @@ namespace OxLibrary.Controls
     {
         private class OxControlManagerCache : Dictionary<Control, IOxControlManager>
         {
-            public IOxControlManager AddControl(Control control)
+            public TManager Add<TManager>(Control control)
+                where TManager : IOxControlManager
             {
                 if (!ContainsKey(control))
-                    Add(control, new OxControlManager(control));
+                    Add(
+                        control,
+                        control is IOxBox
+                            ? new OxBoxManager(control)
+                            : new OxControlManager(control)
+                    );
 
-                return this[control];
-            }
-
-            public IOxContainerManager AddContainer(Control control)
-            {
-                if (!ContainsKey(control))
-                    Add(control, new OxContainerManager(control));
-
-                return (IOxContainerManager)this[control];
+                return (TManager)this[control];
             }
         }
 
         private static readonly OxControlManagerCache Controls = new();
 
         public static IOxControlManager RegisterControl(Control baseControl) =>
-            Controls.AddControl(baseControl);
+            Controls.Add<IOxControlManager>(baseControl);
 
-        public static IOxContainerManager RegisterContainer(Control baseContainer) =>
-            Controls.AddContainer(baseContainer);
+        public static IOxBoxManager RegisterBox(Control baseBox) =>
+            Controls.Add<IOxBoxManager>(baseBox);
 
         public static void UnRegisterControl(Control control) =>
             Controls.Remove(control);

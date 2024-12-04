@@ -75,7 +75,7 @@ public new virtual OxDock Dock
     set => manager.Dock = value;
 }
 
-public new virtual IOxControlContainer? Parent
+public new virtual IOxBox? Parent
 {
     get => manager.Parent;
     set => manager.Parent = value;

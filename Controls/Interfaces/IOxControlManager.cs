@@ -21,7 +21,7 @@ namespace OxLibrary.Controls
         OxDock Dock { get; set; }
         OxSize PreferredSize { get; }
         OxPoint AutoScrollOffset { get; set; }
-        IOxContainer? Parent { get; set; }
+        IOxBox? Parent { get; set; }
         void DoWithSuspendedLayout(Action method);
         void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height);
         void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height, BoundsSpecified specified);

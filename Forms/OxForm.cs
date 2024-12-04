@@ -5,13 +5,13 @@ using OxLibrary.Interfaces;
 namespace OxLibrary.Forms
 {
     public class OxForm : Form,
-        IOxContainer,
+        IOxBox,
         IOxWithColorHelper
     {
         private readonly bool Initialized = false;
         public OxFormMainPanel MainPanel { get; internal set; }
 
-        public IOxContainerManager Manager { get; }
+        public IOxBoxManager Manager { get; }
 
         public OxControls OxControls => Manager.OxControls;
 
@@ -59,7 +59,7 @@ namespace OxLibrary.Forms
             try
             {
                 DoubleBuffered = true;
-                Manager = OxControlManagers.RegisterContainer(this);
+                Manager = OxControlManagers.RegisterBox(this);
                 MainPanel = CreateMainPanel();
                 MainPanel.Colors.BaseColorChanged += BaseColorChangedHandler;
                 SetUpForm();
@@ -287,7 +287,7 @@ namespace OxLibrary.Forms
             set => Manager.Dock = value;
         }
 
-        public new IOxContainer? Parent
+        public new IOxBox? Parent
         {
             get => Manager.Parent;
             set => Manager.Parent = value;

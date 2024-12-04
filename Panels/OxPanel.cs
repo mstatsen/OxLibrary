@@ -6,11 +6,11 @@ namespace OxLibrary.Panels
 {
     public class OxPanel : Panel, IOxPanel
     {
-        public IOxContainerManager Manager { get; }
+        public IOxBoxManager Manager { get; }
         public OxPanel() : this(OxSize.Empty) { }
         public OxPanel(OxSize size)
         {
-            Manager = OxControlManagers.RegisterContainer(this);
+            Manager = OxControlManagers.RegisterBox(this);
             BorderVisible = false;
             Colors = new(DefaultColor);
             Initialized = false;
@@ -179,7 +179,7 @@ namespace OxLibrary.Panels
 
         protected virtual void PrepareDialog(OxPanelViewer dialog) { }
 
-        public new virtual IOxContainer? Parent
+        public new virtual IOxBox? Parent
         {
             get => Manager.Parent;
             set
@@ -345,7 +345,7 @@ namespace OxLibrary.Panels
         protected virtual Bitmap? GetIcon() => null;
         #endregion
 
-        #region Implemention of IOxContainer using IOxContainerManager
+        #region Implemention of IOxBox using IOxBoxManager
         public new OxWidth Width
         {
             get => Manager.Width;
