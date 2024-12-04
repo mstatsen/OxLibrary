@@ -51,6 +51,36 @@ public class OxLabel :
         set => Manager.Top = value;
     }
 
+    #region Original Location and Size. Obsolete
+    [Obsolete("OriginalWidth it is used only for internal needs. Instead, use Width")]
+    public int OriginalWidth
+    {
+        get => Manager.OriginalWidth;
+        set => Manager.OriginalWidth = value;
+    }
+
+    [Obsolete("OriginalHeight it is used only for internal needs. Instead, use Height")]
+    public int OriginalHeight
+    {
+        get => Manager.OriginalHeight;
+        set => Manager.OriginalHeight = value;
+    }
+
+    [Obsolete("OriginalTop it is used only for internal needs. Instead, use Top")]
+    public int OriginalTop
+    {
+        get => Manager.OriginalTop;
+        set => Manager.OriginalTop = value;
+    }
+
+    [Obsolete("OriginalLeft it is used only for internal needs. Instead, use Left")]
+    public int OriginalLeft
+    {
+        get => Manager.OriginalLeft;
+        set => Manager.OriginalLeft = value;
+    }
+    #endregion
+
     public new OxWidth Left
     {
         get => Manager.Left;

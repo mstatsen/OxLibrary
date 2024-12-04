@@ -35,7 +35,7 @@ public class OxBorder
 
     public override bool Equals(object? obj) => 
         obj is OxBorder otherBorder
-        && Size == otherBorder.Size;
+        && Size.Equals(otherBorder.Size);
 
     public override int GetHashCode() => 
         Size.GetHashCode();

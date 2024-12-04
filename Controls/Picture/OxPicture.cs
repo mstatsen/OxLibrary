@@ -14,14 +14,16 @@ public partial class OxPicture : OxPanel
         set => SetEnabledBitmap(value);
     }
 
-    public bool Stretch 
-    { 
-        get => picture.Dock is OxDock.Fill;
-        set => 
-            picture.Dock = 
-                value 
-                    ? OxDock.Fill 
-                    : OxDock.None;
+    private bool stretch = false;
+    public bool Stretch
+    {
+        get => stretch;
+        set
+        {
+            stretch = value;
+            picture.Height = value ? Height : pictureSize;
+            CorrectPicturePosition();
+        }
     }
 
     private void SetEnabledBitmap(Bitmap? value)
@@ -35,7 +37,10 @@ public partial class OxPicture : OxPanel
 
     private Bitmap? DisabledBitmap;
 
-    private readonly OxPictureBox picture = new();
+    private readonly OxPictureBox picture = new()
+    { 
+        Dock = OxDock.Fill
+    };
     public PictureBox Picture => picture;
 
     public OxPicture()
@@ -43,51 +48,58 @@ public partial class OxPicture : OxPanel
         BackColor = Color.Transparent;
         Width = OxWh.W24;
         Height = OxWh.W24;
-        PictureSize = OxWh.W16;
+        //Padding.SizeChanged += PaddingSizeChangedHandler;
+        Padding.Size = OxWh.W0;
     }
 
+    private OxWidth pictureSize = OxWh.W16;
     public OxWidth PictureSize
     {
-        get => picture.Height;
+        get => pictureSize;
         set => SetPictureSize(value);
     }
 
-    private OxWidth picturePadding = OxWh.W0;
-
     public OxWidth PicturePadding
     {
-        get => picturePadding;
-        set => SetPicturePadding(value);
-    }
-
-    private void SetPicturePadding(OxWidth value)
-    {
-        picturePadding = value;
-        PictureSize = OxWh.Sub(Height, OxWh.Mul(picturePadding, OxWh.W2));
+        get => Padding.Size;
+        set
+        {
+            Padding.Size = value;
+            PictureSize = OxWh.Sub(Height, Padding.Vertical);
+        }
     }
 
     private void SetPictureSize(OxWidth value)
     {
-        if (Stretch)
+        if (pictureCorrectionProcess)
             return;
 
-        OxSize newSize = new(value, value);
-
-        if (newSize.Equals(Size))
+        if (Stretch
+            || value.Equals(pictureSize))
             return;
 
-        picture.Size = newSize;
+        pictureSize = value;
         CorrectPicturePosition();
     }
 
+    private bool pictureCorrectionProcess = false;
+
     private void CorrectPicturePosition()
     {
-        if (Stretch)
+        if (pictureCorrectionProcess)
             return;
+        pictureCorrectionProcess = true;
+        Padding.Vertical = Stretch
+            ? OxWh.W0
+            : OxWh.Div(OxWh.Sub(Height, pictureSize), OxWh.W2);
+        Padding.Horizontal = Stretch
+            ? OxWh.W0
+            : OxWh.Div(OxWh.Sub(Width, pictureSize), OxWh.W2);
 
-        picturePadding = OxWh.Div(OxWh.Sub(Height, picture.Height), OxWh.W2);
+        SetImage(Image);
         picture.Left = OxWh.Div(OxWh.Sub(Width, picture.Width), OxWh.W2);
         picture.Top = OxWh.Div(OxWh.Sub(Height, picture.Height), OxWh.W2);
+        pictureCorrectionProcess = false;
     }
 
     protected override void PrepareInnerComponents()
@@ -98,16 +110,15 @@ public partial class OxPicture : OxPanel
 
     private void PreparePicture()
     {
-        picture.Dock = OxDock.None;
         picture.Parent = this;
         picture.Click += (s, e) => InvokeOnClick(this, null);
-        SetPictureSize(Height);
+        CorrectPicturePosition();
+        //SetPictureSize(Height);
     }
 
     protected override void SetHandlers()
     {
         base.SetHandlers();
-        picture.SizeChanged += PictureSizeChanged;
         SetHoverHandlers(picture);
     }
 
@@ -123,17 +134,6 @@ public partial class OxPicture : OxPanel
     {
         base.PrepareColors();
         picture.BackColor = BackColor;
-    }
-
-    private void PictureSizeChanged(object sender, OxSizeChangedEventArgs e)
-    {
-        return;
-        if (!e.Changed
-            || Stretch)
-            return;
-
-        CorrectPicturePosition();
-        SetImage(picture.Image);
     }
 
     private void SetHoverHandlers(Control control)
@@ -157,7 +157,7 @@ public partial class OxPicture : OxPanel
             return;
         }
 
-        OxBitmapCalcer bitmapCalcer = new(value, new(picture.Size), Stretch);
+        OxBitmapCalcer bitmapCalcer = new(value, new(pictureSize, pictureSize), Stretch);
         picture.SizeMode = bitmapCalcer.SizeMode;
 
         if (!Stretch

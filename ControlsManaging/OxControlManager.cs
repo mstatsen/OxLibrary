@@ -14,7 +14,6 @@ public class OxControlManager : IOxControlManager
         ManagingControl = managingControl;
         ManagingControl.Disposed += ControlDisposedHandler;
         SetHandlers();
-        ControlZone = OxRectangle.Max;
     }
 
     private void BordersSizeChangedHandler(object sender, OxBordersChangedEventArgs e) =>
@@ -36,12 +35,17 @@ public class OxControlManager : IOxControlManager
 
     protected virtual void SetHandlers()
     {
+        OxControl.VisibleChanged += VisibleChangedHandler;
+
         if (OxControl is IOxWithBorders controlWithBorders)
             controlWithBorders.Borders.SizeChanged += BordersSizeChangedHandler;
 
         if (OxControl is IOxWithMargin controlWithMargin)
             controlWithMargin.Margin.SizeChanged += MarginSizeChangedHandler;
     }
+
+    private void VisibleChangedHandler(object? sender, EventArgs e) =>
+        RealignParent();
 
     protected virtual void RealignParent() =>
         Parent?.RealignControls();
@@ -63,25 +67,25 @@ public class OxControlManager : IOxControlManager
         }
     }
 
-    internal int OriginalLeft
+    public int OriginalLeft
     {
         get => ManagingControl.Left;
         set => ManagingControl.Left = value;
     }
 
-    internal int OriginalTop
+    public int OriginalTop
     {
         get => ManagingControl.Top;
         set => ManagingControl.Top = value;
     }
 
-    internal int OriginalWidth
+    public int OriginalWidth
     {
         get => ManagingControl.Width;
         set => ManagingControl.Width = value;
     }
 
-    internal int OriginalHeight
+    public int OriginalHeight
     {
         get => ManagingControl.Height;
         set => ManagingControl.Height = value;
@@ -260,12 +264,10 @@ public class OxControlManager : IOxControlManager
         }
     }
 
-    public OxRectangle ControlZone { get; private set; }
-
     private OxRectangle ParentControlZone =>
         Parent is null
             ? OxRectangle.Max
-            : Parent.ControlZone;
+            : Parent.OuterControlZone;
 
     public bool ParentRealigning =>
         Parent is not null

@@ -21,7 +21,7 @@ public class OxBoxManager :
     public void RealignControls(OxDockType dockType = OxDockType.Unknown)
     {
         Aligner.RealignControls(dockType);
-        ControlZone.CopyFrom(Aligner.ControlZone);
+        //ControlZone.CopyFrom(Aligner.ControlZone);
     }
 
     public bool Realigning =>

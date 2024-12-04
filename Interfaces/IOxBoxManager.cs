@@ -2,7 +2,6 @@
 
 public interface IOxBoxManager : IOxControlManager
 {
-    OxRectangle ControlZone { get; }
     OxRectangle OuterControlZone { get; }
     bool HandleParentPadding { get; }
     bool Realigning { get; }

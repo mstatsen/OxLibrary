@@ -26,6 +26,7 @@ public class OxButton : OxIconButton
         base.AfterCreated();
         Picture.Dock = OxDock.Left;
         Picture.Width = OxWh.W16;
+        Picture.Stretch = true;
         HiddenBorder = false;
     }
 

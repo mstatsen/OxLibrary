@@ -34,11 +34,13 @@ public class OxIconButton : OxClickFrame
     protected override void SetIcon(Bitmap? value) => 
         Picture.Image = value;
 
+    /*
     public OxWidth IconPadding
     {
         get => Picture.PicturePadding;
         set => Picture.PicturePadding = value;
     }
+    */
 
     protected override void SetUseDisabledStyles(bool value)
     {

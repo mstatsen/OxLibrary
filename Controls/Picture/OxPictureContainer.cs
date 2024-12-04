@@ -158,7 +158,7 @@ public class OxPictureContainer : OxClickFrame
         Dock = OxDock.Fill,
         Visible = false,
         Stretch = true,
-        PicturePadding = 0,
+        PicturePadding = OxWh.W0,
         Cursor = Cursors.Hand,
         AlwaysEnabled = true
     };

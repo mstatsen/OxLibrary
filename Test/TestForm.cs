@@ -23,7 +23,7 @@ namespace OxLibrary.Test
             InitializeComponent();
             //BaseColor = Color.FromArgb(135, 165, 195);
             MoveToScreenCenter();
-            /*
+            
             toolBarButton = new OxButton("Test action", OxIcons.Cross);
             toolbar = new()
             { 
@@ -42,13 +42,12 @@ namespace OxLibrary.Test
                 Parent = MainPanel,
                 Name = "LeftCard",
                 Text = "Left docked card",
-                Dock = OxDock.Left,
+                Dock = OxDock.Top,
                 Width = OxWh.W200,
                 Height = OxWh.W300,
                 Icon = OxIcons.Tag
             };
             card.Margin.Size = OxWh.W40;
-            card.Margin.Right = OxWh.W0;
             card.BaseColor = Color.Red;
             card.Click += Card_Click;
 
@@ -58,11 +57,10 @@ namespace OxLibrary.Test
                 Parent = MainPanel,
                 Name = "FillFrame",
                 Text = "Fill-docked frame with header",
-                Dock = OxDock.Fill,
+                Dock = OxDock.Right,
                 Width = OxWh.W400,
                 Height = OxWh.W200
             };
-
             
 
             bluredCheckBox = new()
@@ -96,7 +94,6 @@ namespace OxLibrary.Test
 
             SetFrameMarginSize();
             frame.Click += Frame_Click;
-            */
         }
 
         private void Card_Click(object? sender, EventArgs e)

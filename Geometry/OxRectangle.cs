@@ -49,6 +49,30 @@ public class OxRectangle
         set => height = value;
     }
 
+    public int XInt
+    {
+        get => OxWh.I(x);
+        set => x = OxWh.W(value);
+    }
+
+    public int YInt
+    {
+        get => OxWh.I(y);
+        set => y = OxWh.W(value);
+    }
+
+    public int WidthInt
+    {
+        get => OxWh.I(width);
+        set => width = OxWh.W(value);
+    }
+
+    public int HeightInt
+    {
+        get => OxWh.I(height);
+        set => height = OxWh.W(value);
+    }
+
     public OxWidth Right => OxWh.A(X, Width);
     public OxWidth Bottom => OxWh.A(Y, Height);
 
@@ -157,6 +181,6 @@ public class OxRectangle
     public override string ToString() =>
         $"X = {OxWh.I(X)}, Y = {OxWh.I(Y)}, Width = {OxWh.I(Width)}, Height = {OxWh.I(Height)}";
 
-    public static readonly OxRectangle Empty = new(OxWh.W0, OxWh.W0, OxWh.W0, OxWh.W0);
-    public static readonly OxRectangle Max = new(OxWh.W0, OxWh.W0, OxWh.Maximum, OxWh.Maximum);
+    public static OxRectangle Empty => new(OxWh.W0, OxWh.W0, OxWh.W0, OxWh.W0);
+    public static OxRectangle Max => new(OxWh.W0, OxWh.W0, OxWh.Maximum, OxWh.Maximum);
 }

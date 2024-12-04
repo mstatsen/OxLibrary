@@ -7,6 +7,12 @@ namespace OxLibrary.Interfaces
 {
     public interface IOxControl : IOxControlManager
     {
+        void OnDockChanged(OxDockChangedEventArgs e);
+        void OnLocationChanged(OxLocationChangedEventArgs e);
+        void OnParentChanged(OxParentChangedEventArgs e);
+        void OnSizeChanged(OxSizeChangedEventArgs e);
+
+        #region Inherited from Control
         AccessibleObject AccessibilityObject { get; }
         string AccessibleDefaultActionDescription { get; set; }
         string AccessibleDescription { get; set; }
@@ -166,10 +172,6 @@ namespace OxLibrary.Interfaces
         event CancelEventHandler Validating;
         event EventHandler Validated;
         event EventHandler VisibleChanged;
-
-        void OnDockChanged(OxDockChangedEventArgs e);
-        void OnLocationChanged(OxLocationChangedEventArgs e);
-        void OnParentChanged(OxParentChangedEventArgs e);
-        void OnSizeChanged(OxSizeChangedEventArgs e);
+        #endregion
     }
 }
