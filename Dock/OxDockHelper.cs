@@ -67,6 +67,29 @@ public static class OxDockHelper
         IsHorizontal(dock)
         || dock is OxDock.None;
 
+    public static bool TouchLeft(OxDock dock) =>
+        dock is OxDock.Left
+             or OxDock.Fill;
+
+    public static bool TouchTop(OxDock dock) =>
+        dock is OxDock.Top
+             or OxDock.Fill;
+
+    public static bool TouchRight(OxDock dock) =>
+        dock is OxDock.Right
+             or OxDock.Fill;
+
+    public static bool TouchBottom(OxDock dock) =>
+        dock is OxDock.Bottom
+             or OxDock.Fill;
+
+    public static bool TouchWidth(OxDock dock) =>
+        TouchLeft(dock)
+        || TouchRight(dock);
+
+    public static bool TouchHeight(OxDock dock) =>
+        TouchTop(dock)
+        || TouchBottom(dock);
 
     private static readonly List<OxDock> all = new();
     public static List<OxDock> All

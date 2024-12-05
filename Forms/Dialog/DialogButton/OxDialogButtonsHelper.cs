@@ -64,7 +64,7 @@ public static class OxDialogButtonsHelper
             _ => null,
         };
 
-    public static int WidthInt(OxDialogButton button) =>
+    public static int Z_Width(OxDialogButton button) =>
         (int)Width(button);
 
     public static OxWidth Width(OxDialogButton button) =>

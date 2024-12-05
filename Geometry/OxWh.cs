@@ -61,6 +61,18 @@ public static class OxWh
     public static OxWidth Sub(int left, OxWidth right) =>
         S(left, right);
 
+    public static OxWidth R(OxWidth source, OxWidth search, OxWidth replace) =>
+        A(S(source, search), replace);
+
+    public static OxWidth R(int source, OxWidth search, OxWidth replace) =>
+        R(W(source), search, replace);
+
+    public static OxWidth Replace(OxWidth source, OxWidth search, OxWidth replace) =>
+        R(source, search, replace);
+
+    public static OxWidth Replace(int source, OxWidth search, OxWidth replace) =>
+        R(source, search, replace);
+
     public static OxWidth Mul(OxWidth left, OxWidth right) =>
         W(I(left) * I(right));
 

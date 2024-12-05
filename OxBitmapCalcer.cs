@@ -68,8 +68,8 @@ namespace OxLibrary
 
             if (zoom > 1)
             {
-                ImageSize.Width = OxWh.W((int)(ImageSize.WidthInt / zoom));
-                ImageSize.Height = OxWh.W((int)(ImageSize.HeightInt / zoom));
+                ImageSize.Width = OxWh.W((int)(ImageSize.Z_Width / zoom));
+                ImageSize.Height = OxWh.W((int)(ImageSize.Z_Height / zoom));
             }
         }
 

@@ -1,4 +1,5 @@
-﻿namespace OxLibrary;
+﻿
+namespace OxLibrary;
 
 public class OxRectangle
 {
@@ -47,30 +48,6 @@ public class OxRectangle
     {
         get => height;
         set => height = value;
-    }
-
-    public int XInt
-    {
-        get => OxWh.I(x);
-        set => x = OxWh.W(value);
-    }
-
-    public int YInt
-    {
-        get => OxWh.I(y);
-        set => y = OxWh.W(value);
-    }
-
-    public int WidthInt
-    {
-        get => OxWh.I(width);
-        set => width = OxWh.W(value);
-    }
-
-    public int HeightInt
-    {
-        get => OxWh.I(height);
-        set => height = OxWh.W(value);
     }
 
     public OxWidth Right => OxWh.A(X, Width);
@@ -123,6 +100,13 @@ public class OxRectangle
               size.Height
         ) { }
 
+    public OxRectangle(Point location, Size size)
+        : this(
+              new OxPoint(location),
+              new OxSize(size)
+        )
+    { }
+
     public Rectangle Rectangle =>
         new(
             OxWh.I(X), 
@@ -132,6 +116,7 @@ public class OxRectangle
         );
 
     public OxPoint Location => new(X, Y);
+
     public OxSize Size => new(Width, Height);
 
     public bool Contains(OxWidth x, OxWidth y) =>
@@ -181,6 +166,78 @@ public class OxRectangle
     public override string ToString() =>
         $"X = {OxWh.I(X)}, Y = {OxWh.I(Y)}, Width = {OxWh.I(Width)}, Height = {OxWh.I(Height)}";
 
+    public OxWidth FirstByDockVariable(OxDockVariable variable) =>
+        variable switch
+        {
+            OxDockVariable.Width =>
+                X,
+            OxDockVariable.Height =>
+                Y,
+            _ => OxWh.W0,
+        };
+
+    public OxWidth LastByDockVariable(OxDockVariable variable) =>
+        variable switch
+        {
+            OxDockVariable.Width =>
+                Right,
+            OxDockVariable.Height =>
+                Bottom,
+            _ => OxWh.W0,
+        };
+
     public static OxRectangle Empty => new(OxWh.W0, OxWh.W0, OxWh.W0, OxWh.W0);
     public static OxRectangle Max => new(OxWh.W0, OxWh.W0, OxWh.Maximum, OxWh.Maximum);
+
+    #region Internal properties
+    [Obsolete("Z_X it is used only for internal needs. Instead, use X")]
+    public int Z_X
+    {
+        get => OxWh.I(x);
+        set => x = OxWh.W(value);
+    }
+
+    [Obsolete("Z_Y it is used only for internal needs. Instead, use Y")]
+    public int Z_Y
+    {
+        get => OxWh.I(y);
+        set => y = OxWh.W(value);
+    }
+
+    [Obsolete("Z_Width it is used only for internal needs. Instead, use Width")]
+    public int Z_Width
+    {
+        get => OxWh.I(width);
+        set => width = OxWh.W(value);
+    }
+
+    [Obsolete("Z_Height it is used only for internal needs. Instead, use Height")]
+    public int Z_Height
+    {
+        get => OxWh.I(height);
+        set => height = OxWh.W(value);
+    }
+
+    [Obsolete("Z_Location it is used only for internal needs. Instead, use Location")]
+    public Point Z_Location
+    {
+        get => new(Z_X, Z_Y);
+        set
+        {
+            Z_X = value.X;
+            Z_Y = value.Y;
+        }
+    }
+
+    [Obsolete("Z_Size it is used only for internal needs. Instead, use Size")]
+    public Size Z_Size
+    {
+        get => new(Z_Width, Z_Height);
+        set
+        {
+            Z_Width = value.Width;
+            Z_Height = value.Height;
+        }
+    }
+    #endregion
 }

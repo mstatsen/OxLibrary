@@ -1,4 +1,5 @@
-﻿namespace OxLibrary;
+﻿
+namespace OxLibrary;
 
 public class OxPoint : OxSize
 {
@@ -28,10 +29,6 @@ public class OxPoint : OxSize
         set => Height = value;
     }
 
-    public int XInt => OxWh.I(X);
-
-    public int YInt => OxWh.I(Y);
-
     public OxPoint(OxWidth x, OxWidth y) : base(x, y) { }
     public OxPoint(OxWidth x, int y) : base(x, y) { }
     public OxPoint(int x, OxWidth y) : base(x, y) { }
@@ -55,5 +52,29 @@ public class OxPoint : OxSize
     public override string ToString() =>
         $"X = {OxWh.I(X)}, Y = {OxWh.I(Y)}";
 
-    public new static readonly OxPoint Empty = new(0, 0);
+    public new static OxPoint Empty => new(OxWh.W0, OxWh.W0);
+
+    private new int Z_Width
+    {
+        get => base.Z_Width;
+        set => base.Z_Width = value;
+    }
+
+    private new int Z_Height
+    {
+        get => base.Z_Height;
+        set => base.Z_Height = value;
+    }
+
+    public int Z_X
+    {
+        get => Z_Width;
+        set => Z_Width = value;
+    }
+
+    public int Z_Y
+    {
+        get => Z_Height;
+        set => Z_Height = value;
+    }
 }

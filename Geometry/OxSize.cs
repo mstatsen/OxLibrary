@@ -45,9 +45,28 @@ public class OxSize
         SizeChanged?.Invoke(this, new OxSizeChangedEventArgs(oldSize, this));
     }
 
-    public int WidthInt => OxWh.I(Width);
+    public int Z_Width
+    {
+        get => OxWh.I(Width);
+        set => Width = OxWh.W(value);
+    }
 
-    public int HeightInt => OxWh.I(Height);
+    public int Z_Height
+    {
+        get => OxWh.I(Height);
+        set => Height = OxWh.W(value);
+    }
+
+    public OxWidth ByDockVariable(OxDockVariable variable) =>
+        variable switch
+        {
+            OxDockVariable.Width =>
+                Width,
+            OxDockVariable.Height =>
+                Height,
+            _ =>
+                OxWh.W0
+        };
 
     public OxSize(OxWidth width, OxWidth height)
     {
@@ -79,15 +98,18 @@ public class OxSize
 
     public OxSize(Size size)
         : this(size.Width, size.Height) { }
+
     public OxSize(OxSize size)
         : this(size.Width, size.Height) { }
+
     public OxSize(Point point)
         : this(point.X, point.Y) { }
+
     public OxSize(OxPoint point)
         : this(point.X, point.Y) { }
 
     public Size Size =>
-        new(WidthInt, HeightInt);
+        new(Z_Width, Z_Height);
 
     public override bool Equals(object? obj) =>
         base.Equals(obj)
@@ -97,7 +119,7 @@ public class OxSize
         ;
 
     public override int GetHashCode() =>
-        WidthInt.GetHashCode() ^ HeightInt.GetHashCode();
+        Z_Width.GetHashCode() ^ Z_Height.GetHashCode();
 
     public override string ToString() =>
         $"Width = {OxWh.I(Width)}, Height = {OxWh.I(Height)}";

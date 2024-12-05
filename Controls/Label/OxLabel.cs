@@ -16,12 +16,6 @@ public class OxLabel :
         AutoSize = true;
     }
 
-    public bool ReadOnly
-    {
-        get => !Enabled;
-        set => Enabled = !value;
-    }
-
     #region Implemention of IOxControl using IOxControlManager
     public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
     public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
@@ -50,36 +44,6 @@ public class OxLabel :
         get => Manager.Top;
         set => Manager.Top = value;
     }
-
-    #region Original Location and Size. Obsolete
-    [Obsolete("OriginalWidth it is used only for internal needs. Instead, use Width")]
-    public int OriginalWidth
-    {
-        get => Manager.OriginalWidth;
-        set => Manager.OriginalWidth = value;
-    }
-
-    [Obsolete("OriginalHeight it is used only for internal needs. Instead, use Height")]
-    public int OriginalHeight
-    {
-        get => Manager.OriginalHeight;
-        set => Manager.OriginalHeight = value;
-    }
-
-    [Obsolete("OriginalTop it is used only for internal needs. Instead, use Top")]
-    public int OriginalTop
-    {
-        get => Manager.OriginalTop;
-        set => Manager.OriginalTop = value;
-    }
-
-    [Obsolete("OriginalLeft it is used only for internal needs. Instead, use Left")]
-    public int OriginalLeft
-    {
-        get => Manager.OriginalLeft;
-        set => Manager.OriginalLeft = value;
-    }
-    #endregion
 
     public new OxWidth Left
     {
@@ -188,6 +152,67 @@ public class OxLabel :
         add => Manager.SizeChanged += value;
         remove => Manager.SizeChanged -= value;
     }
+
+    #region Internal used properties and methods
+    [Obsolete("Z_Height it is used only for internal needs. Instead, use Height")]
+    public int Z_Height
+    {
+        get => Manager.Z_Height;
+        set => Manager.Z_Height = value;
+    }
+
+    [Obsolete("Z_Left it is used only for internal needs. Instead, use Left")]
+    public int Z_Left
+    {
+        get => Manager.Z_Left;
+        set => Manager.Z_Left = value;
+    }
+
+    [Obsolete("Z_Location it is used only for internal needs. Instead, use Location")]
+    public Point Z_Location
+    {
+        get => Manager.Z_Location;
+        set => Manager.Z_Location = value;
+    }
+
+    [Obsolete("Z_Size it is used only for internal needs. Instead, use Size")]
+    public Size Z_Size
+    {
+        get => Manager.Z_Size;
+        set => Manager.Z_Size = value;
+    }
+
+    [Obsolete("Z_Top it is used only for internal needs. Instead, use Top")]
+    public int Z_Top
+    {
+        get => Manager.Z_Top;
+        set => Manager.Z_Top = value;
+    }
+
+    [Obsolete("Z_Width it is used only for internal needs. Instead, use Width")]
+    public int Z_Width
+    {
+        get => Manager.Z_Width;
+        set => Manager.Z_Width = value;
+    }
+
+    [Obsolete("Z_RestoreLocation it is used only for internal needs")]
+    public void Z_RestoreLocation() =>
+        Manager.Z_RestoreLocation();
+
+    [Obsolete("Z_RestoreSize it is used only for internal needs")]
+    public void Z_RestoreSize() =>
+        Manager.Z_RestoreSize();
+
+    [Obsolete("Z_SaveLocation it is used only for internal needs")]
+    public void Z_SaveLocation() =>
+        Manager.Z_SaveLocation();
+
+    [Obsolete("Z_SaveSize it is used only for internal needs")]
+    public void Z_SaveSize() =>
+        Manager.Z_SaveSize();
+    #endregion
+
     #endregion
 
     #region Hidden base methods

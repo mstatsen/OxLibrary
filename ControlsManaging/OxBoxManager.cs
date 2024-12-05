@@ -10,19 +10,27 @@ public class OxBoxManager :
     public OxBoxManager(Control managingBox) : base(managingBox)
     {
         OxControls = new(Box);
+#pragma warning disable CS0618 // Type or member is obsolete
         Aligner = new(Box);
+#pragma warning restore CS0618 // Type or member is obsolete
     }
 
     public IOxBox Box =>
         (IOxBox)ManagingControl;
 
+    [Obsolete("Aligner it is used only for internal needs")]
     private readonly OxControlAligner Aligner;
 
-    public void RealignControls(OxDockType dockType = OxDockType.Unknown) =>
-        Aligner.RealignControls(dockType);
+#pragma warning disable CS0618 // Type or member is obsolete
+    public void Realign()
+    {
+        Aligner.Realign();
+        InnerControlZone.CopyFrom(Aligner.ControlZone);
+    }
 
     public bool Realigning =>
         Aligner.Realigning;
+#pragma warning restore CS0618 // Type or member is obsolete
 
     protected override void SetHandlers()
     {
@@ -36,7 +44,7 @@ public class OxBoxManager :
     }
 
     private void PaddingSizeChangedHandler(object sender, OxBordersChangedEventArgs e) =>
-        RealignControls();
+        Realign();
 
     private void ControlRemovedHandler(object? sender, ControlEventArgs e)
     {
@@ -52,6 +60,9 @@ public class OxBoxManager :
             || e.Control.Equals(OxControl))
             return;
 
+        oxControl.Z_SaveLocation();
+        oxControl.Z_SaveSize();
+        
         OxControls.Add(oxControl);
 
         if (OxControl is IOxWithColorHelper colorHelperControl)
@@ -61,7 +72,7 @@ public class OxBoxManager :
     protected override void RealignParent()
     {
         if (Parent is null)
-            RealignControls();
+            Realign();
         else
             base.RealignParent();
     }
@@ -72,7 +83,7 @@ public class OxBoxManager :
     {
         get
         {
-            OxRectangle outerZone = new(OxControl.ClientRectangle);
+            OxRectangle outerZone = new(ClientRectangle);
 
             if (OxControl is IOxWithPadding controlWithPadding)
                 outerZone -= controlWithPadding.Padding;
@@ -84,6 +95,19 @@ public class OxBoxManager :
                 outerZone -= controlWithMargin.Margin;
 
             return outerZone;
+        }
+    }
+
+    public OxRectangle innerControlZone = new();
+
+    public OxRectangle InnerControlZone 
+    {
+        get
+        {
+            if (innerControlZone.IsEmpty)
+                innerControlZone.CopyFrom(OuterControlZone);
+
+            return innerControlZone;
         }
     }
 

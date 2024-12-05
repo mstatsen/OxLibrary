@@ -17,18 +17,18 @@
         #region Implemention of IOxBox using IOxBoxManager
         public virtual bool HandleParentPadding => true;
 
+        public OxRectangle InnerControlZone =>
+            Manager.InnerControlZone;
+
         public OxRectangle OuterControlZone =>
             Manager.OuterControlZone;
+
+        public OxControls OxControls =>
+            Manager.OxControls;
 
         public void RealignControls(OxDockType dockType = OxDockType.Unknown) =>
             Manager.RealignControls(dockType);
 
         public bool Realigning =>
             Manager.Realigning;
-
-        public OxRectangle ControlZone =>
-            Manager.ControlZone;
-
-        public OxControls OxControls =>
-            Manager.OxControls;
         #endregion

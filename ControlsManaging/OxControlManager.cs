@@ -25,10 +25,10 @@ public class OxControlManager : IOxControlManager
             return;
 
         if (OxDockHelper.IsVariableWidth(Dock))
-            Width = OxWh.S(OriginalWidth, e.OldValue.Horizontal);
+            Width = OxWh.S(Z_Width, e.OldValue.Horizontal);
 
         if (OxDockHelper.IsVariableHeight(Dock))
-            Height = OxWh.S(OriginalHeight, e.OldValue.Vertical);
+            Height = OxWh.S(Z_Height, e.OldValue.Vertical);
 
         RealignParent();
     }
@@ -48,7 +48,7 @@ public class OxControlManager : IOxControlManager
         RealignParent();
 
     protected virtual void RealignParent() =>
-        Parent?.RealignControls();
+        Parent?.Realign();
 
     private void ControlDisposedHandler(object? sender, EventArgs e) =>
         OxControlManagers.UnRegisterControl(ManagingControl);
@@ -67,125 +67,169 @@ public class OxControlManager : IOxControlManager
         }
     }
 
-    public int OriginalLeft
+    public int Z_Left
     {
         get => ManagingControl.Left;
         set => ManagingControl.Left = value;
     }
 
-    public int OriginalTop
+    public int Z_Top
     {
         get => ManagingControl.Top;
         set => ManagingControl.Top = value;
     }
 
-    public int OriginalWidth
+    public int Z_Width
     {
         get => ManagingControl.Width;
         set => ManagingControl.Width = value;
     }
 
-    public int OriginalHeight
+    public int Z_Height
     {
         get => ManagingControl.Height;
         set => ManagingControl.Height = value;
     }
 
-    public OxWidth Width
+    public Point Z_Location
     {
-        get
-        {
-            OxWidth width = OxWh.W(OriginalWidth);
-
-            if (OxDockHelper.Variable(Dock) is OxDockVariable.Width
-                && OxControl is IOxWithMargin controlWithMargin
-                && !controlWithMargin.Margin.IsEmpty)
-                width = OxWh.S(width, controlWithMargin.Margin.Horizontal);
-
-            return width;
-        }
+        get => new(Z_Left, Z_Top);
         set
         {
-            if (Width.Equals(value))
-                return;
-
-            OxSize oldSize = new(Size);
-            OriginalWidth =
-                OxWh.IAdd(value,
-                    OxDockHelper.Variable(Dock) is OxDockVariable.Width
-                    && OxControl is IOxWithMargin controlWithMargin
-                    && !controlWithMargin.Margin.IsEmpty
-                        ? controlWithMargin.Margin.Horizontal
-                        : OxWh.W0
-                );
-            OnSizeChanged(new(oldSize, Size));
-            SaveSize();
+            Z_Left = value.X;
+            Z_Top = value.Y;
         }
+    }
+
+    public Size Z_Size
+    {
+        get => new(Z_Width, Z_Height);
+        set
+        {
+            Z_Width = value.Width;
+            Z_Height = value.Height;
+        }
+    }
+
+    public OxWidth Width
+    {
+        get => CalcedSizePart(OxDockVariable.Width);
+        set => SetZOriginalSizePart(OxDockVariable.Width, value);
     }
 
     public OxWidth Height
     {
-        get
+        get => CalcedSizePart(OxDockVariable.Height);
+        set => SetZOriginalSizePart(OxDockVariable.Height, value);
+    }
+
+    private OxWidth CalcedSizePart(OxDockVariable variable)
+    {
+        OxWidth calcedValue =
+            OxWh.W(
+                variable switch
+                {
+                    OxDockVariable.Width =>
+                        Z_Width,
+                    OxDockVariable.Height =>
+                        Z_Height,
+                    _ =>
+                        0,
+                }
+            );
+
+        if (OxDockHelper.Variable(Dock).Equals(variable)
+            && OxControl is IOxWithMargin controlWithMargin)
+            calcedValue = OxWh.S(calcedValue, controlWithMargin.Margin.ByDockVariable(variable));
+
+        return calcedValue;
+    }
+
+    private void SetZOriginalSizePart(OxDockVariable variable, OxWidth value)
+    {
+        if (Size.ByDockVariable(variable).Equals(value))
+            return;
+
+        OxSize oldSize = new(Size);
+        OxWidth calcedValue = value;
+
+        if (Dock is not OxDock.None
+            && OxControl is IOxWithMargin controlWithMargin)
+            calcedValue = OxWh.Add(
+                value,
+                controlWithMargin.Margin.ByDockVariable(variable)
+            );
+
+        if (!ParentOuterControlZone.IsEmpty)
         {
-            OxWidth height = OxWh.W(OriginalHeight);
+            if (Dock is OxDock.Right)
+                Z_Left = OxWh.I(OxWh.Sub(ParentOuterControlZone.Right, calcedValue));
+            else
+                if (Dock is OxDock.Bottom)
+                Z_Top = OxWh.I(OxWh.Sub(ParentOuterControlZone.Bottom, calcedValue));
 
-            if (OxDockHelper.Variable(Dock) is OxDockVariable.Height
-                && OxControl is IOxWithMargin controlWithMargin
-                && !controlWithMargin.Margin.IsEmpty)
-                height = OxWh.S(height, controlWithMargin.Margin.Vertical);
-
-            return height;
+            calcedValue = OxWh.Min(
+                calcedValue,
+                OxWh.Sub(
+                    ParentOuterControlZone.LastByDockVariable(variable),
+                    Location.ByDockVariable(variable)
+                )
+            );
         }
-        set
+
+        switch (variable)
         {
-            if (Height.Equals(value))
-                return;
-
-            OxSize oldSize = new(Size);
-            OriginalHeight =
-                OxWh.IAdd(
-                    value,
-                    OxDockHelper.Variable(Dock) is OxDockVariable.Height
-                    && OxControl is IOxWithMargin controlWithMargin
-                    && controlWithMargin.Margin.IsEmpty
-                        ? controlWithMargin.Margin.Vertical
-                        : OxWh.W0
-                );
-            OnSizeChanged(new(oldSize, Size));
-            SaveSize();
+            case OxDockVariable.Width:
+                Z_Width = OxWh.I(calcedValue);
+                break;
+            case OxDockVariable.Height:
+                Z_Height = OxWh.I(calcedValue);
+                break;
         }
+
+        Z_SaveSize();
+        OnSizeChanged(new(oldSize, Size));
     }
 
     public OxWidth Bottom =>
-        OxWh.S(ManagingControl.Bottom, ParentControlZone.Y);
+        OxWh.S(ManagingControl.Bottom, ParentOuterControlZone.Y);
 
     public OxWidth Right =>
-        OxWh.S(ManagingControl.Right, ParentControlZone.X);
+        OxWh.S(ManagingControl.Right, ParentOuterControlZone.X);
 
     public OxWidth Top
     {
-        get => OxWh.S(OriginalTop, ParentControlZone.Y);
+        get => OxWh.S(Z_Top, ParentInnerControlZone.Y);
         set
         {
+            if (OxDockHelper.DockType(Dock) is OxDockType.Docked)
+                return;
+
             OxPoint oldLocation = new(Location);
-            OriginalTop = OxWh.IAdd(value, ParentControlZone.Y);
+            Z_Top = OxWh.IAdd(value, ParentInnerControlZone.Y);
             OnLocationChanged(new(oldLocation, Location));
+            Z_SaveLocation();
         }
     }
 
     public OxWidth Left
     {
-        get => OxWh.S(OriginalLeft, ParentControlZone.X);
+        get => OxWh.S(Z_Left, ParentInnerControlZone.X);
         set
         {
+            if (OxDockHelper.DockType(Dock) is OxDockType.Docked)
+                return;
+
             OxPoint oldLocation = new(Location);
-            OriginalLeft = OxWh.IAdd(value, ParentControlZone.X);
+            Z_Left = OxWh.IAdd(value, ParentInnerControlZone.X);
             OnLocationChanged(new(oldLocation, Location));
+            Z_SaveLocation();
         }
     }
 
     private OxDock SavedDock = OxDock.None;
     private OxSize SavedSize = OxSize.Empty;
+    private OxPoint SavedLocation = OxPoint.Empty;
 
     private readonly OxHandlers Handlers = new();
 
@@ -239,35 +283,40 @@ public class OxControlManager : IOxControlManager
         }
     }
 
-    private void SaveSize()
+    public void Z_SaveLocation()
     {
-        if (DockCnahging
-            || ParentRealigning)
+        if (DockCnahging)
             return;
 
-        SavedSize = new(Size);
+        SavedLocation = new(Z_Left, Z_Top);
     }
 
-    private void RestoreSize()
+    public void Z_SaveSize()
     {
-        switch (OxDockHelper.Variable(SavedDock))
-        {
-            case OxDockVariable.None:
-                Size = new(SavedSize);
-                break;
-            case OxDockVariable.Width:
-                Width = SavedSize.Width;
-                break;
-            case OxDockVariable.Height:
-                Height = SavedSize.Height;
-                break;
-        }
+        if (DockCnahging)
+            return;
+
+        SavedSize = new(Z_Width, Z_Height);
     }
 
-    private OxRectangle ParentControlZone =>
+    public void Z_RestoreLocation() =>
+        Z_Location = new(SavedLocation.Z_X, SavedLocation.Z_Y);
+
+    public void Z_RestoreSize()
+    {
+        if (!SavedSize.IsEmpty)
+            Z_Size = new (SavedSize.Z_Width, SavedSize.Z_Height);
+    }
+
+    private OxRectangle ParentOuterControlZone =>
         Parent is null
             ? OxRectangle.Max
             : Parent.OuterControlZone;
+
+    private OxRectangle ParentInnerControlZone =>
+        Parent is null
+            ? OxRectangle.Max
+            : Parent.InnerControlZone;
 
     public bool ParentRealigning =>
         Parent is not null
@@ -388,7 +437,13 @@ public class OxControlManager : IOxControlManager
 
         try
         {
-            RestoreSize();
+            if (e.OldValue is OxDock.Fill
+                || e.NewValue is OxDock.Fill)
+            {
+                Z_RestoreLocation();
+                Z_RestoreSize();
+            }
+
             OxControl.OnDockChanged(e);
             InvokeHandlers(OxHandlerType.DockChanged, e);
             RealignParent();
@@ -415,7 +470,7 @@ public class OxControlManager : IOxControlManager
 
         OxControl.OnParentChanged(e);
         InvokeHandlers(OxHandlerType.ParentChanged, e);
-        e.NewValue?.RealignControls();
+        e.NewValue?.Realign();
     }
 
     protected virtual void OnSizeChanged(OxSizeChangedEventArgs e)

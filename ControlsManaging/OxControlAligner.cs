@@ -1,143 +1,170 @@
-﻿using OxLibrary.Dock;
+﻿using OxLibrary.ControlsManaging;
 using OxLibrary.Interfaces;
 
 namespace OxLibrary;
 
-public class OxControlAligner
+[Obsolete("OxControlAligner it is used only for internal needs")]
+internal class OxControlAligner
 {
     private readonly IOxBox Box;
-    public OxRectangle ControlZone = OxRectangle.Empty;
-    public OxRectangle OuterControlZone => Box.OuterControlZone;
+    internal OxRectangle ControlZone = OxRectangle.Empty;
 
-    public bool Realigning { get; private set; } = false;
+    private OxRectangle OuterControlZone =>
+        Box.OuterControlZone;
 
-    public OxControlAligner(IOxBox box) =>
+    private OxRectangle InnerControlZone =>
+        Box.InnerControlZone;
+
+    private OxControls OxControls => Box.OxControls;
+
+    internal bool Realigning { get; private set; } = false;
+
+    internal OxControlAligner(IOxBox box) =>
         Box = box;
 
-    public void RealignControls(OxDockType dockType = OxDockType.Unknown)
+    internal void Realign()
     {
         if (OuterControlZone.IsEmpty
             || Realigning)
             return;
 
         ControlZone.CopyFrom(OuterControlZone);
-        OxRectangle oldControlZone = new(ControlZone);
         Realigning = true;
 
         try
         {
-            if (OxDockTypeHelper.ContainsIn(OxDockType.Docked, dockType))
-                if (!RealignDockedControls())
-                    return;
-
-            if (OxDockTypeHelper.ContainsIn(OxDockType.Undocked, dockType))
-                RealignUndockedControls(
-                    oldControlZone,
-                    dockType is OxDockType.Undocked
-                );
+            if (RealignControls(OxDockType.Docked, CalcedDockedBounds))
+                RealignControls(OxDockType.Undocked, CalcedUndockedBounds);
         }
         finally
         {
+            Box.Invalidate();
             Realigning = false;
         }
     }
 
-#pragma warning disable CS0618 // Type or member is obsolete
-    private OxSize GetRealControlSize(IOxControl control) =>
-        new(OxWh.Min(
-                OxDockHelper.IsVariableWidth(control.Dock)
-                    ? control.OriginalWidth
-                    : ControlZone.WidthInt,
-                ControlZone.Width
-            ),
-            OxWh.Min(
-                OxDockHelper.IsVariableHeight(control.Dock)
-                    ? control.OriginalHeight
-                    : ControlZone.HeightInt,
-                ControlZone.Height
-            )
-        );
-#pragma warning restore CS0618 // Type or member is obsolete
-
-
-    private List<IOxControl> GetControls(OxDockType dockType) =>
-        Box.OxControls.Controls(dockType);
-
-    private bool RealignDockedControls()
+    private bool RealignControls(OxDockType dockType, Func<IOxControl, OxRectangle> calcBounds)
     {
-        OxRectangle currentBounds;
+        OxControlDictionary<OxRectangle> controlsBounds = new();
 
-        foreach (IOxControl control in GetControls(OxDockType.Docked))
+        foreach (IOxControl control in OxControls[dockType])
         {
-            if (ControlZone.IsEmpty)
-                return false;
-
-            currentBounds = new(ControlZone);
-
             if (!control.Visible)
                 continue;
 
-            if (control is IOxBox childBox
-                && !childBox.HandleParentPadding
-                && Box is IOxWithPadding boxWithPadding
-                && !boxWithPadding.Padding.IsEmpty)
-                currentBounds += boxWithPadding.Padding;
+            controlsBounds.Add(
+                control,
+                calcBounds(control));
 
-            OxSize realControlSize = GetRealControlSize(control);
-
-            switch (control.Dock)
-            {
-                case OxDock.Right:
-                    currentBounds.X = OxWh.S(ControlZone.Right, realControlSize.Width);
-                    break;
-                case OxDock.Bottom:
-                    currentBounds.Y = OxWh.S(ControlZone.Bottom, realControlSize.Height);
-                    break;
-            }
-
-#pragma warning disable CS0618 // Type or member is obsolete
-            switch (OxDockHelper.Variable(control.Dock))
-            {
-                case OxDockVariable.Width:
-                    currentBounds.Width = OxWh.Min(realControlSize.Width, ControlZone.Width);
-                    break;
-                case OxDockVariable.Height:
-                    currentBounds.Height = OxWh.Min(realControlSize.Height, ControlZone.Height);
-                    break;
-            }
-#pragma warning restore CS0618 // Type or member is obsolete
-
-            SetControlBounds(control, currentBounds);
-            SubstractControlFromControlZone(control, realControlSize);
+            if (OxDockHelper.DockType(control.Dock).Equals(OxDockType.Docked))
+                SubstractControlFromControlZone(control);
         }
 
+        if (controlsBounds.Count is 0)
+            return false;
+
+        SetBounds(controlsBounds);
         return true;
     }
 
-#pragma warning disable CS0618 // Type or member is obsolete
-    private static void SetControlBounds(IOxControl control, OxRectangle newBounds)
+    private void HandleParentPadding(IOxControl control, OxRectangle controlBounds)
     {
-        OxRectangle oldBounds = new(
-            control.OriginalLeft, 
-            control.OriginalTop, 
-            control.OriginalWidth, 
-            control.OriginalWidth);
-
-        if (oldBounds.Equals(newBounds))
+        if (control.Dock is OxDock.None
+            || control is not IOxBox childBox
+            || childBox.HandleParentPadding
+            || Box is not IOxWithPadding paddingBox
+            || paddingBox.Padding.IsEmpty)
             return;
 
-        control.OriginalLeft = newBounds.XInt;
-        control.OriginalTop = newBounds.YInt;
-        control.OriginalWidth = newBounds.WidthInt;
-        control.OriginalHeight = newBounds.HeightInt;
+        if (control.Dock is OxDock.Right)
+            controlBounds.X = OxWh.A(controlBounds.X, paddingBox.Padding.Right);
+        else controlBounds.X = OxWh.S(controlBounds.X, paddingBox.Padding.Left);
 
-        if (control is IOxBox box)
-            box.RealignControls();
+        if (control.Dock is OxDock.Bottom)
+            controlBounds.Y = OxWh.A(controlBounds.Y, paddingBox.Padding.Bottom);
+        else controlBounds.Y = OxWh.S(controlBounds.Y, paddingBox.Padding.Top);
 
-        control.Invalidate();
+        if (OxDockHelper.TouchHeight(control.Dock))
+        {
+            controlBounds.Width = OxWh.A(controlBounds.Width, paddingBox.Padding.Left);
+            controlBounds.Width = OxWh.A(controlBounds.Width, paddingBox.Padding.Right);
+        }
+
+        if (OxDockHelper.TouchWidth(control.Dock))
+        {
+            controlBounds.Height = OxWh.A(controlBounds.Height, paddingBox.Padding.Top);
+            controlBounds.Height = OxWh.A(controlBounds.Height, paddingBox.Padding.Bottom);
+        }
     }
 
-    private void SubstractControlFromControlZone(IOxControl control, OxSize realControlSize)
+    private OxRectangle CalcedDockedBounds(IOxControl control)
+    {
+        OxRectangle controlBounds = new(control.Z_Location, control.Z_Size);
+
+        if (OxDockHelper.Variable(control.Dock) is not OxDockVariable.Width)
+            controlBounds.Width = ControlZone.Width;
+
+        if (OxDockHelper.Variable(control.Dock) is not OxDockVariable.Height)
+            controlBounds.Height = ControlZone.Height;
+
+        controlBounds.X = control.Dock is OxDock.Right
+            ? OxWh.S(ControlZone.Right, controlBounds.Width)
+            : ControlZone.X;
+
+        controlBounds.Y = control.Dock is OxDock.Bottom
+            ? OxWh.S(ControlZone.Bottom, controlBounds.Height)
+            : ControlZone.Y;
+
+        HandleParentPadding(control, controlBounds);
+
+        return controlBounds;
+    }
+
+    private OxRectangle CalcedUndockedBounds(IOxControl control)
+    {
+        control.Z_RestoreSize();
+        OxWidth left = OxWh.R(control.Z_Left, InnerControlZone.X, ControlZone.X);
+        OxWidth top = OxWh.R(control.Z_Top, InnerControlZone.Y, ControlZone.Y);
+        OxWidth width = OxWh.W(control.Z_Width);
+        OxWidth right = OxWh.A(left, width);
+        OxWidth height = OxWh.W(control.Z_Height);
+        OxWidth bottom = OxWh.A(top, height);
+
+        if (OxWh.Greater(right, ControlZone.Right))
+            width = OxWh.S(ControlZone.Right, left);
+
+        if (OxWh.Greater(bottom, ControlZone.Bottom))
+            height = OxWh.S(ControlZone.Bottom, top);
+
+        return new(left, top, width, height);
+    }
+
+    private static void SetBounds(OxControlDictionary<OxRectangle> boundsDictionary)
+    {
+        foreach (var item in boundsDictionary)
+            SetBounds(item.Key, item.Value);
+    }
+
+    private static void SetBounds(IOxControl control, OxRectangle newBounds)
+    {
+        if (control.Dock is OxDock.None)
+        {
+            control.Z_RestoreLocation();
+            control.Z_RestoreSize();
+
+            if (control.Z_Location.Equals(newBounds.Z_Location)
+                && control.Z_Size.Equals(newBounds.Z_Size))
+                return;
+        }
+
+        control.Z_Location = newBounds.Z_Location;
+        control.Z_Size = newBounds.Z_Size;
+
+        if (control is IOxBox box)
+            box.Realign();
+    }
+
+    private void SubstractControlFromControlZone(IOxControl control)
     {
         switch (control.Dock)
         {
@@ -145,37 +172,17 @@ public class OxControlAligner
                 ControlZone.Clear(); //Use only one fill control in one box
                 return;
             case OxDock.Left:
-                ControlZone.X = OxWh.A(ControlZone.X, control.OriginalWidth);
+                ControlZone.X = OxWh.A(ControlZone.X, control.Z_Width);
                 break;
             case OxDock.Top:
-                ControlZone.Y = OxWh.A(ControlZone.Y, control.OriginalHeight);
+                ControlZone.Y = OxWh.A(ControlZone.Y, control.Z_Height);
                 break;
         }
 
-        switch (OxDockHelper.Variable(control.Dock))
-        {
-            case OxDockVariable.Width:
-                ControlZone.Width = OxWh.S(ControlZone.Width, control.OriginalWidth);
-                break;
-            case OxDockVariable.Height:
-                ControlZone.Height = OxWh.S(ControlZone.Height, control.OriginalHeight);
-                break;
-        }
+        if (OxDockHelper.Variable(control.Dock) is OxDockVariable.Width)
+            ControlZone.Width = OxWh.S(ControlZone.Width, control.Z_Width);
+        else
+            if (OxDockHelper.Variable(control.Dock) is OxDockVariable.Height)
+                ControlZone.Height = OxWh.S(ControlZone.Height, control.Z_Height);
     }
-
-    private void RealignUndockedControls(OxRectangle oldControlZone, bool force)
-    {
-        if (!force
-            && oldControlZone.Equals(ControlZone))
-            return;
-
-        foreach (IOxControl oxControl in GetControls(OxDockType.Undocked))
-        {
-            oxControl.OriginalLeft += ControlZone.XInt + OuterControlZone.XInt - oldControlZone.XInt;
-            oxControl.OriginalTop += ControlZone.YInt + OuterControlZone.YInt - oldControlZone.YInt;
-
-            //TODO: cut width and height if its greater then ControlZone
-        }
-    }
-#pragma warning restore CS0618 // Type or member is obsolete
 }

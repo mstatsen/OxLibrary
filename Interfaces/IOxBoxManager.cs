@@ -2,9 +2,10 @@
 
 public interface IOxBoxManager : IOxControlManager
 {
-    OxRectangle OuterControlZone { get; }
     bool HandleParentPadding { get; }
-    bool Realigning { get; }
-    void RealignControls(OxDockType dockType = OxDockType.Unknown);
+    OxRectangle InnerControlZone { get; }
+    OxRectangle OuterControlZone { get; }
     OxControls OxControls { get; }
+    void Realign();
+    bool Realigning { get; }
 }

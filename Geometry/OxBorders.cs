@@ -172,6 +172,17 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
         }
     }
 
+    public OxWidth ByDockVariable(OxDockVariable variable) =>
+        variable switch
+        {
+            OxDockVariable.Width =>
+                Horizontal,
+            OxDockVariable.Height =>
+                Vertical,
+            _ =>
+                Size
+        };
+
     public int RightInt
     {
         get => OxWh.I(Right);

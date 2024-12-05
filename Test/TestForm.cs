@@ -24,6 +24,7 @@ namespace OxLibrary.Test
             //BaseColor = Color.FromArgb(135, 165, 195);
             MoveToScreenCenter();
             
+            
             toolBarButton = new OxButton("Test action", OxIcons.Cross);
             toolbar = new()
             { 
@@ -38,15 +39,16 @@ namespace OxLibrary.Test
 
             card = new OxCard
             {
-                BlurredBorder = false,
+                BlurredBorder = true,
                 Parent = MainPanel,
                 Name = "LeftCard",
                 Text = "Left docked card",
                 Dock = OxDock.Top,
-                Width = OxWh.W200,
-                Height = OxWh.W300,
-                Icon = OxIcons.Tag
+                Height = OxWh.W150,
+                Icon = OxIcons.Tag,
+                Visible = false
             };
+            card.Width = OxWh.W400;
             card.Margin.Size = OxWh.W40;
             card.BaseColor = Color.Red;
             card.Click += Card_Click;
@@ -57,12 +59,11 @@ namespace OxLibrary.Test
                 Parent = MainPanel,
                 Name = "FillFrame",
                 Text = "Fill-docked frame with header",
-                Dock = OxDock.Right,
+                Dock = OxDock.Fill,
                 Width = OxWh.W400,
                 Height = OxWh.W200
             };
             
-
             bluredCheckBox = new()
             {
                 Parent = frame,
@@ -75,12 +76,12 @@ namespace OxLibrary.Test
             setMarginButton = new OxButton("Set frame dock as Right", OxIcons.Go)
             {
                 Parent = frame,
-                Top = OxWh.Add(bluredCheckBox.Bottom, OxWh.W8),
                 Left = bluredCheckBox.Left,
                 Height = OxWh.W24,
                 Width = OxWh.W140
             };
             setMarginButton.Click += Button_Click;
+            setMarginButton.Top = OxWh.Add(bluredCheckBox.Bottom, OxWh.W8);
 
             hideCardButton = new OxButton("Hide card", OxIcons.Go)
             {
@@ -94,11 +95,15 @@ namespace OxLibrary.Test
 
             SetFrameMarginSize();
             frame.Click += Frame_Click;
+            MainPanel.Padding.Size = OxWh.W80;
         }
 
         private void Card_Click(object? sender, EventArgs e)
         {
-            MessageBox.Show($"Location: {card.Location}\nSize: {card.Size}");
+            MessageBox.Show(
+                $"Location: {card.Z_Location}\nSize: {card.Z_Size}\n\n\n"+
+                $"HEADER location: {card.Header.Z_Location}\nsize: {card.Header.Z_Size}\n\n\n"
+                );
         }
 
         private void Frame_Click(object? sender, EventArgs e)
@@ -135,6 +140,7 @@ namespace OxLibrary.Test
 
         protected override void OnShown(EventArgs e)
         {
+            Width = OxWh.W800;
             base.OnShown(e);
             BaseColor = Color.FromArgb(135, 165, 195);
         }
@@ -143,6 +149,8 @@ namespace OxLibrary.Test
         {
             if (card is not null)
                 card.BaseColor = Color.FromArgb(195, 165, 135);
+
+            //MainPanel.HeaderToolBar.BaseColor = Color.Gray;
         }
     }
 }

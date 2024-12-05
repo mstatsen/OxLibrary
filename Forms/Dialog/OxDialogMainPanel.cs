@@ -148,7 +148,7 @@ public class OxDialogMainPanel : OxFormMainPanel
 
         foreach (var item in realButtons)
         {
-            item.Value.Left = rightOffset - OxDialogButtonsHelper.WidthInt(item.Key);
+            item.Value.Left = rightOffset - OxDialogButtonsHelper.Z_Width(item.Key);
             item.Value.Size = new(
                 OxDialogButtonsHelper.Width(item.Key),
                 OxWh.Sub(

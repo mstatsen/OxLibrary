@@ -73,7 +73,10 @@ namespace OxLibrary.Controls
                     if (OxDockHelper.Variable(button.Dock) is not OxDockVariable.Width)
                         button.Dock = OxDock.Left;
 
-                    TButton? beginGroupButton = button.Dock is OxDock.Left ? button : lastButton;
+                    TButton? beginGroupButton =
+                        button.Dock is OxDock.Left
+                            ? button
+                            : lastButton;
 
                     if (beginGroupButton is not null
                         && beginGroupButton.BeginGroup

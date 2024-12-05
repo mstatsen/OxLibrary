@@ -277,7 +277,7 @@ public class OxPictureContainer : OxClickFrame
     protected override void SetReadOnly(bool value) 
     {
         base.SetReadOnly(value);
-        label.ReadOnly = false;
+        label.Enabled = true;
     }
 
     protected override void OnEnabledChanged(EventArgs e)
