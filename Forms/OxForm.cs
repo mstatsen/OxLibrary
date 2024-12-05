@@ -165,8 +165,8 @@ public class OxForm : Form,
     protected override void OnShown(EventArgs e)
     {
         base.OnShown(e);
-        MainPanel.Location = new(OxPoint.Empty);
-        MainPanel.Size = new(OxWh.W0, OxWh.W0);
+        //MainPanel.Location = new(OxPoint.Empty);
+        //MainPanel.Size = new(OxWh.W0, OxWh.W0);
         Realign();
     }
 

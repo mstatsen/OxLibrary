@@ -45,6 +45,7 @@ namespace OxLibrary.Controls
         protected virtual OxWidth ButtonMargin => OxWh.W1;
         protected virtual OxWidth GroupsSeparatorWidth => OxWh.W1;
         protected virtual OxWidth GroupSeparatorMargin => OxWh.W2;
+        public override bool HandleParentPadding => false;
 
         protected bool PlacingButtons { get; private set; } = false;
 

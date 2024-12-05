@@ -55,7 +55,7 @@ public class OxPanel : Panel, IOxPanel
 
     protected virtual void PrepareInnerComponents() { }
 
-    private OxRectangle BorderRectangle =>
+    protected virtual OxRectangle BorderRectangle =>
         ClientRectangle - Margin;
 
     protected override void OnPaint(PaintEventArgs e)

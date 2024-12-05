@@ -2,6 +2,7 @@
 using OxLibrary.Forms;
 using OxLibrary.Panels;
 using System.Reflection.Metadata.Ecma335;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace OxLibrary.Test
 {
@@ -22,6 +23,7 @@ namespace OxLibrary.Test
         {
             InitializeComponent();
             //BaseColor = Color.FromArgb(135, 165, 195);
+            //Width = OxWh.W1000;
             MoveToScreenCenter();
             
             
@@ -35,7 +37,9 @@ namespace OxLibrary.Test
             toolBarButton.Height = OxWh.W36;
             toolbar.Parent = this;
             toolbar.BaseColor = BaseColor;
-            toolbar.Margin.Left = OxWh.W4;
+            toolbar.Margin.Left = OxWh.W1;
+            toolbar.BorderVisible = true;
+            toolbar.Padding.Left = OxWh.W4;
 
             card = new OxCard
             {
@@ -46,7 +50,6 @@ namespace OxLibrary.Test
                 Dock = OxDock.Top,
                 Height = OxWh.W150,
                 Icon = OxIcons.Tag,
-                Visible = false
             };
             card.Width = OxWh.W400;
             card.Margin.Size = OxWh.W40;
@@ -55,7 +58,7 @@ namespace OxLibrary.Test
 
             frame = new OxFrameWithHeader
             {
-                BlurredBorder = false,
+                BlurredBorder = true,
                 Parent = MainPanel,
                 Name = "FillFrame",
                 Text = "Fill-docked frame with header",
@@ -136,20 +139,24 @@ namespace OxLibrary.Test
 
         private void SetFrameMarginSize()
         {
-            frame.Margin.Size = bluredCheckBox.Checked ? OxWh.W40 : OxWh.W4;
+            frame.Margin.Size = bluredCheckBox.Checked ? OxWh.W40 : OxWh.W0;
         }
 
         protected override void OnShown(EventArgs e)
         {
-            Width = OxWh.W800;
+            //Width = OxWh.W800;
+            WindowState = FormWindowState.Maximized;
             base.OnShown(e);
-            BaseColor = Color.FromArgb(135, 165, 195);
+            BaseColor = Color.FromArgb(155, 185, 215);
         }
 
         public override void PrepareColors()
         {
             if (card is not null)
                 card.BaseColor = Color.FromArgb(195, 165, 135);
+
+            if (frame is not null)
+                frame.BaseColor = Color.FromArgb(125, 195, 145);
 
             //MainPanel.HeaderToolBar.BaseColor = Color.Gray;
         }
