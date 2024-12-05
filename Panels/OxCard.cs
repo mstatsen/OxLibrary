@@ -53,15 +53,19 @@ namespace OxLibrary.Panels
             if (!Expandable)
                 return;
 
-            //ContentBox.StartSizeRecalcing();
             try
             {
                 Padding[OxDock.Top].Visible = value;
                 Padding[OxDock.Bottom].Visible = value;
                 Borders[OxDock.Bottom].Visible = value;
-                //ContentBox.Visible = value;
                 ExpandButton.Icon = ExpandButtonIcon;
                 ExpandButton.ToolTipText = ExpandButtonToolTipText;
+
+                if (value)
+                    Z_RestoreSize();
+                else Z_Height = OxWh.IAdd(OxWh.Add(Header.Underline.Size, HeaderHeight), Margin.Vertical);
+
+                Parent.Realign();
 
                 CollapseOtherAccordions();
 
@@ -72,10 +76,6 @@ namespace OxLibrary.Panels
             }
             finally
             {
-                Update();
-
-                //ContentBox.EndSizeRecalcing();
-
                 if (changed)
                     ExpandHandler?.Invoke(this, EventArgs.Empty);
             }
@@ -98,7 +98,6 @@ namespace OxLibrary.Panels
         protected override void SetHandlers()
         {
             base.SetHandlers();
-            //ApplyVisibleChangedHandler(ContentBox);
             ExpandButton.Click += (s, e) => Expanded = !Expanded;
             Header.Click += AccordionExpandingChangeHandler;
         }
@@ -108,18 +107,6 @@ namespace OxLibrary.Panels
             if (Accordion)
                 Expanded = !Expanded;
         }
-
-        /*
-        protected override OxWidth GetCalcedHeight()
-        {
-            OxWidth calcedHeight = base.GetCalcedHeight();
-
-            if (!Expanded)
-                calcedHeight -= Height;
-
-            return calcedHeight;
-        }
-        */
 
         private readonly OxIconButton ExpandButton = new(OxIcons.Up, OxWh.W20)
         {

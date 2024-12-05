@@ -66,7 +66,7 @@ namespace OxLibrary.Test
             
             bluredCheckBox = new()
             {
-                Parent = frame,
+                Parent = card,
                 Left = OxWh.W8,
                 Top = OxWh.W8,
                 Text = "Set parent margin to 4px",
@@ -76,7 +76,8 @@ namespace OxLibrary.Test
             setMarginButton = new OxButton("Set frame dock as Right", OxIcons.Go)
             {
                 Parent = frame,
-                Left = bluredCheckBox.Left,
+                Left = OxWh.W8,
+                Top = OxWh.W8,
                 Height = OxWh.W24,
                 Width = OxWh.W140
             };

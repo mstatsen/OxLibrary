@@ -88,13 +88,6 @@ public partial class OxPicture : OxPanel
         if (pictureCorrectionProcess)
             return;
         pictureCorrectionProcess = true;
-        Padding.Vertical = Stretch
-            ? OxWh.W0
-            : OxWh.Div(OxWh.Sub(Height, pictureSize), OxWh.W2);
-        Padding.Horizontal = Stretch
-            ? OxWh.W0
-            : OxWh.Div(OxWh.Sub(Width, pictureSize), OxWh.W2);
-
         SetImage(Image);
         picture.Left = OxWh.Div(OxWh.Sub(Width, picture.Width), OxWh.W2);
         picture.Top = OxWh.Div(OxWh.Sub(Height, picture.Height), OxWh.W2);
@@ -154,6 +147,13 @@ public partial class OxPicture : OxPanel
             picture.Image = null;
             return;
         }
+
+        Padding.Vertical = Stretch
+            ? OxWh.W0
+            : OxWh.Div(OxWh.Sub(Height, pictureSize), OxWh.W2);
+        Padding.Horizontal = Stretch
+            ? OxWh.W0
+            : OxWh.Div(OxWh.Sub(Width, pictureSize), OxWh.W2);
 
         OxBitmapCalcer bitmapCalcer = new(value, new(pictureSize, pictureSize), Stretch);
         picture.SizeMode = bitmapCalcer.SizeMode;
