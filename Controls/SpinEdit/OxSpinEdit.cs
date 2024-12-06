@@ -13,7 +13,7 @@ namespace OxLibrary.Controls
         {
             Top = 0,
             TextAlign = HorizontalAlignment.Center,
-            Dock = DockStyle.Fill,
+            Dock = OxDock.Fill,
             BorderStyle = BorderStyle.None
         };
         private readonly OxIconButton DecreaseButton = CreateButton(OxIcons.Minus, OxDock.Left);
@@ -126,7 +126,7 @@ namespace OxLibrary.Controls
         private void PrepareTextBox()
         {
             TextBox.Parent = this;
-            TextBox.Left = OxWh.Int(DecreaseButton.Right);
+            TextBox.Left = DecreaseButton.Right;
         }
 
         protected override void SetHandlers()

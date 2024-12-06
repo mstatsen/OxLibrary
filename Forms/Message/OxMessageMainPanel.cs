@@ -7,7 +7,7 @@ public class OxMessageMainPanel : OxDialogMainPanel
 {
     private readonly OxTextBox MessageBox = new()
     {
-        Dock = DockStyle.Top,
+        Dock = OxDock.Top,
         TextAlign = HorizontalAlignment.Center,
         Font = OxStyles.Font(OxStyles.DefaultFontSize + 1.15f),
         ForeColor = Color.FromArgb(60, 55, 54),
@@ -45,7 +45,7 @@ public class OxMessageMainPanel : OxDialogMainPanel
         set
         {
             MessageBox.Text = value;
-            MessageBox.Height = Math.Max(value.Length / 2, 23)
+            MessageBox.Height = OxWh.Max(value.Length / 2, OxWh.W23)
                 + 23 * value.Count(c => c.Equals('\r'));
             Size = new(
                 OxWh.W240,

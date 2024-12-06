@@ -1,8 +1,6 @@
 ﻿using OxLibrary.Controls;
 using OxLibrary.Forms;
 using OxLibrary.Panels;
-using System.Reflection.Metadata.Ecma335;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace OxLibrary.Test
 {
@@ -18,6 +16,10 @@ namespace OxLibrary.Test
         private readonly OxButton toolBarButton;
         private readonly OxCheckBox bluredCheckBox;
         private readonly OxToolBar<OxButton> toolbar;
+        private readonly OxColorComboBox colorComboBox;
+        private readonly OxCountryComboBox countryComboBox;
+        private readonly OxButtonEdit buttonEdit;
+        private readonly OxTextBox textBox;
 
         public TestForm()
         {
@@ -43,16 +45,18 @@ namespace OxLibrary.Test
 
             card = new OxCard
             {
-                BlurredBorder = true,
+                BlurredBorder = false,
                 Parent = MainPanel,
                 Name = "LeftCard",
                 Text = "Left docked card",
                 Dock = OxDock.Top,
                 Height = OxWh.W150,
                 Icon = OxIcons.Tag,
-                Width = OxWh.W400
+                Width = OxWh.W400,
+                HeaderHeight = OxWh.W40
             };
-            card.Margin.Size = OxWh.W40;
+            card.Margin.Size = OxWh.W10;
+            card.Padding.Size = OxWh.W18;
 
             frame = new OxFrameWithHeader
             {
@@ -83,7 +87,7 @@ namespace OxLibrary.Test
                 Width = OxWh.W140
             };
             setMarginButton.Click += Button_Click;
-            setMarginButton.Top = OxWh.Add(bluredCheckBox.Bottom, OxWh.W8);
+            //setMarginButton.Top = OxWh.Add(bluredCheckBox.Bottom, OxWh.W8);
 
             hideCardButton = new OxButton("Hide card", OxIcons.Go)
             {
@@ -97,7 +101,51 @@ namespace OxLibrary.Test
 
             SetFrameMarginSize();
             frame.Click += Frame_Click;
-            MainPanel.Padding.Size = OxWh.W80;
+            MainPanel.Padding.Size = OxWh.W40;
+
+            /*
+            colorComboBox = new()
+
+            {
+                Parent = frame,
+                Left = OxWh.W8,
+                Top = OxWh.Add(hideCardButton.Bottom, OxWh.W8)
+            };
+
+            countryComboBox = new()
+            {
+                Parent = frame,
+                Left = OxWh.W8,
+                Top = OxWh.Add(colorComboBox.Bottom, OxWh.W8),
+                Width = OxWh.W200,
+            };
+            countryComboBox.LoadCountries();
+            */
+
+            buttonEdit = new()
+            {
+                Parent = frame,
+                Left = OxWh.W8,
+                Top = OxWh.Add(hideCardButton.Bottom, OxWh.W8),
+                //Height = OxWh.W70
+            };
+            buttonEdit.OnButtonClick += ButtonEdit_OnButtonClick;
+
+            textBox = new()
+            {
+                Parent = frame,
+                Left = OxWh.W8,
+                Top = OxWh.Add(buttonEdit.Bottom, OxWh.W8),
+                Multiline = true,
+                WordWrap = true,
+                Height = OxWh.W40
+            };
+           
+        }
+
+        private void ButtonEdit_OnButtonClick(object? sender, EventArgs e)
+        {
+            MessageBox.Show("Click on buttonEdit' button");
         }
 
         private void Frame_Click(object? sender, EventArgs e)

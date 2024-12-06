@@ -122,7 +122,7 @@ internal class OxControlAligner
 
     private OxRectangle CalcedUndockedBounds(IOxControl control)
     {
-        control.ZBounds.RestoreSize();
+        //control.ZBounds.RestoreBounds();
         OxWidth left = OxWh.R(control.ZBounds.Left, InnerControlZone.X, ControlZone.X);
         OxWidth top = OxWh.R(control.ZBounds.Top, InnerControlZone.Y, ControlZone.Y);
         OxWidth width = OxWh.W(control.ZBounds.Width);

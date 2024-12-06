@@ -62,7 +62,7 @@ public static class OxWh
         S(left, right);
 
     public static OxWidth R(OxWidth source, OxWidth search, OxWidth replace) =>
-        A(S(source, search), replace);
+        S(A(source, replace), search);
 
     public static OxWidth R(int source, OxWidth search, OxWidth replace) =>
         R(W(source), search, replace);

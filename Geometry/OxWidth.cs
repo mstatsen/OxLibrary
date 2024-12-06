@@ -15,5 +15,5 @@ public enum OxWidth
     G = 256,
     XG = 512,
     XXG = 1024,
-    XXXG = 2048,
+    XXXG = 2048
 }

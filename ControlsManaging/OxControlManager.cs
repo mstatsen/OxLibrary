@@ -18,6 +18,9 @@ public class OxControlManager : IOxControlManager
         SetHandlers();
     }
 
+
+    public bool IncreaceIfFocused { get; set; } = false;
+
     private void BordersSizeChangedHandler(object sender, OxBordersChangedEventArgs e) =>
         RealignParent();
 
@@ -38,12 +41,36 @@ public class OxControlManager : IOxControlManager
     protected virtual void SetHandlers()
     {
         OxControl.VisibleChanged += VisibleChangedHandler;
+        OxControl.GotFocus += GotFocusHandler;
+        OxControl.LostFocus += LostFocusHandler;
 
         if (OxControl is IOxWithBorders controlWithBorders)
             controlWithBorders.Borders.SizeChanged += BordersSizeChangedHandler;
 
         if (OxControl is IOxWithMargin controlWithMargin)
             controlWithMargin.Margin.SizeChanged += MarginSizeChangedHandler;
+    }
+
+    private void LostFocusHandler(object? sender, EventArgs e)
+    {
+        if (IncreaceIfFocused)
+        {
+            Left = OxWh.A(Left, OxWh.Div(OxWh.W4, OxWh.W2));
+            Top = OxWh.A(Top, OxWh.Div(OxWh.W4, OxWh.W2));
+            Height = OxWh.S(Height, OxWh.W4);
+            Width = OxWh.S(Width, OxWh.W4);
+        }
+    }
+
+    private void GotFocusHandler(object? sender, EventArgs e)
+    {
+        if (IncreaceIfFocused)
+        {
+            Left = OxWh.S(Left, OxWh.Div(OxWh.W4, OxWh.W2));
+            Top = OxWh.S(Top, OxWh.Div(OxWh.W4, OxWh.W2));
+            Height = OxWh.A(Height, OxWh.W4);
+            Width = OxWh.A(Width, OxWh.W4);
+        }
     }
 
     private void VisibleChangedHandler(object? sender, EventArgs e) =>
@@ -127,7 +154,7 @@ public class OxControlManager : IOxControlManager
         }
 
         ZBounds.SetSizePart(variable, OxWh.I(calcedValue));
-        ZBounds.SaveSize();
+        ZBounds.SaveSize(variable);
         OnSizeChanged(new(oldSize, Size));
     }
 
@@ -145,8 +172,8 @@ public class OxControlManager : IOxControlManager
 
     public OxWidth Left
     {
-        get => GetLocationPart(OxDockVariable.Height);
-        set => SetLocationPart(OxDockVariable.Height, value);
+        get => GetLocationPart(OxDockVariable.Width);
+        set => SetLocationPart(OxDockVariable.Width, value);
     }
 
     private OxWidth GetLocationPart(OxDockVariable variable) => 
@@ -162,6 +189,8 @@ public class OxControlManager : IOxControlManager
                 return;
 
             OxPoint oldLocation = new(Location);
+            ZBounds.SetLocationPart(variable, OxWh.I(value));
+            ZBounds.SaveLocation(variable);
             ZBounds.SetLocationPart(
                 variable,
                 OxWh.IAdd(
@@ -170,7 +199,6 @@ public class OxControlManager : IOxControlManager
                 )
             );
             OnLocationChanged(new(oldLocation, Location));
-            ZBounds.SaveLocation();
         }
     }
 

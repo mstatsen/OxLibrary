@@ -12,6 +12,7 @@ public class OxButton : OxIconButton
 
     public static readonly OxWidth DefaultWidth = OxWh.W100;
     public static readonly OxWidth DefaultHeight = OxWh.W20;
+    public override bool IncreaceIfHovered => true;
 
     public OxButton() : base() { }
     public OxButton(string text, Bitmap? icon) : base(icon, DefaultHeight)

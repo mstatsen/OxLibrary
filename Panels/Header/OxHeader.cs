@@ -8,7 +8,6 @@ namespace OxLibrary.Panels
 
         private readonly OxPicture icon = new()
         {
-            PictureSize = OxWh.W24,
             Dock = OxDock.Left,
             Visible = false
         };
@@ -116,7 +115,9 @@ namespace OxLibrary.Panels
             base.OnSizeChanged(e);
 
             if (e.Changed)
+            {
                 icon.Width = icon.Height;
+            }
         }
 
         public void AddToolButton(OxIconButton button, bool startGroup = false) =>

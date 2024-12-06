@@ -53,7 +53,7 @@ public class OxButtonEdit : OxPanel
     private void PrepareTextBox()
     {
         TextBox.Parent = this;
-        TextBox.Dock = DockStyle.Fill;
+        TextBox.Dock = OxDock.Fill;
         TextBox.Multiline = true;
         TextBox.WordWrap = true;
     }

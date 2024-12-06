@@ -5,6 +5,8 @@
         protected bool hovered = false;
         private bool freezeHovered = false;
         public bool HandHoverCursor = false;
+        public virtual bool IncreaceIfHovered => false;
+        public virtual OxWidth HoveredIncreaseSize => OxWh.W2;
 
         private bool useDefaultHoveredColor = true;
         public bool UseDefaultHoveredColor 
@@ -111,7 +113,11 @@
         }
 
         public OxClickFrame() : this(OxSize.Empty) { }
-        public OxClickFrame(OxSize size) : base(size: size) => Colors ??= new(DefaultColor);
+        public OxClickFrame(OxSize size) : base(size: size)
+        {
+            Colors ??= new(DefaultColor);
+            SetHoverHandlers(this);
+        }
 
         private bool readOnly = false;
 
@@ -163,6 +169,14 @@
 
             if (HandHoverCursor)
                 Cursor = Cursors.Hand;
+
+            if (IncreaceIfHovered)
+            {
+                Left = OxWh.S(Left, OxWh.Div(HoveredIncreaseSize, OxWh.W2));
+                Top = OxWh.S(Top, OxWh.Div(HoveredIncreaseSize, OxWh.W2));
+                Height = OxWh.A(Height, HoveredIncreaseSize);
+                Width = OxWh.A(Width, HoveredIncreaseSize);
+            }
         }
 
         protected override Cursor DefaultCursor => Enabled ? Cursors.Default : Cursors.No;
@@ -176,6 +190,14 @@
 
             if (HandHoverCursor)
                 Cursor = Cursors.Default;
+
+            if (IncreaceIfHovered)
+            {
+                Left = OxWh.A(Left, OxWh.Div(HoveredIncreaseSize, OxWh.W2));
+                Top = OxWh.A(Top, OxWh.Div(HoveredIncreaseSize, OxWh.W2));
+                Height = OxWh.S(Height, HoveredIncreaseSize);
+                Width = OxWh.S(Width, HoveredIncreaseSize);
+            }
         }
 
         private bool hiddenBorder;

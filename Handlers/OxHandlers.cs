@@ -2,6 +2,7 @@
 
 namespace OxLibrary.Handlers
 {
+    public delegate void GetToolTip<T>(T item, out string toolTipTitle, out string toolTipText);
     public delegate void OxActionClick<TAction>(
         object sender,
         OxActionEventArgs<TAction> e)
@@ -15,7 +16,6 @@ namespace OxLibrary.Handlers
 
     public class OxHandlers : Dictionary<OxHandlerType, List<Delegate>>
     {
-
         public OxHandlers() { }
 
         public void Add(OxHandlerType type, Delegate handler)

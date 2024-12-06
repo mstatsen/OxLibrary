@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Controls;
+using OxLibrary.Handlers;
 
 namespace OxLibrary.Panels
 {
@@ -66,8 +67,6 @@ namespace OxLibrary.Panels
                     ZBounds.RestoreSize();
                 else ZBounds.Height = OxWh.IAdd(OxWh.Add(Header.Underline.Size, HeaderHeight), Margin.Vertical);
 #pragma warning restore CS0618 // Type or member is obsolete
-
-                Parent?.Realign();
 
                 CollapseOtherAccordions();
 
