@@ -196,8 +196,7 @@ public class OxForm : Form,
 
     public OxColorHelper Colors => MainPanel.Colors;
 
-    public virtual void PrepareColors() =>
-        MainPanel.PrepareColors();
+    public virtual void PrepareColors() { }
 
     #region Implemention of IOxBox using IOxBoxManager
     public virtual bool HandleParentPadding => false;
