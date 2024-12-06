@@ -50,11 +50,9 @@ namespace OxLibrary.Test
                 Dock = OxDock.Top,
                 Height = OxWh.W150,
                 Icon = OxIcons.Tag,
+                Width = OxWh.W400
             };
-            card.Width = OxWh.W400;
             card.Margin.Size = OxWh.W40;
-            card.BaseColor = Color.Red;
-            card.Click += Card_Click;
 
             frame = new OxFrameWithHeader
             {
@@ -102,14 +100,6 @@ namespace OxLibrary.Test
             MainPanel.Padding.Size = OxWh.W80;
         }
 
-        private void Card_Click(object? sender, EventArgs e)
-        {
-            MessageBox.Show(
-                $"Location: {card.Z_Location}\nSize: {card.Z_Size}\n\n\n"+
-                $"HEADER location: {card.Header.Z_Location}\nsize: {card.Header.Z_Size}\n\n\n"
-                );
-        }
-
         private void Frame_Click(object? sender, EventArgs e)
         {
             MessageBox.Show($"Location: {frame.Location}\nSize: {frame.Size}");
@@ -153,7 +143,7 @@ namespace OxLibrary.Test
         public override void PrepareColors()
         {
             if (card is not null)
-                card.BaseColor = Color.FromArgb(195, 165, 135);
+                card.BaseColor = Color.Red;
 
             if (frame is not null)
                 frame.BaseColor = Color.FromArgb(125, 195, 145);

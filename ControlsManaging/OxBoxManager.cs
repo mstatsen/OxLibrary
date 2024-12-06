@@ -60,9 +60,10 @@ public class OxBoxManager :
             || e.Control.Equals(OxControl))
             return;
 
-        oxControl.Z_SaveLocation();
-        oxControl.Z_SaveSize();
-        
+#pragma warning disable CS0618 // Type or member is obsolete
+        oxControl.ZBounds.SaveBounds();
+#pragma warning restore CS0618 // Type or member is obsolete
+
         OxControls.Add(oxControl);
 
         if (OxControl is IOxWithColorHelper colorHelperControl)

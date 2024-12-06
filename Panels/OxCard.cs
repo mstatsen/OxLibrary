@@ -61,11 +61,13 @@ namespace OxLibrary.Panels
                 ExpandButton.Icon = ExpandButtonIcon;
                 ExpandButton.ToolTipText = ExpandButtonToolTipText;
 
+#pragma warning disable CS0618 // Type or member is obsolete
                 if (value)
-                    Z_RestoreSize();
-                else Z_Height = OxWh.IAdd(OxWh.Add(Header.Underline.Size, HeaderHeight), Margin.Vertical);
+                    ZBounds.RestoreSize();
+                else ZBounds.Height = OxWh.IAdd(OxWh.Add(Header.Underline.Size, HeaderHeight), Margin.Vertical);
+#pragma warning restore CS0618 // Type or member is obsolete
 
-                Parent.Realign();
+                Parent?.Realign();
 
                 CollapseOtherAccordions();
 
