@@ -4,11 +4,6 @@ using System.Drawing.Imaging;
 
 namespace OxLibrary.Controls;
 
-public class OxPictureActionEventArgs : OxActionEventArgs<OxPictureAction>
-{
-    public OxPictureActionEventArgs(OxPictureAction action) : base(action) { }
-}
-
 public class OxPictureContainer : OxClickFrame
 {
     private static readonly string SelectText = "Click here to select image";

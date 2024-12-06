@@ -1,4 +1,6 @@
-﻿namespace OxLibrary.Controls;
+﻿using OxLibrary.BitmapWorker;
+
+namespace OxLibrary.Controls;
 
 public delegate Bitmap? GetItemPicture<T>(T item);
 public class OxPicturedComboBox<T> : OxComboBox<T>
@@ -27,7 +29,7 @@ public class OxPicturedComboBox<T> : OxComboBox<T>
 
             if (picture is not null)
                 e.Graphics.DrawImage(
-                    OxImageBoxer.BoxingImage(picture, new(e.Bounds.Height, e.Bounds.Height)),
+                    OxBitmapWorker.BoxingImage(picture, new(e.Bounds.Height, e.Bounds.Height)),
                     e.Bounds.X + ImageLeft,
                     e.Bounds.Y
                 );

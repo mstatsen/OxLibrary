@@ -4,19 +4,22 @@
 
         public IOxControlManager Manager { get; }
 
+3. Add Manager initialization into constructor
+
         public CUSTOM_CONTROL()
         {
             Manager = OxControlManagers.RegisterControl(this);
             ...
         }
 
-3. Insert following code in your class
+4. Insert following code in your class
 
     #region Implemention of IOxControl using IOxControlManager
         public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
         public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
         public virtual void OnParentChanged(OxParentChangedEventArgs e) { }
         public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }
+
         public new IOxBox? Parent
         {
             get => Manager.Parent;

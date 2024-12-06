@@ -1,6 +1,6 @@
 ﻿using System.Drawing.Imaging;
 
-namespace OxLibrary
+namespace OxLibrary.BitmapWorker
 {
     public static class OxBase64
     {

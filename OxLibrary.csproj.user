@@ -26,6 +26,9 @@
     <Compile Update="Controls\Picture\OxPictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Update="Controls\Picture\OxPictureContainer.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Update="Panels\Header\OxHeaderToolBar.cs">
       <SubType>Component</SubType>
     </Compile>

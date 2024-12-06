@@ -1,6 +1,6 @@
 ﻿using System.Drawing.Drawing2D;
 
-namespace OxLibrary
+namespace OxLibrary.BitmapWorker
 {
     public class OxBitmapCalcer
     {
@@ -33,7 +33,7 @@ namespace OxLibrary
             CalcParams();
         }
 
-        private bool NeedZoom() => 
+        private bool NeedZoom() =>
             ImageSize.Width >= ImageBox.Width
             || ImageSize.Height >= ImageBox.Height;
 
@@ -41,12 +41,12 @@ namespace OxLibrary
         {
             SizeMode = PictureBoxSizeMode.CenterImage;
 
-            if (ImageSize.Width > ImageBox.Width 
+            if (ImageSize.Width > ImageBox.Width
                 && ImageBox.Width > 0)
                 ImageSize.Width = ImageBox.Width;
             else ImageBox.Width = ImageSize.Width;
 
-            if (ImageSize.Height > ImageBox.Height 
+            if (ImageSize.Height > ImageBox.Height
                 && ImageBox.Height > 0)
                 ImageSize.Height = ImageBox.Height;
             else ImageBox.Height = ImageSize.Height;
@@ -54,7 +54,7 @@ namespace OxLibrary
 
         private static double GetZoom(OxWidth imageSize, OxWidth imageBox) =>
             OxWh.Greater(imageSize, imageBox)
-                ? ((double)OxWh.Int(imageSize) / OxWh.Int(imageBox)) 
+                ? (double)OxWh.Int(imageSize) / OxWh.Int(imageBox)
                 : 1;
 
         private void CalcForZoom()
@@ -82,7 +82,7 @@ namespace OxLibrary
         private Bitmap GetBitmap(OxSize imageSize, OxRectangle coordinates)
         {
             Bitmap resultBitmap = new(
-                OxWh.Int(imageSize.Width), 
+                OxWh.Int(imageSize.Width),
                 OxWh.Int(imageSize.Height)
             );
             Graphics g = Graphics.FromImage(resultBitmap);
@@ -101,7 +101,7 @@ namespace OxLibrary
 
         public Bitmap CroppedBitmap => GetBitmap(
             new(ImageSize.Width, ImageSize.Height),
-            new(OxWh.W0, 
+            new(OxWh.W0,
                 OxWh.W0,
                 OxWh.Min(ImageBox.Width, ImageSize.Width),
                 OxWh.Min(ImageBox.Height, ImageSize.Height)));
@@ -110,7 +110,7 @@ namespace OxLibrary
             new(ImageBox.Width, ImageBox.Height),
             new(ImageBox.X, ImageBox.Y, ImageSize.Width, ImageSize.Height));
 
-        public static Bitmap Zip(Bitmap bitmap, OxSize maximumSize) => 
+        public static Bitmap Zip(Bitmap bitmap, OxSize maximumSize) =>
             new OxBitmapCalcer(bitmap, maximumSize, true).CroppedBitmap;
     }
 }

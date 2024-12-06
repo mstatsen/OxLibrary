@@ -1,4 +1,5 @@
-﻿using OxLibrary.Handlers;
+﻿using OxLibrary.BitmapWorker;
+using OxLibrary.Handlers;
 using OxLibrary.Panels;
 
 namespace OxLibrary.Controls;

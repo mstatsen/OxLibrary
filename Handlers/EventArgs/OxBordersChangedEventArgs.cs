@@ -1,6 +1,4 @@
-﻿using OxLibrary.Panels;
-
-namespace OxLibrary.Handlers
+﻿namespace OxLibrary.Handlers
 {
     public class OxBordersChangedEventArgs : OxNotNullEventArgs<OxBorders>
     {
