@@ -15,7 +15,7 @@ public partial class OxFormMainPanel : OxFrameWithHeader
         Form = form;
         Form.SizeChanged += FormSizeChanged;
         Dock = OxDock.Fill;
-        SetTitleButtonsVisible();
+        SetHeaderButtonsVisible();
         SetHeaderHeight(OxWh.W34);
         SetRestoreButtonIconAndTooltip();
         SetBordersSize();
@@ -58,7 +58,7 @@ public partial class OxFormMainPanel : OxFrameWithHeader
             Form.Icon = System.Drawing.Icon.FromHandle(Form.FormIcon.GetHicon());
     }
 
-    internal void SetTitleButtonsVisible()
+    internal void SetHeaderButtonsVisible()
     {
         minimizeButton.Visible = Form.CanMinimize;
         restoreButton.Visible = Form.CanMaximize;
@@ -80,15 +80,22 @@ public partial class OxFormMainPanel : OxFrameWithHeader
 
     private void PlaceButtons()
     {
-        Header.AddToolButton(closeButton);
-        Header.AddToolButton(restoreButton);
+        Header.SquareToolBarButtons = false;
         Header.AddToolButton(minimizeButton);
+        Header.AddToolButton(restoreButton);
+        Header.AddToolButton(closeButton);
     }
 
     private void SetButtonsSize()
     {
         foreach (OxIconButton button in Header.Buttons)
-            button.Size = new(OxWh.W36, OxWh.W28);
+        {
+            button.Parent = null;
+            button.Size = new(OxWh.W44, OxWh.W28);
+        }
+
+        Header.ToolBar.Buttons.Clear();
+        PlaceButtons();
     }
 
     private void SetButtonsHandlers()

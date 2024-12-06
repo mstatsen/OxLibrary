@@ -15,13 +15,143 @@ public class OxLabel :
         Manager = OxControlManagers.RegisterControl(this);
         DoubleBuffered = true;
         AutoSize = true;
+        HideIfEmpty = true;
+        Font = OxStyles.DefaultFont;
+    }
+
+    private bool cutByParentWidth = false;
+    public bool CutByParentWidth
+    { 
+        get => cutByParentWidth;
+        set
+        {
+            cutByParentWidth = value;
+
+            if (value)
+                AutoSize = false;
+
+            RecalcText();
+        } 
+    }
+
+    protected override void OnFontChanged(EventArgs e)
+    {
+        base.OnFontChanged(e);
+        RecalcText();
+    }
+
+    protected override void OnAutoSizeChanged(EventArgs e)
+    {
+        base.OnAutoSizeChanged(e);
+
+        if (AutoSize)
+        {
+            cutByParentWidth = false;
+            RecalcText();
+        }
+    }
+
+    private void RecalcText()
+    {
+        string calcedText = Text;
+
+        RecalcVisible();
+
+        if (Text.Equals(string.Empty)
+            || !cutByParentWidth
+            || Parent is null)
+        {
+            base.Text = Text;
+            return;
+        }
+            
+        OxWidth labelRight = OxWh.Add(Left, OxControlHelper.GetTextWidth(calcedText, Font));
+
+        while (OxWh.GreaterOrEquals(labelRight, Parent.OuterControlZone.Right)
+            && calcedText.Length > 4)
+        {
+            calcedText = $"{calcedText.Remove(calcedText.Length - 4)}...";
+            labelRight = OxWh.Add(Left, OxControlHelper.GetTextWidth(calcedText, Font));
+        }
+
+        base.Text = calcedText;
+        Width = OxWh.S(labelRight, Left);
+    }
+
+    private string text = string.Empty;
+
+    public new string Text 
+    { 
+        get => text;
+        set
+        {
+            text = value;
+            RecalcText();
+        }
+    }
+
+    private bool hideIfEmpty;
+    public bool HideIfEmpty
+    {
+        get => hideIfEmpty;
+        set
+        { 
+            hideIfEmpty = value;
+            RecalcText();
+        }
+    }
+
+    private bool internalVisible = true;
+    private bool needSaveInternalVisible = true;
+
+    public new bool Visible
+    { 
+        get => base.Visible;
+        set
+        {
+            base.Visible = internalVisible && value;
+
+            if (needSaveInternalVisible)
+                internalVisible = value;
+        }
+    }
+
+    private void RecalcVisible()
+    {
+        needSaveInternalVisible = false;
+
+        try
+        {
+            Visible = !hideIfEmpty
+                || !Text.Equals(string.Empty);
+        }
+        finally
+        {
+            needSaveInternalVisible = true;
+        }
     }
 
     #region Implemention of IOxControl using IOxControlManager
-    public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
-    public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
-    public virtual void OnParentChanged(OxParentChangedEventArgs e) { }
-    public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }
+    public virtual void OnDockChanged(OxDockChangedEventArgs e) 
+    {
+        RecalcText();
+    }
+    
+    public virtual void OnLocationChanged(OxLocationChangedEventArgs e) 
+    {
+        RecalcText();
+    }
+
+    public virtual void OnParentChanged(OxParentChangedEventArgs e) 
+    {
+        RecalcText();
+    }
+
+    public virtual void OnSizeChanged(OxSizeChangedEventArgs e) 
+    {
+        RecalcText();
+    }
+
     public new IOxBox? Parent
     {
         get => Manager.Parent;
@@ -169,6 +299,7 @@ public class OxLabel :
 
     private new Size PreferredSize => base.PreferredSize;
     private new Rectangle DisplayRectangle => base.DisplayRectangle;
+
     private new Size GetPreferredSize(Size proposedSize) => base.GetPreferredSize(proposedSize);
     private new Size LogicalToDeviceUnits(Size value) => base.LogicalToDeviceUnits(value);
     private new void SetBounds(int x, int y, int width, int height, BoundsSpecified specified) =>

@@ -91,6 +91,12 @@ public static class OxWh
     public static OxWidth Div(int left, OxWidth right) =>
         W(left / I(right));
 
+    public static OxWidth Half(OxWidth value) =>
+        Div(value, W2);
+
+    public static OxWidth Double(OxWidth value) =>
+        Mul(value, W2);
+
     public static bool Greater(OxWidth left, OxWidth right) =>
         I(left) > I(right);
 

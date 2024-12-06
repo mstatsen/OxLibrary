@@ -117,6 +117,7 @@ public class OxHeader : OxUnderlinedPanel, IOxHeader
         if (e.Changed)
         {
             icon.Width = icon.Height;
+            ToolBar.PlaceButtons();
         }
     }
 
@@ -124,4 +125,10 @@ public class OxHeader : OxUnderlinedPanel, IOxHeader
         ToolBar.AddButton(button, startGroup);
 
     public override bool HandleParentPadding => false;
+
+    public bool SquareToolBarButtons
+    {
+        get => ToolBar.SquareButtons;
+        set => ToolBar.SquareButtons = value;
+    }
 }

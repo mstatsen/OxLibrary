@@ -11,7 +11,7 @@ namespace OxLibrary.Test
 
         private readonly OxPanel frame;
         private readonly OxCard card;
-        private readonly OxClickFrame setMarginButton;
+        private readonly OxButton setMarginButton;
         private readonly OxClickFrame hideCardButton;
         private readonly OxButton toolBarButton;
         private readonly OxCheckBox bluredCheckBox;
@@ -52,11 +52,11 @@ namespace OxLibrary.Test
                 Dock = OxDock.Top,
                 Height = OxWh.W150,
                 Icon = OxIcons.Tag,
-                Width = OxWh.W400,
-                HeaderHeight = OxWh.W40
+                Width = OxWh.W400
             };
             card.Margin.Size = OxWh.W10;
             card.Padding.Size = OxWh.W18;
+            card.HeaderHeight = OxWh.W40;
 
             frame = new OxFrameWithHeader
             {
@@ -80,16 +80,16 @@ namespace OxLibrary.Test
 
             setMarginButton = new OxButton("Set frame dock as Right", OxIcons.Go)
             {
-                Parent = frame,
                 Left = OxWh.W8,
                 Top = OxWh.W8,
-                Height = OxWh.W24,
-                Width = OxWh.W140
+                Parent = frame,
             };
+            //setMarginButton.Width = OxWh.W140;
             setMarginButton.Click += Button_Click;
+            setMarginButton.AutoSize = true;
             //setMarginButton.Top = OxWh.Add(bluredCheckBox.Bottom, OxWh.W8);
 
-            hideCardButton = new OxButton("Hide card", OxIcons.Go)
+            hideCardButton = new OxButton("Hide card", OxIcons.Eye)
             {
                 Parent = frame,
                 Top = OxWh.Add(setMarginButton.Bottom, OxWh.W8),
@@ -157,6 +157,7 @@ namespace OxLibrary.Test
         {
             card.Visible = !card.Visible;
             hideCardButton.Text = card.Visible ? "Hide card" : "Show card";
+            hideCardButton.AutoSize = !hideCardButton.AutoSize;
         }
 
         private void ToolBarButton_Click(object? sender, EventArgs e)
@@ -191,7 +192,7 @@ namespace OxLibrary.Test
         public override void PrepareColors()
         {
             if (card is not null)
-                card.BaseColor = Color.Red;
+                card.BaseColor = Color.FromArgb(195, 145, 125);
 
             if (frame is not null)
                 frame.BaseColor = Color.FromArgb(125, 195, 145);

@@ -4,9 +4,9 @@
     {
         protected bool hovered = false;
         private bool freezeHovered = false;
-        public bool HandHoverCursor = false;
-        public virtual bool IncreaceIfHovered => false;
-        public virtual OxWidth HoveredIncreaseSize => OxWh.W2;
+        public bool HandHoverCursor { get; set; } = false;
+        public bool IncreaceIfHovered { get; set; } = false;
+        public OxWidth HoveredIncreaseSize { get; set; } = OxWh.W2;
 
         private bool useDefaultHoveredColor = true;
         public bool UseDefaultHoveredColor 
@@ -59,8 +59,7 @@
         }
 
         protected override Color GetForeColor() =>
-            Color.Red;
-            //Colors.Darker(Enabled || !UseDisabledStyles ? 7 : -4);
+            Colors.Darker(Enabled || !UseDisabledStyles ? 7 : -4);
 
         private bool ClickFrameBaseColorProcess = false;
 

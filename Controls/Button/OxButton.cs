@@ -7,12 +7,15 @@ public class OxButton : OxIconButton
     private readonly OxLabel Label = new()
     {
         Dock = OxDock.Left,
-        TextAlign = ContentAlignment.MiddleLeft
+        TextAlign = ContentAlignment.MiddleLeft,
+        AutoSize = false,
+        CutByParentWidth = true
     };
 
+    private readonly OxWidth AutoSizePadding = OxWh.W4;
+
     public static readonly OxWidth DefaultWidth = OxWh.W100;
-    public static readonly OxWidth DefaultHeight = OxWh.W20;
-    public override bool IncreaceIfHovered => true;
+    public static readonly OxWidth DefaultHeight = OxWh.W24;
 
     public OxButton() : base() { }
     public OxButton(string text, Bitmap? icon) : base(icon, DefaultHeight)
@@ -22,13 +25,11 @@ public class OxButton : OxIconButton
         MinimumSize = OxSize.Empty;
     }
 
-    protected override void AfterCreated()
+    protected override void OnAutoSizeChanged(OxEventArgs e)
     {
-        base.AfterCreated();
-        Picture.Dock = OxDock.Left;
-        Picture.Width = OxWh.W16;
-        Picture.Stretch = true;
-        HiddenBorder = false;
+        base.OnAutoSizeChanged(e);
+        Label.CutByParentWidth = !AutoSize;
+        RecalcComponents();
     }
 
     protected override void SetIcon(Bitmap? value)
@@ -44,7 +45,11 @@ public class OxButton : OxIconButton
     protected override void PrepareInnerComponents()
     {
         base.PrepareInnerComponents();
+        Picture.Width = OxWh.W16;
+        Picture.Dock = OxDock.Left;
+        Picture.Stretch = true;
         Label.Parent = this;
+        HiddenBorder = false;
     }
 
     protected override void SetHandlers()
@@ -54,100 +59,70 @@ public class OxButton : OxIconButton
         SetClickHandler(Label);
     }
 
-    protected override void OnForeColorChanged(EventArgs e)
-    {
-        base.OnForeColorChanged(e);
-        Label.ForeColor = ForeColor;
-    }
-
-    protected override string GetText() => 
-        Label.Text;
 
     protected override void SetText(string value)
     {
-        Label.Text = value;
-        Label.Visible = !value.Equals(string.Empty);
-        CalcLabelWidth();
-        RecalcPaddings();
+        base.SetText(value);
+        Label.Visible = value != string.Empty;
+        RecalcComponents();
     }
 
-    private void RecalcPaddings() =>
-        Padding.Left =
-            OxWh.Div(
-                OxWh.Sub(
-                    Width,
-                    RealPictureWidth | RealLabelWidth),
-                OxWh.W2);
-
-    private void CalcLabelWidth()
+    private void RecalcComponents()
     {
-        if (Label is null)
-            return;
+        if (AutoSize)
+        {
+            Padding.Left = AutoSizePadding;
+            OxWidth textWidth =
+                OxWh.Add(
+                    OxWh.Add(
+                        OxControlHelper.GetTextWidth(Text, Label.Font), 
+                        OxWh.Double(AutoSizePadding)
+                    ),
+                    Borders.Horizontal
+                );
+            Width = OxWh.Add(RealPictureWidth, textWidth);
+            Label.Width = textWidth;
+        }
 
-        Label.AutoSize = true;
-        OxWidth calcedLabelWidth = Label.Width;
-        Label.AutoSize = false;
-        calcedLabelWidth = 
-            OxWh.Less(
-                OxWh.Add(calcedLabelWidth, RealPictureWidth), 
-                Width
-            )
-                ? calcedLabelWidth 
-                : OxWh.Sub(Width, RealPictureWidth);
-        Label.Width = OxWh.Max(calcedLabelWidth, OxWh.W0);
+        Label.Text = Text;
+
+        if (!AutoSize)
+        {
+            OxWidth calcedWidth = OxWh.A(RealPictureWidth, RealLabelWidth);
+
+            if (OxWh.Greater(calcedWidth, Width))
+            {
+                Label.Width = OxWh.S(Width, RealPictureWidth);
+                calcedWidth = Width;
+            }
+
+            Padding.Left = OxWh.Half(OxWh.S(Width, calcedWidth));
+        }
     }
 
     protected override void OnFontChanged(EventArgs e)
     {
         base.OnFontChanged(e);
-        CalcLabelWidth();
+        RecalcComponents();
     }
 
     private OxWidth RealPictureWidth =>
-        Picture.Visible
-            ? Picture.Width
-            : OxWh.W0;
+        //Picture.Visible
+        //    ? 
+        Picture.Width
+            //: OxWh.W0
+            ;
 
     private OxWidth RealLabelWidth =>
-        Label.Visible
-            ? Label.Width
-            : OxWh.W0;
+        Label.Width;
 
     public override void OnSizeChanged(OxSizeChangedEventArgs e)
     {
-        if (e.WidthChanged)
-        {
-            CalcLabelWidth();
-            RecalcPaddings();
-
-            /*
-            StartSizeChanging();
-            try
-            {
-                base.SetWidth(Width);
-            }
-            finally
-            {
-                EndSizeChanging();
-            }
-            */
-        }
-
         base.OnSizeChanged(e);
-    }
 
-    /*
-    protected override void OnVisibleChanged(EventArgs e)
-    {
-        base.OnVisibleChanged(e);
-
-        if (Visible)
-        {
-            CalcLabelWidth();
-            RecalcPaddings();
-        }
+        if (e.Changed)
+            RecalcComponents();
     }
-    */
 
     protected override void SetToolTipText(string value)
     {

@@ -271,7 +271,7 @@ public class OxControlManager : IOxControlManager
         get => (IOxBox?)ManagingControl.Parent;
         set
         {
-            if (value is null && Parent is not null
+            if (value is null && Parent is null
                 || value is not null && value.Equals(Parent))
                 return;
 

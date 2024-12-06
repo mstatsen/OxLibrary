@@ -87,7 +87,7 @@ public class OxPanel : Panel, IOxPanel
     {
         get
         {
-            string text = base.Text;
+            string text = GetText();
             return text is null ? string.Empty : text;
         }
         set => SetText(value is null ? string.Empty : value);
@@ -180,6 +180,21 @@ public class OxPanel : Panel, IOxPanel
         {
             Manager.Parent = value;
             PrepareColors();
+        }
+    }
+
+    protected sealed override void OnAutoSizeChanged(EventArgs e) { }
+
+    protected virtual void OnAutoSizeChanged(OxEventArgs e) { }
+
+    private bool autoSize = false;
+    public new bool AutoSize
+    {
+        get => autoSize;
+        set
+        {
+            autoSize = value;
+            OnAutoSizeChanged((EventArgs)OxEventArgs.Empty);
         }
     }
 

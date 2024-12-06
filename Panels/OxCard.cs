@@ -1,5 +1,4 @@
 ﻿using OxLibrary.Controls;
-using OxLibrary.Handlers;
 
 namespace OxLibrary.Panels
 {
@@ -64,7 +63,7 @@ namespace OxLibrary.Panels
 
 #pragma warning disable CS0618 // Type or member is obsolete
                 if (value)
-                    ZBounds.RestoreSize();
+                    ZBounds.RestoreBounds();
                 else ZBounds.Height = OxWh.IAdd(OxWh.Add(Header.Underline.Size, HeaderHeight), Margin.Vertical);
 #pragma warning restore CS0618 // Type or member is obsolete
 
@@ -74,6 +73,8 @@ namespace OxLibrary.Panels
                     BaseColor = expanded
                         ? Colors.HBluer(-2).Browner(1)
                         : Colors.HBluer(2).Browner(-1);
+
+                Parent?.DoWithSuspendedLayout(() => Parent?.Realign());
             }
             finally
             {

@@ -137,7 +137,7 @@ public class OxForm : Form,
         set
         {
             canMaximize = value;
-            MainPanel.SetTitleButtonsVisible();
+            MainPanel.SetHeaderButtonsVisible();
         }
     }
 
@@ -147,7 +147,7 @@ public class OxForm : Form,
         set
         {
             canMinimize = value;
-            MainPanel.SetTitleButtonsVisible();
+            MainPanel.SetHeaderButtonsVisible();
         }
     }
 

@@ -49,7 +49,7 @@ namespace OxLibrary.Controls
 
         protected bool PlacingButtons { get; private set; } = false;
 
-        private void PlaceButtons()
+        internal void PlaceButtons()
         {
             if (PlacingButtons)
                 return;
@@ -64,6 +64,8 @@ namespace OxLibrary.Controls
                     button.VisibleChanged -= ButtonVisibleChangedHandler;
                     button.Parent = null;
                 }
+
+                PrepareButtonsSizes();
 
                 TButton? lastButton = null;
 
@@ -110,6 +112,8 @@ namespace OxLibrary.Controls
                 ResumeLayout();
             }
         }
+
+        protected virtual void PrepareButtonsSizes() { }
 
         private OxPanel CreateSeparator(TButton startButton)
         {
