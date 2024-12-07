@@ -30,10 +30,11 @@ public class OxFormMover
 
     private void MoveHandler(object? sender, MouseEventArgs e)
     {
-        if (!Processing || LastMousePosition.Equals(e.Location))
+        if (!Processing
+            || LastMousePosition.Equals(e.Location))
             return;
 
-        SetFormState(e);
+        SetWindowState(e);
 
         int deltaX = e.X - LastMousePosition.X;
         int deltaY = e.Y - LastMousePosition.Y;
@@ -41,7 +42,7 @@ public class OxFormMover
         LastMousePosition.Y = e.Y - deltaY;
 
         if (Form.WindowState is FormWindowState.Normal)
-            MoveForm(
+            Move(
                 new(
                     Form.PointToScreen(new Point(deltaX, deltaY))
                 )
@@ -49,7 +50,7 @@ public class OxFormMover
         else Processing = false;
     }
 
-    private void SetFormState(MouseEventArgs e)
+    private void SetWindowState(MouseEventArgs e)
     {
         if (!Form.CanMaximize)
             return;
@@ -65,7 +66,7 @@ public class OxFormMover
         }
     }
 
-    private void MoveForm(OxPoint FinishPosition)
+    private void Move(OxPoint FinishPosition)
     {
         if (FinishPosition.Equals(Form.Location))
             return;
