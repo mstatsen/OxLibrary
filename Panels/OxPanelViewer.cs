@@ -12,11 +12,14 @@ namespace OxLibrary.Panels
             Text = ContentPanel.Text;
             DialogButtons = buttons;
             BaseColor = ContentPanel.BaseColor;
-            contentPanel.Parent = MainPanel;
+            contentPanel.Parent = FormPanel;
             Size = ContentPanel.Size;
-            MainPanel.Padding.Size = OxWh.W4;
-            contentPanel.Colors.BaseColorChanged += (s, e) => MainPanel.BaseColor = ContentPanel.BaseColor;
+            Padding.Size = OxWh.W4;
+            contentPanel.Colors.BaseColorChanged += BaseColorChangedHandler;
         }
+
+        private void BaseColorChangedHandler(object? sender, EventArgs e) => 
+            BaseColor = ContentPanel.BaseColor;
 
         public override Bitmap? FormIcon => ContentPanel.Icon;
 

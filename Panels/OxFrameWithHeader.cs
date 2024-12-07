@@ -68,9 +68,9 @@ namespace OxLibrary.Panels
             if (Header.Buttons.Count <= 0)
                 return;
 
-            HeaderToolBar.Parent = dialog.MainPanel.Header;
+            HeaderToolBar.Parent = dialog.Header;
             HeaderToolBar.BringToFront();
-            HeaderToolBar.BaseColor = dialog.MainPanel.Header.BaseColor;
+            HeaderToolBar.BaseColor = dialog.Header.BaseColor;
 
             foreach (OxIconButton button in Header.Buttons.Cast<OxIconButton>())
             {

@@ -65,13 +65,13 @@ public class OxLabel :
             return;
         }
             
-        OxWidth labelRight = OxWh.Add(Left, OxControlHelper.GetTextWidth(calcedText, Font));
+        OxWidth labelRight = OxWh.Add(Left, OxTextHelper.GetTextWidth(calcedText, Font));
 
         while (OxWh.GreaterOrEquals(labelRight, Parent.OuterControlZone.Right)
             && calcedText.Length > 4)
         {
             calcedText = $"{calcedText.Remove(calcedText.Length - 4)}...";
-            labelRight = OxWh.Add(Left, OxControlHelper.GetTextWidth(calcedText, Font));
+            labelRight = OxWh.Add(Left, OxTextHelper.GetTextWidth(calcedText, Font));
         }
 
         base.Text = calcedText;

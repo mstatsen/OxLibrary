@@ -75,7 +75,7 @@ public class OxButton : OxIconButton
             OxWidth textWidth =
                 OxWh.Add(
                     OxWh.Add(
-                        OxControlHelper.GetTextWidth(Text, Label.Font), 
+                        OxTextHelper.GetTextWidth(Text, Label.Font), 
                         OxWh.Double(AutoSizePadding)
                     ),
                     Borders.Horizontal

@@ -1,28 +1,20 @@
 ﻿namespace OxLibrary.Forms;
 
-public class OxMessage : OxDialog
+public class OxMessage : OxDialog<OxMessage, OxMessagePanel>
 {
     private readonly OxMessageType MessageType;
     public OxMessage(OxMessageType messageType) : base()
     {
         MessageType = messageType;
         Text = OxMessageTypeHelper.Caption(messageType);
-        MainPanel.BaseColor = OxMessageTypeHelper.BaseColor(messageType);
-        MainPanel.SetIcon();
+        BaseColor = OxMessageTypeHelper.BaseColor(messageType);
+        ApplyFormIcon();
     }
 
-    protected override OxFormMainPanel CreateMainPanel() =>
-        new OxMessageMainPanel(this);
-
-    public new OxMessageMainPanel MainPanel
-    {
-        get => (OxMessageMainPanel)base.MainPanel;
-        set => base.MainPanel = value;
-    }
     public string Message
     {
-        get => MainPanel.Message;
-        set => MainPanel.Message = value;
+        get => FormPanel.Message;
+        set => FormPanel.Message = value;
     }
 
     public override Bitmap FormIcon =>

@@ -29,10 +29,17 @@ internal class OxControlAligner
             return;
 
         ControlZone.CopyFrom(OuterControlZone);
+
         Realigning = true;
 
         try
         {
+            if (Box is IOxDependedBox dependedBox)
+            {
+                dependedBox.DependedFrom.Realign();
+                return;
+            }
+
             if (RealignControls(OxDockType.Docked, CalcedDockedBounds))
                 RealignControls(OxDockType.Undocked, CalcedUndockedBounds);
         }
@@ -72,6 +79,7 @@ internal class OxControlAligner
         if (control.Dock is OxDock.None
             || control is not IOxBox childBox
             || childBox.HandleParentPadding
+            || Box is IOxDependedBox
             || Box is not IOxWithPadding paddingBox
             || paddingBox.Padding.IsEmpty)
             return;

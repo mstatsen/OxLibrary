@@ -62,7 +62,7 @@ namespace OxLibrary.Panels
         private readonly OxLabel LoadingLabel;
 
         protected override void SetText(string? value) =>
-            LoadingLabel.Text = value;
+            LoadingLabel.Text = OxTextHelper.ToString(value);
 
         public float FontSize
         {

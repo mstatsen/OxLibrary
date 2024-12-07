@@ -1,12 +1,17 @@
-﻿namespace OxLibrary.Forms;
+﻿using OxLibrary.Panels;
+
+namespace OxLibrary.Forms;
 
 public delegate string GetEmptyMandatoryFieldName();
 
-public class OxDialog : OxForm
+public class OxDialog<TDialog, TDialogPanel> : OxForm<TDialog, TDialogPanel>
+
+    where TDialog : OxDialog<TDialog, TDialogPanel>
+    where TDialogPanel : OxDialogPanel<TDialog, TDialogPanel>, new()
 {
     public OxDialog() : base()
     {
-        Sizeble = false;
+        Sizable = false;
         CanMaximize = false;
         CanMinimize = false;
         ShowInTaskbar = false;
@@ -20,20 +25,11 @@ public class OxDialog : OxForm
         KeyPreview = true;
     }
 
-    public new OxDialogMainPanel MainPanel
-    {
-        get => (OxDialogMainPanel)base.MainPanel;
-        set => base.MainPanel = value;
-    }
-
     public OxDialogButton DialogButtons
     {
-        get => MainPanel.DialogButtons;
-        set => MainPanel.DialogButtons = value;
+        get => FormPanel.DialogButtons;
+        set => FormPanel.DialogButtons = value;
     }
-
-    protected override OxFormMainPanel CreateMainPanel() =>
-        new OxDialogMainPanel(this);
 
     protected override void OnKeyUp(KeyEventArgs e)
     {
@@ -105,4 +101,25 @@ public class OxDialog : OxForm
         base.OnShown(e);
         FirstFocusControl?.Focus();
     }
+
+    public OxWidth DialogButtonSpace
+    { 
+        get => FormPanel.DialogButtonSpace;
+        set => FormPanel.DialogButtonSpace = value;
+    }
+
+    public OxWidth DialogButtonStartSpace
+    {
+        get => FormPanel.DialogButtonStartSpace;
+        set => FormPanel.DialogButtonStartSpace = value;
+    }
+
+    public void SetFooterButtonText(OxDialogButton dialogButton, string text) =>
+        FormPanel.SetFooterButtonText(dialogButton, text);
+
+    public OxFrame Footer => FormPanel.Footer;
+}
+
+public class OxDialog : OxDialog<OxDialog, OxDialogPanel>
+{ 
 }

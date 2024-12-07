@@ -44,11 +44,16 @@ public class OxControlManager : IOxControlManager
         OxControl.GotFocus += GotFocusHandler;
         OxControl.LostFocus += LostFocusHandler;
 
-        if (OxControl is IOxWithBorders controlWithBorders)
-            controlWithBorders.Borders.SizeChanged += BordersSizeChangedHandler;
+        if (OxControl is not IOxDependedBox)
+        {
+            if (OxControl is IOxWithBorders controlWithBorders
+                && controlWithBorders.Borders is not null)
+                controlWithBorders.Borders.SizeChanged += BordersSizeChangedHandler;
 
-        if (OxControl is IOxWithMargin controlWithMargin)
-            controlWithMargin.Margin.SizeChanged += MarginSizeChangedHandler;
+            if (OxControl is IOxWithMargin controlWithMargin
+                && controlWithMargin.Margin is not null)
+                controlWithMargin.Margin.SizeChanged += MarginSizeChangedHandler;
+        }
     }
 
     private void LostFocusHandler(object? sender, EventArgs e)
@@ -115,6 +120,7 @@ public class OxControlManager : IOxControlManager
         OxWidth calcedValue = OxWh.W(ZBounds.GetSizePart(variable));
 
         if (OxDockHelper.Variable(Dock).Equals(variable)
+            && OxControl is not IOxDependedBox
             && OxControl is IOxWithMargin controlWithMargin)
             calcedValue = OxWh.S(calcedValue, controlWithMargin.Margin.ByDockVariable(variable));
 
@@ -130,6 +136,7 @@ public class OxControlManager : IOxControlManager
         OxWidth calcedValue = value;
 
         if (Dock is not OxDock.None
+            && OxControl is not IOxDependedBox
             && OxControl is IOxWithMargin controlWithMargin)
             calcedValue = OxWh.Add(
                 value,
@@ -254,17 +261,15 @@ public class OxControlManager : IOxControlManager
 
     private OxRectangle ParentOuterControlZone =>
         Parent is null
-            ? OxRectangle.Max
+        || Parent is IOxDependedBox
+            ? OxRectangle.Empty
             : Parent.OuterControlZone;
 
     private OxRectangle ParentInnerControlZone =>
         Parent is null
-            ? OxRectangle.Max
+        || Parent is IOxDependedBox
+            ? OxRectangle.Empty
             : Parent.InnerControlZone;
-
-    public bool ParentRealigning =>
-        Parent is not null
-        && Parent.Realigning;
 
     public IOxBox? Parent
     {

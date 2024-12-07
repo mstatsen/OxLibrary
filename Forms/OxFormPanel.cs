@@ -4,24 +4,38 @@ using OxLibrary.Panels;
 
 namespace OxLibrary.Forms;
 
-public partial class OxFormMainPanel : OxFrameWithHeader
+public partial class OxFormPanel<TForm, TFormPanel> :
+    OxFrameWithHeader,
+    IOxFormPanel<TForm, TFormPanel>
+    where TForm : IOxForm<TForm, TFormPanel>
+    where TFormPanel : IOxFormPanel<TForm, TFormPanel>, new()
 {
-    public OxForm Form { get; internal set; }
+    private TForm? form;
+    public TForm? Form 
+    { 
+        get => form;
+        set
+        { 
+            form = value;
 
-    private OxFormMover formMover = default!;
+            if (form is not null)
+            {
+                form.SizeChanged += FormSizeChanged;
+                formMover = new(form, Header.Label);
+            }
+        }
+    }
 
-    public OxFormMainPanel(OxForm form) : base()
+    private OxBoxMover? formMover;
+
+    
+    public OxFormPanel() : base()
     {
-        Form = form;
-        Form.SizeChanged += FormSizeChanged;
         Dock = OxDock.Fill;
-        SetHeaderButtonsVisible();
         SetHeaderHeight(OxWh.W34);
         SetRestoreButtonIconAndTooltip();
         SetBordersSize();
         SetHeaderFont();
-        SetMarginsSize();
-        CreateFormMover();
         BlurredBorder = true;
     }
 
@@ -41,33 +55,15 @@ public partial class OxFormMainPanel : OxFrameWithHeader
     private void SetBordersSize() => 
         Borders.Size = OxWh.W1;
 
-    private void CreateFormMover() => 
-        formMover = new OxFormMover(Form, Header.Label);
-
     public void SetHeaderHeight(OxWidth height)
     {
         HeaderHeight = height;
         SetButtonsSize();
     }
 
-    public void SetIcon()
-    {
-        Header.Icon = Form.FormIcon;
-
-        if (Form.FormIcon is not null)
-            Form.Icon = System.Drawing.Icon.FromHandle(Form.FormIcon.GetHicon());
-    }
-
-    internal void SetHeaderButtonsVisible()
-    {
-        minimizeButton.Visible = Form.CanMinimize;
-        restoreButton.Visible = Form.CanMaximize;
-    }
-
     protected override void PrepareInnerComponents()
     {
         base.PrepareInnerComponents();
-        SetButtonsHandlers();
         SetButtonsSize();
         PlaceButtons();
     }
@@ -98,19 +94,6 @@ public partial class OxFormMainPanel : OxFrameWithHeader
         PlaceButtons();
     }
 
-    private void SetButtonsHandlers()
-    {
-        closeButton.Click += CloseButtonClickHandler;
-        restoreButton.Click += RestoreButtonClickHandler;
-        minimizeButton.Click += MinimizeButtonClickHandler;
-    }
-
-    private void MinimizeButtonClickHandler(object? sender, EventArgs e) => 
-        SetFormState(FormWindowState.Minimized);
-
-    private void RestoreButtonClickHandler(object? sender, EventArgs e) => 
-        SetFormState(FormIsMaximized ? FormWindowState.Normal : FormWindowState.Maximized);
-
     private readonly OxIconButton closeButton = new(OxIcons.Close, OxWh.W28)
     {
         ToolTipText = "Close",
@@ -128,6 +111,10 @@ public partial class OxFormMainPanel : OxFrameWithHeader
         ToolTipText = "Minimize window",
         Name = "FormMinimizeButton"
     };
+
+    public OxIconButton CloseButton => closeButton;
+    public OxIconButton RestoreButton => restoreButton;
+    public OxIconButton MinimizeButton => minimizeButton;
 
     private Bitmap GetRestoreIcon() =>
         Form is not null 
@@ -151,19 +138,13 @@ public partial class OxFormMainPanel : OxFrameWithHeader
     }
 
     public void SetFormState(FormWindowState state) => 
-        Form.SetUpSizes(state);
-
-    private void CloseButtonClickHandler(object? sender, EventArgs e)
-    {
-        Form.DialogResult = DialogResult.Cancel;
-        Form.Close();
-    }
+        Form?.SetState(state);
 
     public override Color DefaultColor =>
         Color.FromArgb(146, 143, 140);
 
     public bool FormIsMaximized => 
-        Form.WindowState is FormWindowState.Maximized;
+        Form?.WindowState is FormWindowState.Maximized;
 
     public override void OnSizeChanged(OxSizeChangedEventArgs e)
     {
@@ -180,23 +161,32 @@ public partial class OxFormMainPanel : OxFrameWithHeader
         );
     }
 
-    internal void SetMarginsSize() => 
-        Margin.Size = 
-            Form.Sizeble 
-                ? OxWh.W2
-                : OxWh.W0;
-
     public override void OnLocationChanged(OxLocationChangedEventArgs e)
     {
         base.OnLocationChanged(e);
 
-        if (formMover.Processing)
+        if (!e.Changed
+            || Form is null
+            || formMover is not null
+                && formMover.Processing)
             return;
 
-        Form.Left |= Left;
-        Form.Top |= Top;
+        if (e.XChanged)
+        {
+            if (OxWh.Greater(e.NewValue.X, e.OldValue.X))
+                Form.Left = OxWh.A(Form.Left, Left);
+            else Form.Left = OxWh.S(Form.Left, Left);
+        }
+
+        if (e.YChanged)
+        {
+            if (OxWh.Greater(e.NewValue.Y, e.OldValue.Y))
+                Form.Left = OxWh.A(Form.Top, Top);
+            else Form.Left = OxWh.S(Form.Top, Top);
+        }
     }
-                                         
+
+
     protected override void SetHandlers()
     {
         base.SetHandlers();
@@ -230,7 +220,8 @@ public partial class OxFormMainPanel : OxFrameWithHeader
 
     private void ResizeHandler(object? sender, MouseEventArgs e)
     {
-        if (!Form.Sizeble)
+        if (Form is null
+            || !Form.Sizable)
             return;
 
         if (ResizeProcessing)
@@ -280,7 +271,7 @@ public partial class OxFormMainPanel : OxFrameWithHeader
         if (OxWh.LessOrEquals(newSize.Y, Form.MinimumSize.Height))
             newSize.Y = Form.MinimumSize.Height;
 
-        List<OxPoint> sizePoints = OxFormMover.WayPoints(oldSize, newSize, 30);
+        List<OxPoint> sizePoints = OxBoxMover.WayPoints(oldSize, newSize, 30);
 
         ResizeProcessing = true;
         Form.SuspendLayout();
@@ -317,4 +308,8 @@ public partial class OxFormMainPanel : OxFrameWithHeader
         Form.ResumeLayout();
         ResizeProcessing = false;
     }
+}
+
+public class OxFormPanel : OxFormPanel<OxForm, OxFormPanel>
+{ 
 }

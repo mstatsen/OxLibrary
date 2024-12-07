@@ -161,7 +161,7 @@ public class OxPanel : Panel, IOxPanel
         PrepareDialogCaption(out string? dialogCaption);
         PanelViewer = new OxPanelViewer(this, buttons)
         {
-            Text = dialogCaption
+            Text = OxTextHelper.ToString(dialogCaption)
         };
         PanelViewer.ButtonsWithBorders.Clear();
         PrepareDialog(PanelViewer);

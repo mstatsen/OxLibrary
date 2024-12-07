@@ -37,7 +37,9 @@ public class OxBoxManager :
         Box.ControlAdded += ControlAddedHandler;
         Box.ControlRemoved += ControlRemovedHandler;
 
-        if (OxControl is IOxWithPadding controlWithPadding)
+        if (OxControl is not IOxDependedBox
+            && OxControl is IOxWithPadding controlWithPadding
+            && controlWithPadding.Padding is not null)
             controlWithPadding.Padding.SizeChanged += PaddingSizeChangedHandler;
 
         base.SetHandlers();
@@ -86,14 +88,17 @@ public class OxBoxManager :
         {
             OxRectangle outerZone = new(ClientRectangle);
 
-            if (OxControl is IOxWithPadding controlWithPadding)
-                outerZone -= controlWithPadding.Padding;
+            if (OxControl is not IOxDependedBox)
+            {
+                if (OxControl is IOxWithPadding controlWithPadding)
+                    outerZone -= controlWithPadding.Padding;
 
-            if (OxControl is IOxWithBorders controlWithBorders)
-                outerZone -= controlWithBorders.Borders;
+                if (OxControl is IOxWithBorders controlWithBorders)
+                    outerZone -= controlWithBorders.Borders;
 
-            if (OxControl is IOxWithMargin controlWithMargin)
-                outerZone -= controlWithMargin.Margin;
+                if (OxControl is IOxWithMargin controlWithMargin)
+                    outerZone -= controlWithMargin.Margin;
+            }
 
             return outerZone;
         }

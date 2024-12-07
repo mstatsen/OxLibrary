@@ -1,34 +1,42 @@
-﻿namespace OxLibrary.Forms;
+﻿using OxLibrary.Interfaces;
 
-public class OxFormMover
+namespace OxLibrary.Forms;
+
+public class OxBoxMover
 {
-    public OxFormMover(OxForm form, Control mover)
+    public OxBoxMover(IOxBox Box, Control? mover)
     {
-        Form = form;
+        this.Box = Box;
         Mover = mover;
         SetHandlers();
     }
 
     private void SetHandlers()
     {
-        Mover.MouseMove += MoveHandler;
-        Mover.MouseDown += MouseDownHandler;
-        Mover.MouseUp += (s, e) => Processing = false;
+        if (Mover is null)
+            return;
+
+        Mover.MouseMove += MoverMoveHandler;
+        Mover.MouseDown += MoverMouseDownHandler;
+        Mover.MouseUp += MoverMouseUpHandler;
     }
 
-    private OxForm Form { get; }
-    private Control Mover { get; }
+    private void MoverMouseUpHandler(object? sender, MouseEventArgs e) =>
+        Processing = false;
+
+    private IOxBox Box { get; }
+    private Control? Mover { get; }
     public bool Processing { get; set; }
 
     private Point LastMousePosition = new();
 
-    private void MouseDownHandler(object? sender, MouseEventArgs e)
+    private void MoverMouseDownHandler(object? sender, MouseEventArgs e)
     {
         Processing = e.Button is MouseButtons.Left;
         LastMousePosition = e.Location;
     }
 
-    private void MoveHandler(object? sender, MouseEventArgs e)
+    private void MoverMoveHandler(object? sender, MouseEventArgs e)
     {
         if (!Processing
             || LastMousePosition.Equals(e.Location))
@@ -41,10 +49,11 @@ public class OxFormMover
         LastMousePosition.X = e.X - deltaX;
         LastMousePosition.Y = e.Y - deltaY;
 
-        if (Form.WindowState is FormWindowState.Normal)
+        if (Box is not IOxForm form
+            || form.WindowState is FormWindowState.Normal)
             Move(
                 new(
-                    Form.PointToScreen(new Point(deltaX, deltaY))
+                    Box.PointToScreen(new OxPoint(deltaX, deltaY))
                 )
             );
         else Processing = false;
@@ -52,29 +61,30 @@ public class OxFormMover
 
     private void SetWindowState(MouseEventArgs e)
     {
-        if (!Form.CanMaximize)
+        if (Box is not IOxForm form
+            || !form.CanMaximize)
             return;
 
-        switch (Form.WindowState)
+        switch (form.WindowState)
         {
             case FormWindowState.Maximized when !LastMousePosition.Y.Equals(e.Y):
-                Form.MainPanel.SetFormState(FormWindowState.Normal);
+                form.SetState(FormWindowState.Normal);
                 break;
-            case FormWindowState.Normal when Form.PointToScreen(e.Location).Y < 20:
-                Form.MainPanel.SetFormState(FormWindowState.Maximized);
+            case FormWindowState.Normal when OxWh.Less(Box.PointToScreen(new(e.Location)).Y, OxWh.W20):
+                form.SetState(FormWindowState.Maximized);
                 break;
         }
     }
 
     private void Move(OxPoint FinishPosition)
     {
-        if (FinishPosition.Equals(Form.Location))
+        if (FinishPosition.Equals(Box.Location))
             return;
 
-        List<OxPoint> wayPoints = WayPoints(Form.Location, FinishPosition, 30);
+        List<OxPoint> wayPoints = WayPoints(Box.Location, FinishPosition, 30);
 
         foreach (OxPoint point in wayPoints)
-            Form.Location = point;
+            Box.Location = point;
     }
 
     public static List<OxPoint> WayPoints(OxPoint Start, OxPoint Finish, int speed)

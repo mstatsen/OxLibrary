@@ -29,6 +29,12 @@
     <Compile Update="Controls\Picture\OxPictureContainer.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Update="Forms\OxForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\OxFormPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Update="Panels\Header\OxHeaderToolBar.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -62,19 +68,13 @@
     <Compile Update="Forms\Dialog\OxDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\Dialog\OxDialogMainPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="Forms\OxForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Forms\OxFormMainPanel.cs">
+    <Compile Update="Forms\Dialog\OxDialogPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Update="Forms\Message\OxMessage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\Message\OxMessageMainPanel.cs">
+    <Compile Update="Forms\Message\OxMessagePanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Update="Panels\OxCard.cs">

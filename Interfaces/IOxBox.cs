@@ -1,14 +1,8 @@
 ﻿namespace OxLibrary.Interfaces
 {
     public interface IOxBox :
-        IOxControl,
+        IOxControlWithManager<IOxBoxManager>,
         IOxBoxManager
-    {
-    }
-
-    public interface IOxBox<TOxControl> :
-        IOxBox,
-        IOxControlWithManager<IOxBoxManager>
     {
     }
 }

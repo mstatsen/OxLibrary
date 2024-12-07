@@ -46,7 +46,7 @@ namespace OxLibrary.Test
             card = new OxCard
             {
                 BlurredBorder = false,
-                Parent = MainPanel,
+                Parent = FormPanel,
                 Name = "LeftCard",
                 Text = "Left docked card",
                 Dock = OxDock.Top,
@@ -61,7 +61,7 @@ namespace OxLibrary.Test
             frame = new OxFrameWithHeader
             {
                 BlurredBorder = true,
-                Parent = MainPanel,
+                Parent = FormPanel,
                 Name = "FillFrame",
                 Text = "Fill-docked frame with header",
                 Dock = OxDock.Fill,
@@ -101,7 +101,7 @@ namespace OxLibrary.Test
 
             SetFrameMarginSize();
             frame.Click += Frame_Click;
-            MainPanel.Padding.Size = OxWh.W40;
+            Padding.Size = OxWh.W40;
 
             /*
             colorComboBox = new()
@@ -197,7 +197,7 @@ namespace OxLibrary.Test
             if (frame is not null)
                 frame.BaseColor = Color.FromArgb(125, 195, 145);
 
-            //MainPanel.HeaderToolBar.BaseColor = Color.Gray;
+            //FormPanel.HeaderToolBar.BaseColor = Color.Gray;
         }
     }
 }

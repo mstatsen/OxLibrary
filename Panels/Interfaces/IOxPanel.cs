@@ -5,7 +5,7 @@ namespace OxLibrary.Panels
 {
 
     public interface IOxPanel :
-        IOxBox<OxPanel>,
+        IOxBox,
         IOxWithMargin, 
         IOxWithBorders, 
         IOxWithPadding,

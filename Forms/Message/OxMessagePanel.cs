@@ -3,7 +3,7 @@ using System.Windows.Forms.VisualStyles;
 
 namespace OxLibrary.Forms;
 
-public class OxMessageMainPanel : OxDialogMainPanel
+public class OxMessagePanel : OxDialogPanel<OxMessage, OxMessagePanel>
 {
     private readonly OxTextBox MessageBox = new()
     {
@@ -22,7 +22,7 @@ public class OxMessageMainPanel : OxDialogMainPanel
         MessageBox.BackColor = BackColor;
     }
 
-    public OxMessageMainPanel(OxForm form) : base(form)
+    public OxMessagePanel() : base()
     {
         Padding.Size = OxWh.W24;
         Size = new(OxWh.W240, OxWh.W120);

@@ -50,7 +50,4 @@ public static class OxControlHelper
                 ? GetControlUnderMouse(foundControl, desktopPoint)
                 : foundControl;
     }
-
-    public static OxWidth GetTextWidth(string text, Font font) =>
-        OxWh.W(TextRenderer.MeasureText(text, font).Width);
 }

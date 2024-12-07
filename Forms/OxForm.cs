@@ -1,15 +1,27 @@
-﻿using OxLibrary.ControlsManaging;
+﻿using OxLibrary.Controls;
+using OxLibrary.ControlsManaging;
 using OxLibrary.Handlers;
 using OxLibrary.Interfaces;
+using OxLibrary.Panels;
 
 namespace OxLibrary.Forms;
 
-public class OxForm : Form,
-    IOxBox<OxForm>,
-    IOxWithColorHelper
+public class OxForm<TForm, TFormPanel>:
+    Form,
+    IOxForm<TForm, TFormPanel>,
+    IOxDependedBox
+    where TForm : IOxForm<TForm, TFormPanel>
+    where TFormPanel: IOxFormPanel<TForm, TFormPanel>, new()
+    
 {
     private readonly bool Initialized = false;
-    public OxFormMainPanel MainPanel { get; internal set; }
+    public TFormPanel FormPanel { get; internal set; }
+    public OxHeader Header => FormPanel.Header;
+    public OxWidth HeaderHeight
+    {
+        get => FormPanel.HeaderHeight;
+        set => FormPanel.HeaderHeight = value;
+    }
 
     public IOxBoxManager Manager { get; }
 
@@ -21,16 +33,42 @@ public class OxForm : Form,
         {
             DoubleBuffered = true;
             Manager = OxControlManagers.RegisterBox(this);
-            MainPanel = CreateMainPanel();
-            MainPanel.Colors.BaseColorChanged += BaseColorChangedHandler;
+            FormPanel = new()
+            {
+             //   Form = this
+            };
+            PrepareFormPanel();
             SetUpForm();
-            PlaceMainPanel();
+            PlaceFormPanel();
         }
         finally
         {
             Initialized = true;
         }
     }
+
+    private void PrepareFormPanel()
+    {
+        SetFormPanelMargins();
+        CloseButton.Click += CloseButtonClickHandler;
+        RestoreButton.Click += RestoreButtonClickHandler;
+        MinimizeButton.Click += MinimizeButtonClickHandler;
+        Colors.BaseColorChanged += BaseColorChangedHandler;
+    }
+
+    private void CloseButtonClickHandler(object? sender, EventArgs e)
+    {
+        DialogResult = DialogResult.Cancel;
+        Close();
+    }
+
+    private void RestoreButtonClickHandler(object? sender, EventArgs e) =>
+        SetState(WindowState is FormWindowState.Maximized
+            ? FormWindowState.Normal
+            : FormWindowState.Maximized);
+
+    private void MinimizeButtonClickHandler(object? sender, EventArgs e) =>
+        SetState(FormWindowState.Minimized);
 
     private void BaseColorChangedHandler(object? sender, EventArgs e) =>
         PrepareColors();
@@ -63,17 +101,25 @@ public class OxForm : Form,
     protected virtual void SetUpForm()
     {
         FormBorderStyle = FormBorderStyle.None;
-        SetUpSizes(WindowState);
+        SetState(WindowState);
         StartPosition = FormStartPosition.CenterParent;
     }
 
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
-        MainPanel.SetIcon();
+        ApplyFormIcon();
     }
 
-    public void SetUpSizes(FormWindowState state)
+    public void ApplyFormIcon()
+    {
+        Header.Icon = FormIcon;
+
+        if (FormIcon is not null)
+            Icon = FormIcon;
+    }
+
+    public void SetState(FormWindowState state)
     {
         MaximumSize = OxControlHelper.ScreenSize(this);
         OxSize wantedMinimumSize = WantedMinimumSize;
@@ -108,25 +154,22 @@ public class OxForm : Form,
     public virtual OxSize WantedMinimumSize =>
         new(OxWh.W640, OxWh.W480);
 
-    protected virtual OxFormMainPanel CreateMainPanel() =>
-        new(this);
-
-    private void PlaceMainPanel()
+    private void PlaceFormPanel()
     {
-        MainPanel.Parent = this;
-        MainPanel.Location = new(OxWh.W0, OxWh.W0);
-        MainPanel.Size = new(Width, Height);
+        FormPanel.Parent = this;
+        FormPanel.Location = new(OxWh.W0, OxWh.W0);
+        FormPanel.Size = new(Width, Height);
     }
 
     protected override void OnControlAdded(ControlEventArgs e)
     {
+        if (e.Control is not IOxControl oxControl)
+            return;
+             
         if (Initialized)
-            e.Control.Parent = MainPanel;
+            oxControl.Parent = FormPanel;
         else base.OnControlAdded(e);
     }
-
-    protected override void OnTextChanged(EventArgs e) =>
-        MainPanel.Text = Text;
 
     private bool canMaximize = true;
     private bool canMinimize = true;
@@ -137,7 +180,7 @@ public class OxForm : Form,
         set
         {
             canMaximize = value;
-            MainPanel.SetHeaderButtonsVisible();
+            RestoreButton.Visible = CanMaximize;
         }
     }
 
@@ -147,27 +190,35 @@ public class OxForm : Form,
         set
         {
             canMinimize = value;
-            MainPanel.SetHeaderButtonsVisible();
+            MinimizeButton.Visible = CanMinimize;
         }
     }
 
+    private bool sizable = true;
 
-    private bool sizeble = true;
-    public bool Sizeble
+    public bool Sizable
     {
-        get => sizeble;
+        get => sizable;
         set
         {
-            sizeble = value;
-            MainPanel.SetMarginsSize();
+            sizable = value;
+            SetFormPanelMargins();
         }
+    }
+
+    private void SetFormPanelMargins()
+    {
+        Margin.Size =
+            Sizable
+                ? OxWh.W2
+                : OxWh.W0;
     }
 
     protected override void OnShown(EventArgs e)
     {
         base.OnShown(e);
-        //MainPanel.Location = new(OxPoint.Empty);
-        //MainPanel.Size = new(OxWh.W0, OxWh.W0);
+        //FormPanel.Location = new(OxPoint.Empty);
+        //FormPanel.Size = new(OxWh.W0, OxWh.W0);
         Realign();
     }
 
@@ -181,30 +232,54 @@ public class OxForm : Form,
 
     public void FreezeSize()
     {
-        if (MainPanel is null)
+        if (FormPanel is null)
             return;
 
-        MinimumSize = MainPanel.Size;
+        MinimumSize = FormPanel.Size;
         MaximumSize = MinimumSize;
     }
 
     public Color BaseColor
     {
-        get => MainPanel.BaseColor;
-        set => MainPanel.BaseColor = value;
+        get => FormPanel.BaseColor;
+        set => FormPanel.BaseColor = value;
     }
 
-    public OxColorHelper Colors => MainPanel.Colors;
+    public new Color BackColor
+    { 
+        get => FormPanel.BackColor;
+        set => FormPanel.BackColor = value;
+    }
+
+    public new string Text
+    { 
+        get => FormPanel.Text;
+        set => FormPanel.Text = value;
+    }
+
+    public new void SuspendLayout()
+    { 
+        base.SuspendLayout();
+        FormPanel.SuspendLayout();
+    }
+
+    public new void ResumeLayout()
+    {
+        FormPanel.ResumeLayout();
+        base.ResumeLayout();
+    }
+
+    public OxColorHelper Colors => FormPanel.Colors;
 
     public virtual void PrepareColors() { }
 
-    #region Implemention of IOxBox using IOxBoxManager
-    public virtual bool HandleParentPadding => false;
+    #region Implemention of IOxBox using OxFormPanel
+    public bool HandleParentPadding => false;
     public OxRectangle InnerControlZone =>
-        Manager.InnerControlZone;
+        ClientRectangle;
 
     public OxRectangle OuterControlZone =>
-        Manager.OuterControlZone;
+        ClientRectangle;
 
     public OxControls OxControls =>
         Manager.OxControls;
@@ -217,16 +292,22 @@ public class OxForm : Form,
     #endregion
 
     #region Implemention of IOxControl using IOxControlManager
-    public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
-    public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
-    public virtual void OnParentChanged(OxParentChangedEventArgs e) { }
-    public virtual void OnSizeChanged(OxSizeChangedEventArgs e)
+    public void OnDockChanged(OxDockChangedEventArgs e) =>
+        FormPanel.OnDockChanged(e);
+
+    public void OnLocationChanged(OxLocationChangedEventArgs e) =>
+        FormPanel.OnLocationChanged(e);
+
+    public void OnParentChanged(OxParentChangedEventArgs e) =>
+        FormPanel.OnParentChanged(e);
+
+    public void OnSizeChanged(OxSizeChangedEventArgs e)
     {
         if (!Initialized ||
             !e.Changed)
             return;
 
-        MainPanel.Size = Size;
+        FormPanel.Size = Size;
         Realign();
     }
 
@@ -301,8 +382,8 @@ public class OxForm : Form,
 
     public new virtual OxDock Dock
     {
-        get => Manager.Dock;
-        set => Manager.Dock = value;
+        get => FormPanel.Dock;
+        set => FormPanel.Dock = value;
     }
 
     public new OxRectangle ClientRectangle =>
@@ -340,14 +421,14 @@ public class OxForm : Form,
 
     public new event OxDockChangedEvent DockChanged
     {
-        add => Manager.DockChanged += value;
-        remove => Manager.DockChanged -= value;
+        add => FormPanel.DockChanged += value;
+        remove => FormPanel.DockChanged -= value;
     }
 
     public new event OxLocationChangedEvent LocationChanged
     {
-        add => Manager.LocationChanged += value;
-        remove => Manager.LocationChanged -= value;
+        add => FormPanel.LocationChanged += value;
+        remove => FormPanel.LocationChanged -= value;
     }
 
     public new event OxParentChangedEvent ParentChanged
@@ -381,6 +462,65 @@ public class OxForm : Form,
     private new Rectangle DisplayRectangle =>
         base.DisplayRectangle;
 
+    public new OxBorders Padding =>
+        FormPanel.Padding;
+            
+    public bool HeaderVisible
+    {
+        get => FormPanel.HeaderVisible;
+        set => FormPanel.HeaderVisible = value;
+    }
+
+    public Color DefaultColor =>
+        FormPanel.DefaultColor;
+
+    public bool IsHovered =>
+        FormPanel.IsHovered;
+
+    public new OxBorders Margin =>
+        FormPanel.Margin;
+
+    public bool BlurredBorder
+    { 
+        get => FormPanel.BlurredBorder;
+        set => FormPanel.BlurredBorder = value;
+    }
+
+    public OxBorders Borders =>
+        FormPanel.Borders;
+
+    public Color BorderColor
+    { 
+        get => FormPanel.BorderColor;
+        set => FormPanel.BorderColor = value;
+    }
+    public bool BorderVisible
+    { 
+        get => FormPanel.BorderVisible;
+        set => FormPanel.BorderVisible = value;
+    }
+
+    public OxIconButton CloseButton =>
+        FormPanel.CloseButton;
+
+    public OxIconButton RestoreButton =>
+        FormPanel.RestoreButton;
+
+    public OxIconButton MinimizeButton =>
+        FormPanel.MinimizeButton;
+
+    public new Bitmap? Icon
+    {
+        get => base.Icon.ToBitmap();
+        set => base.Icon =
+            value is null
+                ? null
+                : System.Drawing.Icon.FromHandle(value.GetHicon());
+    }
+
+    public IOxBox DependedFrom =>
+        FormPanel;
+
     private new Size GetPreferredSize(Size proposedSize) =>
         base.GetPreferredSize(proposedSize);
 
@@ -400,5 +540,21 @@ public class OxForm : Form,
     protected sealed override void OnLocationChanged(EventArgs e) { }
     protected sealed override void OnParentChanged(EventArgs e) { }
     protected sealed override void OnSizeChanged(EventArgs e) { }
+
+    public OxPanelViewer AsDialog(OxDialogButton buttons = OxDialogButton.OK) =>
+        FormPanel.AsDialog(buttons);
+
+    public DialogResult ShowAsDialog(Control owner, OxDialogButton buttons = OxDialogButton.OK) =>
+        FormPanel.ShowAsDialog(owner, buttons);
+
+    public void SetBorderWidth(OxWidth value) =>
+        FormPanel.SetBorderWidth(value);
+
+    public void SetBorderWidth(OxDock dock, OxWidth value) =>
+        FormPanel.SetBorderWidth(dock, value);
     #endregion
+}
+
+public class OxForm : OxForm<OxForm, OxFormPanel>
+{ 
 }

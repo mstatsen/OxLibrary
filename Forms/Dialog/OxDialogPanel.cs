@@ -5,7 +5,9 @@ using System.Windows.Forms.VisualStyles;
 
 namespace OxLibrary.Forms;
 
-public class OxDialogMainPanel : OxFormMainPanel
+public class OxDialogPanel<TDialog, TDialogPanel> : OxFormPanel<TDialog,TDialogPanel>
+    where TDialog : OxDialog<TDialog, TDialogPanel>
+    where TDialogPanel: OxDialogPanel<TDialog, TDialogPanel>, new()
 {
     public OxWidth DialogButtonSpace = OxWh.W6;
     public OxWidth DialogButtonStartSpace = OxWh.W10;
@@ -19,12 +21,6 @@ public class OxDialogMainPanel : OxFormMainPanel
     }
 
     private OxDialogButton dialogButtons = OxDialogButton.OK | OxDialogButton.Cancel;
-
-    public new OxDialog Form
-    {
-        get => (OxDialog)base.Form;
-        set => base.Form = value;
-    }
 
     public OxDialogButton DialogButtons
     {
@@ -40,12 +36,10 @@ public class OxDialogMainPanel : OxFormMainPanel
         }
     }
 
-    public OxDialogMainPanel(OxForm form) : base(form) =>
+    public OxDialogPanel() : base() =>
         Size = new(480, 360);
 
     public readonly OxFrame Footer = new();
-
-    public DialogResult DialogResult { get; private set; }
 
     protected override void PrepareInnerComponents()
     {
@@ -109,7 +103,8 @@ public class OxDialogMainPanel : OxFormMainPanel
             if (item.Value.Equals(button))
                 dialogButton = item.Key;
 
-        Form.DialogResult = OxDialogButtonsHelper.Result(dialogButton);
+        if (Form is not null)
+            Form.DialogResult = OxDialogButtonsHelper.Result(dialogButton);
     }
 
     protected virtual void PlaceButtons()
@@ -176,10 +171,10 @@ public class OxDialogMainPanel : OxFormMainPanel
         if (!e.Changed)
             return;
 
-        Form.ClearConstraints();
+        Form?.ClearConstraints();
         base.OnSizeChanged(e);
         PlaceButtons();
-        Form.FreezeSize();
+        Form?.FreezeSize();
     }
 
     /*
@@ -189,4 +184,8 @@ public class OxDialogMainPanel : OxFormMainPanel
         Form.ClientSize = new(Width, Height);
     };
     */
+}
+
+public class OxDialogPanel : OxDialogPanel<OxDialog, OxDialogPanel>
+{ 
 }
