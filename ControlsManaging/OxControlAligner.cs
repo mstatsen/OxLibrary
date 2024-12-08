@@ -34,12 +34,6 @@ internal class OxControlAligner
 
         try
         {
-            if (Box is IOxDependedBox dependedBox)
-            {
-                dependedBox.DependedFrom.Realign();
-                return;
-            }
-
             if (RealignControls(OxDockType.Docked, CalcedDockedBounds))
                 RealignControls(OxDockType.Undocked, CalcedUndockedBounds);
         }

@@ -38,7 +38,6 @@ namespace OxLibrary.Test
             toolBarButton.Click += ToolBarButton_Click;
             toolBarButton.Height = OxWh.W36;
             toolbar.Parent = this;
-            toolbar.BaseColor = BaseColor;
             toolbar.Margin.Left = OxWh.W1;
             toolbar.BorderVisible = true;
             toolbar.Padding.Left = OxWh.W4;
@@ -46,7 +45,7 @@ namespace OxLibrary.Test
             card = new OxCard
             {
                 BlurredBorder = false,
-                Parent = FormPanel,
+                Parent = this,
                 Name = "LeftCard",
                 Text = "Left docked card",
                 Dock = OxDock.Top,
@@ -61,7 +60,7 @@ namespace OxLibrary.Test
             frame = new OxFrameWithHeader
             {
                 BlurredBorder = true,
-                Parent = FormPanel,
+                Parent = this,
                 Name = "FillFrame",
                 Text = "Fill-docked frame with header",
                 Dock = OxDock.Fill,
@@ -186,7 +185,8 @@ namespace OxLibrary.Test
             //Width = OxWh.W800;
             WindowState = FormWindowState.Maximized;
             base.OnShown(e);
-            BaseColor = Color.FromArgb(155, 185, 215);
+            //BaseColor = Color.FromArgb(155, 185, 215);
+            BaseColor = Color.LightGreen;
         }
 
         public override void PrepareColors()

@@ -220,11 +220,10 @@ public partial class OxFormPanel<TForm, TFormPanel> :
 
     private void ResizeHandler(object? sender, MouseEventArgs e)
     {
+        // TODO: change logic from OxPanel? border to OxBorder border
         if (Form is null
-            || !Form.Sizable)
-            return;
-
-        if (ResizeProcessing)
+            || !Form.Sizable
+            || ResizeProcessing)
             return;
 
         OxPanel? border = (OxPanel?)sender;
@@ -274,39 +273,45 @@ public partial class OxFormPanel<TForm, TFormPanel> :
         List<OxPoint> sizePoints = OxBoxMover.WayPoints(oldSize, newSize, 30);
 
         ResizeProcessing = true;
-        Form.SuspendLayout();
-        SuspendLayout();
 
-        foreach (OxPoint point in sizePoints)
+        try
         {
-            OxPoint newLocationStep = new(Form.Left, Form.Top);
+            Form.DoWithSuspendedLayout(
+                () =>
+                {
+                    foreach (OxPoint point in sizePoints)
+                    {
+                        OxPoint newLocationStep = new(Form.Left, Form.Top);
 
-            if (OxDirectionHelper.ContainsLeft(LastDirection))
-                newLocationStep.X =
-                    OxWh.Sub(
-                        newLocationStep.X, 
-                        OxWh.Sub(point.X, Width)
-                    );
+                        if (OxDirectionHelper.ContainsLeft(LastDirection))
+                            newLocationStep.X =
+                                OxWh.Sub(
+                                    newLocationStep.X,
+                                    OxWh.Sub(point.X, Width)
+                                );
 
-            if (OxDirectionHelper.ContainsTop(LastDirection))
-                newLocationStep.Y =
-                    OxWh.Sub(
-                        newLocationStep.Y,
-                        OxWh.Sub(point.Y, Height)
-                    );
+                        if (OxDirectionHelper.ContainsTop(LastDirection))
+                            newLocationStep.Y =
+                                OxWh.Sub(
+                                    newLocationStep.Y,
+                                    OxWh.Sub(point.Y, Height)
+                                );
 
-            if (!Form.Location.Equals(newLocationStep))
-                Form.Location = newLocationStep;
+                        if (!Form.Location.Equals(newLocationStep))
+                            Form.Location = newLocationStep;
 
-            OxSize newSizeStep = new(point);
+                        OxSize newSizeStep = new(point);
 
-            if (!Size.Equals(newSizeStep))
-                Size = newSizeStep;
+                        if (!Size.Equals(newSizeStep))
+                            Size = newSizeStep;
+                    }
+                }
+            );
         }
-
-        ResumeLayout();
-        Form.ResumeLayout();
-        ResizeProcessing = false;
+        finally
+        { 
+            ResizeProcessing = false;
+        }
     }
 }
 

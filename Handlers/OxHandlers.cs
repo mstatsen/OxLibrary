@@ -16,10 +16,18 @@ namespace OxLibrary.Handlers
 
     public class OxHandlers : Dictionary<OxHandlerType, List<Delegate>>
     {
-        public OxHandlers() { }
+        public IOxControl Owner { get; }
+        public OxHandlers(IOxControl owner) =>
+            Owner = owner;
 
         public void Add(OxHandlerType type, Delegate handler)
         {
+            if (OxHandlerTypeHelper.UseDependedFromBox(type)
+                && Owner is IOxDependedBox dependedBox)
+            { 
+                dependedBox.DependedFrom.AddHandler(type, handler);
+                return;
+            }
 
             if (!TryGetValue(type, out List<Delegate>? list))
             {
@@ -33,6 +41,13 @@ namespace OxLibrary.Handlers
 
         public void Remove(OxHandlerType type, Delegate handler)
         {
+            if (OxHandlerTypeHelper.UseDependedFromBox(type)
+                && Owner is IOxDependedBox dependedBox)
+            {
+                dependedBox.DependedFrom.RemoveHandler(type, handler);
+                return;
+            }
+
             if (!TryGetValue(type, out List<Delegate>? list))
                 return;
 
@@ -41,6 +56,13 @@ namespace OxLibrary.Handlers
 
         public void Invoke(OxHandlerType type, object sender, OxEventArgs args)
         {
+            if (OxHandlerTypeHelper.UseDependedFromBox(type)
+                && Owner is IOxDependedBox dependedBox)
+            {
+                dependedBox.DependedFrom.InvokeHandlers(type, args);
+                return;
+            }
+
             if (!TryGetValue(type, out List<Delegate>? list))
                 return;
 

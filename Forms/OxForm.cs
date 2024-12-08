@@ -14,7 +14,6 @@ public class OxForm<TForm, TFormPanel>:
     where TFormPanel: IOxFormPanel<TForm, TFormPanel>, new()
     
 {
-    private readonly bool Initialized = false;
     public TFormPanel FormPanel { get; internal set; }
     public OxHeader Header => FormPanel.Header;
     public OxWidth HeaderHeight
@@ -27,29 +26,20 @@ public class OxForm<TForm, TFormPanel>:
 
     public OxForm()
     {
-        Initialized = false;
-
-        try
+        DoubleBuffered = true;
+        Manager = OxControlManagers.RegisterBox(this);
+        FormPanel = new()
         {
-            DoubleBuffered = true;
-            Manager = OxControlManagers.RegisterBox(this);
-            FormPanel = new()
-            {
-             //   Form = this
-            };
-            PrepareFormPanel();
-            SetUpForm();
-            PlaceFormPanel();
-        }
-        finally
-        {
-            Initialized = true;
-        }
+            //   Form = this
+        };
+        PrepareFormPanel();
+        SetUpForm();
+        PlaceFormPanel();
     }
 
     private void PrepareFormPanel()
     {
-        SetFormPanelMargins();
+        SetMargins();
         CloseButton.Click += CloseButtonClickHandler;
         RestoreButton.Click += RestoreButtonClickHandler;
         MinimizeButton.Click += MinimizeButtonClickHandler;
@@ -79,23 +69,15 @@ public class OxForm<TForm, TFormPanel>:
         Location = new(
             OxWh.Add(
                 OxWh.W(screen.Bounds.Left),
-                OxWh.Div(
-                    OxWh.Sub(screen.WorkingArea.Width, Width),
-                    OxWh.W2
+                OxWh.Half(OxWh.Sub(screen.WorkingArea.Width, Width)
                 )
             ),
             OxWh.Add(
                 OxWh.W(screen.Bounds.Top),
-                OxWh.Div(
-                    OxWh.Sub(screen.WorkingArea.Height, Height),
-                    OxWh.W2
-                )
+                OxWh.Half(OxWh.Sub(screen.WorkingArea.Height, Height))
             )
         );
-        Size = new(
-            OxWh.I(Width),
-            OxWh.I(Height)
-        );
+        Size = new(Width, Height);
     }
 
     protected virtual void SetUpForm()
@@ -139,15 +121,11 @@ public class OxForm<TForm, TFormPanel>:
             if (WindowState.Equals(value))
                 return;
 
-            if (value is FormWindowState.Minimized)
-            {
-                base.WindowState = value;
-                return;
-            }
-
             OxSize oldSize = new(Size);
             base.WindowState = value;
-            OnSizeChanged(new(oldSize, Size));
+
+            if (value is not FormWindowState.Minimized)
+                OnSizeChanged(new(oldSize, Size));
         }
     }
 
@@ -159,16 +137,6 @@ public class OxForm<TForm, TFormPanel>:
         FormPanel.Parent = this;
         FormPanel.Location = new(OxWh.W0, OxWh.W0);
         FormPanel.Size = new(Width, Height);
-    }
-
-    protected override void OnControlAdded(ControlEventArgs e)
-    {
-        if (e.Control is not IOxControl oxControl)
-            return;
-             
-        if (Initialized)
-            oxControl.Parent = FormPanel;
-        else base.OnControlAdded(e);
     }
 
     private bool canMaximize = true;
@@ -202,11 +170,11 @@ public class OxForm<TForm, TFormPanel>:
         set
         {
             sizable = value;
-            SetFormPanelMargins();
+            SetMargins();
         }
     }
 
-    private void SetFormPanelMargins()
+    private void SetMargins()
     {
         Margin.Size =
             Sizable
@@ -217,8 +185,6 @@ public class OxForm<TForm, TFormPanel>:
     protected override void OnShown(EventArgs e)
     {
         base.OnShown(e);
-        //FormPanel.Location = new(OxPoint.Empty);
-        //FormPanel.Size = new(OxWh.W0, OxWh.W0);
         Realign();
     }
 
@@ -257,29 +223,18 @@ public class OxForm<TForm, TFormPanel>:
         set => FormPanel.Text = value;
     }
 
-    public new void SuspendLayout()
-    { 
-        base.SuspendLayout();
-        FormPanel.SuspendLayout();
-    }
-
-    public new void ResumeLayout()
-    {
-        FormPanel.ResumeLayout();
-        base.ResumeLayout();
-    }
-
     public OxColorHelper Colors => FormPanel.Colors;
 
     public virtual void PrepareColors() { }
 
     #region Implemention of IOxBox using OxFormPanel
     public bool HandleParentPadding => false;
+
     public OxRectangle InnerControlZone =>
-        ClientRectangle;
+        Manager.InnerControlZone;
 
     public OxRectangle OuterControlZone =>
-        ClientRectangle;
+        Manager.OuterControlZone;
 
     public OxControls OxControls =>
         Manager.OxControls;
@@ -301,15 +256,7 @@ public class OxForm<TForm, TFormPanel>:
     public void OnParentChanged(OxParentChangedEventArgs e) =>
         FormPanel.OnParentChanged(e);
 
-    public void OnSizeChanged(OxSizeChangedEventArgs e)
-    {
-        if (!Initialized ||
-            !e.Changed)
-            return;
-
-        FormPanel.Size = Size;
-        Realign();
-    }
+    public void OnSizeChanged(OxSizeChangedEventArgs e) { }
 
     public new IOxBox? Parent
     {
@@ -382,8 +329,8 @@ public class OxForm<TForm, TFormPanel>:
 
     public new virtual OxDock Dock
     {
-        get => FormPanel.Dock;
-        set => FormPanel.Dock = value;
+        get => Manager.Dock;
+        set => Manager.Dock = value;
     }
 
     public new OxRectangle ClientRectangle =>
@@ -421,14 +368,14 @@ public class OxForm<TForm, TFormPanel>:
 
     public new event OxDockChangedEvent DockChanged
     {
-        add => FormPanel.DockChanged += value;
-        remove => FormPanel.DockChanged -= value;
+        add => Manager.DockChanged += value;
+        remove => Manager.DockChanged -= value;
     }
 
     public new event OxLocationChangedEvent LocationChanged
     {
-        add => FormPanel.LocationChanged += value;
-        remove => FormPanel.LocationChanged -= value;
+        add => Manager.LocationChanged += value;
+        remove => Manager.LocationChanged -= value;
     }
 
     public new event OxParentChangedEvent ParentChanged
@@ -552,6 +499,15 @@ public class OxForm<TForm, TFormPanel>:
 
     public void SetBorderWidth(OxDock dock, OxWidth value) =>
         FormPanel.SetBorderWidth(dock, value);
+
+    public void AddHandler(OxHandlerType type, Delegate handler) =>
+        Manager.AddHandler(type, handler);
+
+    public void InvokeHandlers(OxHandlerType type, OxEventArgs args) =>
+        Manager.InvokeHandlers(type, args);
+
+    public void RemoveHandler(OxHandlerType type, Delegate handler) =>
+        Manager.RemoveHandler(type, handler);
     #endregion
 }
 

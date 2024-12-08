@@ -1,5 +1,6 @@
 ﻿using OxLibrary.ControlsManaging;
 using OxLibrary.Handlers;
+using System.Windows.Forms;
 
 namespace OxLibrary.Interfaces
 {
@@ -28,6 +29,10 @@ namespace OxLibrary.Interfaces
         OxSize Size { get; set; }
         OxWidth Top { get; set; }
         OxWidth Width { get; set; }
+
+        void AddHandler(OxHandlerType type, Delegate handler);
+        void InvokeHandlers(OxHandlerType type, OxEventArgs args);
+        void RemoveHandler(OxHandlerType type, Delegate handler);
 
         event OxDockChangedEvent DockChanged;
         event OxLocationChangedEvent LocationChanged;

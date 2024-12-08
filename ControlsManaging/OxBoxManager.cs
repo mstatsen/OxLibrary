@@ -1,4 +1,5 @@
-﻿using OxLibrary.Handlers;
+﻿using OxLibrary.Forms;
+using OxLibrary.Handlers;
 using OxLibrary.Interfaces;
 
 namespace OxLibrary;
@@ -61,6 +62,13 @@ public class OxBoxManager :
         if (e.Control is not IOxControl oxControl
             || e.Control.Equals(OxControl))
             return;
+
+        if (Box is IOxDependedBox dependedBox
+            && !oxControl.Equals(dependedBox.DependedFrom))
+        {
+            oxControl.Parent = dependedBox.DependedFrom;
+            return;
+        }
 
 #pragma warning disable CS0618 // Type or member is obsolete
         oxControl.ZBounds.SaveBounds();

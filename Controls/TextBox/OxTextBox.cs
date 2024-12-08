@@ -153,6 +153,15 @@ namespace OxLibrary.Controls
             remove => Manager.SizeChanged -= value;
         }
 
+        public void AddHandler(OxHandlerType type, Delegate handler) =>
+            Manager.AddHandler(type, handler);
+
+        public void InvokeHandlers(OxHandlerType type, OxEventArgs args) =>
+            Manager.InvokeHandlers(type, args);
+
+        public void RemoveHandler(OxHandlerType type, Delegate handler) =>
+            Manager.RemoveHandler(type, handler);
+
         #region Internal used properties and methods
         [Obsolete("ZBounds it is used only for internal needs")]
         public OxZBounds ZBounds =>

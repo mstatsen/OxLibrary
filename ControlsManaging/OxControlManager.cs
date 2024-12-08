@@ -13,6 +13,7 @@ public class OxControlManager : IOxControlManager
     internal OxControlManager(Control managingControl)
     {
         ManagingControl = managingControl;
+        Handlers = new(OxControl);
         ManagingControl.Disposed += ControlDisposedHandler;
         ZBounds = new(ManagingControl);
         SetHandlers();
@@ -90,6 +91,11 @@ public class OxControlManager : IOxControlManager
     public void DoWithSuspendedLayout(Action method)
     {
         ManagingControl.SuspendLayout();
+        IOxBox? dependedFromBox = ManagingControl is IOxDependedBox dependedBox
+            ? dependedBox.DependedFrom
+            : null;
+
+        dependedFromBox?.SuspendLayout();
 
         try
         {
@@ -97,6 +103,7 @@ public class OxControlManager : IOxControlManager
         }
         finally
         {
+            dependedFromBox?.ResumeLayout();
             ManagingControl.ResumeLayout();
         }
     }
@@ -209,15 +216,15 @@ public class OxControlManager : IOxControlManager
         }
     }
 
-    private readonly OxHandlers Handlers = new();
+    private readonly OxHandlers Handlers;
 
-    private void InvokeHandlers(OxHandlerType type, OxEventArgs args) =>
+    public void InvokeHandlers(OxHandlerType type, OxEventArgs args) =>
         Handlers.Invoke(type, OxControl, args);
 
-    private void AddHandler(OxHandlerType type, Delegate handler) =>
+    public void AddHandler(OxHandlerType type, Delegate handler) =>
         Handlers.Add(type, handler);
 
-    private void RemoveHandler(OxHandlerType type, Delegate handler) =>
+    public void RemoveHandler(OxHandlerType type, Delegate handler) =>
         Handlers.Remove(type, handler);
 
     public event OxDockChangedEvent DockChanged
@@ -249,6 +256,12 @@ public class OxControlManager : IOxControlManager
         get => ZBounds.Dock;
         set
         {
+            if (OxControl is IOxDependedBox dependedBox)
+            { 
+                dependedBox.Dock = value;
+                return;
+            }
+
             if (ZBounds.Dock.Equals(value))
                 return;
 
@@ -417,6 +430,12 @@ public class OxControlManager : IOxControlManager
     {
         if (!e.Changed)
             return;
+
+        if (OxControl is IOxDependedBox dependedBox)
+        {
+            dependedBox.Size = Size;
+            dependedBox.Realign();
+        }
 
         OxControl.OnSizeChanged(e);
         InvokeHandlers(OxHandlerType.SizeChanged, e);
