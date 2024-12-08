@@ -6,7 +6,6 @@ namespace OxLibrary.Interfaces
 {
     public interface IOxControlManager
     {
-        OxPoint AutoScrollOffset { get; set; }
         OxWidth Bottom { get; }
         OxRectangle Bounds { get; set; }
         OxRectangle ClientRectangle { get; }
@@ -21,10 +20,6 @@ namespace OxLibrary.Interfaces
         OxSize MaximumSize { get; set; }
         OxSize MinimumSize { get; set; }
         IOxBox? Parent { get; set; }
-        OxPoint PointToClient(OxPoint p);
-        OxPoint PointToScreen(OxPoint p);
-        OxRectangle RectangleToClient(OxRectangle r);
-        OxRectangle RectangleToScreen(OxRectangle r);
         OxWidth Right { get; }
         OxSize Size { get; set; }
         OxWidth Top { get; set; }

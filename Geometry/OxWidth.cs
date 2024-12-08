@@ -3,6 +3,14 @@
 [Flags]
 public enum OxWidth
 {
+    NXXXL = -128,
+    NXXL = -64,
+    NXL = -32,
+    NL = -16,
+    NM = -8,
+    NS = -4,
+    NXS = -2,
+    NXXS = -1,
     None = 0,
     XXS = 1,
     XS = 2,

@@ -183,7 +183,7 @@ namespace OxLibrary.Test
         protected override void OnShown(EventArgs e)
         {
             //Width = OxWh.W800;
-            WindowState = FormWindowState.Maximized;
+            //WindowState = FormWindowState.Maximized;
             base.OnShown(e);
             //BaseColor = Color.FromArgb(155, 185, 215);
             BaseColor = Color.LightGreen;

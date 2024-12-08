@@ -20,6 +20,7 @@ namespace OxLibrary.Interfaces
         string AccessibleName { get; set; }
         AccessibleRole AccessibleRole { get; set; }
         bool AllowDrop { get; set; }
+        Point AutoScrollOffset { get; set; }
         bool AutoSize { get; set; }
         Color BackColor { get; set; }
         Image BackgroundImage { get; set; }
@@ -87,10 +88,14 @@ namespace OxLibrary.Interfaces
         object Invoke(Delegate method, params object[] args);
         T Invoke<T>(Func<T> method) => (T)Invoke(method, default!);
         int LogicalToDeviceUnits(int value);
+        Point PointToClient(Point p);
+        Point PointToScreen(Point p);
         void PerformLayout();
         void PerformLayout(Control affectedControl, string affectedProperty);
         bool PreProcessMessage(ref Message msg);
         PreProcessControlState PreProcessControlMessage(ref Message msg);
+        Rectangle RectangleToClient(Rectangle r);
+        Rectangle RectangleToScreen(Rectangle r);
         void Refresh();
         void ResetBackColor();
         void ResetBindings();

@@ -180,7 +180,7 @@ public class OxForm<TFormPanel> :
     {
         Margin.Size =
             Sizable
-                ? OxWh.W2
+                ? OxWh.W1
                 : OxWh.W0;
     }
 
@@ -266,9 +266,6 @@ public class OxForm<TFormPanel> :
         set => Manager.Parent = value;
     }
 
-    public OxPoint PointToScreen(OxPoint p) =>
-        Manager.PointToScreen(p);
-
     public new OxWidth Width
     {
         get => Manager.Width;
@@ -344,12 +341,6 @@ public class OxForm<TFormPanel> :
         set => Manager.Bounds = value;
     }
 
-    public new OxPoint AutoScrollOffset
-    {
-        get => Manager.AutoScrollOffset;
-        set => Manager.AutoScrollOffset = value;
-    }
-
     public void DoWithSuspendedLayout(Action method) =>
         Manager.DoWithSuspendedLayout(method);
 
@@ -358,15 +349,6 @@ public class OxForm<TFormPanel> :
 
     public void Invalidate(OxRectangle rc) =>
         Manager.Invalidate(rc);
-
-    public OxPoint PointToClient(OxPoint p) =>
-        Manager.PointToClient(p);
-
-    public OxRectangle RectangleToClient(OxRectangle r) =>
-        Manager.RectangleToClient(r);
-
-    public OxRectangle RectangleToScreen(OxRectangle r) =>
-        Manager.RectangleToScreen(r);
 
     public new event OxDockChangedEvent DockChanged
     {

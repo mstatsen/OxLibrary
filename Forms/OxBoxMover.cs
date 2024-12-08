@@ -51,11 +51,7 @@ public class OxBoxMover
 
         if (Box is not IOxForm form
             || form.WindowState is FormWindowState.Normal)
-            Move(
-                new(
-                    Box.PointToScreen(new OxPoint(deltaX, deltaY))
-                )
-            );
+            Move(Box.PointToScreen(new(deltaX, deltaY)));
         else Processing = false;
     }
 
@@ -70,27 +66,30 @@ public class OxBoxMover
             case FormWindowState.Maximized when !LastMousePosition.Y.Equals(e.Y):
                 form.SetState(FormWindowState.Normal);
                 break;
-            case FormWindowState.Normal when OxWh.Less(Box.PointToScreen(new(e.Location)).Y, OxWh.W20):
+            case FormWindowState.Normal when OxWh.Less(Box.PointToScreen(e.Location).Y, OxWh.W0):
                 form.SetState(FormWindowState.Maximized);
                 break;
         }
     }
 
-    private void Move(OxPoint FinishPosition)
+    private void Move(Point FinishPosition)
     {
-        if (FinishPosition.Equals(Box.Location))
+        if (FinishPosition.Equals(Box.Location.Point))
             return;
 
-        List<OxPoint> wayPoints = WayPoints(Box.Location, FinishPosition, 30);
+        List<Point> wayPoints = WayPoints(Box.Location.Point, FinishPosition, 30);
 
-        foreach (OxPoint point in wayPoints)
-            Box.Location = point;
+        foreach (Point point in wayPoints)
+            Box.Location = new(point);
     }
 
-    public static List<OxPoint> WayPoints(OxPoint Start, OxPoint Finish, int speed)
+    public static List<Point> WayPoints(OxPoint Start, OxPoint Finish, int speed) =>
+        WayPoints(Start.Point, Finish.Point, speed);
+
+    public static List<Point> WayPoints(Point Start, Point Finish, int speed)
     {
-        List<OxPoint> wayPoints = new();
-        Point currentPoint = Start.Point;
+        List<Point> wayPoints = new();
+        Point currentPoint = Start;
         Point delta = new(Finish.X - Start.X, Finish.Y - Start.Y);
         Point sign = new(delta.X > 0 ? 1 : -1, delta.Y > 0 ? 1 : -1);
         delta.X = Math.Abs(delta.X);
@@ -99,11 +98,11 @@ public class OxBoxMover
         int error = delta.X - delta.Y;
         int step = speed;
 
-        while (!currentPoint.Equals(Finish.Point))
+        while (!currentPoint.Equals(Finish))
         {
             if (step.Equals(speed))
             {
-                wayPoints.Add(new OxPoint(currentPoint));
+                wayPoints.Add(currentPoint);
                 step = 0;
             }
 
@@ -125,7 +124,7 @@ public class OxBoxMover
         }
 
         if (wayPoints.Count is 0 
-            || !wayPoints[^1].Equals(Finish.Point))
+            || !wayPoints[^1].Equals(Finish))
             wayPoints.Add(Finish);
 
         return wayPoints;

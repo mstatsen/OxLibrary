@@ -380,16 +380,6 @@ public class OxControlManager : IOxControlManager
     public OxSize PreferredSize =>
         new(ManagingControl.Size);
 
-    public OxPoint AutoScrollOffset
-    {
-        get => new(ManagingControl.AutoScrollOffset);
-        set
-        {
-            if (!AutoScrollOffset.Equals(value))
-                ManagingControl.AutoScrollOffset = value.Point;
-        }
-    }
-
     private void OnDockChanged(OxDockChangedEventArgs e) => 
         ZBounds.WithoutSave(
             () =>
@@ -478,16 +468,4 @@ public class OxControlManager : IOxControlManager
 
     public OxSize LogicalToDeviceUnits(OxSize value) =>
         new(ManagingControl.LogicalToDeviceUnits(value.Size));
-
-    public OxPoint PointToClient(OxPoint p) =>
-        new(ManagingControl.PointToClient(p.Point));
-
-    public OxPoint PointToScreen(OxPoint p) =>
-        new(ManagingControl.PointToScreen(p.Point));
-
-    public OxRectangle RectangleToClient(OxRectangle r) =>
-        new(ManagingControl.RectangleToClient(r.Rectangle));
-
-    public OxRectangle RectangleToScreen(OxRectangle r) =>
-        new(ManagingControl.RectangleToScreen(r.Rectangle));
 }

@@ -1,4 +1,4 @@
-﻿using OxLibrary.Panels;
+﻿using OxLibrary.Interfaces;
 
 namespace OxLibrary;
 
@@ -14,36 +14,27 @@ public static class OxDirectionHelper
             _ => OxDirection.None,
         };
 
-    //TODO: replace "OxPanel border" with "OxPoint location"
-    public static OxDirection GetDirection(OxPanel border, OxPoint position)
+    public static OxDirection GetDirection(IOxBox box, OxPoint position)
     {
-        OxDirection direction = GetDirection(border.Dock);
-        OxWidth borderSize = OxDockHelper.IsVertical(border.Dock)
-            ? border.Height
-            : border.Width;
-        OxWidth error = OxWh.Mul(borderSize, 2);
+        OxWidth error = OxWh.W2;
+        OxRectangle outerControlZone = box.OuterControlZone;
 
-        switch (border.Dock)
-        {
-            case OxDock.Left:
-            case OxDock.Right:
-                if (position.Y < error)
-                    direction |= OxDirection.Top;
-                else
-                if (OxWh.Greater(position.Y, OxWh.Sub(border.Height, error)))
-                    direction |= OxDirection.Bottom;
-                break;
-            case OxDock.Top:
-            case OxDock.Bottom:
-                if (position.X < error)
-                    direction |= OxDirection.Left;
-                else
-                if (OxWh.Greater(position.X, OxWh.Sub(border.Width, error)))
-                    direction |= OxDirection.Right;
-                break;
-        }
+        if (box is IOxWithPadding boxWithPadding)
+            outerControlZone -= boxWithPadding.Padding;
 
-        return direction;
+        return
+            (OxWh.Less(position.X, OxWh.W2)
+                ? OxDirection.Left
+                : OxWh.Greater(position.X, OxWh.S(outerControlZone.Width, error))
+                    ? OxDirection.Right
+                    : OxDirection.None
+            )
+            |
+            (OxWh.Less(position.Y, error)
+                ? OxDirection.Top
+                : OxWh.Greater(position.Y, OxWh.S(outerControlZone.Height, error))
+                    ? OxDirection.Bottom
+                    : OxDirection.None);
     }
 
     public static bool IsLeft(OxDirection direction) => direction is OxDirection.Left;

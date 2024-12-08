@@ -258,12 +258,6 @@ public class OxComboBox<T> : ComboBox, IOxControlWithManager
         set => Manager.Bounds = value;
     }
 
-    public new OxPoint AutoScrollOffset
-    {
-        get => Manager.AutoScrollOffset;
-        set => Manager.AutoScrollOffset = value;
-    }
-
     public void DoWithSuspendedLayout(Action method) =>
         Manager.DoWithSuspendedLayout(method);
 
@@ -272,18 +266,6 @@ public class OxComboBox<T> : ComboBox, IOxControlWithManager
 
     public void Invalidate(OxRectangle rc) =>
         Manager.Invalidate(rc);
-
-    public OxPoint PointToClient(OxPoint p) =>
-        Manager.PointToClient(p);
-
-    public OxPoint PointToScreen(OxPoint p) =>
-        Manager.PointToScreen(p);
-
-    public OxRectangle RectangleToClient(OxRectangle r) =>
-        Manager.RectangleToClient(r);
-
-    public OxRectangle RectangleToScreen(OxRectangle r) =>
-        Manager.RectangleToScreen(r);
 
     public new event OxDockChangedEvent DockChanged
     {
