@@ -8,7 +8,7 @@ namespace OxLibrary.Panels
         private bool panelResizing = false;
         private const int MaximumColumnCount = 48;
         private int CalcedColumnCount = MaximumColumnCount;
-        private readonly OxPaneDictionary columnsPanels = new();
+        private readonly OxPanelsDictionary columnsPanels = new();
         private readonly OxPanelList columns = new();
         private readonly OxPanelList placedPanels = new();
 
@@ -360,7 +360,7 @@ namespace OxLibrary.Panels
         {
             placedPanels.Clear();
 
-            foreach (OxPanelList panelsList in columnsPanels.Values)
+            foreach (OxPanelList panelsList in columnsPanels.Values.Cast<OxPanelList>())
             {
                 foreach (OxPanel panel in panelsList)
                 {

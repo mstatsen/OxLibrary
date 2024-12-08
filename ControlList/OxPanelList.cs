@@ -1,34 +1,40 @@
-﻿using OxLibrary.Panels;
+﻿using OxLibrary.Interfaces;
+using OxLibrary.Panels;
 
 namespace OxLibrary.ControlList;
 
-public class OxPanelList : List<OxPanel>
+public class OxPanelList<TPanel> : List<TPanel>
+    where TPanel : IOxPanel
 {
-    public OxPanel? Last =>
+    public TPanel? Last =>
         Count > 0
             ? this[Count - 1]
-            : default;
+            : default!;
 
-    public OxPanel? First =>
+    public TPanel? First =>
         Count > 0
             ? this[0]
-            : default;
+            : default!;
 
     public OxWidth Bottom
     {
         get
         {
-            OxPanel? last = Last;
+            TPanel? last = Last;
 
             return last is null
                 ? OxWh.W0
-                : last.Bottom | OxWh.W24;
+                : OxWh.Add(last.Bottom, OxWh.W24);
         }
     }
 
-    public new OxPanelList AddRange(IEnumerable<OxPanel> collection)
+    public new OxPanelList<TPanel> AddRange(IEnumerable<TPanel> list)
     {
-        base.AddRange(collection);
+        base.AddRange(list);
         return this;
     }
+}
+
+public class OxPanelList : OxPanelList<OxPanel>
+{ 
 }

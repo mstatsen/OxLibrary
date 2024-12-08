@@ -2,19 +2,9 @@
 
 namespace OxLibrary.ControlList;
 
-public class OxClickFrameList<TClickFrame> : List<TClickFrame>
+public class OxClickFrameList<TClickFrame> : OxPanelList<TClickFrame>
     where TClickFrame : OxClickFrame, new()
 {
-    public TClickFrame? First =>
-        Count > 0
-            ? this[0]
-            : null;
-
-    public TClickFrame? Last =>
-        Count > 0
-            ? this[Count - 1]
-            : null;
-
     public TClickFrame? FirstVisible =>
         Find(f => f.Visible);
 
