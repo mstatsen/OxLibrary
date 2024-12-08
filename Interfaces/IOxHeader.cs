@@ -1,6 +1,7 @@
 ﻿using OxLibrary.Controls;
+using OxLibrary.Panels;
 
-namespace OxLibrary.Panels
+namespace OxLibrary.Interfaces
 {
     public interface IOxHeader : IOxPanel
     {

@@ -1,15 +1,15 @@
 ﻿using OxLibrary.Forms;
-using OxLibrary.Interfaces;
+using OxLibrary.Panels;
 
-namespace OxLibrary.Panels
+namespace OxLibrary.Interfaces
 {
 
     public interface IOxPanel :
         IOxBox,
-        IOxWithMargin, 
-        IOxWithBorders, 
+        IOxWithMargin,
+        IOxWithBorders,
         IOxWithPadding,
-        IOxWithIcon, 
+        IOxWithIcon,
         IOxWithColorHelper
     {
         Color DefaultColor { get; }

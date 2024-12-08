@@ -1,5 +1,6 @@
 ﻿using OxLibrary.Controls;
 using OxLibrary.Handlers;
+using OxLibrary.Interfaces;
 
 namespace OxLibrary.Panels;
 

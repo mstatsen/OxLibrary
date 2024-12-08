@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Handlers;
+using OxLibrary.Interfaces;
 
 namespace OxLibrary.Panels
 {

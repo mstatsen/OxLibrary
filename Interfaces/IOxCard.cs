@@ -1,4 +1,4 @@
-﻿namespace OxLibrary.Panels
+﻿namespace OxLibrary.Interfaces
 {
     public interface IOxCard : IOxFrameWithHeader
     {

@@ -17,20 +17,12 @@ namespace OxLibrary.Interfaces
         public void RemoveAt(int index);
         public void RemoveCurrent();
         Control? Parent { get; set; }
-
-        event EventHandler? SelectedIndexChanged;
-        event EventHandler DoubleClick;
-        event EventHandler Click;
-        event KeyEventHandler KeyUp;
         IsHighPriorityItem? CheckIsHighPriorityItem { get; set; }
         IsHighPriorityItem? CheckIsMandatoryItem { get; set; }
-
         void Add(object item);
         void AddChild(object item);
         void Clear();
-
         List<object> ObjectList { get; }
-
         int Height { get; set; }
         void MoveUp();
         void MoveDown();
@@ -40,5 +32,9 @@ namespace OxLibrary.Interfaces
         BorderStyle BorderStyle { get; set; }
         Control AsControl();
         bool AvailableChilds { get; }
+        event EventHandler Click;
+        event EventHandler DoubleClick;
+        event KeyEventHandler KeyUp;
+        event EventHandler? SelectedIndexChanged;
     }
 }

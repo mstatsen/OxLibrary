@@ -1,4 +1,6 @@
-﻿namespace OxLibrary.Panels
+﻿using OxLibrary.Panels;
+
+namespace OxLibrary.Interfaces
 {
     public interface IOxFrameWithHeader : IOxPanel
     {

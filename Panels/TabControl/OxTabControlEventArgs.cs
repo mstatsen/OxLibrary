@@ -1,4 +1,6 @@
-﻿namespace OxLibrary.Panels
+﻿using OxLibrary.Interfaces;
+
+namespace OxLibrary.Panels
 {
     public class OxTabControlEventArgs
     {

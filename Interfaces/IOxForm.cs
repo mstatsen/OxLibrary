@@ -1,7 +1,7 @@
-﻿namespace OxLibrary.Forms;
+﻿namespace OxLibrary.Interfaces;
 
 public interface IOxForm :
-    IOxBaseFormPanel
+    IOxFormPanelBase
 {
     FormWindowState WindowState { get; set; }
     bool CanMaximize { get; set; }
@@ -16,7 +16,7 @@ public interface IOxForm :
 }
 
 public interface IOxForm<TFormPanel> : IOxForm
-    where TFormPanel : IOxBaseFormPanel, new()
+    where TFormPanel : IOxFormPanelBase, new()
 {
     TFormPanel FormPanel { get; }
 }
