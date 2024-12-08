@@ -10,6 +10,7 @@ namespace OxLibrary.Handlers
     public delegate void OxBordersChangedEvent(object sender, OxBordersChangedEventArgs e);
     public delegate void OxControlEvent(IOxBox sender, OxControlEventArgs e);
     public delegate void OxDockChangedEvent(object sender, OxDockChangedEventArgs e);
+    public delegate void ExpandChanged(IOxExpandable sender, OxBoolEventArgs e);
     public delegate void OxLocationChangedEvent(object sender, OxLocationChangedEventArgs e);
     public delegate void OxParentChangedEvent(object sender, OxParentChangedEventArgs e);
     public delegate void OxSizeChangedEvent(object sender, OxSizeChangedEventArgs e);

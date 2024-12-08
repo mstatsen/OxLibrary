@@ -1,6 +1,7 @@
 ﻿using OxLibrary.Controls;
 using OxLibrary.Handlers;
 using OxLibrary.Interfaces;
+using OxLibrary.ControlList;
 
 namespace OxLibrary.Panels;
 
@@ -13,7 +14,7 @@ public class OxHeader : OxUnderlinedPanel, IOxHeader
         Visible = false
     };
 
-    private readonly OxLabel label = new()
+    private readonly OxLabel title = new()
     {
         AutoSize = false,
         Dock = OxDock.Fill,
@@ -43,10 +44,13 @@ public class OxHeader : OxUnderlinedPanel, IOxHeader
     public OxHeader(string title = "") : base(new(OxWh.W0, OxWh.W26))
     {
         Dock = OxDock.Top;
-        label.Text = title;
-        label.DoubleClick += (s, e) => ToolBar.ExecuteDefault();
-        label.Click += LabelClickHandler;
+        this.title.Text = title;
+        this.title.DoubleClick += TitleDoubleClickHandler;
+        this.title.Click += LabelClickHandler;
     }
+
+    private void TitleDoubleClickHandler(object? sender, EventArgs e) =>
+        ToolBar.ExecuteDefault();
 
     public override OxDock Dock 
     { 
@@ -59,30 +63,30 @@ public class OxHeader : OxUnderlinedPanel, IOxHeader
 
     public new EventHandler? Click { get; set; }
 
-    public Label Label => label;
+    public OxLabel Title => title;
 
     protected override string GetText() =>
-        label.Text;
+        title.Text;
 
     protected override void SetText(string? value)
     {
-        label.Text = 
+        title.Text = 
             value is not null 
                 ? value.Trim() 
                 : string.Empty;
-        label.Visible = !label.Text.Equals(string.Empty);
+        title.Visible = !title.Text.Equals(string.Empty);
     }
 
     public ContentAlignment TitleAlign
     {
-        get => label.TextAlign;
-        set => label.TextAlign = value;
+        get => title.TextAlign;
+        set => title.TextAlign = value;
     }
 
     public Font TitleFont 
     { 
-        get => label.Font; 
-        set => label.Font = value;
+        get => title.Font; 
+        set => title.Font = value;
     }
 
     protected override Bitmap? GetIcon() => 
@@ -99,14 +103,13 @@ public class OxHeader : OxUnderlinedPanel, IOxHeader
         base.PrepareInnerComponents();
         icon.Parent = this;
         ToolBar.Parent = this;
-        label.Parent = this;
-        //SendToBack();
+        title.Parent = this;
     }
 
     public override void PrepareColors()
     {
         base.PrepareColors();
-        label.ForeColor = Colors.Darker(6);
+        title.ForeColor = Colors.Darker(6);
         ToolBar.BaseColor = BaseColor;
         icon.BaseColor = BaseColor;
     }
@@ -115,14 +118,14 @@ public class OxHeader : OxUnderlinedPanel, IOxHeader
     {
         base.OnSizeChanged(e);
 
-        if (e.Changed)
-        {
-            icon.Width = icon.Height;
-            ToolBar.PlaceButtons();
-        }
+        if (!e.Changed)
+            return;
+
+        icon.Width = icon.Height;
+        ToolBar.PlaceButtons();
     }
 
-    public void AddToolButton(OxIconButton button, bool startGroup = false) =>
+    public void AddButton(OxIconButton button, bool startGroup = false) =>
         ToolBar.AddButton(button, startGroup);
 
     public override bool HandleParentPadding => false;

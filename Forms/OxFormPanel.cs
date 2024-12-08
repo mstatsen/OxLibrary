@@ -20,7 +20,7 @@ public partial class OxFormPanel :
             if (form is not null)
             {
                 form.SizeChanged += FormSizeChanged;
-                formMover = new(form, Header.Label);
+                formMover = new(form, Header.Title);
             }
         }
     }
@@ -76,9 +76,9 @@ public partial class OxFormPanel :
     private void PlaceButtons()
     {
         Header.SquareToolBarButtons = false;
-        Header.AddToolButton(minimizeButton);
-        Header.AddToolButton(restoreButton);
-        Header.AddToolButton(closeButton);
+        Header.AddButton(minimizeButton);
+        Header.AddButton(restoreButton);
+        Header.AddButton(closeButton);
     }
 
     private void SetButtonsSize()

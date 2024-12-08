@@ -30,7 +30,9 @@ public class OxForm<TFormPanel> :
     {
         DoubleBuffered = true;
         Manager = OxControlManagers.RegisterBox(this);
+#pragma warning disable IDE0017 // Simplify object initialization
         FormPanel = new();
+#pragma warning restore IDE0017 // Simplify object initialization
         FormPanel.Form = this;
         PrepareFormPanel();
         SetUpForm();

@@ -1,5 +1,6 @@
 ﻿using OxLibrary.Handlers;
 using OxLibrary.Interfaces;
+using OxLibrary.ControlList;
 
 namespace OxLibrary.Panels
 {
@@ -228,7 +229,7 @@ namespace OxLibrary.Panels
         public event OxTabControlEvent? DeactivatePage;
 
         public OxTabControl() : base() =>
-            Header.Label.Visible = false;
+            Header.Title.Visible = false;
 
         protected override void OnVisibleChanged(EventArgs e)
         {

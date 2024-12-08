@@ -1,15 +1,6 @@
-﻿namespace OxLibrary.Interfaces
+﻿namespace OxLibrary.Interfaces;
+
+public interface IOxCard : IOxFrameWithHeader, IOxExpandable
 {
-    public interface IOxCard : IOxFrameWithHeader
-    {
-        bool Accordion { get; set; }
-        bool Expanded { get; set; }
-
-        void Expand();
-        void Collapse();
-
-        event EventHandler ExpandHandler;
-
-        bool ExpandButtonVisible { get; set; }
-    }
+    bool ExpandButtonVisible { get; set; }
 }
