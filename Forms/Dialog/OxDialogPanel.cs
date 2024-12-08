@@ -5,9 +5,7 @@ using System.Windows.Forms.VisualStyles;
 
 namespace OxLibrary.Forms;
 
-public class OxDialogPanel<TDialog, TDialogPanel> : OxFormPanel<TDialog,TDialogPanel>
-    where TDialog : OxDialog<TDialog, TDialogPanel>
-    where TDialogPanel: OxDialogPanel<TDialog, TDialogPanel>, new()
+public class OxDialogPanel : OxFormPanel
 {
     public OxWidth DialogButtonSpace = OxWh.W6;
     public OxWidth DialogButtonStartSpace = OxWh.W10;
@@ -184,8 +182,4 @@ public class OxDialogPanel<TDialog, TDialogPanel> : OxFormPanel<TDialog,TDialogP
         Form.ClientSize = new(Width, Height);
     };
     */
-}
-
-public class OxDialogPanel : OxDialogPanel<OxDialog, OxDialogPanel>
-{ 
 }

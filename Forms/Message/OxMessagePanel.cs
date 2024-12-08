@@ -3,7 +3,7 @@ using System.Windows.Forms.VisualStyles;
 
 namespace OxLibrary.Forms;
 
-public class OxMessagePanel : OxDialogPanel<OxMessage, OxMessagePanel>
+public class OxMessagePanel : OxDialogPanel
 {
     private readonly OxTextBox MessageBox = new()
     {

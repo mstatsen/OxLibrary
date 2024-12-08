@@ -5,5 +5,6 @@
         OxHeader Header { get; }
         OxWidth HeaderHeight { get; set; }
         bool HeaderVisible { get; set; }
+        OxHeaderToolBar HeaderToolBar { get; }
     }
 }

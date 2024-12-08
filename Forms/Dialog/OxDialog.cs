@@ -4,10 +4,9 @@ namespace OxLibrary.Forms;
 
 public delegate string GetEmptyMandatoryFieldName();
 
-public class OxDialog<TDialog, TDialogPanel> : OxForm<TDialog, TDialogPanel>
+public class OxDialog<TDialogPanel> : OxForm<TDialogPanel>
 
-    where TDialog : OxDialog<TDialog, TDialogPanel>
-    where TDialogPanel : OxDialogPanel<TDialog, TDialogPanel>, new()
+    where TDialogPanel : OxDialogPanel, new()
 {
     public OxDialog() : base()
     {
@@ -120,6 +119,6 @@ public class OxDialog<TDialog, TDialogPanel> : OxForm<TDialog, TDialogPanel>
     public OxFrame Footer => FormPanel.Footer;
 }
 
-public class OxDialog : OxDialog<OxDialog, OxDialogPanel>
+public class OxDialog : OxDialog<OxDialogPanel>
 { 
 }

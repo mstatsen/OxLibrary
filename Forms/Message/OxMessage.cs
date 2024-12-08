@@ -1,6 +1,6 @@
 ﻿namespace OxLibrary.Forms;
 
-public class OxMessage : OxDialog<OxMessage, OxMessagePanel>
+public class OxMessage : OxDialog<OxMessagePanel>
 {
     private readonly OxMessageType MessageType;
     public OxMessage(OxMessageType messageType) : base()

@@ -6,12 +6,11 @@ using OxLibrary.Panels;
 
 namespace OxLibrary.Forms;
 
-public class OxForm<TForm, TFormPanel>:
+public class OxForm<TFormPanel> :
     Form,
-    IOxForm<TForm, TFormPanel>,
+    IOxForm<TFormPanel>,
     IOxDependedBox
-    where TForm : IOxForm<TForm, TFormPanel>
-    where TFormPanel: IOxFormPanel<TForm, TFormPanel>, new()
+    where TFormPanel: IOxFormPanel, new()
     
 {
     public TFormPanel FormPanel { get; internal set; }
@@ -22,16 +21,17 @@ public class OxForm<TForm, TFormPanel>:
         set => FormPanel.HeaderHeight = value;
     }
 
+    public OxHeaderToolBar HeaderToolBar =>
+        FormPanel.HeaderToolBar;
+
     public IOxBoxManager Manager { get; }
 
     public OxForm()
     {
         DoubleBuffered = true;
         Manager = OxControlManagers.RegisterBox(this);
-        FormPanel = new()
-        {
-            //   Form = this
-        };
+        FormPanel = new();
+        FormPanel.Form = this;
         PrepareFormPanel();
         SetUpForm();
         PlaceFormPanel();
@@ -511,6 +511,6 @@ public class OxForm<TForm, TFormPanel>:
     #endregion
 }
 
-public class OxForm : OxForm<OxForm, OxFormPanel>
+public class OxForm : OxForm<OxFormPanel>
 { 
 }

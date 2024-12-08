@@ -4,14 +4,12 @@ using OxLibrary.Panels;
 
 namespace OxLibrary.Forms;
 
-public partial class OxFormPanel<TForm, TFormPanel> :
+public partial class OxFormPanel :
     OxFrameWithHeader,
-    IOxFormPanel<TForm, TFormPanel>
-    where TForm : IOxForm<TForm, TFormPanel>
-    where TFormPanel : IOxFormPanel<TForm, TFormPanel>, new()
+    IOxFormPanel
 {
-    private TForm? form;
-    public TForm? Form 
+    private IOxForm? form;
+    public IOxForm? Form 
     { 
         get => form;
         set
@@ -313,8 +311,4 @@ public partial class OxFormPanel<TForm, TFormPanel> :
             ResizeProcessing = false;
         }
     }
-}
-
-public class OxFormPanel : OxFormPanel<OxForm, OxFormPanel>
-{ 
 }
