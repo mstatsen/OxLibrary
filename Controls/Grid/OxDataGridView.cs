@@ -74,34 +74,34 @@ public class OxDataGridView : DataGridView, IOxControlWithManager
         set => Manager.Parent = value;
     }
 
-    public new OxWidth Width
+    public new short Width
     {
         get => Manager.Width;
         set => Manager.Width = value;
     }
 
-    public new OxWidth Height
+    public new short Height
     {
         get => Manager.Height;
         set => Manager.Height = value;
     }
 
-    public new OxWidth Top
+    public new short Top
     {
         get => Manager.Top;
         set => Manager.Top = value;
     }
 
-    public new OxWidth Left
+    public new short Left
     {
         get => Manager.Left;
         set => Manager.Left = value;
     }
 
-    public new OxWidth Bottom =>
+    public new short Bottom =>
         Manager.Bottom;
 
-    public new OxWidth Right =>
+    public new short Right =>
         Manager.Right;
 
     public new OxSize Size

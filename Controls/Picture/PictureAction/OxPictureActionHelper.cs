@@ -22,9 +22,9 @@ public static class OxPictureActionHelper
             _ => string.Empty,
         };
 
-    public static OxWidth DefaultHeight => OxWh.W20;
+    public static short DefaultHeight => 20;
 
-    public static readonly OxWidth ButtonMargin = OxWh.W2;
+    public static readonly short ButtonMargin = 2;
 
     public static List<OxPictureAction> List
     {

@@ -114,9 +114,9 @@ public class OxPanel : Panel, IOxPanel
         {
             Point thisPoint = PointToClient(Cursor.Position);
             return (thisPoint.X >= 0)
-                && (thisPoint.X <= Size.Z_Width)
+                && (thisPoint.X <= Size.Width)
                 && (thisPoint.Y >= 0)
-                && (thisPoint.Y <= Size.Z_Height);
+                && (thisPoint.Y <= Size.Height);
         }
     }
 
@@ -207,7 +207,7 @@ public class OxPanel : Panel, IOxPanel
     private readonly OxBorders borders =
         new()
         {
-            Size = OxWh.W1
+            Size = 1
         };
 
     public OxBorders Borders => borders;
@@ -238,10 +238,10 @@ public class OxPanel : Panel, IOxPanel
         }
     }
 
-    public void SetBorderWidth(OxWidth value) =>
+    public void SetBorderWidth(short value) =>
         Borders.Size = value;
 
-    public void SetBorderWidth(OxDock dock, OxWidth value) =>
+    public void SetBorderWidth(OxDock dock, short value) =>
         Borders[dock].Size = value;
 
     public bool BorderVisible
@@ -379,34 +379,34 @@ public class OxPanel : Panel, IOxPanel
     public virtual void OnParentChanged(OxParentChangedEventArgs e) { }
     public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }
 
-    public new OxWidth Width
+    public new short Width
     {
         get => Manager.Width;
         set => Manager.Width = value;
     }
 
-    public new OxWidth Height
+    public new short Height
     {
         get => Manager.Height;
         set => Manager.Height = value;
     }
 
-    public new OxWidth Top
+    public new short Top
     {
         get => Manager.Top;
         set => Manager.Top = value;
     }
 
-    public new OxWidth Left
+    public new short Left
     {
         get => Manager.Left;
         set => Manager.Left = value;
     }
 
-    public new OxWidth Bottom =>
+    public new short Bottom =>
         Manager.Bottom;
 
-    public new OxWidth Right =>
+    public new short Right =>
         Manager.Right;
 
     public new OxSize Size

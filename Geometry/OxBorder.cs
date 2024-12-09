@@ -9,19 +9,13 @@ public class OxBorder
         Visible = prototype.Visible;
     }
 
-    private OxWidth size = OxWh.W0;
+    private short size = 0;
     private bool visible = true;
 
-    public OxWidth Size
+    public short Size
     {
-        get => visible ? size : OxWh.W0;
+        get => visible ? size : (short)0;
         set => size = value;
-    }
-
-    public int IntSize
-    {
-        get => OxWh.I(Size);
-        set => Size = OxWh.W(value);
     }
 
     public bool Visible
@@ -31,7 +25,7 @@ public class OxBorder
     }
 
     public bool IsEmpty =>
-        Size is OxWidth.None;
+        Size is 0;
 
     public override bool Equals(object? obj) => 
         obj is OxBorder otherBorder
@@ -41,5 +35,5 @@ public class OxBorder
         Size.GetHashCode();
 
     public override string ToString() =>
-        $"Size = {OxWh.I(Size)}";
+        $"Size = {Size}";
 }

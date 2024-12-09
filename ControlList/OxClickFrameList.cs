@@ -22,33 +22,33 @@ public class OxClickFrameList<TClickFrame> : OxPanelList<TClickFrame>
         }
     }
 
-    public OxWidth Right =>
-        Last is not null
+    public short Right =>
+        (short)(Last is not null
             ? Last.Right
-            : OxWh.W0;
+            : 0);
 
-    public OxWidth Width
+    public short Width
     {
         get
         {
-            OxWidth result = OxWh.W0;
+            short result = 0;
 
             foreach (TClickFrame frame in this)
             {
-                result = OxWh.A(result, frame.Width);
-                result = OxWh.A(result, frame.Margin.Horizontal);
+                result += frame.Width;
+                result += frame.Margin.Horizontal;
             }
 
             return result;
         }
     }
 
-    public OxWidth Height()
+    public short Height()
     {
-        OxWidth maxHeight = OxWh.W0;
+        short maxHeight = 0;
 
         foreach (TClickFrame frame in this)
-            maxHeight = OxWh.Max(maxHeight, frame.Height);
+            maxHeight = Math.Max(maxHeight, frame.Height);
 
         return maxHeight;
     }

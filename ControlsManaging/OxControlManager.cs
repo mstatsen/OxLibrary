@@ -31,10 +31,10 @@ public class OxControlManager : IOxControlManager
             return;
 
         if (OxDockHelper.IsVariableWidth(Dock))
-            Width = OxWh.S(ZBounds.Width, e.OldValue.Horizontal);
+            Width = (short)(ZBounds.Width - e.OldValue.Horizontal);
 
         if (OxDockHelper.IsVariableHeight(Dock))
-            Height = OxWh.S(ZBounds.Height, e.OldValue.Vertical);
+            Height = (short)(ZBounds.Height - e.OldValue.Vertical);
 
         RealignParent();
     }
@@ -61,10 +61,10 @@ public class OxControlManager : IOxControlManager
     {
         if (IncreaceIfFocused)
         {
-            Left = OxWh.A(Left, OxWh.Div(OxWh.W4, OxWh.W2));
-            Top = OxWh.A(Top, OxWh.Div(OxWh.W4, OxWh.W2));
-            Height = OxWh.S(Height, OxWh.W4);
-            Width = OxWh.S(Width, OxWh.W4);
+            Left += 2;
+            Top += 2;
+            Height -= 4;
+            Width -= 4;
         }
     }
 
@@ -72,10 +72,10 @@ public class OxControlManager : IOxControlManager
     {
         if (IncreaceIfFocused)
         {
-            Left = OxWh.S(Left, OxWh.Div(OxWh.W4, OxWh.W2));
-            Top = OxWh.S(Top, OxWh.Div(OxWh.W4, OxWh.W2));
-            Height = OxWh.A(Height, OxWh.W4);
-            Width = OxWh.A(Width, OxWh.W4);
+            Left -= 2;
+            Top -= 2;
+            Height += 4;
+            Width += 4;
         }
     }
 
@@ -110,107 +110,97 @@ public class OxControlManager : IOxControlManager
 
     public OxZBounds ZBounds { get; }
 
-    public OxWidth Width
+    public short Width
     {
         get => GetSizePart(OxDockVariable.Width);
         set => SetSizePart(OxDockVariable.Width, value);
     }
 
-    public OxWidth Height
+    public short Height
     {
         get => GetSizePart(OxDockVariable.Height);
         set => SetSizePart(OxDockVariable.Height, value);
     }
 
-    private OxWidth GetSizePart(OxDockVariable variable)
+    private short GetSizePart(OxDockVariable variable)
     {
-        OxWidth calcedValue = OxWh.W(ZBounds.GetSizePart(variable));
+        short calcedValue = ZBounds.GetSizePart(variable);
 
         if (OxDockHelper.Variable(Dock).Equals(variable)
             && OxControl is not IOxDependedBox
             && OxControl is IOxWithMargin controlWithMargin)
-            calcedValue = OxWh.S(calcedValue, controlWithMargin.Margin.ByDockVariable(variable));
+            calcedValue -= controlWithMargin.Margin.ByDockVariable(variable);
 
         return calcedValue;
     }
 
-    private void SetSizePart(OxDockVariable variable, OxWidth value)
+    private void SetSizePart(OxDockVariable variable, short value)
     {
         if (Size.ByDockVariable(variable).Equals(value))
             return;
 
         OxSize oldSize = new(Size);
-        OxWidth calcedValue = value;
+        short calcedValue = value;
 
         if (Dock is not OxDock.None
             && OxControl is not IOxDependedBox
             && OxControl is IOxWithMargin controlWithMargin)
-            calcedValue = OxWh.Add(
-                value,
-                controlWithMargin.Margin.ByDockVariable(variable)
-            );
+            calcedValue = (short)(value + controlWithMargin.Margin.ByDockVariable(variable));
 
         if (!ParentOuterControlZone.IsEmpty)
         {
             if (Dock is OxDock.Right)
-                ZBounds.Left = OxWh.I(OxWh.Sub(ParentOuterControlZone.Right, calcedValue));
+                ZBounds.Left = (short)(ParentOuterControlZone.Right - calcedValue);
             else
                 if (Dock is OxDock.Bottom)
-                    ZBounds.Top = OxWh.I(OxWh.Sub(ParentOuterControlZone.Bottom, calcedValue));
+                ZBounds.Top = (short)(ParentOuterControlZone.Bottom - calcedValue);
 
-            calcedValue = OxWh.Min(
+            calcedValue = (short)Math.Min(
                 calcedValue,
-                OxWh.Sub(
-                    ParentOuterControlZone.LastByDockVariable(variable),
-                    Location.ByDockVariable(variable)
-                )
+                ParentOuterControlZone.LastByDockVariable(variable)
+                - Location.ByDockVariable(variable)
             );
         }
 
-        ZBounds.SetSizePart(variable, OxWh.I(calcedValue));
+        ZBounds.SetSizePart(variable, calcedValue);
         ZBounds.SaveSize(variable);
         OnSizeChanged(new(oldSize, Size));
     }
 
-    public OxWidth Bottom =>
-        OxWh.S(ManagingControl.Bottom, ParentOuterControlZone.Y);
+    public short Bottom =>
+        (short)(ManagingControl.Bottom - ParentOuterControlZone.Y);
 
-    public OxWidth Right =>
-        OxWh.S(ManagingControl.Right, ParentOuterControlZone.X);
+    public short Right =>
+        (short)(ManagingControl.Right - ParentOuterControlZone.X);
 
-    public OxWidth Top
+    public short Top
     {
         get => GetLocationPart(OxDockVariable.Height);
         set => SetLocationPart(OxDockVariable.Height, value);
     }
 
-    public OxWidth Left
+    public short Left
     {
         get => GetLocationPart(OxDockVariable.Width);
         set => SetLocationPart(OxDockVariable.Width, value);
     }
 
-    private OxWidth GetLocationPart(OxDockVariable variable) => 
-        OxWh.S(
-            ZBounds.GetLocationPart(variable),
-            ParentInnerControlZone.FirstByDockVariable(variable)
-        );
+    private short GetLocationPart(OxDockVariable variable) =>
+            (short)(ZBounds.GetLocationPart(variable)
+            - ParentInnerControlZone.FirstByDockVariable(variable));
 
-    private void SetLocationPart(OxDockVariable variable, OxWidth value)
+    private void SetLocationPart(OxDockVariable variable, short value)
     {
         {
             if (OxDockHelper.DockType(Dock) is OxDockType.Docked)
                 return;
 
             OxPoint oldLocation = new(Location);
-            ZBounds.SetLocationPart(variable, OxWh.I(value));
+            ZBounds.SetLocationPart(variable, (short)value);
             ZBounds.SaveLocation(variable);
             ZBounds.SetLocationPart(
                 variable,
-                OxWh.IAdd(
-                    value,
-                    ParentInnerControlZone.FirstByDockVariable(variable)
-                )
+                (short)((short)value + ParentInnerControlZone.FirstByDockVariable(variable))
             );
             OnLocationChanged(new(oldLocation, Location));
         }
@@ -305,10 +295,10 @@ public class OxControlManager : IOxControlManager
         set
         {
             if (!Width.Equals(value.Width))
-                Width = value.Width;
+                Width = (value.Width);
 
             if (!Height.Equals(value.Height))
-                Height = value.Height;
+                Height = (value.Height);
         }
     }
 
@@ -324,7 +314,7 @@ public class OxControlManager : IOxControlManager
 
     public OxPoint Location
     {
-        get => new(Left, Top);
+        get => new((short)Left, (short)Top);
         set
         {
             OxPoint oldLocation = new(Location);
@@ -434,20 +424,20 @@ public class OxControlManager : IOxControlManager
             RealignParent();
     }
 
-    public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height) =>
+    public void SetBounds(short x, short y, short width, short height) =>
         ManagingControl.SetBounds(
-            OxWh.I(x),
-            OxWh.I(y),
-            OxWh.I(width),
-            OxWh.I(height)
+            x,
+            y,
+            width,
+            height
         );
 
-    public void SetBounds(OxWidth x, OxWidth y, OxWidth width, OxWidth height, BoundsSpecified specified) =>
+    public void SetBounds(short x, short y, short width, short height, BoundsSpecified specified) =>
         ManagingControl.SetBounds(
-            OxWh.I(x),
-            OxWh.I(y),
-            OxWh.I(width),
-            OxWh.I(height),
+            x,
+            y,
+            width,
+            height,
             specified
         );
 

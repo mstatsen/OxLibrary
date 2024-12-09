@@ -27,7 +27,7 @@ namespace OxLibrary.Panels
 #pragma warning disable CS0618 // Type or member is obsolete
                 if (value)
                     ZBounds.RestoreBounds();
-                else ZBounds.Height = OxWh.IAdd(OxWh.Add(Header.Underline.Size, HeaderHeight), Margin.Vertical);
+                else ZBounds.Height = (short)(Header.Underline.Size + HeaderHeight + Margin.Vertical);
 #pragma warning restore CS0618 // Type or member is obsolete
                 Parent?.DoWithSuspendedLayout(() => Parent?.Realign());
             }
@@ -62,7 +62,7 @@ namespace OxLibrary.Panels
         private void ExpandButtonClickHandler(object? sender, EventArgs e) =>
             Expanded = !Expanded;
 
-        private readonly OxIconButton ExpandButton = new(OxIcons.Up, OxWh.W20)
+        private readonly OxIconButton ExpandButton = new(OxIcons.Up, 20)
         {
             Default = true,
             ToolTipText = "Collapse"
@@ -93,7 +93,7 @@ namespace OxLibrary.Panels
         protected override void PrepareInnerComponents()
         {
             base.PrepareInnerComponents();
-            ExpandButton.Size = new(OxWh.W25, OxWh.W20);
+            ExpandButton.Size = new(25, 20);
             Header.AddButton(ExpandButton);
         }
 

@@ -16,25 +16,25 @@ public static class OxDirectionHelper
 
     public static OxDirection GetDirection(IOxBox box, OxPoint position)
     {
-        OxWidth error = OxWh.W2;
+        short error = 2;
         OxRectangle outerControlZone = box.OuterControlZone;
 
         if (box is IOxWithPadding boxWithPadding)
             outerControlZone -= boxWithPadding.Padding;
 
         return
-            (OxWh.Less(position.X, OxWh.W2)
+            (position.X < error
                 ? OxDirection.Left
-                : OxWh.Greater(position.X, OxWh.S(outerControlZone.Width, error))
+                : position.X > outerControlZone.Width - error
                     ? OxDirection.Right
-                    : OxDirection.None
-            )
+                    : OxDirection.None)
             |
-            (OxWh.Less(position.Y, error)
+            (position.Y < error
                 ? OxDirection.Top
-                : OxWh.Greater(position.Y, OxWh.S(outerControlZone.Height, error))
+                : position.Y > outerControlZone.Height - error
                     ? OxDirection.Bottom
-                    : OxDirection.None);
+                    : OxDirection.None
+            );
     }
 
     public static bool IsLeft(OxDirection direction) => direction is OxDirection.Left;

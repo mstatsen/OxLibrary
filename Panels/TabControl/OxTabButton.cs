@@ -136,14 +136,14 @@ namespace OxLibrary.Panels
                 || !IsPrevButton(TabControl.ActiveTabButton);
 
             Margin[TabControl.TabPosition].Size =
-                Active ?
-                    OxWh.W0
+                (short)(Active ?
+                    0
                     : OxDockHelper.IsVertical(TabControl.TabPosition)
-                        ? OxWh.W4
-                        : OxWh.W24;
+                        ? 4
+                        : 24);
             Borders[TabControl.TabPosition].Visible = true;
             OxDock oppositeDock = OxDockHelper.Opposite(TabControl.TabPosition);
-            Margin[oppositeDock].Size = OxWh.W0;
+            Margin[oppositeDock].Size = 0;
             Borders[oppositeDock].Visible = false;
             Text += string.Empty; //for recalc label size
         }
@@ -164,8 +164,8 @@ namespace OxLibrary.Panels
             }
 
             Dock = buttonDock;
-            Width = TabControl.TabHeaderSize.Width;
-            Height = TabControl.TabHeaderSize.Height;
+            Width = (TabControl.TabHeaderSize.Width);
+            Height = (TabControl.TabHeaderSize.Height);
             SetVisualParameters();
         }
     }

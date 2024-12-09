@@ -6,19 +6,19 @@ namespace OxLibrary.Interfaces
     
     public interface IOxControlManager
     {
-        OxWidth Bottom { get; }
+        short Bottom { get; }
         OxDock Dock { get; set; }
         void DoWithSuspendedLayout(Action method);
-        OxWidth Height { get; set; }
-        OxWidth Left { get; set; }
+        short Height { get; set; }
+        short Left { get; set; }
         OxPoint Location { get; set; }
         OxSize MaximumSize { get; set; }
         OxSize MinimumSize { get; set; }
         IOxBox? Parent { get; set; }
-        OxWidth Right { get; }
+        short Right { get; }
         OxSize Size { get; set; }
-        OxWidth Top { get; set; }
-        OxWidth Width { get; set; }
+        short Top { get; set; }
+        short Width { get; set; }
 
         void AddHandler(OxHandlerType type, Delegate handler);
         void InvokeHandlers(OxHandlerType type, OxEventArgs args);

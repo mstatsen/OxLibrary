@@ -1,6 +1,4 @@
-﻿using OxLibrary.Panels;
-
-namespace OxLibrary.Interfaces
+﻿namespace OxLibrary.Interfaces
 {
     public interface IOxWithMargin
     {

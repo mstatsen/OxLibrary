@@ -1,12 +1,11 @@
 ﻿using OxLibrary.Handlers;
-using System.ComponentModel;
-using System.Windows.Forms.Layout;
-using static System.Windows.Forms.Control;
 
 namespace OxLibrary.Interfaces
 {
     public interface IOxControl : IOxControlManager
     {
+        AnchorStyles Anchor { get; set; }
+        object? Tag { get; set; }
         void OnDockChanged(OxDockChangedEventArgs e);
         void OnLocationChanged(OxLocationChangedEventArgs e);
         void OnParentChanged(OxParentChangedEventArgs e);

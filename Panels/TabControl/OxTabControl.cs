@@ -34,16 +34,16 @@ namespace OxLibrary.Panels
 
         private void SetHeaderPaddings()
         {
-            Header.Padding.Size = OxWh.W0;
+            Header.Padding.Size = 0;
 
             switch (TabPosition)
             {
                 case OxDock.Left:
                 case OxDock.Right:
-                    Header.Padding.Top = OxWh.W2;
+                    Header.Padding.Top = 2;
                     break;
                 case OxDock.Bottom:
-                    Header.Padding.Left = OxWh.W4;
+                    Header.Padding.Left = 4;
                     break;
             }
         }

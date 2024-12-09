@@ -30,7 +30,7 @@ public class OxHeader : OxUnderlinedPanel, IOxHeader
     private readonly OxHeaderToolBar toolBar = new()
     {
         Dock = OxDock.Right,
-        Width = OxWh.W1
+        Width = 1
     };
 
     public OxHeaderToolBar ToolBar => toolBar;
@@ -41,7 +41,7 @@ public class OxHeader : OxUnderlinedPanel, IOxHeader
         set => ToolBar.Buttons = value;
     }
 
-    public OxHeader(string title = "") : base(new(OxWh.W0, OxWh.W26))
+    public OxHeader(string title = "") : base(new(0, 26))
     {
         Dock = OxDock.Top;
         this.title.Text = title;

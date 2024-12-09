@@ -1,13 +1,11 @@
-﻿using OxLibrary.Panels;
-
-namespace OxLibrary.Interfaces
+﻿namespace OxLibrary.Interfaces
 {
     public interface IOxWithBorders
     {
         OxBorders Borders { get; }
         Color BorderColor { get; set; }
-        void SetBorderWidth(OxWidth value);
-        void SetBorderWidth(OxDock dock, OxWidth value);
+        void SetBorderWidth(short value);
+        void SetBorderWidth(OxDock dock, short value);
         bool BorderVisible { get; set; }
     }
 }

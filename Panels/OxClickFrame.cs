@@ -6,7 +6,7 @@
         private bool freezeHovered = false;
         public bool HandHoverCursor { get; set; } = false;
         public bool IncreaceIfHovered { get; set; } = false;
-        public OxWidth HoveredIncreaseSize { get; set; } = OxWh.W2;
+        public short HoveredIncreaseSize { get; set; } = 2;
 
         private bool useDefaultHoveredColor = true;
         public bool UseDefaultHoveredColor 
@@ -171,10 +171,10 @@
 
             if (IncreaceIfHovered)
             {
-                Left = OxWh.S(Left, OxWh.Div(HoveredIncreaseSize, OxWh.W2));
-                Top = OxWh.S(Top, OxWh.Div(HoveredIncreaseSize, OxWh.W2));
-                Height = OxWh.A(Height, HoveredIncreaseSize);
-                Width = OxWh.A(Width, HoveredIncreaseSize);
+                Left -= (short)(HoveredIncreaseSize / 2);
+                Top -= HoveredIncreaseSize;
+                Height += HoveredIncreaseSize;
+                Width += HoveredIncreaseSize;
             }
         }
 
@@ -192,10 +192,10 @@
 
             if (IncreaceIfHovered)
             {
-                Left = OxWh.A(Left, OxWh.Div(HoveredIncreaseSize, OxWh.W2));
-                Top = OxWh.A(Top, OxWh.Div(HoveredIncreaseSize, OxWh.W2));
-                Height = OxWh.S(Height, HoveredIncreaseSize);
-                Width = OxWh.S(Width, HoveredIncreaseSize);
+                Left = (short)(Left + HoveredIncreaseSize/ 2);
+                Top = (short)(Top + HoveredIncreaseSize / 2);
+                Height -= HoveredIncreaseSize;
+                Width -= HoveredIncreaseSize;
             }
         }
 

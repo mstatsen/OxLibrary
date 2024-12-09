@@ -7,31 +7,31 @@ public class OxZBounds
 
     public readonly Control Control;
 
-    public int Left 
+    public short Left 
     { 
-        get => Control.Left;
+        get => (short)Control.Left;
         set => Control.Left = value;
     }
 
-    public int Top
+    public short Top
     {
-        get => Control.Top;
+        get => (short)Control.Top;
         set => Control.Top = value;
     }
 
-    public int Width
+    public short Width
     {
-        get => Control.Width;
+        get => (short)Control.Width;
         set => Control.Width = value;
     }
 
-    public int Height
+    public short Height
     {
-        get => Control.Height;
+        get => (short)Control.Height;
         set => Control.Height = value;
     }
 
-    public Point Location
+    public OxPoint Location
     {
         get => new(Left, Top);
         set
@@ -41,7 +41,7 @@ public class OxZBounds
         }
     }
 
-    public Size Size
+    public OxSize Size
     {
         get => new(Width, Height);
         set
@@ -51,7 +51,7 @@ public class OxZBounds
         }
     }
 
-    public Rectangle Bounds
+    public OxRectangle Bounds
     {
         get => new(Location, Size);
         set
@@ -61,7 +61,7 @@ public class OxZBounds
         }
     }
 
-    public int GetLocationPart(OxDockVariable variable) =>
+    public short GetLocationPart(OxDockVariable variable) =>
         variable switch
         {
             OxDockVariable.Width =>
@@ -72,7 +72,7 @@ public class OxZBounds
                 0,
         };
 
-    public void SetLocationPart(OxDockVariable variable, int value)
+    public void SetLocationPart(OxDockVariable variable, short value)
     {
         switch (variable)
         {
@@ -85,7 +85,7 @@ public class OxZBounds
         }
     }
 
-    public int GetSizePart(OxDockVariable variable) =>
+    public short GetSizePart(OxDockVariable variable) =>
         variable switch
         {
             OxDockVariable.Width =>
@@ -96,7 +96,7 @@ public class OxZBounds
                 0,
         };
 
-    public void SetSizePart(OxDockVariable variable, int value)
+    public void SetSizePart(OxDockVariable variable, short value)
     {
         switch (variable)
         {
@@ -129,14 +129,14 @@ public class OxZBounds
 
     public void RestoreLocation()
     {
-        Left = SavedLocation.Z_X;
-        Top = SavedLocation.Z_Y;
+        Left = SavedLocation.X;
+        Top = SavedLocation.Y;
     }
 
     public void RestoreSize()
     {
-        Width = SavedSize.Z_Width;
-        Height = SavedSize.Z_Height;
+        Width = SavedSize.Width;
+        Height = SavedSize.Height;
     }
 
     public void RestoreBounds()
@@ -155,8 +155,8 @@ public class OxZBounds
 
         SavedLocation = variable switch
         {
-            OxDockVariable.Width => new(Left, SavedLocation.Z_Y),
-            OxDockVariable.Height => new(SavedLocation.Z_X, Top),
+            OxDockVariable.Width => new(Left, SavedLocation.Y),
+            OxDockVariable.Height => new(SavedLocation.X, Top),
             _ => new(Left, Top),
         };
     }

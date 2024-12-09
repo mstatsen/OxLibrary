@@ -3,13 +3,13 @@ namespace OxLibrary;
 
 public class OxPoint : OxSize
 {
-    private new OxWidth Width
+    private new short Width
     {
         get => base.Width;
         set => base.Width = value;
     }
 
-    private new OxWidth Height
+    private new short Height
     {
         get => base.Height;
         set => base.Height = value;
@@ -17,23 +17,20 @@ public class OxPoint : OxSize
 
     private new Size Size => base.Size;
 
-    public OxWidth X
+    public short X
     {
         get => Width;
         set => Width = value;
     }
 
-    public OxWidth Y
+    public short Y
     {
         get => Height;
         set => Height = value;
     }
 
-    public OxPoint(OxWidth x, OxWidth y) : base(x, y) { }
-    public OxPoint(OxWidth x, int y) : base(x, y) { }
-    public OxPoint(int x, OxWidth y) : base(x, y) { }
     public OxPoint() : base() { }
-    public OxPoint(int x, int y) : base(x, y) { }
+    public OxPoint(short x, short y) : base(x, y) { }
     public OxPoint(Size size) : base(size) { }
     public OxPoint(OxSize size) : base(size) { }
     public OxPoint(Point point) : base(point) { }
@@ -50,31 +47,7 @@ public class OxPoint : OxSize
         X.GetHashCode() ^ Y.GetHashCode();
 
     public override string ToString() =>
-        $"X = {OxWh.I(X)}, Y = {OxWh.I(Y)}";
+        $"X = {X}, Y = {Y}";
 
-    public new static OxPoint Empty => new(OxWh.W0, OxWh.W0);
-
-    private new int Z_Width
-    {
-        get => base.Z_Width;
-        set => base.Z_Width = value;
-    }
-
-    private new int Z_Height
-    {
-        get => base.Z_Height;
-        set => base.Z_Height = value;
-    }
-
-    public int Z_X
-    {
-        get => Z_Width;
-        set => Z_Width = value;
-    }
-
-    public int Z_Y
-    {
-        get => Z_Height;
-        set => Z_Height = value;
-    }
+    public new static OxPoint Empty => new(0, 0);
 }

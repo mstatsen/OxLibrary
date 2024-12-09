@@ -4,16 +4,16 @@ namespace OxLibrary;
 
 public class OxSize
 {
-    private OxWidth width;
+    private short width;
 
-    private OxWidth height;
+    private short height;
 
-    public OxWidth Width
+    public short Width
     {
         get => width;
         set
         {
-            OxWidth oldValue = width;
+            short oldValue = width;
             width = value;
 
             if (!oldValue.Equals(width))
@@ -21,12 +21,12 @@ public class OxSize
         }
     }
 
-    public OxWidth Height
+    public short Height
     {
         get => height;
         set
         {
-            OxWidth oldValue = height;
+            short oldValue = height;
             height = value;
 
             if (oldValue != height)
@@ -45,19 +45,7 @@ public class OxSize
         SizeChanged?.Invoke(this, new OxSizeChangedEventArgs(oldSize, this));
     }
 
-    public int Z_Width
-    {
-        get => OxWh.I(Width);
-        set => Width = OxWh.W(value);
-    }
-
-    public int Z_Height
-    {
-        get => OxWh.I(Height);
-        set => Height = OxWh.W(value);
-    }
-
-    public OxWidth ByDockVariable(OxDockVariable variable) =>
+    public short ByDockVariable(OxDockVariable variable) =>
         variable switch
         {
             OxDockVariable.Width =>
@@ -65,17 +53,21 @@ public class OxSize
             OxDockVariable.Height =>
                 Height,
             _ =>
-                OxWh.W0
+                0
         };
 
-    public OxSize(OxWidth width, OxWidth height)
+    public OxSize() : this(0) { }
+
+    public OxSize(short size) : this(size, size) { }
+
+    public OxSize(short width, short height)
     {
         Creating = true;
 
         try
         {
-            Width = OxWh.Max(width, OxWh.W0);
-            Height = OxWh.Max(height, OxWh.W0);
+            Width = Math.Max(width, (short)0);
+            Height = Math.Max(height, (short)0);
         }
         finally
         {
@@ -83,33 +75,20 @@ public class OxSize
         }
     }
 
-    public OxSize(OxWidth width, int height) :
-        this(width, OxWh.W(height))
-    { }
-
-    public OxSize(int width, OxWidth height) :
-        this(OxWh.W(width), height)
-    { }
-
-    public OxSize() : this(Size.Empty) { }
-
-    public OxSize(int width, int height)
-        : this(OxWh.W(width), OxWh.W(height)) { }
-
     public OxSize(Size size)
-        : this(size.Width, size.Height) { }
+        : this((short)size.Width, (short)size.Height) { }
 
     public OxSize(OxSize size)
         : this(size.Width, size.Height) { }
 
     public OxSize(Point point)
-        : this(point.X, point.Y) { }
+        : this((short)point.X, (short)point.Y) { }
 
     public OxSize(OxPoint point)
-        : this(point.X, point.Y) { }
+        : this(point.Point) { }
 
     public Size Size =>
-        new(Z_Width, Z_Height);
+        new(Width, Height);
 
     public override bool Equals(object? obj) =>
         base.Equals(obj)
@@ -119,14 +98,14 @@ public class OxSize
         ;
 
     public override int GetHashCode() =>
-        Z_Width.GetHashCode() ^ Z_Height.GetHashCode();
+        Width.GetHashCode() ^ Height.GetHashCode();
 
     public override string ToString() =>
-        $"Width = {OxWh.I(Width)}, Height = {OxWh.I(Height)}";
+        $"Width = {Width}, Height = {Height}";
 
     public bool IsEmpty =>
-        Width is OxWidth.None
-        && Height is OxWidth.None;
+        Width is 0
+        && Height is 0;
 
-    public static readonly OxSize Empty = new(0, 0);
+    public static readonly OxSize Empty = new((short)0, 0);
 }

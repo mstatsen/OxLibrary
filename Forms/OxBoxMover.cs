@@ -66,7 +66,7 @@ public class OxBoxMover
             case FormWindowState.Maximized when !LastMousePosition.Y.Equals(e.Y):
                 form.SetState(FormWindowState.Normal);
                 break;
-            case FormWindowState.Normal when OxWh.Less(Box.PointToScreen(e.Location).Y, OxWh.W0):
+            case FormWindowState.Normal when Box.PointToScreen(e.Location).Y < 0:
                 form.SetState(FormWindowState.Maximized);
                 break;
         }

@@ -10,7 +10,7 @@ namespace OxLibrary.BitmapWorker
                 Position = 0
             };
 
-        private readonly static OxSize BitmapBoxSizeForBase64 = new(OxWh.W220, OxWh.W107);
+        private readonly static OxSize BitmapBoxSizeForBase64 = new(220, 107);
 
         public static string BitmapToBase64(Bitmap? bitmap)
         {

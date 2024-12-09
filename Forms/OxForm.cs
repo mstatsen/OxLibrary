@@ -15,7 +15,7 @@ public class OxForm<TFormPanel> :
 {
     public TFormPanel FormPanel { get; internal set; }
     public OxHeader Header => FormPanel.Header;
-    public OxWidth HeaderHeight
+    public short HeaderHeight
     {
         get => FormPanel.HeaderHeight;
         set => FormPanel.HeaderHeight = value;
@@ -69,17 +69,18 @@ public class OxForm<TFormPanel> :
     {
         Screen screen = Screen.FromControl(this);
         Location = new(
-            OxWh.Add(
-                OxWh.W(screen.Bounds.Left),
-                OxWh.Half(OxWh.Sub(screen.WorkingArea.Width, Width)
-                )
+            (short)
+            (
+                screen.Bounds.Left +
+                (screen.WorkingArea.Width - Width) / 2
             ),
-            OxWh.Add(
-                OxWh.W(screen.Bounds.Top),
-                OxWh.Half(OxWh.Sub(screen.WorkingArea.Height, Height))
+            (short)
+            (
+                screen.Bounds.Top +
+                (screen.WorkingArea.Height - Height) / 2
             )
         );
-        Size = new(Width, Height);
+        Size = new((short)Width, (short)Height);
     }
 
     protected virtual void SetUpForm()
@@ -108,8 +109,8 @@ public class OxForm<TFormPanel> :
         MaximumSize = OxControlHelper.ScreenSize(this);
         OxSize wantedMinimumSize = WantedMinimumSize;
         MinimumSize = new(
-            OxWh.Min(wantedMinimumSize.Width, MaximumSize.Width),
-            OxWh.Min(wantedMinimumSize.Height, MaximumSize.Height)
+            Math.Min(wantedMinimumSize.Width, MaximumSize.Width),
+            Math.Min(wantedMinimumSize.Height, MaximumSize.Height)
         );
         WindowState = state;
         Realign();
@@ -132,13 +133,13 @@ public class OxForm<TFormPanel> :
     }
 
     public virtual OxSize WantedMinimumSize =>
-        new(OxWh.W640, OxWh.W480);
+        new(640, 480);
 
     private void PlaceFormPanel()
     {
         FormPanel.Parent = this;
-        FormPanel.Location = new(OxWh.W0, OxWh.W0);
-        FormPanel.Size = new(Width, Height);
+        FormPanel.Location = new(0, 0);
+        FormPanel.Size = new((short)Width, (short)Height);
     }
 
     private bool canMaximize = true;
@@ -179,9 +180,9 @@ public class OxForm<TFormPanel> :
     private void SetMargins()
     {
         Margin.Size =
-            Sizable
-                ? OxWh.W1
-                : OxWh.W0;
+            (short)(Sizable
+                ? 1
+                : 0);
     }
 
     protected override void OnShown(EventArgs e)
@@ -266,34 +267,34 @@ public class OxForm<TFormPanel> :
         set => Manager.Parent = value;
     }
 
-    public new OxWidth Width
+    public new short Width
     {
         get => Manager.Width;
         set => Manager.Width = value;
     }
 
-    public new OxWidth Height
+    public new short Height
     {
         get => Manager.Height;
         set => Manager.Height = value;
     }
 
-    public new OxWidth Top
+    public new short Top
     {
         get => Manager.Top;
         set => Manager.Top = value;
     }
 
-    public new OxWidth Left
+    public new short Left
     {
         get => Manager.Left;
         set => Manager.Left = value;
     }
 
-    public new OxWidth Bottom =>
+    public new short Bottom =>
         Manager.Bottom;
 
-    public new OxWidth Right =>
+    public new short Right =>
         Manager.Right;
 
     public new OxSize Size
@@ -445,10 +446,10 @@ public class OxForm<TFormPanel> :
     public DialogResult ShowAsDialog(Control owner, OxDialogButton buttons = OxDialogButton.OK) =>
         FormPanel.ShowAsDialog(owner, buttons);
 
-    public void SetBorderWidth(OxWidth value) =>
+    public void SetBorderWidth(short value) =>
         FormPanel.SetBorderWidth(value);
 
-    public void SetBorderWidth(OxDock dock, OxWidth value) =>
+    public void SetBorderWidth(OxDock dock, short value) =>
         FormPanel.SetBorderWidth(dock, value);
 
     public void AddHandler(OxHandlerType type, Delegate handler) =>

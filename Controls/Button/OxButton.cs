@@ -12,10 +12,10 @@ public class OxButton : OxIconButton
         CutByParentWidth = true
     };
 
-    private readonly OxWidth AutoSizePadding = OxWh.W4;
+    private readonly short AutoSizePadding = 4;
 
-    public static readonly OxWidth DefaultWidth = OxWh.W100;
-    public static readonly OxWidth DefaultHeight = OxWh.W24;
+    public static readonly short DefaultWidth = 100;
+    public static readonly short DefaultHeight = 24;
 
     public OxButton() : base() { }
     public OxButton(string text, Bitmap? icon) : base(icon, DefaultHeight)
@@ -45,7 +45,7 @@ public class OxButton : OxIconButton
     protected override void PrepareInnerComponents()
     {
         base.PrepareInnerComponents();
-        Picture.Width = OxWh.W16;
+        Picture.Width = 16;
         Picture.Dock = OxDock.Left;
         Picture.Stretch = true;
         Label.Parent = this;
@@ -72,15 +72,8 @@ public class OxButton : OxIconButton
         if (AutoSize)
         {
             Padding.Left = AutoSizePadding;
-            OxWidth textWidth =
-                OxWh.Add(
-                    OxWh.Add(
-                        OxTextHelper.GetTextWidth(Text, Label.Font), 
-                        OxWh.Double(AutoSizePadding)
-                    ),
-                    Borders.Horizontal
-                );
-            Width = OxWh.Add(RealPictureWidth, textWidth);
+            short textWidth = (short)(OxTextHelper.GetTextWidth(Text, Label.Font) + AutoSizePadding * 2 + Borders.Horizontal);
+            Width = (short)(RealPictureWidth + textWidth);
             Label.Width = textWidth;
         }
 
@@ -88,15 +81,15 @@ public class OxButton : OxIconButton
 
         if (!AutoSize)
         {
-            OxWidth calcedWidth = OxWh.A(RealPictureWidth, RealLabelWidth);
+            short calcedWidth = (short)(RealPictureWidth + RealLabelWidth);
 
-            if (OxWh.Greater(calcedWidth, Width))
+            if (calcedWidth > Width)
             {
-                Label.Width = OxWh.S(Width, RealPictureWidth);
+                Label.Width = (short)(Width - RealPictureWidth);
                 calcedWidth = Width;
             }
 
-            Padding.Left = OxWh.Half(OxWh.S(Width, calcedWidth));
+            Padding.Left = (short)((Width - calcedWidth) / 2);
         }
     }
 
@@ -106,14 +99,14 @@ public class OxButton : OxIconButton
         RecalcComponents();
     }
 
-    private OxWidth RealPictureWidth =>
+    private short RealPictureWidth =>
         //Picture.Visible
         //    ? 
         Picture.Width
-            //: OxWh.W0
+            //: 0
             ;
 
-    private OxWidth RealLabelWidth =>
+    private short RealLabelWidth =>
         Label.Width;
 
     public override void OnSizeChanged(OxSizeChangedEventArgs e)

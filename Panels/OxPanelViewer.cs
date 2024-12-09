@@ -14,7 +14,7 @@ namespace OxLibrary.Panels
             BaseColor = ContentPanel.BaseColor;
             contentPanel.Parent = FormPanel;
             Size = ContentPanel.Size;
-            Padding.Size = OxWh.W4;
+            Padding.Size = 4;
             contentPanel.Colors.BaseColorChanged += BaseColorChangedHandler;
         }
 

@@ -9,7 +9,7 @@ namespace OxLibrary.Panels
             Color.Transparent;
 
         protected override void SetToolBarPaddings() =>
-            Padding.Size = OxWh.W0;
+            Padding.Size = 0;
 
         private new OxIconButton AddButton(OxIconButton button, bool? startGroup = null, bool InsertAsFirst = false) =>
             base.AddButton(button, startGroup, InsertAsFirst);

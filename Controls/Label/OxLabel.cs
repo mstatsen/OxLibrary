@@ -65,17 +65,17 @@ public class OxLabel :
             return;
         }
             
-        OxWidth labelRight = OxWh.Add(Left, OxTextHelper.GetTextWidth(calcedText, Font));
+        short labelRight = (short)(Left + OxTextHelper.GetTextWidth(calcedText, Font));
 
-        while (OxWh.GreaterOrEquals(labelRight, Parent.OuterControlZone.Right)
+        while (labelRight >=  Parent.OuterControlZone.Right
             && calcedText.Length > 4)
         {
             calcedText = $"{calcedText.Remove(calcedText.Length - 4)}...";
-            labelRight = OxWh.Add(Left, OxTextHelper.GetTextWidth(calcedText, Font));
+            labelRight = (short)(Left + OxTextHelper.GetTextWidth(calcedText, Font));
         }
 
         base.Text = calcedText;
-        Width = OxWh.S(labelRight, Left);
+        Width = (short)(labelRight - Left);
     }
 
     private string text = string.Empty;
@@ -158,34 +158,34 @@ public class OxLabel :
         set => Manager.Parent = value;
     }
 
-    public new OxWidth Width
+    public new short Width
     {
         get => Manager.Width;
         set => Manager.Width = value;
     }
 
-    public new OxWidth Height
+    public new short Height
     {
         get => Manager.Height;
         set => Manager.Height = value;
     }
 
-    public new OxWidth Top
+    public new short Top
     {
         get => Manager.Top;
         set => Manager.Top = value;
     }
 
-    public new OxWidth Left
+    public new short Left
     {
         get => Manager.Left;
         set => Manager.Left = value;
     }
 
-    public new OxWidth Bottom =>
+    public new short Bottom =>
         Manager.Bottom;
 
-    public new OxWidth Right =>
+    public new short Right =>
         Manager.Right;
 
     public new OxSize Size

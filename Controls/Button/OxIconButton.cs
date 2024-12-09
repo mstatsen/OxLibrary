@@ -11,7 +11,7 @@ public class OxIconButton : OxClickFrame
         };
 
     public OxIconButton() : base() { }
-    public OxIconButton(Bitmap? icon, OxWidth Size) : base(new(Size, Size))
+    public OxIconButton(Bitmap? icon, short Size) : base(new(Size, Size))
     {
         Icon = icon;
     }
@@ -35,7 +35,7 @@ public class OxIconButton : OxClickFrame
         Picture.Image = value;
 
     /*
-    public OxWidth IconPadding
+    public short IconPadding
     {
         get => Picture.PicturePadding;
         set => Picture.PicturePadding = value;

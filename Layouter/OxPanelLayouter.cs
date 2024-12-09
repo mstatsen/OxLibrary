@@ -61,8 +61,8 @@ namespace OxLibrary.Panels
 
         private void SetSizes()
         {
-            Padding.TopInt = 18;
-            Padding.BottomInt = 18;
+            Padding.Top = 18;
+            Padding.Bottom = 18;
         }
 
         private void PlacePanel(OxPanel panel)
@@ -199,13 +199,13 @@ namespace OxLibrary.Panels
             }
 
             CalcedColumnCount = 0;
-            OxWidth calcedWidth = OxWh.W0;
+            short calcedWidth = 0;
 
             foreach (OxPanel panel in placedPanels)
             {
-                calcedWidth |= panel.Width;
+                calcedWidth += panel.Width;
 
-                if (OxWh.GreaterOrEquals(calcedWidth, Width))
+                if (calcedWidth >= Width)
                     break;
                 else
                     CalcedColumnCount++;
@@ -269,20 +269,20 @@ namespace OxLibrary.Panels
                 columnsPanels[column].Clear();
         }
 
-        private OxWidth SetColumnSize(OxPanel column)
+        private short SetColumnSize(OxPanel column)
         {
-            OxWidth calcedHeight = OxWh.W0;
-            OxWidth maxWidth = OxWh.W1;
+            short calcedHeight = 0;
+            short maxWidth = 1;
 
             foreach (OxPanel panel in columnsPanels[column])
                 if (panel.Visible)
                 {
-                    calcedHeight |= panel.Height;
-                    maxWidth = OxWh.Max(maxWidth, panel.Width);
+                    calcedHeight += (short)panel.Height;
+                    maxWidth = Math.Max(maxWidth, (short)panel.Width);
                 }
 
             if (panelsAlign is OxPanelsHorizontalAlign.OneColumn)
-                calcedHeight |= OxWh.W48;
+                calcedHeight += 48;
 
             column.Size = new(maxWidth, calcedHeight);
             return calcedHeight;
@@ -302,9 +302,7 @@ namespace OxLibrary.Panels
             {
                 SetColumnsSize();
                 OxSize columnsSize = GetSumColumnsSize();
-                columnsSize.Height +=
-                    Padding.TopInt
-                    + Padding.BottomInt;
+                columnsSize.Height += (short)(Padding.Top + Padding.Bottom);
                 Size = columnsSize;
             }
             finally
@@ -318,16 +316,16 @@ namespace OxLibrary.Panels
             if (columns is null)
                 return OxSize.Empty;
 
-            OxWidth sumWidth = OxWh.W0;
-            OxWidth maxColumnHeight = OxWh.W0;
+            short sumWidth = 0;
+            short maxColumnHeight = 0;
 
             foreach (OxPanel column in columns)
             {
-                OxWidth columnHeight = SetColumnSize(column);
-                maxColumnHeight = OxWh.Max(maxColumnHeight, columnHeight);
+                short columnHeight = SetColumnSize(column);
+                maxColumnHeight = Math.Max(maxColumnHeight, columnHeight);
 
                 if (columnsPanels[column].Count is not 0)
-                    sumWidth |= column.Width;
+                    sumWidth += (short)column.Width;
             }
 
             return new(sumWidth, maxColumnHeight);
@@ -344,14 +342,14 @@ namespace OxLibrary.Panels
             switch (panelsAlign)
             {
                 case OxPanelsHorizontalAlign.Left:
-                    Padding.LeftInt = 0;
+                    Padding.Left = 0;
                     break;
                 case OxPanelsHorizontalAlign.Center:
                 case OxPanelsHorizontalAlign.Right:
-                    Padding.LeftInt = (Width - GetSumColumnsSize().Width) / 2;
+                    Padding.Left = (short)(((short)Width - GetSumColumnsSize().Width)/ 2);
                     break;
                 case OxPanelsHorizontalAlign.OneColumn:
-                    Padding.HorizontalInt = 0;
+                    Padding.Horizontal = 0;
                     break;
             }
         }
@@ -398,10 +396,10 @@ namespace OxLibrary.Panels
         }
 
         private void SetTopPadding() => 
-            Padding.TopInt =
-                panelsAlign is OxPanelsHorizontalAlign.OneColumn
+            Padding.Top =
+                (short)(panelsAlign is OxPanelsHorizontalAlign.OneColumn
                     ? 16
-                    : 18;
+                    : 18);
 
         protected void UpdateParent() =>
             Parent?.Update();

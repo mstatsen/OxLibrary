@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Controls;
+using OxLibrary.Interfaces;
 using OxLibrary.Panels;
 
 namespace OxLibrary;
@@ -10,6 +11,10 @@ public static class OxControlHelper
             control.Font.GetHeight()
                 * control.Font.FontFamily.GetCellAscent(control.Font.Style)
                 / control.Font.FontFamily.GetLineSpacing(control.Font.Style));
+
+    public static T? AlignByBaseLineOx<T>(IOxControl baseControl, T? aligningControl)
+        where T : Control =>
+        AlignByBaseLine<T>((Control)baseControl, aligningControl);
 
     public static T? AlignByBaseLine<T>(Control baseControl,
         T? aligningControl)

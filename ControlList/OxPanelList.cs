@@ -16,15 +16,15 @@ public class OxPanelList<TPanel> : List<TPanel>
             ? this[0]
             : default!;
 
-    public OxWidth Bottom
+    public short Bottom
     {
         get
         {
             TPanel? last = Last;
 
-            return last is null
-                ? OxWh.W0
-                : OxWh.Add(last.Bottom, OxWh.W24);
+            return (short)(last is null
+                ? 0
+                : last.Bottom + 24);
         }
     }
 

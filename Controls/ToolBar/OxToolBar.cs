@@ -7,7 +7,7 @@ namespace OxLibrary.Controls
     public class OxToolBar<TButton> : OxPanel
         where TButton : OxClickFrame, new()
     {
-        private readonly OxWidth DefaultToolBarHeight = OxWh.W24;
+        private readonly short DefaultToolBarHeight = 24;
         private OxClickFrameList<TButton> buttons = new();
 
         public OxToolBar() : base() =>
@@ -21,16 +21,15 @@ namespace OxLibrary.Controls
             if (!OxDockHelper.IsVariableWidth(Dock))
                 return;
 
-            OxWidth calcedWidth = OxWh.W0;
-            calcedWidth = OxWh.A(calcedWidth, Margin.Horizontal);
-            calcedWidth = OxWh.A(calcedWidth, buttons.Width);
+            short calcedWidth = 0;
+            calcedWidth += Margin.Horizontal;
+            calcedWidth += buttons.Width;
 
             foreach (OxPanel separator in Separators.Values)
-                calcedWidth = 
-                    OxWh.A(
-                        OxWh.A(calcedWidth, separator.Width),
-                        separator.Margin.Horizontal
-                    );
+            {
+                calcedWidth += separator.Width;
+                calcedWidth += separator.Margin.Horizontal;
+            }
 
             Width = calcedWidth;
         }
@@ -39,13 +38,13 @@ namespace OxLibrary.Controls
         {
             base.AfterCreated();
             SetToolBarPaddings();
-            Size = new(Width, DefaultToolBarHeight);
+            Size = new((short)Width, DefaultToolBarHeight);
         }
 
         private readonly Dictionary<TButton, OxPanel> Separators = new();
-        protected virtual OxWidth ButtonMargin => OxWh.W1;
-        protected virtual OxWidth GroupsSeparatorWidth => OxWh.W1;
-        protected virtual OxWidth GroupSeparatorMargin => OxWh.W2;
+        protected virtual short ButtonMargin => 1;
+        protected virtual short GroupsSeparatorWidth => 1;
+        protected virtual short GroupSeparatorMargin => 2;
         public override bool HandleParentPadding => false;
 
         protected bool PlacingButtons { get; private set; } = false;
@@ -89,10 +88,10 @@ namespace OxLibrary.Controls
                     else
                         button.Margin.SetSize(
                             button.Dock,
-                            lastButton is null
+                            (short)(lastButton is null
                             || !lastButton.Dock.Equals(button.Dock)
-                                ? OxWh.W0
-                                : ButtonMargin
+                                ? 0
+                                : ButtonMargin)
                         );
 
                     lastButton = button;
@@ -120,7 +119,7 @@ namespace OxLibrary.Controls
         {
             if (!Separators.TryGetValue(startButton, out var separator))
             {
-                separator = new(new(GroupsSeparatorWidth, OxWh.W0))
+                separator = new(new(GroupsSeparatorWidth, 0))
                 {
                     Dock = startButton.Dock,
                     Parent = startButton.Parent,
@@ -163,15 +162,15 @@ namespace OxLibrary.Controls
 
         protected virtual void SetToolBarPaddings()
         {
-            Padding.Left = OxWh.W0;
-            Padding.Right = OxWh.W1;
-            Padding.Top = OxWh.W2;
-            Padding.Bottom = OxWh.W4;
+            Padding.Left = 0;
+            Padding.Right = 1;
+            Padding.Top = 2;
+            Padding.Bottom = 4;
 
             if (buttons.Last?.Height > Height)
             {
-                Padding.Top = OxWh.W1;
-                Padding.Bottom = OxWh.W1;
+                Padding.Top = 1;
+                Padding.Bottom = 1;
             }
         }
 
@@ -238,7 +237,7 @@ namespace OxLibrary.Controls
                         : GetActionByButton((OxButton)s)
                 )
             );
-            button.Size = new(OxToolbarActionHelper.Width(action), button.Height);
+            button.Size = new(OxToolbarActionHelper.Width(action), (short)button.Height);
             Actions.Add(action, button);
             Buttons.Add(button);
             PlaceButtons();

@@ -25,7 +25,7 @@ namespace OxLibrary.Test
         {
             InitializeComponent();
             //BaseColor = Color.FromArgb(135, 165, 195);
-            //Width = OxWh.W1000;
+            //Width = 1000;
             MoveToScreenCenter();
             
             
@@ -36,11 +36,11 @@ namespace OxLibrary.Test
             };
             toolbar.AddButton(toolBarButton);
             toolBarButton.Click += ToolBarButton_Click;
-            toolBarButton.Height = OxWh.W36;
+            toolBarButton.Height = 36;
             toolbar.Parent = this;
-            toolbar.Margin.Left = OxWh.W1;
+            toolbar.Margin.Left = 1;
             toolbar.BorderVisible = true;
-            toolbar.Padding.Left = OxWh.W4;
+            toolbar.Padding.Left = 4;
 
             card = new OxCard
             {
@@ -49,13 +49,13 @@ namespace OxLibrary.Test
                 Name = "LeftCard",
                 Text = "Left docked card",
                 Dock = OxDock.Top,
-                Height = OxWh.W150,
+                Height = 150,
                 Icon = OxIcons.Tag,
-                Width = OxWh.W400
+                Width = 400
             };
-            card.Margin.Size = OxWh.W10;
-            card.Padding.Size = OxWh.W18;
-            card.HeaderHeight = OxWh.W40;
+            card.Margin.Size = 10;
+            card.Padding.Size = 18;
+            card.HeaderHeight = 40;
 
             frame = new OxFrameWithHeader
             {
@@ -64,59 +64,59 @@ namespace OxLibrary.Test
                 Name = "FillFrame",
                 Text = "Fill-docked frame with header",
                 Dock = OxDock.Fill,
-                Width = OxWh.W400,
-                Height = OxWh.W200
+                Width = 400,
+                Height = 200
             };
             
             bluredCheckBox = new()
             {
                 Parent = card,
-                Left = OxWh.W8,
-                Top = OxWh.W8,
+                Left = 8,
+                Top = 8,
                 Text = "Set parent margin to 4px",
             };
             bluredCheckBox.CheckedChanged += BluredCheckBox_CheckedChanged;
 
             setMarginButton = new OxButton("Set frame dock as Right", OxIcons.Go)
             {
-                Left = OxWh.W8,
-                Top = OxWh.W8,
+                Left = 8,
+                Top = 8,
                 Parent = frame,
             };
-            //setMarginButton.Width = OxWh.W140;
+            //setMarginButton.Width = 140;
             setMarginButton.Click += Button_Click;
             setMarginButton.AutoSize = true;
-            //setMarginButton.Top = OxWh.Add(bluredCheckBox.Bottom, OxWh.W8);
+            //setMarginButton.Top = OxWh.Add(bluredCheckBox.Bottom, 8);
 
             hideCardButton = new OxButton("Hide card", OxIcons.Eye)
             {
                 Parent = frame,
-                Top = OxWh.Add(setMarginButton.Bottom, OxWh.W8),
+                Top = (short)(setMarginButton.Bottom + 8),
                 Left = setMarginButton.Left,
-                Height = OxWh.W24,
-                Width = OxWh.W140
+                Height = 24,
+                Width = 140
             };
             hideCardButton.Click += HideCardButton_Click;
 
             SetFrameMarginSize();
             frame.Click += Frame_Click;
-            Padding.Size = OxWh.W40;
+            Padding.Size = 40;
 
             /*
             colorComboBox = new()
 
             {
                 Parent = frame,
-                Left = OxWh.W8,
-                Top = OxWh.Add(hideCardButton.Bottom, OxWh.W8)
+                Left = 8,
+                Top = OxWh.Add(hideCardButton.Bottom, 8)
             };
 
             countryComboBox = new()
             {
                 Parent = frame,
-                Left = OxWh.W8,
-                Top = OxWh.Add(colorComboBox.Bottom, OxWh.W8),
-                Width = OxWh.W200,
+                Left = 8,
+                Top = OxWh.Add(colorComboBox.Bottom, 8),
+                Width = 200,
             };
             countryComboBox.LoadCountries();
             */
@@ -124,20 +124,20 @@ namespace OxLibrary.Test
             buttonEdit = new()
             {
                 Parent = frame,
-                Left = OxWh.W8,
-                Top = OxWh.Add(hideCardButton.Bottom, OxWh.W8),
-                //Height = OxWh.W70
+                Left = 8,
+                Top = (short)(hideCardButton.Bottom + 8),
+                //Height = 70
             };
             buttonEdit.OnButtonClick += ButtonEdit_OnButtonClick;
 
             textBox = new()
             {
                 Parent = frame,
-                Left = OxWh.W8,
-                Top = OxWh.Add(buttonEdit.Bottom, OxWh.W8),
+                Left = 8,
+                Top = (short)(buttonEdit.Bottom + 8),
                 Multiline = true,
                 WordWrap = true,
-                Height = OxWh.W40
+                Height = 40
             };
            
         }
@@ -177,12 +177,12 @@ namespace OxLibrary.Test
 
         private void SetFrameMarginSize()
         {
-            frame.Margin.Size = bluredCheckBox.Checked ? OxWh.W40 : OxWh.W0;
+            frame.Margin.Size = (short)(bluredCheckBox.Checked ? 40 : 0);
         }
 
         protected override void OnShown(EventArgs e)
         {
-            //Width = OxWh.W800;
+            //Width = 800;
             //WindowState = FormWindowState.Maximized;
             base.OnShown(e);
             //BaseColor = Color.FromArgb(155, 185, 215);

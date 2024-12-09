@@ -4,7 +4,7 @@
     {
         public const string FontFamily = "Calibri Light";
         public const float DefaultFontSize = 11;
-        public static readonly OxWidth ToolBarButtonWidth = OxWh.W100;
+        public static readonly short ToolBarButtonWidth = 100;
         public static readonly Color ElementControlColor = Color.FromArgb(235, 241, 241);
         public static readonly Color DefaultGridRowColor = Color.FromArgb(254, 254, 255);
         public static readonly Color DefaultGridFontColor = Color.Black;
@@ -16,7 +16,7 @@
                 Font = new(FontFamily, 10),
             };
         public static DataGridViewCellStyle Cell_LeftAlignment { get; private set; }
-        public const int DefaultControlHeight = 24;
+        public const short DefaultControlHeight = 24;
 
         public static readonly Color FieldsColor = Color.FromArgb(195, 145, 195);
         public static readonly Color CardColor = DefaultGridRowColor;

@@ -39,7 +39,7 @@ namespace OxLibrary.Controls
         }
 
         private static OxIconButton CreateButton(Bitmap icon, OxDock dock) =>
-            new(icon, OxWh.W14)
+            new(icon, 14)
             {
                 Dock = dock,
                 HiddenBorder = false,
@@ -189,7 +189,7 @@ namespace OxLibrary.Controls
 
         public EventHandler? ValueChanged;
 
-        public OxSpinEdit() : base(new(OxWh.W80, OxWh.W22)) { }
+        public OxSpinEdit() : base(new(80, 22)) { }
 
         public bool ReadOnly
         {

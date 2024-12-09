@@ -6,18 +6,18 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
 {
     public static OxBorders operator +(OxBorders left, OxBorders right) =>
         new(
-            OxWh.A(left.Top, right.Top),
-            OxWh.A(left.Left, right.Left),
-            OxWh.A(left.Bottom, right.Bottom),
-            OxWh.A(left.Right, right.Right)
+            (short)(left.Top + right.Top),
+            (short)(left.Left + right.Left),
+            (short)(left.Bottom + right.Bottom),
+            (short)(left.Right + right.Right)
         );
 
     public static OxBorders operator -(OxBorders left, OxBorders right) =>
         new(
-            OxWh.S(left.Top, right.Top),
-            OxWh.S(left.Left, right.Left),
-            OxWh.S(left.Bottom, right.Bottom),
-            OxWh.S(left.Right, right.Right)
+            (short)(left.Top - right.Top),
+            (short)(left.Left - right.Left),
+            (short)(left.Bottom - right.Bottom),
+            (short)(left.Right - right.Right)
         );
 
     public void Draw(Graphics g, OxRectangle bounds, Color color)
@@ -36,10 +36,10 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
             switch (border.Key)
             {
                 case OxDock.Right:
-                    borderBounds.X = OxWh.S(borderBounds.Right, border.Value.Size);
+                    borderBounds.X = (short)(borderBounds.Right - border.Value.Size);
                     break;
                 case OxDock.Bottom:
-                    borderBounds.Y = OxWh.S(borderBounds.Bottom, border.Value.Size);
+                    borderBounds.Y = (short)(borderBounds.Bottom - border.Value.Size);
                     break;
             }
 
@@ -68,9 +68,9 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
         );
     }
 
-    public bool SetSize(OxDock dock, OxWidth size)
+    public bool SetSize(OxDock dock, short size)
     {
-        OxWidth oldSize = this[dock].Size;
+        short oldSize = this[dock].Size;
 
         if (oldSize.Equals(size))
             return false;
@@ -81,7 +81,7 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
         return true;
     }
 
-    private void SetSize(OxWidth size)
+    private void SetSize(short size)
     {
         SizeChanging = true;
         OxBorders oldBorders = new(this);
@@ -99,7 +99,7 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
         NotifyAboutSizeChanged(oldBorders);
     }
 
-    private OxWidth GetSize(OxDock dock) =>
+    private short GetSize(OxDock dock) =>
         this[dock].Size;
 
     public OxBorders()
@@ -115,34 +115,18 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
             Add(border.Key, new(border.Value));
     }
 
-    public OxBorders(OxWidth top, OxWidth left, OxWidth bottom, OxWidth right) : this() => 
+    public OxBorders(short top, short left, short bottom, short right) : this() => 
         SetSize(top, left, bottom, right);
 
-    public int LeftInt
-    {
-        get => OxWh.I(Left);
-        set => Left = OxWh.W(value);
-    }
-
-    public OxWidth Left
+    public short Left
     {
         get => GetSize(OxDock.Left);
         set => SetSize(OxDock.Left, value);
     }
 
-    public int HorizontalInt
+    public short Horizontal
     {
-        get => LeftInt;
-        set
-        {
-            LeftInt = value;
-            RightInt = value;
-        }
-    }
-
-    public OxWidth Horizontal
-    {
-        get => OxWh.A(Left, Right);
+        get => (short)(Left + Right);
         set
         {
             Left = value;
@@ -150,21 +134,15 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
         }
     }
 
-    public int TopInt
-    {
-        get => OxWh.I(Top);
-        set => Top = OxWh.W(value);
-    }
-
-    public OxWidth Top
+    public short Top
     {
         get => GetSize(OxDock.Top);
         set => SetSize(OxDock.Top, value);
     }
 
-    public OxWidth Vertical
+    public short Vertical
     {
-        get => OxWh.A(Top, Bottom);
+        get => (short)(Top + Bottom);
         set
         {
             Top = value;
@@ -172,7 +150,7 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
         }
     }
 
-    public OxWidth ByDockVariable(OxDockVariable variable) =>
+    public short ByDockVariable(OxDockVariable variable) =>
         variable switch
         {
             OxDockVariable.Width =>
@@ -183,56 +161,30 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
                 Size
         };
 
-    public int RightInt
-    {
-        get => OxWh.I(Right);
-        set => Right = OxWh.W(value);
-    }
-
-    public OxWidth Right
+    public short Right
     {
         get => GetSize(OxDock.Right);
         set => SetSize(OxDock.Right, value);
     }
 
-    public int BottomInt
-    {
-        get => OxWh.I(Bottom);
-        set => Bottom = OxWh.W(value);
-    }
-
-    public OxWidth Bottom
+    public short Bottom
     {
         get => GetSize(OxDock.Bottom);
         set => SetSize(OxDock.Bottom, value);
     }
 
-    public OxWidth Size
+    public short Size
     {
         get => GetSize(OxDock.Left);
         set => SetSize(value);
     }
 
-    public int SizeInt
-    {
-        get => OxWh.I(Size);
-        set => Size = OxWh.W(value);
-    }
-
-    public void SetSize(OxWidth top, OxWidth left, OxWidth bottom, OxWidth right)
+    public void SetSize(short top, short left, short bottom, short right)
     {
         Top = top;
         Left = left;
         Bottom = bottom;
         Right = right;
-    }
-
-    public void SetSize(int top, int left, int bottom, int right)
-    {
-        TopInt = top;
-        LeftInt = left;
-        BottomInt = bottom;
-        RightInt = right;
     }
 
     public bool Visible(OxDock dock) => 
@@ -300,8 +252,8 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
     }
 
     public override string ToString() =>
-        $"Left = {OxWh.I(Left)}\n"
-        + $"Top = {OxWh.I(Top)}\n"
-        + $"Right = {OxWh.I(Right)}\n"
-        + $"Bottom = {OxWh.I(Bottom)}\n";
+        $"Left = {Left}\n"
+        + $"Top = {Top}\n"
+        + $"Right = {Right}\n"
+        + $"Bottom = {Bottom}\n";
 }

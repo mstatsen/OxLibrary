@@ -17,7 +17,7 @@ namespace OxLibrary.Panels
         protected override Bitmap? GetIcon() => 
             Header.Icon;
 
-        public OxWidth HeaderHeight 
+        public short HeaderHeight 
         { 
             get => Header.Height;
             set => Header.Height = value; 
@@ -55,11 +55,11 @@ namespace OxLibrary.Panels
         }
 
         /*
-        protected override OxWidth GetCalcedHeight() => 
+        protected override short GetCalcedHeight() => 
             base.GetCalcedHeight() 
             | (HeaderVisible 
                 ? HeaderHeight 
-                : OxWh.W0);
+                : 0);
         */
 
         protected override void PrepareDialog(OxPanelViewer dialog)

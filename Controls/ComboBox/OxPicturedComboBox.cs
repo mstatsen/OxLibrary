@@ -29,7 +29,7 @@ public class OxPicturedComboBox<T> : OxComboBox<T>
 
             if (picture is not null)
                 e.Graphics.DrawImage(
-                    OxBitmapWorker.BoxingImage(picture, new(e.Bounds.Height, e.Bounds.Height)),
+                    OxBitmapWorker.BoxingImage(picture, new((short)e.Bounds.Height, (short)e.Bounds.Height)),
                     e.Bounds.X + ImageLeft,
                     e.Bounds.Y
                 );

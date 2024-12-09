@@ -79,24 +79,21 @@ internal class OxControlAligner
             return;
 
         if (control.Dock is OxDock.Right)
-            controlBounds.X = OxWh.A(controlBounds.X, paddingBox.Padding.Right);
-        else controlBounds.X = OxWh.S(controlBounds.X, paddingBox.Padding.Left);
+            controlBounds.X = (short)(controlBounds.X + paddingBox.Padding.Right);
+        else controlBounds.X = (short)(controlBounds.X - paddingBox.Padding.Left);
 
         if (control.Dock is OxDock.Bottom)
-            controlBounds.Y = OxWh.A(controlBounds.Y, paddingBox.Padding.Bottom);
-        else controlBounds.Y = OxWh.S(controlBounds.Y, paddingBox.Padding.Top);
+            controlBounds.Y = (short)(controlBounds.Y + paddingBox.Padding.Bottom);
+        else controlBounds.Y = (short)(controlBounds.Y - paddingBox.Padding.Top);
 
         if (OxDockHelper.TouchHeight(control.Dock))
         {
-            controlBounds.Width = OxWh.A(controlBounds.Width, paddingBox.Padding.Left);
-            controlBounds.Width = OxWh.A(controlBounds.Width, paddingBox.Padding.Right);
+            controlBounds.Width = (short)(controlBounds.Width + paddingBox.Padding.Left);
+            controlBounds.Width = (short)(controlBounds.Width + paddingBox.Padding.Right);
         }
 
         if (OxDockHelper.TouchWidth(control.Dock))
-        {
-            controlBounds.Height = OxWh.A(controlBounds.Height, paddingBox.Padding.Top);
-            controlBounds.Height = OxWh.A(controlBounds.Height, paddingBox.Padding.Bottom);
-        }
+            controlBounds.Height = (short)(controlBounds.Height + paddingBox.Padding.Top + paddingBox.Padding.Bottom);
     }
 
     private OxRectangle CalcedDockedBounds(IOxControl control)
@@ -109,13 +106,13 @@ internal class OxControlAligner
         if (OxDockHelper.Variable(control.Dock) is not OxDockVariable.Height)
             controlBounds.Height = ControlZone.Height;
 
-        controlBounds.X = control.Dock is OxDock.Right
-            ? OxWh.S(ControlZone.Right, controlBounds.Width)
-            : ControlZone.X;
+        controlBounds.X = (short)(control.Dock is OxDock.Right
+            ? ControlZone.Right - controlBounds.Width
+            : ControlZone.X);
 
-        controlBounds.Y = control.Dock is OxDock.Bottom
-            ? OxWh.S(ControlZone.Bottom, controlBounds.Height)
-            : ControlZone.Y;
+        controlBounds.Y = (short)(control.Dock is OxDock.Bottom
+            ? ControlZone.Bottom - controlBounds.Height
+            : ControlZone.Y);
 
         HandleParentPadding(control, controlBounds);
 
@@ -125,18 +122,18 @@ internal class OxControlAligner
     private OxRectangle CalcedUndockedBounds(IOxControl control)
     {
         //control.ZBounds.RestoreBounds();
-        OxWidth left = OxWh.R(control.ZBounds.Left, InnerControlZone.X, ControlZone.X);
-        OxWidth top = OxWh.R(control.ZBounds.Top, InnerControlZone.Y, ControlZone.Y);
-        OxWidth width = OxWh.W(control.ZBounds.Width);
-        OxWidth right = OxWh.A(left, width);
-        OxWidth height = OxWh.W(control.ZBounds.Height);
-        OxWidth bottom = OxWh.A(top, height);
+        short left = (short)(control.ZBounds.Left - InnerControlZone.X + ControlZone.X);
+        short top = (short)(control.ZBounds.Top - InnerControlZone.Y + ControlZone.Y);
+        short width = control.ZBounds.Width;
+        short right = (short)(left + width);
+        short height = control.ZBounds.Height;
+        short bottom = (short)(top + height);
 
-        if (OxWh.Greater(right, ControlZone.Right))
-            width = OxWh.S(ControlZone.Right, left);
+        if (right > ControlZone.Right)
+            width = (short)(ControlZone.Right - left);
 
-        if (OxWh.Greater(bottom, ControlZone.Bottom))
-            height = OxWh.S(ControlZone.Bottom, top);
+        if (bottom > ControlZone.Bottom)
+            height = (short)(ControlZone.Bottom - top);
 
         return new(left, top, width, height);
     }
@@ -153,15 +150,15 @@ internal class OxControlAligner
         {
             control.ZBounds.RestoreBounds();
 
-            if (control.ZBounds.Left.Equals(newBounds.Z_X)
-                && control.ZBounds.Top.Equals(newBounds.Z_Y)
-                && control.ZBounds.Width.Equals(newBounds.Z_Width)
-                && control.ZBounds.Height.Equals(newBounds.Z_Height))
+            if (control.ZBounds.Left.Equals(newBounds.X)
+                && control.ZBounds.Top.Equals(newBounds.Y)
+                && control.ZBounds.Width.Equals(newBounds.Width)
+                && control.ZBounds.Height.Equals(newBounds.Height))
                 return;
         }
 
-        control.ZBounds.Location = newBounds.Z_Location;
-        control.ZBounds.Size = newBounds.Z_Size;
+        control.ZBounds.Location = newBounds.Location;
+        control.ZBounds.Size = newBounds.Size;
 
         if (control is IOxBox box)
             box.Realign();
@@ -175,17 +172,17 @@ internal class OxControlAligner
                 ControlZone.Clear(); //Use only one fill control in one box
                 return;
             case OxDock.Left:
-                ControlZone.X = OxWh.A(ControlZone.X, control.ZBounds.Width);
+                ControlZone.X = (short)(ControlZone.X + control.ZBounds.Width);
                 break;
             case OxDock.Top:
-                ControlZone.Y = OxWh.A(ControlZone.Y, control.ZBounds.Height);
+                ControlZone.Y = (short)(ControlZone.Y + control.ZBounds.Height);
                 break;
         }
 
         if (OxDockHelper.Variable(control.Dock) is OxDockVariable.Width)
-            ControlZone.Width = OxWh.S(ControlZone.Width, control.ZBounds.Width);
+            ControlZone.Width = (short)(ControlZone.Width - control.ZBounds.Width);
         else
             if (OxDockHelper.Variable(control.Dock) is OxDockVariable.Height)
-                ControlZone.Height = OxWh.S(ControlZone.Height, control.ZBounds.Height);
+                ControlZone.Height = (short)(ControlZone.Height - control.ZBounds.Height);
     }
 }

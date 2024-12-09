@@ -40,7 +40,7 @@ public class OxPictureContainer : OxClickFrame
                 return;
             }
 
-            buttonsParent.Height = OxPictureActionHelper.DefaultHeight;
+            buttonsParent.Height = (OxPictureActionHelper.DefaultHeight);
             RecalcButtonsSize();
         }
         finally
@@ -54,14 +54,14 @@ public class OxPictureContainer : OxClickFrame
         if (Image is null)
             return;
 
-        OxWidth calcedWidth;
+        short calcedWidth;
 
         foreach (OxClickFrame button in Buttons)
         {
-            calcedWidth = 
-                OxWh.Div(buttonsParent.Width, Buttons.Count) 
-                | OxWh.Mul(OxPictureActionHelper.ButtonMargin,Buttons.Count)
-                | OxWh.W1;
+            calcedWidth =
+                (short)((buttonsParent.Width / Buttons.Count) 
+                + OxPictureActionHelper.ButtonMargin * Buttons.Count
+                + 1);
 
             button.Size = new(
                 calcedWidth,
@@ -98,7 +98,7 @@ public class OxPictureContainer : OxClickFrame
         };
 
         button.Margin.Left = OxPictureActionHelper.ButtonMargin;
-        button.Margin.Top = OxWh.W1;
+        button.Margin.Top = 1;
         button.Click += ButtonClick;
         Actions.Add(action, button);
         Buttons.Add(button);
@@ -154,7 +154,7 @@ public class OxPictureContainer : OxClickFrame
         Dock = OxDock.Fill,
         Visible = false,
         Stretch = true,
-        PicturePadding = OxWh.W0,
+        PicturePadding = 0,
         Cursor = Cursors.Hand,
         AlwaysEnabled = true
     };

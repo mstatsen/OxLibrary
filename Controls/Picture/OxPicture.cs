@@ -22,7 +22,7 @@ public partial class OxPicture : OxPanel
         set
         {
             stretch = value;
-            picture.Height = value ? Height : pictureSize;
+            picture.Height = value ? Height : (short)pictureSize;
             CorrectPicturePosition();
         }
     }
@@ -47,29 +47,29 @@ public partial class OxPicture : OxPanel
     public OxPicture()
     {
         BackColor = Color.Transparent;
-        Width = OxWh.W24;
-        Height = OxWh.W24;
-        Padding.Size = OxWh.W0;
+        Width = 24;
+        Height = 24;
+        Padding.Size = 0;
     }
 
-    private OxWidth pictureSize = OxWh.W16;
-    public OxWidth PictureSize
+    private short pictureSize = 16;
+    public short PictureSize
     {
         get => pictureSize;
         set => SetPictureSize(value);
     }
 
-    public OxWidth PicturePadding
+    public short PicturePadding
     {
         get => Padding.Size;
         set
         {
             Padding.Size = value;
-            PictureSize = OxWh.Sub(Height, Padding.Vertical);
+            PictureSize = (short)((short)Height - Padding.Vertical);
         }
     }
 
-    private void SetPictureSize(OxWidth value)
+    private void SetPictureSize(short value)
     {
         if (pictureCorrectionProcess)
             return;
@@ -90,8 +90,8 @@ public partial class OxPicture : OxPanel
             return;
         pictureCorrectionProcess = true;
         SetImage(Image);
-        picture.Left = OxWh.Div(OxWh.Sub(Width, picture.Width), OxWh.W2);
-        picture.Top = OxWh.Div(OxWh.Sub(Height, picture.Height), OxWh.W2);
+        picture.Left = (short)((Width - picture.Width) / 2);
+        picture.Top = (short)((Height - picture.Height) / 2);
         pictureCorrectionProcess = false;
     }
 
@@ -149,12 +149,12 @@ public partial class OxPicture : OxPanel
             return;
         }
 
-        Padding.Vertical = Stretch
-            ? OxWh.W0
-            : OxWh.Div(OxWh.Sub(Height, pictureSize), OxWh.W2);
-        Padding.Horizontal = Stretch
-            ? OxWh.W0
-            : OxWh.Div(OxWh.Sub(Width, pictureSize), OxWh.W2);
+        Padding.Vertical = (short)(Stretch
+            ? 0
+            : (short)(Height - pictureSize) / 2);
+        Padding.Horizontal = (short)(Stretch
+            ? 0
+            : (short)(Width - pictureSize)/ 2);
 
         OxBitmapCalcer bitmapCalcer = new(value, new(pictureSize, pictureSize), Stretch);
         picture.SizeMode = bitmapCalcer.SizeMode;

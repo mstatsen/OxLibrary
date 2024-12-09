@@ -24,9 +24,9 @@ public class OxMessagePanel : OxDialogPanel
 
     public OxMessagePanel() : base()
     {
-        Padding.Size = OxWh.W24;
-        Size = new(OxWh.W240, OxWh.W120);
-        HeaderHeight = OxWh.W30;
+        Padding.Size = 24;
+        Size = new(240, 120);
+        HeaderHeight = 30;
     }
 
     protected override HorizontalAlign FooterButtonsAlign => HorizontalAlign.Center;
@@ -45,11 +45,12 @@ public class OxMessagePanel : OxDialogPanel
         set
         {
             MessageBox.Text = value;
-            MessageBox.Height = OxWh.Max(value.Length / 2, OxWh.W23)
-                + 23 * value.Count(c => c.Equals('\r'));
+            MessageBox.Height = (short)
+                (Math.Max((short)value.Length / 2, 23)
+                + 23 * value.Count(c => c.Equals('\r')));
             Size = new(
-                OxWh.W240,
-                OxWh.Add(MessageBox.Bottom, Padding.Bottom)
+                240,
+                (short)(MessageBox.Bottom + Padding.Bottom)
             );
         }
     }
@@ -58,20 +59,20 @@ public class OxMessagePanel : OxDialogPanel
     {
         if (Form is not null)
         {
-            OxWidth calcedWidth = OxWh.W0;
+            short calcedWidth = 0;
 
             foreach (OxDialogButton button in buttonsDictionary.Keys)
                 if ((DialogButtons & button).Equals(button))
-                    calcedWidth |= OxDialogButtonsHelper.Width(button) | DialogButtonSpace;
+                    calcedWidth += (short)(OxDialogButtonsHelper.Width(button) + DialogButtonSpace);
 
             Size = new(
-                OxWh.Max(calcedWidth | OxWh.W160, Width),
-                OxWh.Max(OxWh.Div(calcedWidth, OxWh.W2), Height)
+                (short)Math.Max(calcedWidth + 160, Width),
+                (short)Math.Max(calcedWidth / 2, Height)
             );
         }
 
         base.PlaceButtons();
     }
 
-    protected override OxWidth FooterButtonHeight => OxWh.W34;
+    protected override short FooterButtonHeight => 34;
 }

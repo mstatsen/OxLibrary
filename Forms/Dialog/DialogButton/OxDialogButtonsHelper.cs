@@ -64,11 +64,8 @@ public static class OxDialogButtonsHelper
             _ => null,
         };
 
-    public static int Z_Width(OxDialogButton button) =>
-        (int)Width(button);
-
-    public static OxWidth Width(OxDialogButton button) =>
-        button is OxDialogButton.ApplyForAll
-            ? OxWh.W140
-            : OxWh.W100;
+    public static short Width(OxDialogButton button) =>
+        (short)(button is OxDialogButton.ApplyForAll
+            ? 140
+            : 100);
 }

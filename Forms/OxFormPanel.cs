@@ -31,7 +31,7 @@ public partial class OxFormPanel :
     public OxFormPanel() : base()
     {
         Dock = OxDock.Fill;
-        SetHeaderHeight(OxWh.W34);
+        SetHeaderHeight(34);
         SetRestoreButtonIconAndTooltip();
         SetBordersSize();
         SetHeaderFont();
@@ -52,9 +52,9 @@ public partial class OxFormPanel :
             new(Header.TitleFont.FontFamily, Header.TitleFont.Size + 1, FontStyle.Bold);
 
     private void SetBordersSize() => 
-        Borders.Size = OxWh.W1;
+        Borders.Size = 1;
 
-    public void SetHeaderHeight(OxWidth height)
+    public void SetHeaderHeight(short height)
     {
         HeaderHeight = height;
         SetButtonsSize();
@@ -86,26 +86,26 @@ public partial class OxFormPanel :
         foreach (OxIconButton button in Header.Buttons)
         {
             button.Parent = null;
-            button.Size = new(OxWh.W44, OxWh.W28);
+            button.Size = new(44, 28);
         }
 
         Header.ToolBar.Buttons.Clear();
         PlaceButtons();
     }
 
-    private readonly OxIconButton closeButton = new(OxIcons.Close, OxWh.W28)
+    private readonly OxIconButton closeButton = new(OxIcons.Close, 28)
     {
         ToolTipText = "Close",
         HoveredColor = Color.Red,
         Name = "FormCloseButton"
     };
-    private readonly OxIconButton restoreButton = new(OxIcons.Restore, OxWh.W28)
+    private readonly OxIconButton restoreButton = new(OxIcons.Restore, 28)
     {
         ToolTipText = "Restore window",
         Default = true,
         Name = "FormRestoreButton"
     };
-    private readonly OxIconButton minimizeButton = new(OxIcons.Minimize, OxWh.W28)
+    private readonly OxIconButton minimizeButton = new(OxIcons.Minimize, 28)
     {
         ToolTipText = "Minimize window",
         Name = "FormMinimizeButton"
@@ -167,16 +167,16 @@ public partial class OxFormPanel :
 
         if (e.XChanged)
         {
-            if (OxWh.Greater(e.NewValue.X, e.OldValue.X))
-                Form.Left = OxWh.A(Form.Left, Left);
-            else Form.Left = OxWh.S(Form.Left, Left);
+            if (e.NewValue.X > e.OldValue.X)
+                Form.Left += Left;
+            else Form.Left -= Left;
         }
 
         if (e.YChanged)
         {
-            if (OxWh.Greater(e.NewValue.Y, e.OldValue.Y))
-                Form.Left = OxWh.A(Form.Top, Top);
-            else Form.Left = OxWh.S(Form.Top, Top);
+            if (e.NewValue.Y > e.OldValue.Y)
+                Form.Top += Top;
+            else Form.Top -= Top;
         }
     }
 
@@ -228,28 +228,28 @@ public partial class OxFormPanel :
             return;
 
         OxPoint newLastMousePosition = new(PointToScreen(e.Location));
-        OxPoint oldSize = new(Width, Height);
+        OxPoint oldSize = new((short)Width, (short)Height);
         OxPoint newSize = new(oldSize.X, oldSize.Y);
         OxPoint delta = new(
-            OxWh.Sub(newLastMousePosition.X, LastMousePosition.X),
-            OxWh.Sub(newLastMousePosition.Y, LastMousePosition.Y)
+            (short)(newLastMousePosition.X - LastMousePosition.X),
+            (short)(newLastMousePosition.Y - LastMousePosition.Y)
         );
 
         if (OxDirectionHelper.ContainsRight(LastDirection))
-            newSize.X = OxWh.Add(newSize.X, delta.X);
+            newSize.X = (short)(newSize.X + delta.X);
         else
         if (OxDirectionHelper.ContainsLeft(LastDirection))
-            newSize.X = OxWh.Sub(newSize.X, delta.X);
+            newSize.X = (short)(newSize.X - delta.X);
 
         if (OxDirectionHelper.ContainsBottom(LastDirection))
-            newSize.Y = OxWh.Add(newSize.Y, delta.Y);
+            newSize.Y = (short)(newSize.Y + delta.Y);
         else
         if (OxDirectionHelper.ContainsTop(LastDirection))
-            newSize.X = OxWh.Sub(newSize.Y, delta.Y);
+            newSize.X = (short)(newSize.Y - delta.Y);
 
         LastMousePosition = newLastMousePosition;
-        newSize.X = OxWh.Max(newSize.X, Form.MinimumSize.Width);
-        newSize.Y = OxWh.Max(newSize.Y, Form.MinimumSize.Height);
+        newSize.X = Math.Max(newSize.X, Form.MinimumSize.Width);
+        newSize.Y = Math.Max(newSize.Y, Form.MinimumSize.Height);
         List<Point> sizePoints = OxBoxMover.WayPoints(oldSize, newSize, 30);
         ResizeProcessing = true;
 
@@ -265,22 +265,10 @@ public partial class OxFormPanel :
 #pragma warning restore CS0618 // Type or member is obsolete
 
                         if (OxDirectionHelper.ContainsLeft(LastDirection))
-                            newLocationStep.X =
-                            OxWh.I(
-                                OxWh.S(
-                                    newLocationStep.X,
-                                    OxWh.S(point.X, Width)
-                                )
-                            );
+                            newLocationStep.X -= point.X - Width;
 
                         if (OxDirectionHelper.ContainsTop(LastDirection))
-                            newLocationStep.Y =
-                            OxWh.I(
-                                OxWh.S(
-                                    newLocationStep.Y,
-                                    OxWh.S(point.Y, Height)
-                                )
-                            );
+                            newLocationStep.Y -= point.Y - Height;
 
                         if (!Form.Location.Equals(newLocationStep))
                             Form.Location = new(newLocationStep);

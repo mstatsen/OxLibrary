@@ -13,8 +13,8 @@ namespace OxLibrary.BitmapWorker
 
         private void CalcParams()
         {
-            ImageSize.Width = OxWh.W(Image.Width);
-            ImageSize.Height = OxWh.W(Image.Height);
+            ImageSize.Width = (short)Image.Width;
+            ImageSize.Height = (short)Image.Height;
 
             if (Stretch && NeedZoom())
                 CalcForZoom();
@@ -43,18 +43,18 @@ namespace OxLibrary.BitmapWorker
 
             if (ImageSize.Width > ImageBox.Width
                 && ImageBox.Width > 0)
-                ImageSize.Width = ImageBox.Width;
+                ImageSize.Width = (short)ImageBox.Width;
             else ImageBox.Width = ImageSize.Width;
 
             if (ImageSize.Height > ImageBox.Height
                 && ImageBox.Height > 0)
-                ImageSize.Height = ImageBox.Height;
+                ImageSize.Height = (short)ImageBox.Height;
             else ImageBox.Height = ImageSize.Height;
         }
 
-        private static double GetZoom(OxWidth imageSize, OxWidth imageBox) =>
-            OxWh.Greater(imageSize, imageBox)
-                ? (double)OxWh.Int(imageSize) / OxWh.Int(imageBox)
+        private static double GetZoom(short imageSize, short imageBox) =>
+            imageSize > imageBox
+                ? (double)imageSize / imageBox
                 : 1;
 
         private void CalcForZoom()
@@ -68,22 +68,22 @@ namespace OxLibrary.BitmapWorker
 
             if (zoom > 1)
             {
-                ImageSize.Width = OxWh.W((int)(ImageSize.Z_Width / zoom));
-                ImageSize.Height = OxWh.W((int)(ImageSize.Z_Height / zoom));
+                ImageSize.Width = (short)(ImageSize.Width / zoom);
+                ImageSize.Height = (short)(ImageSize.Height / zoom);
             }
         }
 
         private void AlignByCenter()
         {
-            ImageBox.X = OxWh.Div(OxWh.Sub(ImageBox.Width, ImageSize.Width), OxWh.W2);
-            ImageBox.Y = OxWh.Div(OxWh.Sub(ImageBox.Height, ImageSize.Height), OxWh.W2);
+            ImageBox.X = (short)((ImageBox.Width - ImageSize.Width) / 2);
+            ImageBox.Y = (short)((ImageBox.Height - ImageSize.Height) / 2);
         }
 
         private Bitmap GetBitmap(OxSize imageSize, OxRectangle coordinates)
         {
             Bitmap resultBitmap = new(
-                OxWh.Int(imageSize.Width),
-                OxWh.Int(imageSize.Height)
+                imageSize.Width,
+                imageSize.Height
             );
             Graphics g = Graphics.FromImage(resultBitmap);
             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
@@ -101,10 +101,10 @@ namespace OxLibrary.BitmapWorker
 
         public Bitmap CroppedBitmap => GetBitmap(
             new(ImageSize.Width, ImageSize.Height),
-            new(OxWh.W0,
-                OxWh.W0,
-                OxWh.Min(ImageBox.Width, ImageSize.Width),
-                OxWh.Min(ImageBox.Height, ImageSize.Height)));
+            new(0,
+                0,
+                Math.Min(ImageBox.Width, ImageSize.Width),
+                Math.Min(ImageBox.Height, ImageSize.Height)));
 
         public Bitmap FullBitmap => GetBitmap(
             new(ImageBox.Width, ImageBox.Height),

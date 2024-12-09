@@ -11,13 +11,13 @@ public class OxButtonEdit : OxPanel
     };
 
     public readonly OxIconButton Button = 
-        new (OxIcons.Elipsis, OxWh.W16)
+        new (OxIcons.Elipsis, 16)
         {
             Dock = OxDock.Right,
             Cursor = Cursors.Default
         };
 
-    public OxButtonEdit() : base(new(OxWh.W120, OxWh.W22)) { }
+    public OxButtonEdit() : base(new(120, 22)) { }
 
     protected override void PrepareInnerComponents() 
     {
@@ -31,10 +31,10 @@ public class OxButtonEdit : OxPanel
         Button.Parent = this;
         Button.BaseColor = BaseColor;
         Button.Size = new(
-            OxWh.Min(OxWh.W26, TextBox.Height - 4), 
+            Math.Min((short)26, (short)(TextBox.Height - 4)),
             TextBox.Height
         );
-        Button.Borders.Left = OxWh.W0;
+        Button.Borders.Left = 0;
         Button.FixedBorderColor = true;
     }
 
@@ -64,8 +64,8 @@ public class OxButtonEdit : OxPanel
 
         if (e.Changed)
         {
-            OxWidth calcedButtonWidth = OxWh.Min(OxWh.W22, TextBox.Height - 4);
-            Button.Size = new(calcedButtonWidth, OxWh.Sub(Height, OxWh.W2));
+            short calcedButtonWidth = (short)Math.Min(22, TextBox.Height - 4);
+            Button.Size = new(calcedButtonWidth, (short)(Height - 2));
             Button.Width = calcedButtonWidth;
         }
     }
