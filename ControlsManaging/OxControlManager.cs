@@ -460,12 +460,6 @@ public class OxControlManager : IOxControlManager
     public OxSize GetPreferredSize(OxSize proposedSize) =>
         new(ManagingControl.GetPreferredSize(proposedSize.Size));
 
-    public void Invalidate(OxRectangle rc) =>
-        ManagingControl.Invalidate(rc.Rectangle);
-
-    public void Invalidate(OxRectangle rc, bool invalidateChildren) =>
-        ManagingControl.Invalidate(rc.Rectangle, invalidateChildren);
-
     public OxSize LogicalToDeviceUnits(OxSize value) =>
         new(ManagingControl.LogicalToDeviceUnits(value.Size));
 }

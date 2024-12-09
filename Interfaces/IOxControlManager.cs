@@ -14,7 +14,6 @@ namespace OxLibrary.Interfaces
         void DoWithSuspendedLayout(Action method);
         Control GetChildAtPoint(OxPoint pt);
         OxWidth Height { get; set; }
-        void Invalidate(OxRectangle rc);
         OxWidth Left { get; set; }
         OxPoint Location { get; set; }
         OxSize MaximumSize { get; set; }

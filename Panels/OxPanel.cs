@@ -460,9 +460,6 @@ public class OxPanel : Panel, IOxPanel
     public Control GetChildAtPoint(OxPoint pt) =>
         Manager.GetChildAtPoint(pt);
 
-    public void Invalidate(OxRectangle rc) =>
-        Manager.Invalidate(rc);
-
     public new event OxDockChangedEvent DockChanged
     {
         add => Manager.DockChanged += value;
@@ -525,10 +522,6 @@ public class OxPanel : Panel, IOxPanel
     private new Control GetChildAtPoint(Point pt, GetChildAtPointSkip skipValue) =>
         base.GetChildAtPoint(pt, skipValue);
 
-#pragma warning disable IDE0060 // Remove unused parameter
-    private new void Invalidate(Rectangle rc, bool invalidateChildren) => 
-        Invalidate(true);
-#pragma warning restore IDE0060 // Remove unused parameter
 #pragma warning restore IDE0051 // Remove unused private members
     protected sealed override void OnDockChanged(EventArgs e) { }
     protected sealed override void OnLocationChanged(EventArgs e) { }
