@@ -7,7 +7,6 @@ namespace OxLibrary.Interfaces
     public interface IOxControlManager
     {
         OxWidth Bottom { get; }
-        OxRectangle Bounds { get; set; }
         OxRectangle ClientRectangle { get; }
         OxSize ClientSize { get; set; }
         OxDock Dock { get; set; }

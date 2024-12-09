@@ -227,12 +227,6 @@ public class OxLabel :
     public new OxRectangle ClientRectangle =>
         Manager.ClientRectangle;
 
-    public new OxRectangle Bounds
-    {
-        get => Manager.Bounds;
-        set => Manager.Bounds = value;
-    }
-
     public void DoWithSuspendedLayout(Action method) =>
         Manager.DoWithSuspendedLayout(method);
 
@@ -279,16 +273,11 @@ public class OxLabel :
 
     #region Hidden base methods
 #pragma warning disable IDE0051 // Remove unused private members
-    private new void SetBounds(int x, int y, int width, int height) =>
-        base.SetBounds(x, y, width, height);
-
     private new Size PreferredSize => base.PreferredSize;
     private new Rectangle DisplayRectangle => base.DisplayRectangle;
 
     private new Size GetPreferredSize(Size proposedSize) => base.GetPreferredSize(proposedSize);
     private new Size LogicalToDeviceUnits(Size value) => base.LogicalToDeviceUnits(value);
-    private new void SetBounds(int x, int y, int width, int height, BoundsSpecified specified) =>
-        base.SetBounds(x, y, width, height, specified);
     private new Control GetChildAtPoint(Point pt, GetChildAtPointSkip skipValue) =>
         base.GetChildAtPoint(pt, skipValue);
 

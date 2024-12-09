@@ -117,12 +117,6 @@ public class OxCheckBox :
     public new OxRectangle ClientRectangle =>
         Manager.ClientRectangle;
 
-    public new OxRectangle Bounds
-    {
-        get => Manager.Bounds;
-        set => Manager.Bounds = value;
-    }
-
     public void DoWithSuspendedLayout(Action method) =>
         Manager.DoWithSuspendedLayout(method);
 
@@ -170,16 +164,10 @@ public class OxCheckBox :
 
     #region Hidden base methods
 #pragma warning disable IDE0051 // Remove unused private members
-    private new void SetBounds(int x, int y, int width, int height) =>
-        base.SetBounds(x, y, width, height);
-
     private new Size PreferredSize => base.PreferredSize;
     private new Rectangle DisplayRectangle => base.DisplayRectangle;
     private new Size GetPreferredSize(Size proposedSize) => base.GetPreferredSize(proposedSize);
     private new Size LogicalToDeviceUnits(Size value) => base.LogicalToDeviceUnits(value);
-    private new void SetBounds(int x, int y, int width, int height, BoundsSpecified specified) =>
-        base.SetBounds(x, y, width, height, specified);
-
 #pragma warning restore IDE0051 // Remove unused private members
     protected sealed override void OnDockChanged(EventArgs e) { }
     protected sealed override void OnLocationChanged(EventArgs e) { }
