@@ -7,7 +7,7 @@ namespace OxLibrary;
 
 public static class OxControlHelper
 {
-    private static short GetBaseLine(Control control) =>
+    private static short GetBaseLine(IOxControl control) =>
         OxSH.Div(
             OxSH.Mul(
                 control.Font.GetHeight(),
@@ -15,13 +15,12 @@ public static class OxControlHelper
             ),
             control.Font.FontFamily.GetLineSpacing(control.Font.Style));
 
-    public static T? AlignByBaseLineOx<T>(IOxControl baseControl, T? aligningControl)
-        where T : Control =>
-        AlignByBaseLine<T>((Control)baseControl, aligningControl);
+    public static T? AlignByBaseLine<T>(IOxControl baseControl, T? aligningControl)
+        where T : IOxControl, new() => AlignByBaseLine(baseControl, aligningControl);
 
-    public static T? AlignByBaseLine<T>(Control baseControl,
-        T? aligningControl)
-        where T : Control
+    public static IOxControl? AlignByBaseLine(
+        IOxControl baseControl,
+        IOxControl? aligningControl)
     {
         if (aligningControl is null)
             return null;
@@ -30,15 +29,19 @@ public static class OxControlHelper
             aligningControl switch
             {
                 OxPanel =>
-                    baseControl.Top - (aligningControl.Height - baseControl.Height) / 2,
+                    OxSH.Sub(baseControl.Top, OxSH.Half(aligningControl.Height - baseControl.Height)),
                 _ =>
-                    baseControl is null
-                        ? aligningControl.Top
-                        : baseControl.Top
-                            + GetBaseLine(baseControl)
-                            - GetBaseLine(aligningControl)
-                            + (baseControl is OxLabel ? 0 : 2),
+                    OxSH.IfElse(
+                        baseControl is null,
+                            aligningControl.Top,
+                            baseControl!.Top
+                                + OxSH.Sub(
+                                    GetBaseLine(baseControl), 
+                                    GetBaseLine(aligningControl))
+                                + OxSH.IfElseZero(baseControl is not OxLabel, 2)
+                    )
             };
+
         return aligningControl;
     }
 

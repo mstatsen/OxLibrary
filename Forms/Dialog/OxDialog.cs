@@ -1,4 +1,5 @@
-﻿using OxLibrary.Panels;
+﻿using OxLibrary.Interfaces;
+using OxLibrary.Panels;
 
 namespace OxLibrary.Forms;
 
@@ -39,22 +40,26 @@ public class OxDialog<TDialogPanel> : OxForm<TDialogPanel>
             DialogResult = DialogResult.Cancel;
     }
 
-    public void SetKeyUpHandler(Control control) =>
+    public void SetKeyUpHandler(IOxControl control) =>
         control.KeyUp += DialogControlKeyUpHandler;
 
     private void DialogControlKeyUpHandler(object? sender, KeyEventArgs e)
     {
-        if (!e.Handled)
+        if (e.Handled)
+            return;
+        
+        switch (e.KeyCode)
         {
-            if (e.KeyCode is Keys.Enter)
+            case Keys.Enter:
                 DialogResult = DialogResult.OK;
-            else
-            if (e.KeyCode is Keys.Escape)
+                break;
+            case Keys.Escape:
                 DialogResult = DialogResult.Cancel;
+                break;
         }
     }
 
-    public Control? FirstFocusControl { get; set; }
+    public IOxControl? FirstFocusControl { get; set; }
 
     protected override void OnFormClosing(FormClosingEventArgs e)
     {

@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Geometry;
+using OxLibrary.Interfaces;
 
 namespace OxLibrary.Panels
 {
@@ -151,10 +152,12 @@ namespace OxLibrary.Panels
         public void PerformClick() =>
             InvokeOnClick(this, null);
 
-        protected void SetClickHandler(Control control) =>
-            control.Click += (s, e) => PerformClick();
+        protected void SetClickHandler(IOxControl control) =>
+            control.Click += ControlClickHandler;
+        private void ControlClickHandler(object? sender, EventArgs e) =>
+            PerformClick();
 
-        public void SetHoverHandlers(Control control)
+        public void SetHoverHandlers(IOxControl control)
         {
             control.MouseEnter += MouseEnterHandler;
             control.MouseLeave += MouseLeaveHandler;

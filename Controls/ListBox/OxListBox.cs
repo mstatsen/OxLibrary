@@ -133,7 +133,7 @@ public partial class OxListBox : ListBox, IOxItemsContainer, IOxControlWithManag
     public void AddChild(object item) => Items.Add(item);
     public void Clear() => Items.Clear();
 
-    public Control AsControl() => this;
+    public IOxControl AsControl() => this;
 
     public bool AvailableChilds => false;
 

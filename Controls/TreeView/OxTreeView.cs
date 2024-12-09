@@ -3,7 +3,6 @@ using OxLibrary.Handlers;
 using OxLibrary.Interfaces;
 
 namespace OxLibrary.Controls;
-
 public class OxTreeView : TreeView, IOxItemsContainer, IOxControlWithManager
 {
     public IOxControlManager Manager { get; }
@@ -267,7 +266,7 @@ public class OxTreeView : TreeView, IOxItemsContainer, IOxControlWithManager
 
     public void MoveDown() => MoveNode(OxUpDown.Down);
 
-    public Control AsControl() => this;
+    public IOxControl AsControl() => this;
 
     public bool AvailableChilds => true;
 
