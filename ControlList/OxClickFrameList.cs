@@ -5,54 +5,6 @@ namespace OxLibrary.ControlList;
 public class OxClickFrameList<TClickFrame> : OxPanelList<TClickFrame>
     where TClickFrame : OxClickFrame, new()
 {
-    public TClickFrame? FirstVisible =>
-        Find(f => f.Visible);
-
-    public TClickFrame? LastVisible
-    {
-        get
-        {
-            TClickFrame? visibleFrame = null;
-
-            foreach (TClickFrame frame in this)
-                if (frame.Visible)
-                    visibleFrame = frame;
-
-            return visibleFrame;
-        }
-    }
-
-    public short Right =>
-        (short)(Last is not null
-            ? Last.Right
-            : 0);
-
-    public short Width
-    {
-        get
-        {
-            short result = 0;
-
-            foreach (TClickFrame frame in this)
-            {
-                result += frame.Width;
-                result += frame.Margin.Horizontal;
-            }
-
-            return result;
-        }
-    }
-
-    public short Height()
-    {
-        short maxHeight = 0;
-
-        foreach (TClickFrame frame in this)
-            maxHeight = Math.Max(maxHeight, frame.Height);
-
-        return maxHeight;
-    }
-
     private TClickFrame? Default()
     {
         foreach (TClickFrame button in this)

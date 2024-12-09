@@ -76,8 +76,8 @@ namespace OxLibrary.Panels
                 ? TabButtons[activePage]
                 : null;
 
-        private OxPanel? activePage;
-        public OxPanel? ActivePage
+        private IOxPanel? activePage;
+        public IOxPanel? ActivePage
         {
             get => activePage;
             set => SetActivePage(value);
@@ -169,19 +169,19 @@ namespace OxLibrary.Panels
             TabButtons.Add(page, button);
         }
 
-        private void SetActivePage(OxPanel? value)
+        private void SetActivePage(IOxPanel? value)
         {
             bool isDifferentPage = 
                 (activePage is null 
                     && value is not null) 
                 || (activePage is not null 
                     && !activePage.Equals(value));
-            OxPanel? oldPage = activePage;
+            IOxPanel? oldPage = activePage;
 
             if (isDifferentPage)
-                DeactivatePage?.Invoke(this, new OxTabControlEventArgs(oldPage, value));
+                DeactivatePage?.Invoke(this, new(oldPage, value));
 
-            foreach (OxPanel page in Pages)
+            foreach (IOxPanel page in Pages)
                 if (!page.Equals(value))
                     page.Visible = false;
 

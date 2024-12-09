@@ -1,5 +1,6 @@
 ﻿using OxLibrary.Handlers;
 using OxLibrary.ControlList;
+using OxLibrary.Interfaces;
 
 namespace OxLibrary.Panels
 {
@@ -67,7 +68,7 @@ namespace OxLibrary.Panels
 
         private void PlacePanel(OxPanel panel)
         {
-            OxPanel column = columns[(int)panel.Tag];
+            IOxPanel column = columns[(int)panel.Tag];
             panel.Parent = column;
             panel.Dock = OxDock.Top;
             columnsPanels[column].Add(panel);
@@ -358,7 +359,7 @@ namespace OxLibrary.Panels
         {
             placedPanels.Clear();
 
-            foreach (OxPanelList panelsList in columnsPanels.Values.Cast<OxPanelList>())
+            foreach (OxPanelList panelsList in columnsPanels.Values)
             {
                 foreach (OxPanel panel in panelsList)
                 {
