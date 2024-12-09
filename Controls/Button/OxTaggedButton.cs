@@ -2,16 +2,16 @@
 
 public class OxTaggedButton : OxButton
 {
-    public OxTaggedButton(int tag) : base(tag.ToString(), null) { }
+    public OxTaggedButton(short tag) : base(tag.ToString(), null) { }
 
-    private int tag = 0;
-    public new int Tag 
+    private short tag = 0;
+    public new short Tag 
     { 
         get => tag; 
         set => SetTag(value); 
     }
 
-    private void SetTag(int value)
+    private void SetTag(short value)
     {
         tag = value;
         Text = tag.ToString();

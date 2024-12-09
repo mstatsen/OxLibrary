@@ -1,6 +1,6 @@
 ﻿namespace OxLibrary.Handlers;
 
-public partial class HoverItemEventArgs<T> : EventArgs
+public class HoverItemEventArgs<T> : EventArgs
 {
     public HoverItemEventArgs(int idx, T? hoveredItem)
     {

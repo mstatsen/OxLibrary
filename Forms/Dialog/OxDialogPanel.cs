@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Controls;
+using OxLibrary.Geometry;
 using OxLibrary.Handlers;
 using OxLibrary.Panels;
 using System.Windows.Forms.VisualStyles;
@@ -48,8 +49,8 @@ public class OxDialogPanel : OxFormPanel
     private void CreateButton(OxDialogButton dialogButton)
     {
         OxButton button = new(
-            OxDialogButtonsHelper.Name(dialogButton),
-            OxDialogButtonsHelper.Icon(dialogButton)
+            OxDialogButtonHelper.Name(dialogButton),
+            OxDialogButtonHelper.Icon(dialogButton)
         )
         {
             Parent = Footer,
@@ -58,8 +59,11 @@ public class OxDialogPanel : OxFormPanel
             Anchor = AnchorStyles.Top | AnchorStyles.Right,
             Visible = (dialogButtons & dialogButton).Equals(dialogButton),
             Size = new(
-                (short)OxDialogButtonsHelper.Width(dialogButton),
-                (short)(FooterButtonHeight - FooterButtonVerticalMargin * 2)
+                OxDialogButtonHelper.Width(dialogButton),
+                OxSH.Sub(
+                    FooterButtonHeight, 
+                    OxSH.Double(FooterButtonVerticalMargin)
+                )
             )
         };
         button.Click += DialogButtonClickHandler;
@@ -72,7 +76,7 @@ public class OxDialogPanel : OxFormPanel
         Footer.Parent = this;
         Footer.BlurredBorder = true;
 
-        foreach (OxDialogButton button in OxDialogButtonsHelper.List())
+        foreach (OxDialogButton button in OxDialogButtonHelper.List())
             CreateButton(button);
 
         PlaceButtons();
@@ -99,7 +103,7 @@ public class OxDialogPanel : OxFormPanel
                 dialogButton = item.Key;
 
         if (Form is not null)
-            Form.DialogResult = OxDialogButtonsHelper.Result(dialogButton);
+            Form.DialogResult = OxDialogButtonHelper.Result(dialogButton);
     }
 
     protected virtual void PlaceButtons()
@@ -112,7 +116,7 @@ public class OxDialogPanel : OxFormPanel
             if ((dialogButtons & item.Key).Equals(item.Key))
             {
                 realButtons.Add(item.Key, item.Value);
-                fullButtonsWidth += OxDialogButtonsHelper.Width(item.Key);
+                fullButtonsWidth += OxDialogButtonHelper.Width(item.Key);
                 fullButtonsWidth += DialogButtonSpace;
             }
 
@@ -134,9 +138,9 @@ public class OxDialogPanel : OxFormPanel
 
         foreach (var item in realButtons)
         {
-            item.Value.Left = (short)(rightOffset - OxDialogButtonsHelper.Width(item.Key));
+            item.Value.Left = (short)(rightOffset - OxDialogButtonHelper.Width(item.Key));
             item.Value.Size = new(
-                OxDialogButtonsHelper.Width(item.Key),
+                OxDialogButtonHelper.Width(item.Key),
                 (short)(FooterButtonHeight - FooterButtonVerticalMargin * 2)
             );
             rightOffset = (short)(item.Value.Left - DialogButtonSpace);

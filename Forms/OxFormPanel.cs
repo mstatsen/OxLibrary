@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Controls;
+using OxLibrary.Geometry;
 using OxLibrary.Handlers;
 using OxLibrary.Interfaces;
 using OxLibrary.Panels;
@@ -228,28 +229,28 @@ public partial class OxFormPanel :
             return;
 
         OxPoint newLastMousePosition = new(PointToScreen(e.Location));
-        OxPoint oldSize = new((short)Width, (short)Height);
+        OxPoint oldSize = new(Width, Height);
         OxPoint newSize = new(oldSize.X, oldSize.Y);
         OxPoint delta = new(
-            (short)(newLastMousePosition.X - LastMousePosition.X),
-            (short)(newLastMousePosition.Y - LastMousePosition.Y)
+            OxSH.Sub(newLastMousePosition.X, LastMousePosition.X),
+            OxSH.Sub(newLastMousePosition.Y, LastMousePosition.Y)
         );
 
         if (OxDirectionHelper.ContainsRight(LastDirection))
-            newSize.X = (short)(newSize.X + delta.X);
+            newSize.X += delta.X;
         else
         if (OxDirectionHelper.ContainsLeft(LastDirection))
-            newSize.X = (short)(newSize.X - delta.X);
+            newSize.X -= delta.X;
 
         if (OxDirectionHelper.ContainsBottom(LastDirection))
-            newSize.Y = (short)(newSize.Y + delta.Y);
+            newSize.Y += delta.Y;
         else
         if (OxDirectionHelper.ContainsTop(LastDirection))
-            newSize.X = (short)(newSize.Y - delta.Y);
+            newSize.X -= delta.Y;
 
         LastMousePosition = newLastMousePosition;
-        newSize.X = Math.Max(newSize.X, Form.MinimumSize.Width);
-        newSize.Y = Math.Max(newSize.Y, Form.MinimumSize.Height);
+        newSize.X = OxSH.Max(newSize.X, Form.MinimumSize.Width);
+        newSize.Y = OxSH.Max(newSize.Y, Form.MinimumSize.Height);
         List<Point> sizePoints = OxBoxMover.WayPoints(oldSize, newSize, 30);
         ResizeProcessing = true;
 

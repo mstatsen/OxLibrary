@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Controls;
+using OxLibrary.Geometry;
 using OxLibrary.Handlers;
 using OxLibrary.Interfaces;
 
@@ -27,7 +28,14 @@ namespace OxLibrary.Panels
 #pragma warning disable CS0618 // Type or member is obsolete
                 if (value)
                     ZBounds.RestoreBounds();
-                else ZBounds.Height = (short)(Header.Underline.Size + HeaderHeight + Margin.Vertical);
+                else ZBounds.Height =
+                        OxSH.Add(
+                            Header.Underline.Size, 
+                            OxSH.Add(
+                                HeaderHeight,
+                                Margin.Vertical
+                            )
+                        );
 #pragma warning restore CS0618 // Type or member is obsolete
                 Parent?.DoWithSuspendedLayout(() => Parent?.Realign());
             }

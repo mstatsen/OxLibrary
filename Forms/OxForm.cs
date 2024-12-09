@@ -1,5 +1,6 @@
 ﻿using OxLibrary.Controls;
 using OxLibrary.ControlsManaging;
+using OxLibrary.Geometry;
 using OxLibrary.Handlers;
 using OxLibrary.Interfaces;
 using OxLibrary.Panels;
@@ -69,18 +70,17 @@ public class OxForm<TFormPanel> :
     {
         Screen screen = Screen.FromControl(this);
         Location = new(
-            (short)
-            (
-                screen.Bounds.Left +
-                (screen.WorkingArea.Width - Width) / 2
+            OxSH.Add(
+                screen.Bounds.Left,
+                OxSH.Half(screen.WorkingArea.Width - Width)
             ),
-            (short)
+            OxSH.Add
             (
-                screen.Bounds.Top +
-                (screen.WorkingArea.Height - Height) / 2
+                screen.Bounds.Top,
+                OxSH.Half(screen.WorkingArea.Height - Height)
             )
         );
-        Size = new((short)Width, (short)Height);
+        Size = new(Width, Height);
     }
 
     protected virtual void SetUpForm()
@@ -139,7 +139,7 @@ public class OxForm<TFormPanel> :
     {
         FormPanel.Parent = this;
         FormPanel.Location = new(0, 0);
-        FormPanel.Size = new((short)Width, (short)Height);
+        FormPanel.Size = new(Width, Height);
     }
 
     private bool canMaximize = true;
@@ -177,13 +177,8 @@ public class OxForm<TFormPanel> :
         }
     }
 
-    private void SetMargins()
-    {
-        Margin.Size =
-            (short)(Sizable
-                ? 1
-                : 0);
-    }
+    private void SetMargins() =>
+        Margin.Size = OxSH.IfElseZero(Sizable, 1);
 
     protected override void OnShown(EventArgs e)
     {

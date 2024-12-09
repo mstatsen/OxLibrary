@@ -1,4 +1,5 @@
 ﻿using OxLibrary.ControlsManaging;
+using OxLibrary.Geometry;
 using OxLibrary.Handlers;
 using OxLibrary.Interfaces;
 
@@ -65,17 +66,17 @@ public class OxLabel :
             return;
         }
             
-        short labelRight = (short)(Left + OxTextHelper.GetTextWidth(calcedText, Font));
+        short labelRight = OxSH.Add(Left, OxTextHelper.GetTextWidth(calcedText, Font));
 
         while (labelRight >=  Parent.OuterControlZone.Right
             && calcedText.Length > 4)
         {
             calcedText = $"{calcedText.Remove(calcedText.Length - 4)}...";
-            labelRight = (short)(Left + OxTextHelper.GetTextWidth(calcedText, Font));
+            labelRight = OxSH.Add(Left, OxTextHelper.GetTextWidth(calcedText, Font));
         }
 
         base.Text = calcedText;
-        Width = (short)(labelRight - Left);
+        Width = OxSH.Sub(labelRight, Left);
     }
 
     private string text = string.Empty;

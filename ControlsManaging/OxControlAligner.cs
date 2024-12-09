@@ -1,4 +1,5 @@
 ﻿using OxLibrary.ControlsManaging;
+using OxLibrary.Geometry;
 using OxLibrary.Interfaces;
 
 namespace OxLibrary;
@@ -79,21 +80,28 @@ internal class OxControlAligner
             return;
 
         if (control.Dock is OxDock.Right)
-            controlBounds.X = (short)(controlBounds.X + paddingBox.Padding.Right);
-        else controlBounds.X = (short)(controlBounds.X - paddingBox.Padding.Left);
+            controlBounds.X = OxSH.Add(controlBounds.X, paddingBox.Padding.Right);
+        else controlBounds.X = OxSH.Sub(controlBounds.X, paddingBox.Padding.Left);
 
         if (control.Dock is OxDock.Bottom)
-            controlBounds.Y = (short)(controlBounds.Y + paddingBox.Padding.Bottom);
-        else controlBounds.Y = (short)(controlBounds.Y - paddingBox.Padding.Top);
+            controlBounds.Y = OxSH.Add(controlBounds.Y, paddingBox.Padding.Bottom);
+        else controlBounds.Y = OxSH.Sub(controlBounds.Y, paddingBox.Padding.Top);
 
         if (OxDockHelper.TouchHeight(control.Dock))
-        {
-            controlBounds.Width = (short)(controlBounds.Width + paddingBox.Padding.Left);
-            controlBounds.Width = (short)(controlBounds.Width + paddingBox.Padding.Right);
-        }
+            controlBounds.Width = 
+                OxSH.Short(
+                    controlBounds.Width
+                    + paddingBox.Padding.Left
+                    + paddingBox.Padding.Right
+                );
 
         if (OxDockHelper.TouchWidth(control.Dock))
-            controlBounds.Height = (short)(controlBounds.Height + paddingBox.Padding.Top + paddingBox.Padding.Bottom);
+            controlBounds.Height = 
+                OxSH.Short(
+                    controlBounds.Height
+                    + paddingBox.Padding.Top
+                    + paddingBox.Padding.Bottom
+                );
     }
 
     private OxRectangle CalcedDockedBounds(IOxControl control)
@@ -106,34 +114,38 @@ internal class OxControlAligner
         if (OxDockHelper.Variable(control.Dock) is not OxDockVariable.Height)
             controlBounds.Height = ControlZone.Height;
 
-        controlBounds.X = (short)(control.Dock is OxDock.Right
-            ? ControlZone.Right - controlBounds.Width
-            : ControlZone.X);
-
-        controlBounds.Y = (short)(control.Dock is OxDock.Bottom
-            ? ControlZone.Bottom - controlBounds.Height
-            : ControlZone.Y);
+        controlBounds.X = 
+            OxSH.IfElse(
+                control.Dock is OxDock.Right,
+                ControlZone.Right - controlBounds.Width,
+                ControlZone.X
+            );
+        controlBounds.Y = 
+            OxSH.IfElse(
+                control.Dock is OxDock.Bottom,
+                ControlZone.Bottom - controlBounds.Height,
+                ControlZone.Y
+            );
 
         HandleParentPadding(control, controlBounds);
-
         return controlBounds;
     }
 
     private OxRectangle CalcedUndockedBounds(IOxControl control)
     {
         //control.ZBounds.RestoreBounds();
-        short left = (short)(control.ZBounds.Left - InnerControlZone.X + ControlZone.X);
-        short top = (short)(control.ZBounds.Top - InnerControlZone.Y + ControlZone.Y);
+        short left = OxSH.Add(control.ZBounds.Left, ControlZone.X - InnerControlZone.X);
+        short top = OxSH.Add(control.ZBounds.Top, ControlZone.Y - InnerControlZone.Y);
         short width = control.ZBounds.Width;
-        short right = (short)(left + width);
+        short right = OxSH.Add(left, width);
         short height = control.ZBounds.Height;
-        short bottom = (short)(top + height);
+        short bottom = OxSH.Add(top, height);
 
         if (right > ControlZone.Right)
-            width = (short)(ControlZone.Right - left);
+            width = OxSH.Sub(ControlZone.Right, left);
 
         if (bottom > ControlZone.Bottom)
-            height = (short)(ControlZone.Bottom - top);
+            height = OxSH.Sub(ControlZone.Bottom, top);
 
         return new(left, top, width, height);
     }
@@ -172,17 +184,17 @@ internal class OxControlAligner
                 ControlZone.Clear(); //Use only one fill control in one box
                 return;
             case OxDock.Left:
-                ControlZone.X = (short)(ControlZone.X + control.ZBounds.Width);
+                ControlZone.X = OxSH.Add(ControlZone.X, control.ZBounds.Width);
                 break;
             case OxDock.Top:
-                ControlZone.Y = (short)(ControlZone.Y + control.ZBounds.Height);
+                ControlZone.Y = OxSH.Add(ControlZone.Y, control.ZBounds.Height);
                 break;
         }
 
         if (OxDockHelper.Variable(control.Dock) is OxDockVariable.Width)
-            ControlZone.Width = (short)(ControlZone.Width - control.ZBounds.Width);
+            ControlZone.Width = OxSH.Sub(ControlZone.Width, control.ZBounds.Width);
         else
             if (OxDockHelper.Variable(control.Dock) is OxDockVariable.Height)
-                ControlZone.Height = (short)(ControlZone.Height - control.ZBounds.Height);
+                ControlZone.Height = OxSH.Sub(ControlZone.Height, control.ZBounds.Height);
     }
 }

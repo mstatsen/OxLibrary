@@ -1,5 +1,4 @@
-﻿using OxLibrary.Dock;
-using OxLibrary.Interfaces;
+﻿using OxLibrary.Interfaces;
 
 namespace OxLibrary.ControlsManaging;
 

@@ -1,22 +1,23 @@
-﻿
+﻿using OxLibrary.Geometry;
+
 namespace OxLibrary;
 
 public class OxRectangle
 {
     public static OxRectangle operator -(OxRectangle rect, OxBorders borders) =>
         new(
-            (short)(rect.X + borders.Left),
-            (short)(rect.Y + borders.Top),
-            (short)(rect.Width - borders.Left - borders.Right),
-            (short)(rect.Height - borders.Top - borders.Bottom)
+            OxSH.Add(rect.X, borders.Left),
+            OxSH.Add(rect.Y, borders.Top),
+            OxSH.Sub(rect.Width, OxSH.Add(borders.Left, borders.Right)),
+            OxSH.Sub(rect.Height, OxSH.Add(borders.Top, borders.Bottom))
         );
 
     public static OxRectangle operator +(OxRectangle rect, OxBorders borders) =>
         new(
-            (short)(rect.X - borders.Left),
-            (short)(rect.Y - borders.Top),
-            (short)(rect.Width + borders.Left + borders.Right),
-            (short)(rect.Height + borders.Top + borders.Bottom)
+            OxSH.Sub(rect.X, borders.Left),
+            OxSH.Sub(rect.Y, borders.Top),
+            OxSH.Add(rect.Width, OxSH.Add(borders.Left, borders.Right)),
+            OxSH.Add(rect.Height, OxSH.Add(borders.Top, borders.Bottom))
         );
 
     private short x;
@@ -50,8 +51,8 @@ public class OxRectangle
         set => height = value;
     }
 
-    public short Right => (short)(X + Width);
-    public short Bottom => (short)(Y + Height);
+    public short Right => OxSH.Add(X, Width);
+    public short Bottom => OxSH.Add(Y, Height);
 
     public OxPoint TopLeft => new(X, Y);
     public OxPoint TopRight => new(Right, Y);
@@ -62,12 +63,12 @@ public class OxRectangle
 
     public OxRectangle() : this(Rectangle.Empty) { }
 
-    public OxRectangle(short x, short y, short width, short height)
+    public OxRectangle(int x, int y, int width, int height)
     { 
-        X = x;
-        Y = y;
-        Width = width;
-        Height = height;
+        X = (short)x;
+        Y = (short)y;
+        Width = (short)width;
+        Height = (short)height;
     }
 
     public OxRectangle(Rectangle rectangle)
@@ -181,6 +182,6 @@ public class OxRectangle
             _ => 0,
         };
 
-    public static OxRectangle Empty => new((short)0, 0, 0, 0);
+    public static OxRectangle Empty => new(0, 0, 0, 0);
     public static OxRectangle Max => new(0, 0, short.MaxValue, short.MaxValue);
 }

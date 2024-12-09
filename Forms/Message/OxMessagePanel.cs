@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Controls;
+using OxLibrary.Geometry;
 using System.Windows.Forms.VisualStyles;
 
 namespace OxLibrary.Forms;
@@ -45,12 +46,15 @@ public class OxMessagePanel : OxDialogPanel
         set
         {
             MessageBox.Text = value;
-            MessageBox.Height = (short)
-                (Math.Max((short)value.Length / 2, 23)
-                + 23 * value.Count(c => c.Equals('\r')));
+            MessageBox.Height =
+                OxSH.Add(
+                    OxSH.Max(value.Length / 2, 23),
+                    23 * value.Count(c => c.Equals('\r')
+                )
+            );
             Size = new(
                 240,
-                (short)(MessageBox.Bottom + Padding.Bottom)
+                OxSH.Add(MessageBox.Bottom, Padding.Bottom)
             );
         }
     }
@@ -63,11 +67,11 @@ public class OxMessagePanel : OxDialogPanel
 
             foreach (OxDialogButton button in buttonsDictionary.Keys)
                 if ((DialogButtons & button).Equals(button))
-                    calcedWidth += (short)(OxDialogButtonsHelper.Width(button) + DialogButtonSpace);
+                    calcedWidth += OxSH.Add(OxDialogButtonHelper.Width(button), DialogButtonSpace);
 
             Size = new(
-                (short)Math.Max(calcedWidth + 160, Width),
-                (short)Math.Max(calcedWidth / 2, Height)
+                OxSH.Max(calcedWidth + 160, Width),
+                OxSH.Max(calcedWidth / 2, Height)
             );
         }
 

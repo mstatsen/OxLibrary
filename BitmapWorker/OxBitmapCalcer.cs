@@ -1,4 +1,5 @@
-﻿using System.Drawing.Drawing2D;
+﻿using OxLibrary.Geometry;
+using System.Drawing.Drawing2D;
 
 namespace OxLibrary.BitmapWorker
 {
@@ -43,12 +44,12 @@ namespace OxLibrary.BitmapWorker
 
             if (ImageSize.Width > ImageBox.Width
                 && ImageBox.Width > 0)
-                ImageSize.Width = (short)ImageBox.Width;
+                ImageSize.Width = ImageBox.Width;
             else ImageBox.Width = ImageSize.Width;
 
             if (ImageSize.Height > ImageBox.Height
                 && ImageBox.Height > 0)
-                ImageSize.Height = (short)ImageBox.Height;
+                ImageSize.Height = ImageBox.Height;
             else ImageBox.Height = ImageSize.Height;
         }
 
@@ -68,15 +69,15 @@ namespace OxLibrary.BitmapWorker
 
             if (zoom > 1)
             {
-                ImageSize.Width = (short)(ImageSize.Width / zoom);
-                ImageSize.Height = (short)(ImageSize.Height / zoom);
+                ImageSize.Width = OxSH.Div(ImageSize.Width, zoom);
+                ImageSize.Height = OxSH.Div(ImageSize.Height, zoom);
             }
         }
 
         private void AlignByCenter()
         {
-            ImageBox.X = (short)((ImageBox.Width - ImageSize.Width) / 2);
-            ImageBox.Y = (short)((ImageBox.Height - ImageSize.Height) / 2);
+            ImageBox.X = OxSH.Half(ImageBox.Width - ImageSize.Width);
+            ImageBox.Y = OxSH.Half(ImageBox.Height - ImageSize.Height);
         }
 
         private Bitmap GetBitmap(OxSize imageSize, OxRectangle coordinates)

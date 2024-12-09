@@ -1,7 +1,6 @@
-﻿namespace OxLibrary.Handlers
+﻿namespace OxLibrary.Handlers;
+
+public class OxChangingEventArgs : OxEventArgs
 {
-    public class OxChangingEventArgs : OxEventArgs
-    {
-        public bool Cancel { get; set; } = false;
-    }
+    public bool Cancel { get; set; } = false;
 }

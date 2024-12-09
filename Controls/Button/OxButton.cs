@@ -1,4 +1,5 @@
-﻿using OxLibrary.Handlers;
+﻿using OxLibrary.Geometry;
+using OxLibrary.Handlers;
 
 namespace OxLibrary.Controls;
 
@@ -72,8 +73,10 @@ public class OxButton : OxIconButton
         if (AutoSize)
         {
             Padding.Left = AutoSizePadding;
-            short textWidth = (short)(OxTextHelper.GetTextWidth(Text, Label.Font) + AutoSizePadding * 2 + Borders.Horizontal);
-            Width = (short)(RealPictureWidth + textWidth);
+            short textWidth = OxTextHelper.GetTextWidth(Text, Label.Font);
+            textWidth += OxSH.Double(AutoSizePadding);
+            textWidth += Borders.Horizontal;
+            Width = OxSH.Add(RealPictureWidth, textWidth);
             Label.Width = textWidth;
         }
 
@@ -81,15 +84,15 @@ public class OxButton : OxIconButton
 
         if (!AutoSize)
         {
-            short calcedWidth = (short)(RealPictureWidth + RealLabelWidth);
+            short calcedWidth = OxSH.Add(RealPictureWidth, RealLabelWidth);
 
             if (calcedWidth > Width)
             {
-                Label.Width = (short)(Width - RealPictureWidth);
+                Label.Width = OxSH.Sub(Width, RealPictureWidth);
                 calcedWidth = Width;
             }
 
-            Padding.Left = (short)((Width - calcedWidth) / 2);
+            Padding.Left = OxSH.Half(Width - calcedWidth);
         }
     }
 

@@ -1,4 +1,6 @@
-﻿namespace OxLibrary.Panels
+﻿using OxLibrary.Geometry;
+
+namespace OxLibrary.Panels
 {
     public class OxClickFrame : OxFrame
     {
@@ -171,8 +173,8 @@
 
             if (IncreaceIfHovered)
             {
-                Left -= (short)(HoveredIncreaseSize / 2);
-                Top -= HoveredIncreaseSize;
+                Left -= OxSH.Half(HoveredIncreaseSize);
+                Top -= OxSH.Half(HoveredIncreaseSize);
                 Height += HoveredIncreaseSize;
                 Width += HoveredIncreaseSize;
             }
@@ -192,8 +194,8 @@
 
             if (IncreaceIfHovered)
             {
-                Left = (short)(Left + HoveredIncreaseSize/ 2);
-                Top = (short)(Top + HoveredIncreaseSize / 2);
+                Left += OxSH.Half(HoveredIncreaseSize);
+                Top += OxSH.Half(HoveredIncreaseSize);
                 Height -= HoveredIncreaseSize;
                 Width -= HoveredIncreaseSize;
             }

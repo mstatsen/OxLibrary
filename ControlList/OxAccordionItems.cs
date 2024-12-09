@@ -30,7 +30,7 @@ public class OxAccordionItems : List<IOxExpandable>
 
         if (sender is IOxWithColorHelper withColorHelper)
             withColorHelper.BaseColor = e.NewValue
-            ? withColorHelper.Colors.HBluer(-2).Browner(1)
-            : withColorHelper.Colors.HBluer(2).Browner(-1);
+                ? withColorHelper.Colors.HBluer(-2).Browner(1)
+                : withColorHelper.Colors.HBluer(2).Browner(-1);
     }
 }

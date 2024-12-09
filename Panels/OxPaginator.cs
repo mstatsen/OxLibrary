@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Controls;
+using OxLibrary.Geometry;
 using OxLibrary.Handlers;
 
 namespace OxLibrary.Panels
@@ -9,12 +10,10 @@ namespace OxLibrary.Panels
         private static readonly short PageButtonHeight = 20;
         private static readonly short NavigateButtonWidth = (short)(PageButtonWidth * 2);
         private static readonly short ButtonSpace = 3;
-        private const int MaximumPageButtonsCount = 10;
-        
-        
+        private static readonly short MaximumPageButtonsCount = 10;
 
-        private int pageSize = 12;
-        private int currentPage;
+        private short pageSize = 12;
+        private short currentPage;
         private int objectCount = 0;
 
         private readonly List<OxTaggedButton> Buttons = new();
@@ -37,7 +36,7 @@ namespace OxLibrary.Panels
 
         public event OxPaginatorEventHandler? PageChanged;
 
-        public int PageSize
+        public short PageSize
         {
             get => pageSize;
             set
@@ -47,7 +46,7 @@ namespace OxLibrary.Panels
             }
         }
 
-        public int CurrentPage
+        public short CurrentPage
         {
             get => currentPage;
             set => SetCurrentPage(value);
@@ -56,7 +55,7 @@ namespace OxLibrary.Panels
         public OxTaggedButton? CurrentButton =>
             Buttons.Find(b => b.Tag.Equals(currentPage));
 
-        private void SetCurrentPage(int value)
+        private void SetCurrentPage(short value)
         {
             currentPage = value;
             SetButtonsVisible();
@@ -129,31 +128,29 @@ namespace OxLibrary.Panels
                     currentPage * PageSize)
             );
 
-        private void IterateButtons(Func<OxTaggedButton, bool> iterator)
+        private void IterateButtons(Action<OxTaggedButton> iterator)
         {
             foreach (OxTaggedButton button in Buttons)
                 iterator(button);
         }
 
-        private bool FreezeCurrentButton(OxTaggedButton button) =>
+        private void FreezeCurrentButton(OxTaggedButton button) =>
             button.FreezeHovered = button.Equals(CurrentButton);
 
-        private bool SetButtonSize(OxTaggedButton button)
+        private void SetButtonSize(OxTaggedButton button)
         {
+            short freezeSize = OxSH.IfElseZero(button.FreezeHovered, 8);
             button.Size = new(
-                (short)(PageButtonWidth + (button.FreezeHovered ? 8 : 0)),
-                (short)(PageButtonHeight + (button.FreezeHovered ? 8 : 0))
+                OxSH.Add(PageButtonWidth, freezeSize),
+                OxSH.Add(PageButtonHeight, freezeSize)
             );
-            return true;
         }
 
-        private bool SetButtonFont(OxTaggedButton button)
-        {
+        private void SetButtonFont(OxTaggedButton button) =>
             button.Font = new(
                 button.Font,
-                button.FreezeHovered ? FontStyle.Bold : FontStyle.Regular);
-            return true;
-        }
+                button.FreezeHovered ? FontStyle.Bold : FontStyle.Regular
+            );
 
         public int ObjectCount
         {
@@ -172,7 +169,7 @@ namespace OxLibrary.Panels
         private static short PlaceButton(OxPanel button, short left)
         {
             button.Left = left;
-            return (short)(button.Right + ButtonSpace);
+            return OxSH.Add(button.Right, ButtonSpace);
         }
 
         private void PlaceButtons()
@@ -193,18 +190,18 @@ namespace OxLibrary.Panels
             SetButtonsTop();
         }
 
-        private int PageCount =>
-            (int)Math.Ceiling((decimal)objectCount / pageSize);
+        private short PageCount =>
+            OxSH.Ceiling((decimal)objectCount / pageSize);
 
-        private int ButtonCount =>
-            Math.Min(PageCount, MaximumPageButtonsCount);
+        private short ButtonCount =>
+            OxSH.Min(PageCount, MaximumPageButtonsCount);
 
         private void RenumerateButtons()
         {
             if (CurrentButton is not null)
                 return;
 
-            int buttonIndex = 1;
+            short buttonIndex = 1;
 
             if (Buttons.Count > 0)
             {
@@ -212,29 +209,26 @@ namespace OxLibrary.Panels
                     buttonIndex = CurrentPage;
                 else
                 if (Buttons[^1].Tag < CurrentPage)
-                    buttonIndex = CurrentPage - (MaximumPageButtonsCount - 1);
+                    buttonIndex = OxSH.Sub(CurrentPage, MaximumPageButtonsCount + 1);
             }
 
             foreach (OxTaggedButton button in Buttons)
                 button.Tag = buttonIndex++;
         }
 
-        private bool DisposeButton(OxTaggedButton button)
-        {
+        private static void DisposeButton(OxTaggedButton button) =>
             button.Dispose();
-            return true;
-        }
 
         private void CreateButtons()
         {
             IterateButtons(DisposeButton);
             Buttons.Clear();
 
-            for (int i = 1; i <= ButtonCount; i++)
+            for (short i = 1; i <= ButtonCount; i++)
                 CreatePageButton(i);
         }
 
-        private void CreatePageButton(int pageNumber)
+        private void CreatePageButton(short pageNumber)
         {
             OxTaggedButton button = new(pageNumber)
             {
@@ -243,9 +237,12 @@ namespace OxLibrary.Panels
                 HandHoverCursor = true,
                 Size = new(PageButtonWidth, PageButtonHeight)
             };
-            button.Click += (s, e) => CurrentPage = s is not null ? ((OxTaggedButton)s).Tag : 0;
+            button.Click += ButtonClickHandler;
             Buttons.Add(button);
         }
+
+        private void ButtonClickHandler(object? sender, EventArgs e) =>
+            CurrentPage = OxSH.Short(sender is OxTaggedButton taggedButton ? taggedButton.Tag : 0);
 
         private static OxButton CreateNavigateButton(Bitmap icon, string toolTipText)
         {
@@ -301,7 +298,10 @@ namespace OxLibrary.Panels
         }
 
         private void SetButtonsPanelWidth() =>
-            buttonsPanel.Size = new((short)(LastButton.Right + ButtonSpace), (short)Height);
+            buttonsPanel.Size = new(
+                OxSH.Add(LastButton.Right, ButtonSpace), 
+                Height
+            );
 
         protected override void AfterCreated()
         {
@@ -320,13 +320,10 @@ namespace OxLibrary.Panels
         }
 
         private void SetButtonTop(OxPanel button) =>
-            button.Top = (short)((buttonsPanel.Height - button.Height) / 2);
+            button.Top = OxSH.Half(buttonsPanel.Height - button.Height);
 
-        private bool SetButtonTop(OxTaggedButton button)
-        {
+        private void SetButtonTop(OxTaggedButton button) =>
             SetButtonTop((OxPanel)button);
-            return true;
-        }
 
         private void SetButtonsTop()
         {
@@ -340,13 +337,10 @@ namespace OxLibrary.Panels
         }
 
         private void SetButtonsPanelLeft() =>
-            buttonsPanel.Left = (short)((Width - buttonsPanel.Width) / 2);
+            buttonsPanel.Left = OxSH.Half(Width - buttonsPanel.Width);
 
-        private bool SetButtonBaseColor(OxTaggedButton button)
-        {
+        private void SetButtonBaseColor(OxTaggedButton button) => 
             button.BaseColor = BaseColor;
-            return true;
-        }
 
         public override void PrepareColors()
         {

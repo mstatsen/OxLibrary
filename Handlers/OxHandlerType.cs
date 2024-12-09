@@ -1,11 +1,10 @@
-﻿namespace OxLibrary.Handlers
+﻿namespace OxLibrary.Handlers;
+
+public enum OxHandlerType
 {
-    public enum OxHandlerType
-    {
-        Control,
-        DockChanged,
-        LocationChanged,
-        ParentChanged,
-        SizeChanged,
-    }
+    Control,
+    DockChanged,
+    LocationChanged,
+    ParentChanged,
+    SizeChanged,
 }

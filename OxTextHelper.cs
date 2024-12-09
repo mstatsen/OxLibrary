@@ -1,4 +1,6 @@
-﻿namespace OxLibrary
+﻿using OxLibrary.Geometry;
+
+namespace OxLibrary
 {
     public static class OxTextHelper
     {
@@ -9,6 +11,6 @@
                 : obj.ToString()!;
 
         public static short GetTextWidth(string text, Font font) =>
-            (short)TextRenderer.MeasureText(text, font).Width;
+            OxSH.Short(TextRenderer.MeasureText(text, font).Width);
     }
 }

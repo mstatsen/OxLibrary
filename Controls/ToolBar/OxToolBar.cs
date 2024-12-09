@@ -1,6 +1,7 @@
 ﻿using OxLibrary.Handlers;
 using OxLibrary.ControlList;
 using OxLibrary.Panels;
+using OxLibrary.Geometry;
 
 namespace OxLibrary.Controls
 {
@@ -38,7 +39,7 @@ namespace OxLibrary.Controls
         {
             base.AfterCreated();
             SetToolBarPaddings();
-            Size = new((short)Width, DefaultToolBarHeight);
+            Size = new(Width, DefaultToolBarHeight);
         }
 
         private readonly Dictionary<TButton, OxPanel> Separators = new();
@@ -88,10 +89,11 @@ namespace OxLibrary.Controls
                     else
                         button.Margin.SetSize(
                             button.Dock,
-                            (short)(lastButton is null
-                            || !lastButton.Dock.Equals(button.Dock)
-                                ? 0
-                                : ButtonMargin)
+                            OxSH.IfElseZero(
+                                lastButton is not null 
+                                    && lastButton.Dock.Equals(button.Dock), 
+                                ButtonMargin
+                            )
                         );
 
                     lastButton = button;
@@ -237,7 +239,7 @@ namespace OxLibrary.Controls
                         : GetActionByButton((OxButton)s)
                 )
             );
-            button.Size = new(OxToolbarActionHelper.Width(action), (short)button.Height);
+            button.Size = new(OxToolbarActionHelper.Width(action), button.Height);
             Actions.Add(action, button);
             Buttons.Add(button);
             PlaceButtons();

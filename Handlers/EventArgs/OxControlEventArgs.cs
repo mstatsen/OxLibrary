@@ -1,12 +1,11 @@
 ﻿using OxLibrary.Interfaces;
 
-namespace OxLibrary.Handlers
-{
-    public class OxControlEventArgs : OxEventArgs
-    {
-        public readonly IOxControl Control;
+namespace OxLibrary.Handlers;
 
-        public OxControlEventArgs(IOxControl control) =>
-            Control = control;
-    }
+public class OxControlEventArgs : OxEventArgs
+{
+    public readonly IOxControl Control;
+
+    public OxControlEventArgs(IOxControl control) =>
+        Control = control;
 }

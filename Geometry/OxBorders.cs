@@ -1,4 +1,5 @@
-﻿using OxLibrary.Handlers;
+﻿using OxLibrary.Geometry;
+using OxLibrary.Handlers;
 
 namespace OxLibrary;
 
@@ -6,18 +7,18 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
 {
     public static OxBorders operator +(OxBorders left, OxBorders right) =>
         new(
-            (short)(left.Top + right.Top),
-            (short)(left.Left + right.Left),
-            (short)(left.Bottom + right.Bottom),
-            (short)(left.Right + right.Right)
+            OxSH.Add(left.Top, right.Top),
+            OxSH.Add(left.Left, right.Left),
+            OxSH.Add(left.Bottom, right.Bottom),
+            OxSH.Add(left.Right, right.Right)
         );
 
     public static OxBorders operator -(OxBorders left, OxBorders right) =>
         new(
-            (short)(left.Top - right.Top),
-            (short)(left.Left - right.Left),
-            (short)(left.Bottom - right.Bottom),
-            (short)(left.Right - right.Right)
+            OxSH.Sub(left.Top, right.Top),
+            OxSH.Sub(left.Left, right.Left),
+            OxSH.Sub(left.Bottom, right.Bottom),
+            OxSH.Sub(left.Right, right.Right)
         );
 
     public void Draw(Graphics g, OxRectangle bounds, Color color)
@@ -36,10 +37,10 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
             switch (border.Key)
             {
                 case OxDock.Right:
-                    borderBounds.X = (short)(borderBounds.Right - border.Value.Size);
+                    borderBounds.X = OxSH.Sub(borderBounds.Right, border.Value.Size);
                     break;
                 case OxDock.Bottom:
-                    borderBounds.Y = (short)(borderBounds.Bottom - border.Value.Size);
+                    borderBounds.Y = OxSH.Sub(borderBounds.Bottom, border.Value.Size);
                     break;
             }
 
@@ -126,7 +127,7 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
 
     public short Horizontal
     {
-        get => (short)(Left + Right);
+        get => OxSH.Add(Left, Right);
         set
         {
             Left = value;
@@ -142,7 +143,7 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
 
     public short Vertical
     {
-        get => (short)(Top + Bottom);
+        get => OxSH.Add(Top, Bottom);
         set
         {
             Top = value;

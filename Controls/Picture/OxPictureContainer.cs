@@ -2,6 +2,7 @@
 using OxLibrary.ControlList;
 using OxLibrary.Panels;
 using System.Drawing.Imaging;
+using OxLibrary.Geometry;
 
 namespace OxLibrary.Controls;
 
@@ -59,9 +60,10 @@ public class OxPictureContainer : OxClickFrame
         foreach (OxClickFrame button in Buttons)
         {
             calcedWidth =
-                (short)((buttonsParent.Width / Buttons.Count) 
-                + OxPictureActionHelper.ButtonMargin * Buttons.Count
-                + 1);
+                OxSH.Add(
+                    buttonsParent.Width / Buttons.Count,
+                    OxPictureActionHelper.ButtonMargin * Buttons.Count + 1
+                );
 
             button.Size = new(
                 calcedWidth,

@@ -2,7 +2,7 @@
 
 public static class OxUpDownHelper
 {
-    public static int Delta(OxUpDown upDown) =>
+    public static short Delta(OxUpDown upDown) =>
         upDown switch
         {
             OxUpDown.Up => -1,

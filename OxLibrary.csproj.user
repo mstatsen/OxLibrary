@@ -98,7 +98,7 @@
     <Compile Update="Panels\OxLoadingPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Update="Panels\Paginator\OxPaginator.cs">
+    <Compile Update="Panels\OxPaginator.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Update="Panels\OxPanel.cs">

@@ -1,4 +1,5 @@
-﻿using OxLibrary.Handlers;
+﻿using OxLibrary.Geometry;
+using OxLibrary.Handlers;
 
 namespace OxLibrary;
 
@@ -60,14 +61,14 @@ public class OxSize
 
     public OxSize(short size) : this(size, size) { }
 
-    public OxSize(short width, short height)
+    public OxSize(int width, int height)
     {
         Creating = true;
 
         try
         {
-            Width = Math.Max(width, (short)0);
-            Height = Math.Max(height, (short)0);
+            Width = OxSH.Max(width, 0);
+            Height = OxSH.Max(height, 0);
         }
         finally
         {
@@ -76,13 +77,13 @@ public class OxSize
     }
 
     public OxSize(Size size)
-        : this((short)size.Width, (short)size.Height) { }
+        : this(size.Width, size.Height) { }
 
     public OxSize(OxSize size)
         : this(size.Width, size.Height) { }
 
     public OxSize(Point point)
-        : this((short)point.X, (short)point.Y) { }
+        : this(point.X, point.Y) { }
 
     public OxSize(OxPoint point)
         : this(point.Point) { }
@@ -107,5 +108,5 @@ public class OxSize
         Width is 0
         && Height is 0;
 
-    public static readonly OxSize Empty = new((short)0, 0);
+    public static readonly OxSize Empty = new(0, 0);
 }

@@ -1,5 +1,5 @@
-﻿using OxLibrary.Interfaces;
-using OxLibrary.Panels;
+﻿using OxLibrary.Geometry;
+using OxLibrary.Interfaces;
 
 namespace OxLibrary.ControlList;
 
@@ -15,17 +15,8 @@ public class OxPanelList : List<IOxPanel>
             ? this[0]
             : default!;
 
-    public short Bottom
-    {
-        get
-        {
-            IOxPanel? last = Last;
-
-            return (short)(last is null
-                ? 0
-                : last.Bottom + 24);
-        }
-    }
+    public short Bottom => 
+        OxSH.IfElseZero(Last is not null, Last!.Bottom + 24);
 
     public new OxPanelList AddRange(IEnumerable<IOxPanel> list)
     {
@@ -48,9 +39,7 @@ public class OxPanelList : List<IOxPanel>
     }
 
     public short Right =>
-        (short)(Last is not null
-            ? Last.Right
-            : 0);
+        OxSH.IfElseZero(Last is not null, Last!.Right);
 
     public short Width
     {
@@ -59,10 +48,7 @@ public class OxPanelList : List<IOxPanel>
             short result = 0;
 
             foreach (IOxPanel panel in this)
-            {
-                result += panel.Width;
-                result += panel.Margin.Horizontal;
-            }
+                result += OxSH.Add(panel.Width, panel.Margin.Horizontal);
 
             return result;
         }

@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Controls;
+using OxLibrary.Geometry;
 using OxLibrary.Interfaces;
 using OxLibrary.Panels;
 
@@ -6,11 +7,13 @@ namespace OxLibrary;
 
 public static class OxControlHelper
 {
-    private static int GetBaseLine(Control control) =>
-        (int)(
-            control.Font.GetHeight()
-                * control.Font.FontFamily.GetCellAscent(control.Font.Style)
-                / control.Font.FontFamily.GetLineSpacing(control.Font.Style));
+    private static short GetBaseLine(Control control) =>
+        OxSH.Div(
+            OxSH.Mul(
+                control.Font.GetHeight(),
+                control.Font.FontFamily.GetCellAscent(control.Font.Style)
+            ),
+            control.Font.FontFamily.GetLineSpacing(control.Font.Style));
 
     public static T? AlignByBaseLineOx<T>(IOxControl baseControl, T? aligningControl)
         where T : Control =>

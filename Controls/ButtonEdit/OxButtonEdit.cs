@@ -1,4 +1,5 @@
-﻿using OxLibrary.Handlers;
+﻿using OxLibrary.Geometry;
+using OxLibrary.Handlers;
 using OxLibrary.Panels;
 
 namespace OxLibrary.Controls;
@@ -31,7 +32,7 @@ public class OxButtonEdit : OxPanel
         Button.Parent = this;
         Button.BaseColor = BaseColor;
         Button.Size = new(
-            Math.Min((short)26, (short)(TextBox.Height - 4)),
+            OxSH.Min(26, TextBox.Height - 4),
             TextBox.Height
         );
         Button.Borders.Left = 0;
@@ -64,8 +65,8 @@ public class OxButtonEdit : OxPanel
 
         if (e.Changed)
         {
-            short calcedButtonWidth = (short)Math.Min(22, TextBox.Height - 4);
-            Button.Size = new(calcedButtonWidth, (short)(Height - 2));
+            short calcedButtonWidth = OxSH.Min(22, TextBox.Height - 4);
+            Button.Size = new(calcedButtonWidth, OxSH.Sub(Height, 2));
             Button.Width = calcedButtonWidth;
         }
     }

@@ -1,6 +1,8 @@
-﻿namespace OxLibrary.Forms;
+﻿using OxLibrary.Geometry;
 
-public static class OxDialogButtonsHelper
+namespace OxLibrary.Forms;
+
+public static class OxDialogButtonHelper
 {
     public static DialogResult Result(OxDialogButton button) =>
         button switch
@@ -65,7 +67,9 @@ public static class OxDialogButtonsHelper
         };
 
     public static short Width(OxDialogButton button) =>
-        (short)(button is OxDialogButton.ApplyForAll
-            ? 140
-            : 100);
+        OxSH.IfElse(
+            button is OxDialogButton.ApplyForAll,
+            140,
+            100
+        );
 }

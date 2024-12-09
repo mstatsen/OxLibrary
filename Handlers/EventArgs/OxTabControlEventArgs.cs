@@ -1,6 +1,6 @@
 ﻿using OxLibrary.Interfaces;
 
-namespace OxLibrary.Panels
+namespace OxLibrary.Handlers
 {
     public class OxTabControlEventArgs
     {
@@ -12,6 +12,4 @@ namespace OxLibrary.Panels
             Page = page;
         }
     }
-
-    public delegate void OxTabControlEvent(object sender, OxTabControlEventArgs e);
 }
