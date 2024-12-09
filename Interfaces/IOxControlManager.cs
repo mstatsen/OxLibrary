@@ -1,9 +1,9 @@
 ﻿using OxLibrary.ControlsManaging;
 using OxLibrary.Handlers;
-using System.Windows.Forms;
 
 namespace OxLibrary.Interfaces
 {
+    
     public interface IOxControlManager
     {
         OxWidth Bottom { get; }
