@@ -219,12 +219,6 @@ public class OxComboBox<T> : ComboBox, IOxControlWithManager
         set => Manager.Size = value;
     }
 
-    public new OxSize ClientSize
-    {
-        get => Manager.ClientSize;
-        set => Manager.ClientSize = value;
-    }
-
     public new OxPoint Location
     {
         get => Manager.Location;
@@ -248,9 +242,6 @@ public class OxComboBox<T> : ComboBox, IOxControlWithManager
         get => Manager.Dock;
         set => Manager.Dock = value;
     }
-
-    public new OxRectangle ClientRectangle =>
-        Manager.ClientRectangle;
 
     public void DoWithSuspendedLayout(Action method) =>
         Manager.DoWithSuspendedLayout(method);

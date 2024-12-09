@@ -7,8 +7,6 @@ namespace OxLibrary.Interfaces
     public interface IOxControlManager
     {
         OxWidth Bottom { get; }
-        OxRectangle ClientRectangle { get; }
-        OxSize ClientSize { get; set; }
         OxDock Dock { get; set; }
         void DoWithSuspendedLayout(Action method);
         OxWidth Height { get; set; }

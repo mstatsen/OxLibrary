@@ -57,14 +57,14 @@ public class OxPanel : Panel, IOxPanel
     protected virtual void PrepareInnerComponents() { }
 
     protected virtual OxRectangle BorderRectangle =>
-        ClientRectangle - Margin;
+        new OxRectangle(ClientRectangle) - Margin;
 
     protected override void OnPaint(PaintEventArgs e)
     {
         base.OnPaint(e);
 
         if (!BlurredBorder)
-            Margin.Draw(e.Graphics, ClientRectangle, MarginColor);
+            Margin.Draw(e.Graphics, new(ClientRectangle), MarginColor);
 
         Borders.Draw(e.Graphics, BorderRectangle, BorderColor);
     }
@@ -415,12 +415,6 @@ public class OxPanel : Panel, IOxPanel
         set => Manager.Size = value;
     }
 
-    public new OxSize ClientSize
-    {
-        get => Manager.ClientSize;
-        set => Manager.ClientSize = value;
-    }
-
     public new OxPoint Location
     {
         get => Manager.Location;
@@ -444,9 +438,6 @@ public class OxPanel : Panel, IOxPanel
         get => Manager.Dock;
         set => Manager.Dock = value;
     }
-
-    public new OxRectangle ClientRectangle =>
-        Manager.ClientRectangle;
 
     public void DoWithSuspendedLayout(Action method) =>
         Manager.DoWithSuspendedLayout(method);
@@ -493,19 +484,6 @@ public class OxPanel : Panel, IOxPanel
     #endregion
 
     #region Hidden base methods
-#pragma warning disable IDE0051 // Remove unused private members
-    private new Size PreferredSize =>
-        base.PreferredSize;
-
-    private new Rectangle DisplayRectangle =>
-        base.DisplayRectangle;
-
-    private new Size GetPreferredSize(Size proposedSize) =>
-        base.GetPreferredSize(proposedSize);
-
-    private new Size LogicalToDeviceUnits(Size value) =>
-        base.LogicalToDeviceUnits(value);
-#pragma warning restore IDE0051 // Remove unused private members
     protected sealed override void OnDockChanged(EventArgs e) { }
     protected sealed override void OnLocationChanged(EventArgs e) { }
     protected sealed override void OnParentChanged(EventArgs e) { }

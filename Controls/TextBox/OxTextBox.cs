@@ -63,12 +63,6 @@ namespace OxLibrary.Controls
             set => Manager.Size = value;
         }
 
-        public new OxSize ClientSize
-        {
-            get => Manager.ClientSize;
-            set => Manager.ClientSize = value;
-        }
-
         public new OxPoint Location
         {
             get => Manager.Location;
@@ -92,10 +86,6 @@ namespace OxLibrary.Controls
             get => Manager.Dock;
             set => Manager.Dock = value;
         }
-
-        public new OxRectangle ClientRectangle =>
-            Manager.ClientRectangle;
-
 
         public void DoWithSuspendedLayout(Action method) =>
             Manager.DoWithSuspendedLayout(method);
@@ -143,14 +133,6 @@ namespace OxLibrary.Controls
         #endregion
 
         #region Hidden base methods
-#pragma warning disable IDE0051 // Remove unused private members
-        private new Size PreferredSize => base.PreferredSize;
-        private new Rectangle DisplayRectangle => base.DisplayRectangle;
-        private new Size GetPreferredSize(Size proposedSize) => base.GetPreferredSize(proposedSize);
-        private new Size LogicalToDeviceUnits(Size value) => base.LogicalToDeviceUnits(value);
-        private new Control GetChildAtPoint(Point pt, GetChildAtPointSkip skipValue) =>
-            base.GetChildAtPoint(pt, skipValue);
-
         protected sealed override void OnDockChanged(EventArgs e) { }
         protected sealed override void OnLocationChanged(EventArgs e) { }
         protected sealed override void OnParentChanged(EventArgs e) { }
