@@ -12,7 +12,6 @@ namespace OxLibrary.Interfaces
         OxSize ClientSize { get; set; }
         OxDock Dock { get; set; }
         void DoWithSuspendedLayout(Action method);
-        Control GetChildAtPoint(OxPoint pt);
         OxWidth Height { get; set; }
         OxWidth Left { get; set; }
         OxPoint Location { get; set; }

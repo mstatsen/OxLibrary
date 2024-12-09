@@ -105,9 +105,6 @@ namespace OxLibrary.Controls
         public void DoWithSuspendedLayout(Action method) =>
             Manager.DoWithSuspendedLayout(method);
 
-        public Control GetChildAtPoint(OxPoint pt) =>
-            Manager.GetChildAtPoint(pt);
-
 
         public new event OxDockChangedEvent DockChanged
         {
@@ -164,7 +161,6 @@ namespace OxLibrary.Controls
         private new Control GetChildAtPoint(Point pt, GetChildAtPointSkip skipValue) =>
             base.GetChildAtPoint(pt, skipValue);
 
-#pragma warning restore IDE0051 // Remove unused private members
         protected sealed override void OnDockChanged(EventArgs e) { }
         protected sealed override void OnLocationChanged(EventArgs e) { }
         protected sealed override void OnParentChanged(EventArgs e) { }

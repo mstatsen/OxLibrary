@@ -344,9 +344,6 @@ public class OxForm<TFormPanel> :
     public void DoWithSuspendedLayout(Action method) =>
         Manager.DoWithSuspendedLayout(method);
 
-    public Control GetChildAtPoint(OxPoint pt) =>
-        Manager.GetChildAtPoint(pt);
-
     public new event OxDockChangedEvent DockChanged
     {
         add => Manager.DockChanged += value;
@@ -456,8 +453,6 @@ public class OxForm<TFormPanel> :
         base.LogicalToDeviceUnits(value);
     private new void SetBounds(int x, int y, int width, int height, BoundsSpecified specified) =>
         base.SetBounds(x, y, width, height, specified);
-    private new Control GetChildAtPoint(Point pt, GetChildAtPointSkip skipValue) =>
-        base.GetChildAtPoint(pt, skipValue);
 
 #pragma warning restore IDE0051 // Remove unused private members
     protected sealed override void OnDockChanged(EventArgs e) { }

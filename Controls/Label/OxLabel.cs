@@ -236,10 +236,6 @@ public class OxLabel :
     public void DoWithSuspendedLayout(Action method) =>
         Manager.DoWithSuspendedLayout(method);
 
-    public Control GetChildAtPoint(OxPoint pt) =>
-        Manager.GetChildAtPoint(pt);
-
-
     public new event OxDockChangedEvent DockChanged
     {
         add => Manager.DockChanged += value;
