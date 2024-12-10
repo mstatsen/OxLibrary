@@ -69,7 +69,7 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
         );
     }
 
-    public bool SetSize(OxDock dock, short size)
+    public bool SetSize(OxDock dock, int size)
     {
         short oldSize = this[dock].Size;
 
@@ -77,12 +77,12 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
             return false;
 
         OxBorders oldBorders = new(this);
-        this[dock].Size = size;
+        this[dock].Size = OxSH.Short(size);
         NotifyAboutSizeChanged(oldBorders);
         return true;
     }
 
-    private void SetSize(short size)
+    private void SetSize(int size)
     {
         SizeChanging = true;
         OxBorders oldBorders = new(this);
@@ -116,7 +116,7 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
             Add(border.Key, new(border.Value));
     }
 
-    public OxBorders(short top, short left, short bottom, short right) : this() => 
+    public OxBorders(int top, int left, int bottom, int right) : this() => 
         SetSize(top, left, bottom, right);
 
     public short Left
@@ -180,12 +180,12 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
         set => SetSize(value);
     }
 
-    public void SetSize(short top, short left, short bottom, short right)
+    public void SetSize(int top, int left, int bottom, int right)
     {
-        Top = top;
-        Left = left;
-        Bottom = bottom;
-        Right = right;
+        Top = OxSH.Short(top);
+        Left = OxSH.Short(left);
+        Bottom = OxSH.Short(bottom);
+        Right = OxSH.Short(right);
     }
 
     public bool Visible(OxDock dock) => 

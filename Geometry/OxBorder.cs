@@ -16,7 +16,7 @@ public class OxBorder
 
     public short Size
     {
-        get => OxSH.IfElseZero(visible, size);
+        get => OxSH.Short(visible ? size : 0);
         set => size = value;
     }
 

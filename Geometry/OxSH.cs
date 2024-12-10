@@ -20,20 +20,6 @@
         /// </summary>
         public static short Short(decimal value) => (short)value;
 
-
-        /// <returns>
-        /// trueValue if condition is true, else falseValue
-        /// </returns>
-        public static short IfElse(bool condition, int trueValue, int falseValue) =>
-            Short(condition ? trueValue : falseValue);
-
-        /// <returns>
-        /// trueValue if condition is true, else 0
-        /// </returns>
-        public static short IfElseZero(bool condition, int trueValue) =>
-            IfElse(condition, trueValue, 0);
-
-
         /// <returns>
         /// sum of value1 and value2
         /// </returns>

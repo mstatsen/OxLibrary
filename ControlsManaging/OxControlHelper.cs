@@ -15,15 +15,13 @@ public static class OxControlHelper
             ),
             control.Font.FontFamily.GetLineSpacing(control.Font.Style));
 
-    public static T? AlignByBaseLine<T>(IOxControl baseControl, T? aligningControl)
-        where T : IOxControl, new() => AlignByBaseLine(baseControl, aligningControl);
-
-    public static IOxControl? AlignByBaseLine(
+    public static T? AlignByBaseLine<T>(
         IOxControl baseControl,
-        IOxControl? aligningControl)
+        T? aligningControl)
+        where T : IOxControl
     {
         if (aligningControl is null)
-            return null;
+            return default;
 
         aligningControl.Top =
             aligningControl switch
@@ -34,15 +32,15 @@ public static class OxControlHelper
                         OxSH.CenterOffset(aligningControl.Height, baseControl.Height)
                     ),
                 _ =>
-                    OxSH.IfElse(
-                        baseControl is null,
-                            aligningControl.Top,
-                            baseControl!.Top
-                                + OxSH.Sub(
-                                    BaseLine(baseControl), 
-                                    BaseLine(aligningControl))
-                                + OxSH.IfElseZero(baseControl is not OxLabel, 2)
-                    )
+                    baseControl is null
+                        ? aligningControl.Top
+                        : OxSH.Add(
+                            baseControl!.Top,
+                            OxSH.Sub(
+                                BaseLine(baseControl), 
+                                BaseLine(aligningControl)),
+                            baseControl is not OxLabel ? 2 : 0
+                        )
             };
 
         return aligningControl;

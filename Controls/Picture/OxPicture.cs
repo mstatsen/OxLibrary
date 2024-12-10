@@ -150,8 +150,8 @@ public partial class OxPicture : OxPanel
             return;
         }
 
-        Padding.Vertical = OxSH.IfElseZero(!Stretch, OxSH.CenterOffset(Height, pictureSize));
-        Padding.Horizontal = OxSH.IfElseZero(!Stretch, OxSH.CenterOffset(Width, pictureSize));
+        Padding.Vertical = OxSH.Short(Stretch ? 0 : OxSH.CenterOffset(Height, pictureSize));
+        Padding.Horizontal = OxSH.Short(Stretch ? 0 : OxSH.CenterOffset(Width, pictureSize));
         OxBitmapCalcer bitmapCalcer = new(value, new(pictureSize, pictureSize), Stretch);
         picture.SizeMode = bitmapCalcer.SizeMode;
 

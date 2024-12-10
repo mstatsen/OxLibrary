@@ -139,7 +139,7 @@ namespace OxLibrary.Panels
 
         private void SetButtonSize(OxTaggedButton button)
         {
-            short freezeSize = OxSH.IfElseZero(button.FreezeHovered, 8);
+            short freezeSize = OxSH.Short(button.FreezeHovered ? 8 : 0);
             button.Size = new(
                 OxSH.Add(PageButtonWidth, freezeSize),
                 OxSH.Add(PageButtonHeight, freezeSize)

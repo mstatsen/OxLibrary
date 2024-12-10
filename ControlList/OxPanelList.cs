@@ -15,8 +15,8 @@ public class OxPanelList : List<IOxPanel>
             ? this[0]
             : default!;
 
-    public short Bottom => 
-        OxSH.IfElseZero(Last is not null, Last!.Bottom + 24);
+    public short Bottom =>
+        OxSH.Short(Last is not null ? Last!.Bottom + 24 : 0);
 
     public new OxPanelList AddRange(IEnumerable<IOxPanel> list)
     {
@@ -39,7 +39,7 @@ public class OxPanelList : List<IOxPanel>
     }
 
     public short Right =>
-        OxSH.IfElseZero(Last is not null, Last!.Right);
+        OxSH.Short(Last is not null ? Last!.Right : 0);
 
     public short Width
     {

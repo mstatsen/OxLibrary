@@ -89,11 +89,10 @@ namespace OxLibrary.Controls
                     else
                         button.Margin.SetSize(
                             button.Dock,
-                            OxSH.IfElseZero(
-                                lastButton is not null 
-                                    && lastButton.Dock.Equals(button.Dock), 
-                                ButtonMargin
-                            )
+                            lastButton is not null
+                                && lastButton.Dock.Equals(button.Dock)
+                                ? ButtonMargin
+                                : 0
                         );
 
                     lastButton = button;

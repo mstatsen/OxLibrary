@@ -67,9 +67,9 @@ public static class OxDialogButtonHelper
         };
 
     public static short Width(OxDialogButton button) =>
-        OxSH.IfElse(
-            button is OxDialogButton.ApplyForAll,
-            140,
-            100
+        OxSH.Short(
+            button is OxDialogButton.ApplyForAll
+                ? 140
+                : 100
         );
 }

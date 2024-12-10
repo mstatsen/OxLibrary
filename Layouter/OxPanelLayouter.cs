@@ -399,10 +399,10 @@ namespace OxLibrary.Panels
 
         private void SetTopPadding() => 
             Padding.Top = 
-                OxSH.IfElse(
-                    panelsAlign is OxPanelsHorizontalAlign.OneColumn,
-                    16,
-                    18
+                OxSH.Short(
+                    panelsAlign is OxPanelsHorizontalAlign.OneColumn
+                        ? 16
+                        : 18
                 );
 
         protected void UpdateParent() =>

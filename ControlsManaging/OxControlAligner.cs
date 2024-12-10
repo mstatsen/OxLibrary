@@ -114,18 +114,14 @@ internal class OxControlAligner
         if (OxDockHelper.Variable(control.Dock) is not OxDockVariable.Height)
             controlBounds.Height = ControlZone.Height;
 
-        controlBounds.X = 
-            OxSH.IfElse(
-                control.Dock is OxDock.Right,
-                ControlZone.Right - controlBounds.Width,
-                ControlZone.X
-            );
-        controlBounds.Y = 
-            OxSH.IfElse(
-                control.Dock is OxDock.Bottom,
-                ControlZone.Bottom - controlBounds.Height,
-                ControlZone.Y
-            );
+        controlBounds.X =
+            control.Dock is OxDock.Right
+                ? OxSH.Sub(ControlZone.Right, controlBounds.Width)
+                : ControlZone.X;
+        controlBounds.Y =
+            control.Dock is OxDock.Bottom
+                ? OxSH.Sub(ControlZone.Bottom, controlBounds.Height)
+                : ControlZone.Y;
 
         HandleParentPadding(control, controlBounds);
         return controlBounds;

@@ -137,13 +137,12 @@ namespace OxLibrary.Panels
                 || !IsPrevButton(TabControl.ActiveTabButton);
 
             Margin[TabControl.TabPosition].Size =
-                OxSH.IfElseZero(
-                    !Active, 
-                    OxSH.IfElse(
-                        OxDockHelper.IsVertical(TabControl.TabPosition), 
-                            4, 
-                            24
-                    )
+                OxSH.Short(
+                    !Active
+                        ? OxDockHelper.IsVertical(TabControl.TabPosition)
+                            ? 4 
+                            : 24
+                        : 0
                 );
             Borders[TabControl.TabPosition].Visible = true;
             OxDock oppositeDock = OxDockHelper.Opposite(TabControl.TabPosition);

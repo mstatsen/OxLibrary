@@ -76,8 +76,10 @@ public class OxBoxManager :
 
         OxControls.Add(oxControl);
 
+        /*
         if (OxControl is IOxWithColorHelper colorHelperControl)
             colorHelperControl.PrepareColors();
+        */
     }
 
     protected override void RealignParent()

@@ -196,7 +196,7 @@ public class OxForm<TFormPanel> :
     }
 
     private void SetMargins() =>
-        Margin.Size = OxSH.IfElseZero(Sizable, 1);
+        Margin.Size = OxSH.Short(Sizable ? 1 : 0);
 
     protected override void OnShown(EventArgs e)
     {
