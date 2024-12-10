@@ -127,7 +127,10 @@ public class OxForm<TFormPanel> :
             base.WindowState = value;
 
             if (value is not FormWindowState.Minimized)
+            {
                 OnSizeChanged(new(oldSize, Size));
+                ApplyRestoreButtonIconAndToolTip();
+            }
         }
     }
 
@@ -153,6 +156,22 @@ public class OxForm<TFormPanel> :
             RestoreButton.Visible = CanMaximize;
         }
     }
+
+    public void ApplyRestoreButtonIconAndToolTip()
+    {
+        RestoreButton.Icon = RestoreIcon;
+        RestoreButton.ToolTipText = RestoreToolTip;
+    }
+
+    private Bitmap RestoreIcon =>
+        WindowState is FormWindowState.Maximized
+            ? OxIcons.Restore
+            : OxIcons.Maximize;
+
+    private string RestoreToolTip =>
+        WindowState is FormWindowState.Maximized
+            ? "Restore window"
+            : "Maximize window";
 
     public bool CanMinimize
     {

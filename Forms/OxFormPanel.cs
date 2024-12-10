@@ -16,12 +16,20 @@ public partial class OxFormPanel :
         get => form;
         set
         { 
+            if (form is null && value is null
+                || form is not null && form.Equals(value))
+                return;
+
+            if (form is not null)
+                form.SizeChanged -= FormSizeChanged;
+
             form = value;
 
             if (form is not null)
             {
                 form.SizeChanged += FormSizeChanged;
                 formMover = new(form, Header.Title);
+                Size = form.Size;
             }
         }
     }
@@ -32,8 +40,7 @@ public partial class OxFormPanel :
     public OxFormPanel() : base()
     {
         Dock = OxDock.Fill;
-        SetHeaderHeight(34);
-        SetRestoreButtonIconAndTooltip();
+        ApplyRestoreButtonIconAndToolTip();
         SetBordersSize();
         SetHeaderFont();
         BlurredBorder = true;
@@ -45,8 +52,8 @@ public partial class OxFormPanel :
         set => base.Dock = OxDock.Fill;
     }
 
-    private void FormSizeChanged(object sender, OxSizeChangedEventArgs args) => 
-        SetRestoreButtonIconAndTooltip();
+    private void FormSizeChanged(object sender, OxSizeChangedEventArgs args) =>
+        ApplyRestoreButtonIconAndToolTip();
 
     private void SetHeaderFont() => 
         Header.TitleFont = 
@@ -116,23 +123,15 @@ public partial class OxFormPanel :
     public OxIconButton RestoreButton => restoreButton;
     public OxIconButton MinimizeButton => minimizeButton;
 
-    private Bitmap GetRestoreIcon() =>
-        FormIsMaximized
-            ? OxIcons.Restore
-            : OxIcons.Maximize;
-
-    private string GetRestoreToopTip() =>
-        FormIsMaximized
-            ? "Restore window"
-            : "Maximize window";
-
-    private void SetRestoreButtonIconAndTooltip()
+    public void ApplyRestoreButtonIconAndToolTip()
     {
-        if (!Initialized)
-            return;
-
-        restoreButton.Icon = GetRestoreIcon();
-        restoreButton.ToolTipText = GetRestoreToopTip();
+        if (Form is null)
+        {
+            RestoreButton.Icon = OxIcons.Maximize;
+            RestoreButton.ToolTipText = "Maximize window";
+        }
+        else
+            Form.ApplyRestoreButtonIconAndToolTip();
     }
 
     public override Color DefaultColor =>
@@ -149,8 +148,9 @@ public partial class OxFormPanel :
 
         DoWithSuspendedLayout(() =>
             {
-                if (e.Changed &&
-                    Form is not null)
+                SetHeaderHeight(34);
+
+                if (Form is not null)
                     Form.Size = new(Size);
             }
         );

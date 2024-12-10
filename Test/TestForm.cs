@@ -27,6 +27,7 @@ namespace OxLibrary.Test
             //BaseColor = Color.FromArgb(135, 165, 195);
             //Width = 1000;
             MoveToScreenCenter();
+            return;
             
             
             toolBarButton = new OxButton("Test action", OxIcons.Cross);

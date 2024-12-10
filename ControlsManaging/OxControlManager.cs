@@ -158,8 +158,10 @@ public class OxControlManager : IOxControlManager
 
             calcedValue = OxSH.Min(
                 calcedValue,
-                ParentOuterControlZone.LastByDockVariable(variable)
-                - Location.ByDockVariable(variable)
+                OxSH.Sub(
+                    ParentOuterControlZone.LastByDockVariable(variable),
+                    Location.ByDockVariable(variable)
+                )
             );
         }
 
