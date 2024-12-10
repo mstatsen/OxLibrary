@@ -8,7 +8,7 @@ namespace OxLibrary.Panels
     {
         private static readonly short PageButtonWidth = 28;
         private static readonly short PageButtonHeight = 20;
-        private static short NavigateButtonWidth = OxSH.X2(PageButtonWidth);
+        private static readonly short NavigateButtonWidth = OxSH.X2(PageButtonWidth);
         private static readonly short ButtonSpace = 3;
         private static readonly short MaximumPageButtonsCount = 10;
 
