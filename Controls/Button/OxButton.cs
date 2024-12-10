@@ -74,7 +74,7 @@ public class OxButton : OxIconButton
         {
             Padding.Left = AutoSizePadding;
             short textWidth = OxTextHelper.GetTextWidth(Text, Label.Font);
-            textWidth += OxSH.Double(AutoSizePadding);
+            textWidth += OxSH.X2(AutoSizePadding);
             textWidth += Borders.Horizontal;
             Width = OxSH.Add(RealPictureWidth, textWidth);
             Label.Width = textWidth;
@@ -92,7 +92,7 @@ public class OxButton : OxIconButton
                 calcedWidth = Width;
             }
 
-            Padding.Left = OxSH.Half(Width - calcedWidth);
+            Padding.Left = OxSH.CenterOffset(Width, calcedWidth);
         }
     }
 

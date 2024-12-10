@@ -348,7 +348,7 @@ namespace OxLibrary.Panels
                     break;
                 case OxPanelsHorizontalAlign.Center:
                 case OxPanelsHorizontalAlign.Right:
-                    Padding.Left = OxSH.Half(Width - GetSumColumnsSize().Width);
+                    Padding.Left = OxSH.CenterOffset(Width, GetSumColumnsSize().Width);
                     break;
                 case OxPanelsHorizontalAlign.OneColumn:
                     Padding.Horizontal = 0;

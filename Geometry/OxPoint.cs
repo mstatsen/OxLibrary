@@ -30,7 +30,7 @@ public class OxPoint : OxSize
     }
 
     public OxPoint() : base() { }
-    public OxPoint(short x, short y) : base(x, y) { }
+    public OxPoint(int x, int y) : base(x, y) { }
     public OxPoint(Size size) : base(size) { }
     public OxPoint(OxSize size) : base(size) { }
     public OxPoint(Point point) : base(point) { }

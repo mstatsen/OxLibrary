@@ -1,4 +1,6 @@
-﻿namespace OxLibrary;
+﻿using OxLibrary.Geometry;
+
+namespace OxLibrary;
 
 public class OxBorder
 {
@@ -14,7 +16,7 @@ public class OxBorder
 
     public short Size
     {
-        get => visible ? size : (short)0;
+        get => OxSH.IfElseZero(visible, size);
         set => size = value;
     }
 

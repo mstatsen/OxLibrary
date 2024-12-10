@@ -54,7 +54,7 @@ public class OxDialogPanel : OxFormPanel
         )
         {
             Parent = Footer,
-            Top = (FooterButtonVerticalMargin),
+            Top = FooterButtonVerticalMargin,
             Font = OxStyles.Font(OxStyles.DefaultFontSize + 0.5f, FontStyle.Bold),
             Anchor = AnchorStyles.Top | AnchorStyles.Right,
             Visible = (dialogButtons & dialogButton).Equals(dialogButton),
@@ -62,7 +62,7 @@ public class OxDialogPanel : OxFormPanel
                 OxDialogButtonHelper.Width(dialogButton),
                 OxSH.Sub(
                     FooterButtonHeight, 
-                    OxSH.Double(FooterButtonVerticalMargin)
+                    OxSH.X2(FooterButtonVerticalMargin)
                 )
             )
         };
@@ -80,7 +80,7 @@ public class OxDialogPanel : OxFormPanel
             CreateButton(button);
 
         PlaceButtons();
-        Footer.Size = new((short)Footer.Width, FooterButtonHeight);
+        Footer.Size = new(Footer.Width, FooterButtonHeight);
         Footer.Borders[OxDock.Left].Visible = false;
         Footer.Borders[OxDock.Right].Visible = false;
         Footer.Borders[OxDock.Bottom].Visible = false;
@@ -128,22 +128,27 @@ public class OxDialogPanel : OxFormPanel
                 HorizontalAlign.Left =>
                     fullButtonsWidth,
                 HorizontalAlign.Center =>
-                        (short)(Footer.Width -
-                        (Footer.Width - fullButtonsWidth) / 2),
+                        OxSH.Sub(
+                            Footer.Width,
+                            OxSH.CenterOffset(Footer.Width, fullButtonsWidth)
+                        ),
                 _ =>
-                    (short)(Footer.Width - DialogButtonStartSpace)
+                    OxSH.Sub(Footer.Width, DialogButtonStartSpace)
             };
 
         int buttonIndex = 0;
 
         foreach (var item in realButtons)
         {
-            item.Value.Left = (short)(rightOffset - OxDialogButtonHelper.Width(item.Key));
+            item.Value.Left = OxSH.Sub(rightOffset, OxDialogButtonHelper.Width(item.Key));
             item.Value.Size = new(
                 OxDialogButtonHelper.Width(item.Key),
-                (short)(FooterButtonHeight - FooterButtonVerticalMargin * 2)
+                OxSH.Sub(
+                    FooterButtonHeight, 
+                    OxSH.X2(FooterButtonVerticalMargin)
+                )
             );
-            rightOffset = (short)(item.Value.Left - DialogButtonSpace);
+            rightOffset = OxSH.Sub(item.Value.Left, DialogButtonSpace);
             buttonIndex++;
         }
     }
@@ -151,7 +156,6 @@ public class OxDialogPanel : OxFormPanel
     public override void PrepareColors()
     {
         base.PrepareColors();
-
         Footer.BaseColor = BaseColor;
 
         foreach (var item in buttonsDictionary)

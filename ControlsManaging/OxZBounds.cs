@@ -1,4 +1,6 @@
-﻿namespace OxLibrary.ControlsManaging;
+﻿using OxLibrary.Geometry;
+
+namespace OxLibrary.ControlsManaging;
 
 public class OxZBounds
 {
@@ -9,25 +11,25 @@ public class OxZBounds
 
     public short Left 
     { 
-        get => (short)Control.Left;
+        get => OxSH.Short(Control.Left);
         set => Control.Left = value;
     }
 
     public short Top
     {
-        get => (short)Control.Top;
+        get => OxSH.Short(Control.Top);
         set => Control.Top = value;
     }
 
     public short Width
     {
-        get => (short)Control.Width;
+        get => OxSH.Short(Control.Width);
         set => Control.Width = value;
     }
 
     public short Height
     {
-        get => (short)Control.Height;
+        get => OxSH.Short(Control.Height);
         set => Control.Height = value;
     }
 

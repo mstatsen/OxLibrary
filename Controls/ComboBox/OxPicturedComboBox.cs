@@ -23,16 +23,21 @@ public class OxPicturedComboBox<T> : OxComboBox<T>
     {
         base.OnDrawItem(e);
 
-        if (e.Index > -1)
-        {
-            Bitmap? picture = OnGetPicture(TItems[e.Index]);
+        if (e.Index is -1)
+            return;
 
-            if (picture is not null)
-                e.Graphics.DrawImage(
-                    OxBitmapWorker.BoxingImage(picture, new((short)e.Bounds.Height, (short)e.Bounds.Height)),
-                    e.Bounds.X + ImageLeft,
-                    e.Bounds.Y
-                );
-        }
+        Bitmap? picture = OnGetPicture(TItems[e.Index]);
+
+        if (picture is null)
+            return;
+
+        e.Graphics.DrawImage(
+            OxBitmapWorker.BoxingImage(
+                picture, 
+                new(e.Bounds.Height, e.Bounds.Height)
+            ),
+            e.Bounds.X + ImageLeft,
+            e.Bounds.Y
+        );
     }
 }

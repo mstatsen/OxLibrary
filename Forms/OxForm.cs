@@ -74,8 +74,7 @@ public class OxForm<TFormPanel> :
                 screen.Bounds.Left,
                 OxSH.Half(screen.WorkingArea.Width - Width)
             ),
-            OxSH.Add
-            (
+            OxSH.Add(
                 screen.Bounds.Top,
                 OxSH.Half(screen.WorkingArea.Height - Height)
             )

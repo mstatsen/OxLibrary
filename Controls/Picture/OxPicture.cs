@@ -91,8 +91,8 @@ public partial class OxPicture : OxPanel
             return;
         pictureCorrectionProcess = true;
         SetImage(Image);
-        picture.Left = OxSH.Half(Width - picture.Width);
-        picture.Top = OxSH.Half(Height - picture.Height);
+        picture.Left = OxSH.CenterOffset(Width, picture.Width);
+        picture.Top = OxSH.CenterOffset(Height, picture.Height);
         pictureCorrectionProcess = false;
     }
 
@@ -150,8 +150,8 @@ public partial class OxPicture : OxPanel
             return;
         }
 
-        Padding.Vertical = OxSH.IfElseZero(!Stretch, OxSH.Half(Height - pictureSize));
-        Padding.Horizontal = OxSH.IfElseZero(!Stretch, OxSH.Half(Width - pictureSize));
+        Padding.Vertical = OxSH.IfElseZero(!Stretch, OxSH.CenterOffset(Height, pictureSize));
+        Padding.Horizontal = OxSH.IfElseZero(!Stretch, OxSH.CenterOffset(Width, pictureSize));
         OxBitmapCalcer bitmapCalcer = new(value, new(pictureSize, pictureSize), Stretch);
         picture.SizeMode = bitmapCalcer.SizeMode;
 

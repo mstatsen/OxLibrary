@@ -45,16 +45,17 @@ public class OxMessagePanel : OxDialogPanel
         get => MessageBox.Text;
         set
         {
+            //TODO: Use OxText helper for calc size (see OxLabel)
             MessageBox.Text = value;
             MessageBox.Height =
                 OxSH.Add(
-                    OxSH.Max(value.Length / 2, 23),
+                    OxSH.Max(OxSH.Half(value.Length), 23),
                     23 * value.Count(c => c.Equals('\r')
                 )
             );
             Size = new(
                 240,
-                OxSH.Add(MessageBox.Bottom, Padding.Bottom)
+                MessageBox.Bottom + Padding.Bottom
             );
         }
     }

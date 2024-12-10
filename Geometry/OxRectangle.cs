@@ -8,16 +8,16 @@ public class OxRectangle
         new(
             OxSH.Add(rect.X, borders.Left),
             OxSH.Add(rect.Y, borders.Top),
-            OxSH.Sub(rect.Width, OxSH.Add(borders.Left, borders.Right)),
-            OxSH.Sub(rect.Height, OxSH.Add(borders.Top, borders.Bottom))
+            OxSH.Sub(rect.Width, borders.Left, borders.Right),
+            OxSH.Sub(rect.Height, borders.Top, borders.Bottom)
         );
 
     public static OxRectangle operator +(OxRectangle rect, OxBorders borders) =>
         new(
             OxSH.Sub(rect.X, borders.Left),
             OxSH.Sub(rect.Y, borders.Top),
-            OxSH.Add(rect.Width, OxSH.Add(borders.Left, borders.Right)),
-            OxSH.Add(rect.Height, OxSH.Add(borders.Top, borders.Bottom))
+            OxSH.Add(rect.Width, borders.Left, borders.Right),
+            OxSH.Add(rect.Height, borders.Top, borders.Bottom)
         );
 
     private short x;
@@ -65,18 +65,18 @@ public class OxRectangle
 
     public OxRectangle(int x, int y, int width, int height)
     { 
-        X = (short)x;
-        Y = (short)y;
-        Width = (short)width;
-        Height = (short)height;
+        X = OxSH.Short(x);
+        Y = OxSH.Short(y);
+        Width = OxSH.Short(width);
+        Height = OxSH.Short(height);
     }
 
     public OxRectangle(Rectangle rectangle)
         : this(
-              (short)rectangle.X,
-              (short)rectangle.Y,
-              (short)rectangle.Width,
-              (short)rectangle.Height
+              rectangle.X,
+              rectangle.Y,
+              rectangle.Width,
+              rectangle.Height
         ) { }
 
     public OxRectangle(OxRectangle rectangle)

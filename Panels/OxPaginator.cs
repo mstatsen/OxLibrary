@@ -8,7 +8,7 @@ namespace OxLibrary.Panels
     {
         private static readonly short PageButtonWidth = 28;
         private static readonly short PageButtonHeight = 20;
-        private static readonly short NavigateButtonWidth = (short)(PageButtonWidth * 2);
+        private static short NavigateButtonWidth = OxSH.X2(PageButtonWidth);
         private static readonly short ButtonSpace = 3;
         private static readonly short MaximumPageButtonsCount = 10;
 
@@ -209,7 +209,7 @@ namespace OxLibrary.Panels
                     buttonIndex = CurrentPage;
                 else
                 if (Buttons[^1].Tag < CurrentPage)
-                    buttonIndex = OxSH.Sub(CurrentPage, MaximumPageButtonsCount + 1);
+                    buttonIndex = OxSH.Sub(CurrentPage, MaximumPageButtonsCount, 1);
             }
 
             foreach (OxTaggedButton button in Buttons)
@@ -299,7 +299,7 @@ namespace OxLibrary.Panels
 
         private void SetButtonsPanelWidth() =>
             buttonsPanel.Size = new(
-                OxSH.Add(LastButton.Right, ButtonSpace), 
+                LastButton.Right + ButtonSpace,
                 Height
             );
 
@@ -320,7 +320,7 @@ namespace OxLibrary.Panels
         }
 
         private void SetButtonTop(OxPanel button) =>
-            button.Top = OxSH.Half(buttonsPanel.Height - button.Height);
+            button.Top = OxSH.CenterOffset(buttonsPanel.Height, button.Height);
 
         private void SetButtonTop(OxTaggedButton button) =>
             SetButtonTop((OxPanel)button);
@@ -337,7 +337,7 @@ namespace OxLibrary.Panels
         }
 
         private void SetButtonsPanelLeft() =>
-            buttonsPanel.Left = OxSH.Half(Width - buttonsPanel.Width);
+            buttonsPanel.Left = OxSH.CenterOffset(Width, buttonsPanel.Width);
 
         private void SetButtonBaseColor(OxTaggedButton button) => 
             button.BaseColor = BaseColor;

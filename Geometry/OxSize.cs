@@ -59,7 +59,7 @@ public class OxSize
 
     public OxSize() : this(0) { }
 
-    public OxSize(short size) : this(size, size) { }
+    public OxSize(int size) : this(size, size) { }
 
     public OxSize(int width, int height)
     {

@@ -7,7 +7,7 @@ namespace OxLibrary;
 
 public static class OxControlHelper
 {
-    private static short GetBaseLine(IOxControl control) =>
+    private static short BaseLine(IOxControl control) =>
         OxSH.Div(
             OxSH.Mul(
                 control.Font.GetHeight(),
@@ -29,15 +29,18 @@ public static class OxControlHelper
             aligningControl switch
             {
                 OxPanel =>
-                    OxSH.Sub(baseControl.Top, OxSH.Half(aligningControl.Height - baseControl.Height)),
+                    OxSH.Sub(
+                        baseControl.Top, 
+                        OxSH.CenterOffset(aligningControl.Height, baseControl.Height)
+                    ),
                 _ =>
                     OxSH.IfElse(
                         baseControl is null,
                             aligningControl.Top,
                             baseControl!.Top
                                 + OxSH.Sub(
-                                    GetBaseLine(baseControl), 
-                                    GetBaseLine(aligningControl))
+                                    BaseLine(baseControl), 
+                                    BaseLine(aligningControl))
                                 + OxSH.IfElseZero(baseControl is not OxLabel, 2)
                     )
             };

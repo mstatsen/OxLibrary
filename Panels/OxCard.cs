@@ -31,10 +31,8 @@ namespace OxLibrary.Panels
                 else ZBounds.Height =
                         OxSH.Add(
                             Header.Underline.Size, 
-                            OxSH.Add(
-                                HeaderHeight,
-                                Margin.Vertical
-                            )
+                            HeaderHeight,
+                            Margin.Vertical
                         );
 #pragma warning restore CS0618 // Type or member is obsolete
                 Parent?.DoWithSuspendedLayout(() => Parent?.Realign());

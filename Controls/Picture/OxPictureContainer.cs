@@ -55,21 +55,13 @@ public class OxPictureContainer : OxClickFrame
         if (Image is null)
             return;
 
-        short calcedWidth;
-
         foreach (OxClickFrame button in Buttons)
-        {
-            calcedWidth =
-                OxSH.Add(
-                    buttonsParent.Width / Buttons.Count,
-                    OxPictureActionHelper.ButtonMargin * Buttons.Count + 1
-                );
-
             button.Size = new(
-                calcedWidth,
+                buttonsParent.Width / Buttons.Count
+                + OxPictureActionHelper.ButtonMargin * Buttons.Count
+                + 1,
                 OxPictureActionHelper.DefaultHeight
             );
-        }
     }
 
     private void CreateButtons()
