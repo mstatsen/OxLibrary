@@ -4,7 +4,7 @@ using OxLibrary.Handlers;
 
 namespace OxLibrary.Panels
 {
-    public class OxPaginator : OxUnderlinedPanel
+    public class OxPaginator : OxOneBorderPanel
     {
         private static readonly short PageButtonWidth = 28;
         private static readonly short PageButtonHeight = 20;
@@ -279,7 +279,7 @@ namespace OxLibrary.Panels
             return button;
         }
 
-        public OxPaginator() : base(OxSize.Empty) { }
+        public OxPaginator() : base(40) { }
 
         protected override void PrepareInnerComponents()
         {
@@ -302,12 +302,6 @@ namespace OxLibrary.Panels
                 LastButton.Right + ButtonSpace,
                 Height
             );
-
-        protected override void AfterCreated()
-        {
-            base.AfterCreated();
-            Height = 40;
-        }
 
         public override void OnSizeChanged(OxSizeChangedEventArgs e)
         {

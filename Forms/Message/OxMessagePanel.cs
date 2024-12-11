@@ -50,12 +50,12 @@ public class OxMessagePanel : OxDialogPanel
             MessageBox.Height =
                 OxSH.Add(
                     OxSH.Max(OxSH.Half(value.Length), 23),
-                    23 * value.Count(c => c.Equals('\r')
-                )
+                    23 * value.Count(c => c.Equals('\r'))
+                    + Footer.Height
             );
             Size = new(
                 240,
-                MessageBox.Bottom + Padding.Bottom
+                MessageBox.Bottom
             );
         }
     }

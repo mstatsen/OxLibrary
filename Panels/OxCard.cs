@@ -30,7 +30,7 @@ namespace OxLibrary.Panels
                     ZBounds.RestoreBounds();
                 else ZBounds.Height =
                         OxSH.Add(
-                            Header.Underline.Size, 
+                            Header.Border.Size, 
                             HeaderHeight,
                             Margin.Vertical
                         );

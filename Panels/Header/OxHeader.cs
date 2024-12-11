@@ -5,7 +5,7 @@ using OxLibrary.ControlList;
 
 namespace OxLibrary.Panels;
 
-public class OxHeader : OxUnderlinedPanel, IOxHeader
+public class OxHeader : OxOneBorderPanel, IOxHeader
 {
 
     private readonly OxPicture icon = new()
@@ -41,7 +41,7 @@ public class OxHeader : OxUnderlinedPanel, IOxHeader
         set => ToolBar.Buttons = value;
     }
 
-    public OxHeader(string title = "") : base(new(0, 26))
+    public OxHeader(string title = "") : base(26)
     {
         Dock = OxDock.Top;
         this.title.Text = title;
@@ -127,8 +127,6 @@ public class OxHeader : OxUnderlinedPanel, IOxHeader
 
     public void AddButton(OxIconButton button, bool startGroup = false) =>
         ToolBar.AddButton(button, startGroup);
-
-    public override bool HandleParentPadding => false;
 
     public bool SquareToolBarButtons
     {

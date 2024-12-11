@@ -25,7 +25,7 @@ namespace OxLibrary.Panels
             set
             {
                 Header.Dock = value;
-                Header.UnderlineVisible = Header.Dock is OxDock.Top;
+                Header.BorderVisible = Header.Dock is OxDock.Top;
                 SetHeaderPaddings();
                 SetHeaderSize();
                 SetButtonsPostion();

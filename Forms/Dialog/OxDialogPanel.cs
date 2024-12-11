@@ -38,7 +38,7 @@ public class OxDialogPanel : OxFormPanel
     public OxDialogPanel() : base() =>
         Size = new(480, 360);
 
-    public readonly OxFrame Footer = new();
+    public readonly OxOneBorderPanel Footer = new();
 
     protected override void PrepareInnerComponents()
     {

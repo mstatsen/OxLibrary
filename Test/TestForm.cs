@@ -27,7 +27,6 @@ namespace OxLibrary.Test
             //BaseColor = Color.FromArgb(135, 165, 195);
             //Width = 1000;
             MoveToScreenCenter();
-            return;
             
             
             toolBarButton = new OxButton("Test action", OxIcons.Cross);
@@ -145,12 +144,12 @@ namespace OxLibrary.Test
 
         private void ButtonEdit_OnButtonClick(object? sender, EventArgs e)
         {
-            MessageBox.Show("Click on buttonEdit' button");
+            OxMessage.ShowInfo("Click on buttonEdit' button", this);
         }
 
         private void Frame_Click(object? sender, EventArgs e)
         {
-            MessageBox.Show($"Location: {frame.Location}\nSize: {frame.Size}");
+            OxMessage.ShowInfo($"Location: {frame.Location}\nSize: {frame.Size}", this);
         }
 
         private void HideCardButton_Click(object? sender, EventArgs e)

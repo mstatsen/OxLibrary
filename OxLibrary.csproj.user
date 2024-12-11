@@ -116,7 +116,7 @@
     <Compile Update="Panels\TabControl\OxTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Update="Panels\OxUnderlinedPanel.cs">
+    <Compile Update="Panels\OxOneBorderPanel.cs">
       <SubType>Component</SubType>
     </Compile>
   </ItemGroup>

@@ -9,7 +9,6 @@ namespace OxLibrary.Interfaces
         OxLabel Title { get; }
         ContentAlignment TitleAlign { get; set; }
         Font TitleFont { get; set; }
-        bool UnderlineVisible { get; set; }
         void AddButton(OxIconButton button, bool startGroup = false);
     }
 }

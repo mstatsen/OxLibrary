@@ -246,9 +246,15 @@ public class OxPanel : Panel, IOxPanel
 
     public bool BorderVisible
     {
-        get => Borders.GetVisible();
-        set => Borders.SetVisible(value);
+        get => GetBorderVisible();
+        set => SetBorderVisible(value);
     }
+
+    protected virtual void SetBorderVisible(bool value) =>
+        Borders.SetVisible(value);
+
+    protected virtual bool GetBorderVisible() =>
+        Borders.GetVisible();
 
     protected virtual Color GetBorderColor() =>
         Enabled

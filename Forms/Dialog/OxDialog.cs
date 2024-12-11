@@ -121,7 +121,7 @@ public class OxDialog<TDialogPanel> : OxForm<TDialogPanel>
     public void SetFooterButtonText(OxDialogButton dialogButton, string text) =>
         FormPanel.SetFooterButtonText(dialogButton, text);
 
-    public OxFrame Footer => FormPanel.Footer;
+    public IOxPanel Footer => FormPanel.Footer;
 }
 
 public class OxDialog : OxDialog<OxDialogPanel>
