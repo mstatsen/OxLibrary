@@ -121,6 +121,7 @@ namespace OxLibrary.Test
             countryComboBox.LoadCountries();
             */
 
+            //return;
             buttonEdit = new()
             {
                 Parent = frame,
@@ -144,7 +145,7 @@ namespace OxLibrary.Test
 
         private void ButtonEdit_OnButtonClick(object? sender, EventArgs e)
         {
-            OxMessage.ShowInfo("Click on buttonEdit' button", this);
+            OxMessage.ShowInfo("Click on buttonEdit' button\n\n\n\n\nA\nB\nC", this);
         }
 
         private void Frame_Click(object? sender, EventArgs e)

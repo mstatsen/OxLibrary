@@ -80,11 +80,13 @@ public class OxMessage : OxDialog<OxMessagePanel>
     {
         base.OnKeyUp(e);
 
-        if (!e.Handled
-            && MessageType is OxMessageType.Error
-                            or OxMessageType.Info
+        if (e.Handled)
+            return;
+
+        if (MessageType is OxMessageType.Error
+                        or OxMessageType.Info
             && e.KeyCode is Keys.Enter
-                          or Keys.Space)
+                         or Keys.Space)
             DialogResult = DialogResult.OK;
     }
 }

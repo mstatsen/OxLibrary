@@ -148,8 +148,8 @@ public class OxRectangle
     }
 
     public bool IsEmpty => 
-        Width - X is 0
-        || Height - Y is 0;
+        Width - X <= 0
+        || Height - Y <= 0;
 
     public void Clear()
     { 

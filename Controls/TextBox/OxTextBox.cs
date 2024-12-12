@@ -15,6 +15,12 @@ namespace OxLibrary.Controls
             Height = 24;
         }
 
+        public new string Text
+        {
+            get => base.Text;
+            set => base.Text = value.Replace("\n", "\r\n");
+        }
+
         #region Implemention of IOxControl using IOxControlManager
         public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
         public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
