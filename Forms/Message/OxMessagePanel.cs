@@ -27,7 +27,7 @@ public class OxMessagePanel : OxDialogPanel
     {
         FooterButtonsAlign = HorizontalAlign.Center;
         HeaderHeight = 30;
-        MinimumSize = new(320, 90);
+        MinimumSize = new(384, 126);
         Footer.ButtonsPlacing += FooterButtonsPlacingHandler;
     }
 
