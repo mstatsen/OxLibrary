@@ -8,7 +8,7 @@ public class OxMessagePanel : OxDialogPanel
 {
     private readonly OxTextBox MessageBox = new()
     {
-        Dock = OxDock.Top,
+        Dock = OxDock.Fill,
         TextAlign = HorizontalAlignment.Center,
         Font = OxStyles.Font(OxStyles.DefaultFontSize + 1.15f),
         ForeColor = Color.FromArgb(60, 55, 54),
@@ -26,16 +26,36 @@ public class OxMessagePanel : OxDialogPanel
     public OxMessagePanel() : base()
     {
         FooterButtonsAlign = HorizontalAlign.Center;
-        Size = new(240, 120);
         HeaderHeight = 30;
+        MinimumSize = new(320, 90);
         Footer.ButtonsPlacing += FooterButtonsPlacingHandler;
     }
 
-    private void FooterButtonsPlacingHandler(object? sender, EventArgs e)
+    private void FooterButtonsPlacingHandler(object? sender, EventArgs e) =>
+        RecalcSize();
+
+    private void RecalcSize()
     {
+        short calcedWidth = OxSH.Max(Footer.ButtonsWidth, OxTextHelper.CalcedWidth(MessageBox));
+        short calcedMessageHeight = OxTextHelper.CalcedHeight(MessageBox, calcedWidth);
+        Padding.Horizontal = OxSH.Min(24, OxSH.Div(calcedWidth, 4));
+        calcedWidth += Padding.Horizontal;
+        Padding.Vertical = OxSH.Min(24, OxSH.Div(calcedMessageHeight, 4));
+        short calcedHeight =
+            OxSH.Add(
+                HeaderHeight,
+                Padding.Vertical,
+                calcedMessageHeight,
+                Footer.Height
+            );
+
+        if (Width.Equals(calcedWidth)
+            && Height.Equals(calcedHeight))
+            return;
+
         Size = new(
-            OxSH.Max(Footer.ButtonsWidth + 160, Width),
-            OxSH.Max(Footer.ButtonsWidth / 2, Height)
+            calcedWidth,
+            calcedHeight
         );
     }
 
@@ -43,7 +63,6 @@ public class OxMessagePanel : OxDialogPanel
     {
         base.PrepareInnerComponents();
         MessageBox.Parent = this;
-        Padding.Horizontal = OxSH.Div(Width, 4);
     }
 
     public override Color DefaultColor => Color.FromArgb(146, 141, 140);
@@ -54,18 +73,7 @@ public class OxMessagePanel : OxDialogPanel
         set
         {
             MessageBox.Text = value;
-            short calcedMessageHeight = OxTextHelper.CalcedHeight(MessageBox, MessageBox.Width);
-            Padding.Top = OxSH.Min(36, OxSH.Div(calcedMessageHeight, 4));
-            Padding.Bottom = OxSH.Min(36, OxSH.Div(calcedMessageHeight, 4));
-            Size = new(
-                Width,
-                HeaderHeight
-                 + Padding.Vertical
-                 + calcedMessageHeight
-                 + Footer.Height
-            );
-
-            MessageBox.Height = calcedMessageHeight;
+            RecalcSize();
         }
     }
 
