@@ -45,12 +45,11 @@ namespace OxLibrary
 
         public static short CalcedHeight(string text, Font font, short boundsWidth)
         {
-            short lineHeight = Height(text, font);
-
             if (text.Equals(string.Empty)
                 || boundsWidth <= 0)
                 return 0;
 
+            short lineHeight = Height(text, font);
             short calcedHeight = lineHeight;
             short calcedWidth;
             short index = 0;

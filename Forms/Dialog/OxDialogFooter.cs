@@ -174,7 +174,7 @@ public class OxDialogFooter : OxOneBorderPanel
         buttonsDictionary.Add(dialogButton, button);
     }
 
-    protected virtual void PlaceButtons()
+    private void PlaceButtons()
     {
         Dictionary<OxDialogButton, OxButton> realButtons = new();
 
@@ -196,10 +196,10 @@ public class OxDialogFooter : OxOneBorderPanel
                 HorizontalAlign.Left =>
                     fullButtonsWidth,
                 HorizontalAlign.Center =>
-                        OxSH.Sub(
-                            Width,
-                            OxSH.CenterOffset(Width, fullButtonsWidth)
-                        ),
+                    OxSH.Sub(
+                        Width, 
+                        OxSH.CenterOffset(Width, fullButtonsWidth)
+                    ),
                 _ =>
                     OxSH.Sub(Width, DialogButtonStartSpace)
             };
@@ -208,9 +208,10 @@ public class OxDialogFooter : OxOneBorderPanel
 
         foreach (var item in realButtons)
         {
-            item.Value.Left = OxSH.Sub(rightOffset, OxDialogButtonHelper.Width(item.Key));
+            short dialogButtonWidth = OxDialogButtonHelper.Width(item.Key);
+            item.Value.Left = OxSH.Sub(rightOffset, dialogButtonWidth);
             item.Value.Size = new(
-                OxDialogButtonHelper.Width(item.Key),
+                dialogButtonWidth,
                 OxSH.Sub(
                     ButtonHeight,
                     OxSH.X2(buttonVerticalMargin)

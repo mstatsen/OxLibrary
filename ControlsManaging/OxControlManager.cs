@@ -201,22 +201,20 @@ public class OxControlManager : IOxControlManager
 
     private void SetLocationPart(OxDockVariable variable, short value)
     {
-        {
-            if (OxDockHelper.DockType(Dock) is OxDockType.Docked)
-                return;
+        if (OxDockHelper.DockType(Dock) is OxDockType.Docked)
+            return;
 
-            OxPoint oldLocation = new(Location);
-            ZBounds.SetLocationPart(variable, value);
-            ZBounds.SaveLocation(variable);
-            ZBounds.SetLocationPart(
-                variable,
-                OxSH.Add(
-                    value,
-                    ParentInnerControlZone.FirstByDockVariable(variable)
-                )
-            );
-            OnLocationChanged(new(oldLocation, Location));
-        }
+        OxPoint oldLocation = new(Location);
+        ZBounds.SetLocationPart(variable, value);
+        ZBounds.SaveLocation(variable);
+        ZBounds.SetLocationPart(
+            variable,
+            OxSH.Add(
+                value,
+                ParentInnerControlZone.FirstByDockVariable(variable)
+            )
+        );
+        OnLocationChanged(new(oldLocation, Location));
     }
 
     private readonly OxHandlers Handlers;
@@ -400,7 +398,7 @@ public class OxControlManager : IOxControlManager
             }
         );
 
-    private void OnLocationChanged(OxLocationChangedEventArgs e)
+    internal void OnLocationChanged(OxLocationChangedEventArgs e)
     {
         if (!e.Changed)
             return;
@@ -419,7 +417,7 @@ public class OxControlManager : IOxControlManager
         e.NewValue?.Realign();
     }
 
-    protected virtual void OnSizeChanged(OxSizeChangedEventArgs e)
+    internal void OnSizeChanged(OxSizeChangedEventArgs e)
     {
         if (!e.Changed)
             return;

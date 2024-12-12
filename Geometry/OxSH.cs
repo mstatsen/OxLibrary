@@ -123,6 +123,8 @@
         public static short Third(int value) =>
             Div(value, 3);
 
+        public static short Revert(int value) =>
+            Short(-value);
 
         /// <returns>abs((value1 - value2) / 2)</returns>
         public static short CenterOffset(int value1, int value2)

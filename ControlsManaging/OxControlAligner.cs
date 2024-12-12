@@ -166,6 +166,7 @@ internal class OxControlAligner
 
         control.ZBounds.Location = newBounds.Location;
         control.ZBounds.Size = newBounds.Size;
+        control.ZBounds.ApplyBoundsToControl();
 
         if (control is IOxBox box)
             box.Realign();

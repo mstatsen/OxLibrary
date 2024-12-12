@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Geometry;
+using OxLibrary.Interfaces;
 
 namespace OxLibrary;
 
@@ -79,10 +80,14 @@ public class OxZBounds
         switch (variable)
         {
             case OxDockVariable.Width:
-                Left = value;
+                if (!Left.Equals(value))
+                    Left = value;
+
                 break;
             case OxDockVariable.Height:
-                Top = value;
+                if (!Top.Equals(value))
+                    Top = value;
+
                 break;
         }
     }
@@ -103,10 +108,14 @@ public class OxZBounds
         switch (variable)
         {
             case OxDockVariable.Width:
-                Width = value;
+                if (!Width.Equals(value))
+                    Width = value;
+
                 break;
             case OxDockVariable.Height:
-                Height = value;
+                if (!Height.Equals(value))
+                    Height = value;
+
                 break;
         }
     }
@@ -186,6 +195,15 @@ public class OxZBounds
 
         SaveLocation();
         SaveSize();
+    }
+
+    public void ApplyBoundsToControl()
+    {
+        if (Control is not IOxControl oxControl)
+            return;
+
+        oxControl.OnLocationChanged(new(OxPoint.Empty, oxControl.Location));
+        oxControl.OnSizeChanged(new(OxSize.Empty, oxControl.Size));
     }
 
     private OxSize SavedSize = OxSize.Empty;
