@@ -1,6 +1,6 @@
 ﻿using OxLibrary.Interfaces;
 
-namespace OxLibrary.ControlsManaging;
+namespace OxLibrary;
 
 public class OxControlDictionary<T> : Dictionary<IOxControl, T>
 {

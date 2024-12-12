@@ -1,5 +1,4 @@
 ﻿using OxLibrary.Controls;
-using OxLibrary.ControlsManaging;
 using OxLibrary.Geometry;
 using OxLibrary.Handlers;
 using OxLibrary.Interfaces;
@@ -66,21 +65,8 @@ public class OxForm<TFormPanel> :
     private void BaseColorChangedHandler(object? sender, EventArgs e) =>
         PrepareColors();
 
-    public void MoveToScreenCenter()
-    {
-        Screen screen = Screen.FromControl(this);
-        Location = new(
-            OxSH.Add(
-                screen.Bounds.Left,
-                OxSH.Half(screen.WorkingArea.Width - Width)
-            ),
-            OxSH.Add(
-                screen.Bounds.Top,
-                OxSH.Half(screen.WorkingArea.Height - Height)
-            )
-        );
-        Size = new(Width, Height);
-    }
+    public void MoveToScreenCenter() => 
+        OxMover.MoveToCenter(this);
 
     protected virtual void SetUpForm()
     {

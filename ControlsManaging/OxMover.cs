@@ -1,42 +1,43 @@
-﻿using OxLibrary.Interfaces;
+﻿using OxLibrary.Geometry;
+using OxLibrary.Interfaces;
 
-namespace OxLibrary.Forms;
+namespace OxLibrary;
 
-public class OxBoxMover
+public class OxMover
 {
-    public OxBoxMover(IOxBox Box, Control? mover)
+    public OxMover(IOxControl Control, Control? mover)
     {
-        this.Box = Box;
-        Mover = mover;
+        this.Control = Control;
+        MoverControl = mover;
         SetHandlers();
     }
 
     private void SetHandlers()
     {
-        if (Mover is null)
+        if (MoverControl is null)
             return;
 
-        Mover.MouseMove += MoverMoveHandler;
-        Mover.MouseDown += MoverMouseDownHandler;
-        Mover.MouseUp += MoverMouseUpHandler;
+        MoverControl.MouseMove += MoverControlMoveHandler;
+        MoverControl.MouseDown += MoverControlMouseDownHandler;
+        MoverControl.MouseUp += MoverControlMouseUpHandler;
     }
 
-    private void MoverMouseUpHandler(object? sender, MouseEventArgs e) =>
+    private void MoverControlMouseUpHandler(object? sender, MouseEventArgs e) =>
         Processing = false;
 
-    private IOxBox Box { get; }
-    private Control? Mover { get; }
+    private IOxControl Control { get; }
+    private Control? MoverControl { get; }
     public bool Processing { get; set; }
 
     private Point LastMousePosition = new();
 
-    private void MoverMouseDownHandler(object? sender, MouseEventArgs e)
+    private void MoverControlMouseDownHandler(object? sender, MouseEventArgs e)
     {
         Processing = e.Button is MouseButtons.Left;
         LastMousePosition = e.Location;
     }
 
-    private void MoverMoveHandler(object? sender, MouseEventArgs e)
+    private void MoverControlMoveHandler(object? sender, MouseEventArgs e)
     {
         if (!Processing
             || LastMousePosition.Equals(e.Location))
@@ -49,15 +50,15 @@ public class OxBoxMover
         LastMousePosition.X = e.X - deltaX;
         LastMousePosition.Y = e.Y - deltaY;
 
-        if (Box is not IOxForm form
+        if (Control is not IOxForm form
             || form.WindowState is FormWindowState.Normal)
-            Move(Box.PointToScreen(new(deltaX, deltaY)));
+            Move(Control.PointToScreen(new(deltaX, deltaY)));
         else Processing = false;
     }
 
     private void SetWindowState(MouseEventArgs e)
     {
-        if (Box is not IOxForm form
+        if (Control is not IOxForm form
             || !form.CanMaximize)
             return;
 
@@ -66,7 +67,7 @@ public class OxBoxMover
             case FormWindowState.Maximized when !LastMousePosition.Y.Equals(e.Y):
                 form.SetState(FormWindowState.Normal);
                 break;
-            case FormWindowState.Normal when Box.PointToScreen(e.Location).Y < 0:
+            case FormWindowState.Normal when Control.PointToScreen(e.Location).Y < 0:
                 form.SetState(FormWindowState.Maximized);
                 break;
         }
@@ -74,13 +75,13 @@ public class OxBoxMover
 
     private void Move(Point FinishPosition)
     {
-        if (FinishPosition.Equals(Box.Location.Point))
+        if (FinishPosition.Equals(Control.Location.Point))
             return;
 
-        List<Point> wayPoints = WayPoints(Box.Location.Point, FinishPosition, 30);
+        List<Point> wayPoints = WayPoints(Control.Location.Point, FinishPosition, 30);
 
         foreach (Point point in wayPoints)
-            Box.Location = new(point);
+            Control.Location = new(point);
     }
 
     public static List<Point> WayPoints(OxPoint Start, OxPoint Finish, int speed) =>
@@ -123,10 +124,39 @@ public class OxBoxMover
             }
         }
 
-        if (wayPoints.Count is 0 
+        if (wayPoints.Count is 0
             || !wayPoints[^1].Equals(Finish))
             wayPoints.Add(Finish);
 
         return wayPoints;
+    }
+
+    public static void MoveToCenter(IOxControl control)
+    {
+        OxSize parentSize;
+        OxPoint parentLocation;
+
+        if (control.Parent is not null)
+        {
+            parentSize = new(control.Parent.OuterControlZone.Size);
+            parentLocation = new(control.Parent.OuterControlZone.Location);
+        }
+        else
+        {
+            parentSize = new(Screen.GetWorkingArea((Control)control).Size);
+            parentLocation = new(Screen.GetWorkingArea((Control)control).Location);
+        }
+
+        control.Location = new(
+            OxSH.Add(
+                parentLocation.X,
+                OxSH.Half(parentSize.Width - control.Width)
+            ),
+            OxSH.Add(
+                parentLocation.Y,
+                OxSH.Half(parentSize.Height - control.Height)
+            )
+        );
+        control.Size = new(control.Width, control.Height);
     }
 }

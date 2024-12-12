@@ -1,6 +1,6 @@
 ﻿using OxLibrary.Geometry;
 
-namespace OxLibrary.ControlsManaging;
+namespace OxLibrary;
 
 public class OxZBounds
 {

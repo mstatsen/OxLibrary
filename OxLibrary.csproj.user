@@ -29,6 +29,9 @@
     <Compile Update="Controls\Picture\OxPictureContainer.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Update="Forms\Dialog\OxDialogFooter.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Update="Forms\OxForm.cs">
       <SubType>Form</SubType>
     </Compile>

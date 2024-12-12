@@ -106,18 +106,6 @@ public class OxDialog<TDialogPanel> : OxForm<TDialogPanel>
         FirstFocusControl?.Focus();
     }
 
-    public short DialogButtonSpace
-    { 
-        get => FormPanel.DialogButtonSpace;
-        set => FormPanel.DialogButtonSpace = value;
-    }
-
-    public short DialogButtonStartSpace
-    {
-        get => FormPanel.DialogButtonStartSpace;
-        set => FormPanel.DialogButtonStartSpace = value;
-    }
-
     public void SetFooterButtonText(OxDialogButton dialogButton, string text) =>
         FormPanel.SetFooterButtonText(dialogButton, text);
 

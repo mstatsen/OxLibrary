@@ -34,7 +34,7 @@ public partial class OxFormPanel :
         }
     }
 
-    private OxBoxMover? formMover;
+    private OxMover? formMover;
 
     
     public OxFormPanel() : base()
@@ -65,14 +65,14 @@ public partial class OxFormPanel :
     public void SetHeaderHeight(short height)
     {
         HeaderHeight = height;
-        SetButtonsSize();
+        SetHeaderButtonsSize();
     }
 
     protected override void PrepareInnerComponents()
     {
         base.PrepareInnerComponents();
-        SetButtonsSize();
-        PlaceButtons();
+        SetHeaderButtonsSize();
+        PlaceHeaderButtons();
     }
 
     public override void PrepareColors()
@@ -81,7 +81,7 @@ public partial class OxFormPanel :
         Form?.PrepareColors();
     }
 
-    private void PlaceButtons()
+    private void PlaceHeaderButtons()
     {
         Header.SquareToolBarButtons = false;
         Header.AddButton(minimizeButton);
@@ -89,7 +89,7 @@ public partial class OxFormPanel :
         Header.AddButton(closeButton);
     }
 
-    private void SetButtonsSize()
+    private void SetHeaderButtonsSize()
     {
         foreach (OxIconButton button in Header.Buttons)
         {
@@ -98,7 +98,7 @@ public partial class OxFormPanel :
         }
 
         Header.ToolBar.Buttons.Clear();
-        PlaceButtons();
+        PlaceHeaderButtons();
     }
 
     private readonly OxIconButton closeButton = new(OxIcons.Close, 28)
@@ -251,7 +251,7 @@ public partial class OxFormPanel :
         LastMousePosition = newLastMousePosition;
         newSize.X = OxSH.Max(newSize.X, Form.MinimumSize.Width);
         newSize.Y = OxSH.Max(newSize.Y, Form.MinimumSize.Height);
-        List<Point> sizePoints = OxBoxMover.WayPoints(oldSize, newSize, 30);
+        List<Point> sizePoints = OxMover.WayPoints(oldSize, newSize, 30);
         ResizeProcessing = true;
 
         try

@@ -25,12 +25,20 @@ public class OxMessagePanel : OxDialogPanel
 
     public OxMessagePanel() : base()
     {
+        FooterButtonsAlign = HorizontalAlign.Center;
         Padding.Size = 24;
         Size = new(240, 120);
         HeaderHeight = 30;
+        Footer.ButtonsPlacing += FooterButtonsPlacingHandler;
     }
 
-    protected override HorizontalAlign FooterButtonsAlign => HorizontalAlign.Center;
+    private void FooterButtonsPlacingHandler(object? sender, EventArgs e)
+    {
+        Size = new(
+            OxSH.Max(Footer.ButtonsWidth + 160, Width),
+            OxSH.Max(Footer.ButtonsWidth / 2, Height)
+        );
+    }
 
     protected override void PrepareInnerComponents()
     {
@@ -51,32 +59,12 @@ public class OxMessagePanel : OxDialogPanel
                 OxSH.Add(
                     OxSH.Max(OxSH.Half(value.Length), 23),
                     23 * value.Count(c => c.Equals('\r'))
-                    + Footer.Height
             );
             Size = new(
-                240,
-                MessageBox.Bottom
+                500,
+                MessageBox.Bottom + Footer.Height
             );
         }
-    }
-
-    protected override void PlaceButtons()
-    {
-        if (Form is not null)
-        {
-            short calcedWidth = 0;
-
-            foreach (OxDialogButton button in buttonsDictionary.Keys)
-                if ((DialogButtons & button).Equals(button))
-                    calcedWidth += OxSH.Add(OxDialogButtonHelper.Width(button), DialogButtonSpace);
-
-            Size = new(
-                OxSH.Max(calcedWidth + 160, Width),
-                OxSH.Max(calcedWidth / 2, Height)
-            );
-        }
-
-        base.PlaceButtons();
     }
 
     protected override short FooterButtonHeight => 34;

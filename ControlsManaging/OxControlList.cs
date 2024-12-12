@@ -1,7 +1,7 @@
 ﻿using OxLibrary.Dock;
 using OxLibrary.Interfaces;
 
-namespace OxLibrary.ControlsManaging;
+namespace OxLibrary;
 
 public class OxControlList : List<IOxControl>
 {
