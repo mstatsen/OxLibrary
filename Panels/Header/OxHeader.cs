@@ -7,7 +7,6 @@ namespace OxLibrary.Panels;
 
 public class OxHeader : OxOneBorderPanel, IOxHeader
 {
-
     private readonly OxPicture icon = new()
     {
         Dock = OxDock.Left,

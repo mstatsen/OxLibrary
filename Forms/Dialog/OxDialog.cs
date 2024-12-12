@@ -102,8 +102,8 @@ public class OxDialog<TDialogPanel> : OxForm<TDialogPanel>
 
     protected override void OnShown(EventArgs e)
     {
-        base.OnShown(e);
         FirstFocusControl?.Focus();
+        base.OnShown(e);
     }
 
     public void SetFooterButtonText(OxDialogButton dialogButton, string text) =>

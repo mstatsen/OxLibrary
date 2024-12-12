@@ -1,4 +1,5 @@
-﻿namespace OxLibrary.Forms;
+﻿
+namespace OxLibrary.Forms;
 
 public class OxMessage : OxDialog<OxMessagePanel>
 {
@@ -84,4 +85,4 @@ public class OxMessage : OxDialog<OxMessagePanel>
                          or Keys.Space)
             DialogResult = DialogResult.OK;
     }
-}
+ }

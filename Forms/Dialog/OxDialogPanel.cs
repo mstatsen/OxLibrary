@@ -23,11 +23,15 @@ public class OxDialogPanel : OxFormPanel
     public OxDialogPanel() : base()
     {
         Size = new(480, 360);
-        Footer = new();
+    }
+
+    protected override void PrepareInnerComponents()
+    {
+        base.PrepareInnerComponents();
         PrepareFooter();
     }
 
-    public readonly OxDialogFooter Footer;
+    public readonly OxDialogFooter Footer = new();
 
     private void PrepareFooter()
     {
@@ -36,10 +40,10 @@ public class OxDialogPanel : OxFormPanel
         Footer.SetDialogResult += SetDialogResultHandler;
     }
 
-    protected virtual short FooterButtonHeight
+    public short FooterHeight
     { 
-        get => Footer.ButtonHeight; 
-        set => Footer.ButtonHeight = value;
+        get => Footer.Height; 
+        set => Footer.Height = value;
     }
 
     protected virtual void SetDialogResultHandler(DialogResult dialogResult)

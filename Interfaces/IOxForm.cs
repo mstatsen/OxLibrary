@@ -13,6 +13,7 @@ public interface IOxForm :
     void FreezeSize();
     void ClearConstraints();
     void ApplyFormIcon();
+    event EventHandler? Shown;
 }
 
 public interface IOxForm<TFormPanel> : IOxForm

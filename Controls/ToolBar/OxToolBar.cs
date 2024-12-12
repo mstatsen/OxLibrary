@@ -1,7 +1,6 @@
 ﻿using OxLibrary.Handlers;
 using OxLibrary.ControlList;
 using OxLibrary.Panels;
-using OxLibrary.Geometry;
 
 namespace OxLibrary.Controls
 {
@@ -24,10 +23,13 @@ namespace OxLibrary.Controls
 
             short calcedWidth = 0;
             calcedWidth += Margin.Horizontal;
-            calcedWidth += buttons.Width;
+            calcedWidth += buttons.VisibleWidth;
 
             foreach (OxPanel separator in Separators.Values)
             {
+                if (!separator.Visible)
+                    continue;
+
                 calcedWidth += separator.Width;
                 calcedWidth += separator.Margin.Horizontal;
             }
@@ -72,6 +74,12 @@ namespace OxLibrary.Controls
 
                 foreach (TButton button in buttons)
                 {
+                    if (!button.Visible)
+                    {
+                        HideSeparator(button);
+                        continue;
+                    }
+
                     button.FixedBorderColor = false;
 
                     if (OxDockHelper.Variable(button.Dock) is not OxDockVariable.Width)
@@ -116,6 +124,12 @@ namespace OxLibrary.Controls
 
         protected virtual void PrepareButtonsSizes() { }
 
+        private void HideSeparator(TButton startButton)
+        {
+            if (Separators.TryGetValue(startButton, out var separator))
+                separator.Visible = false;
+        }
+
         private OxPanel CreateSeparator(TButton startButton)
         {
             if (!Separators.TryGetValue(startButton, out var separator))
@@ -132,6 +146,7 @@ namespace OxLibrary.Controls
                 Separators.Add(startButton, separator);
             }
 
+            separator.Visible = true;
             return separator;
         }
 
@@ -143,7 +158,7 @@ namespace OxLibrary.Controls
         }
 
         private void ButtonVisibleChangedHandler(object? sender, EventArgs e) =>
-            RecalcWidth();
+            PlaceButtons();
 
         private void ClearButtons() 
         {

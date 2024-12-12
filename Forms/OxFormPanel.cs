@@ -29,13 +29,18 @@ public partial class OxFormPanel :
             {
                 form.SizeChanged += FormSizeChanged;
                 formMover = new(form, Header.Title);
+                form.Shown += FormShownHandler;
                 Size = form.Size;
             }
         }
     }
 
-    private OxMover? formMover;
+    private void FormShownHandler(object? sender, EventArgs e) =>
+        OnFormShown(e);
 
+    protected virtual void OnFormShown(EventArgs e) { }
+
+    private OxMover? formMover;
     
     public OxFormPanel() : base()
     {
@@ -62,11 +67,7 @@ public partial class OxFormPanel :
     private void SetBordersSize() => 
         Borders.Size = 1;
 
-    public void SetHeaderHeight(short height)
-    {
-        HeaderHeight = height;
-        SetHeaderButtonsSize();
-    }
+    protected new virtual short HeaderHeight => 34;
 
     protected override void PrepareInnerComponents()
     {
@@ -148,7 +149,11 @@ public partial class OxFormPanel :
 
         DoWithSuspendedLayout(() =>
             {
-                SetHeaderHeight(34);
+                if (!base.HeaderHeight.Equals(HeaderHeight))
+                {
+                    base.HeaderHeight = HeaderHeight;
+                    SetHeaderButtonsSize();
+                }
 
                 if (Form is not null)
                     Form.Size = new(Size);

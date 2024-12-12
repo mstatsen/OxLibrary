@@ -15,6 +15,7 @@ public class OxMessagePanel : OxDialogPanel
         BorderStyle = BorderStyle.None,
         WordWrap = true,
         Multiline = true,
+        ReadOnly = true
     };
 
     public override void PrepareColors()
@@ -25,24 +26,37 @@ public class OxMessagePanel : OxDialogPanel
 
     public OxMessagePanel() : base()
     {
-        FooterButtonsAlign = HorizontalAlign.Center;
-        HeaderHeight = 30;
         MinimumSize = new(384, 126);
     }
 
+    protected override void OnFormShown(EventArgs e)
+    {
+        base.OnFormShown(e);
+        MessageBox.SelectionStart = 0;
+        MessageBox.SelectionLength = 0;
+    }
+
+    private readonly short MinPadding = 20;
+
     private void RecalcSize()
     {
-        short calcedWidth = OxSH.Max(Footer.ButtonsWidth, OxSH.Min(OxTextHelper.CalcedWidth(MessageBox), 640));
+        short calcedWidth = OxSH.Max(
+            Footer.ButtonsWidth, 
+            OxSH.Min(OxTextHelper.CalcedWidth(MessageBox), 768)
+        );
         short calcedMessageHeight = OxTextHelper.CalcedHeight(MessageBox, calcedWidth);
-        Padding.Horizontal = OxSH.Min(24, OxSH.Div(calcedWidth, 4));
+        Padding.Horizontal = MinPadding;
         calcedWidth += Padding.Horizontal;
-        Padding.Vertical = OxSH.Min(24, OxSH.Div(calcedMessageHeight, 4));
+        Padding.Vertical = MinPadding;
         short calcedHeight =
-            OxSH.Add(
-                HeaderHeight,
-                Padding.Vertical,
-                calcedMessageHeight,
-                Footer.Height
+            OxSH.Min(
+                OxSH.Add(
+                    HeaderHeight,
+                    Padding.Vertical,
+                    calcedMessageHeight,
+                    Footer.Height
+                ),
+                432
             );
 
         if (Width.Equals(calcedWidth)
@@ -53,11 +67,20 @@ public class OxMessagePanel : OxDialogPanel
             calcedWidth,
             calcedHeight
         );
+
+        MessageBox.ScrollBars =
+            calcedMessageHeight > MessageBox.Height
+                ? ScrollBars.Vertical
+                : MessageBox.ScrollBars = ScrollBars.None;
     }
+
+    protected override short HeaderHeight => 30;
 
     protected override void PrepareInnerComponents()
     {
         base.PrepareInnerComponents();
+        FooterHeight = 34;
+        FooterButtonsAlign = HorizontalAlign.Center;
         MessageBox.Parent = this;
     }
 
@@ -68,11 +91,13 @@ public class OxMessagePanel : OxDialogPanel
         get => MessageBox.Text;
         set
         {
+            value = value.Replace("\n", "\r\n");
+
+            if (MessageBox.Text.Equals(value))
+                return;
+
             MessageBox.Text = value;
-            MessageBox.SelectedText = string.Empty;
             RecalcSize();
         }
     }
-
-    protected override short FooterButtonHeight => 34;
 }

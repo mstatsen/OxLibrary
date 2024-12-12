@@ -1,5 +1,6 @@
 ﻿using OxLibrary.Handlers;
 using OxLibrary.Interfaces;
+using System.Runtime.InteropServices;
 
 namespace OxLibrary.Controls
 {
@@ -15,10 +16,26 @@ namespace OxLibrary.Controls
             Height = 24;
         }
 
+        [DllImport("user32.dll")]
+        static extern bool HideCaret(IntPtr hWnd);
+
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+
+            if (ReadOnly)
+            {
+                Cursor = Cursors.Arrow;
+                HideCaret(Handle);
+            }
+            else
+                Cursor = Cursors.Default;
+        }
+
         public new string Text
         {
             get => base.Text;
-            set => base.Text = value.Replace("\n", "\r\n");
+            set => base.Text = value.Replace("\r\n", "\n").Replace("\n", "\r\n");
         }
 
         #region Implemention of IOxControl using IOxControlManager

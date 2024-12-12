@@ -1,4 +1,5 @@
-﻿using OxLibrary.Interfaces;
+﻿using OxLibrary.Geometry;
+using OxLibrary.Interfaces;
 using System;
 using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
@@ -34,7 +35,13 @@ namespace OxLibrary
                 if (line.Length > maximumLine.Length)
                     maximumLine = line;
 
-            return Width(maximumLine, font);
+            short calcedWidth = Width(maximumLine, font);
+
+            if (!text.Equals(string.Empty)
+                && calcedWidth < 0)
+                calcedWidth = OxSH.Revert(calcedWidth);
+
+            return calcedWidth;
         }
 
         public static short CalcedHeight(IOxControl control, short boundsWidth) =>

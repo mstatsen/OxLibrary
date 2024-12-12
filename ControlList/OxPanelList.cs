@@ -41,6 +41,19 @@ public class OxPanelList : List<IOxPanel>
     public short Right =>
         OxSH.Short(Last is not null ? Last!.Right : 0);
 
+    public short VisibleWidth
+    {
+        get
+        {
+            short result = 0;
+
+            foreach (IOxPanel panel in this.FindAll(p => p.Visible))
+                result += OxSH.Add(panel.Width, panel.Margin.Horizontal);
+
+            return result;
+        }
+    }
+
     public short Width
     {
         get
@@ -52,6 +65,16 @@ public class OxPanelList : List<IOxPanel>
 
             return result;
         }
+    }
+
+    public short VisibleHeight()
+    {
+        short maxHeight = 0;
+
+        foreach (IOxPanel panel in this.FindAll(p => p.Visible))
+            maxHeight = Math.Max(maxHeight, panel.Height);
+
+        return maxHeight;
     }
 
     public short Height()

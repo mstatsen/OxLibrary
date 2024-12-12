@@ -14,13 +14,18 @@ public class OxDialogFooter : OxOneBorderPanel
     public readonly short DialogButtonStartSpace = 10;
 
     private HorizontalAlign buttonsAlign = HorizontalAlign.Right;
-    private short buttonHeight = 36;
     private short buttonVerticalMargin = 4;
 
     public OnDialogResult? SetDialogResult;
     public event EventHandler? ButtonsPlacing;
 
-    public OxDialogFooter() : base()
+    private short ButtonHeight =>
+        OxSH.Sub(
+            Height, 
+            OxSH.X2(buttonVerticalMargin)
+        );
+
+    public OxDialogFooter() : base(26)
     {
         BlurredBorder = true;
 
@@ -28,7 +33,6 @@ public class OxDialogFooter : OxOneBorderPanel
             CreateButton(button);
 
         PlaceButtons();
-        Size = new(Width, ButtonHeight);
     }
 
     public override void PrepareColors()
@@ -76,17 +80,6 @@ public class OxDialogFooter : OxOneBorderPanel
                 return;
 
             buttonVerticalMargin = value;
-            PlaceButtons();
-        }
-    }
-    public short ButtonHeight {
-        get => buttonHeight;
-        set
-        {
-            if (buttonHeight.Equals(value))
-                return;
-
-            buttonHeight = value;
             PlaceButtons();
         }
     }
@@ -213,7 +206,7 @@ public class OxDialogFooter : OxOneBorderPanel
             item.Value.Size = new(
                 dialogButtonWidth,
                 OxSH.Sub(
-                    ButtonHeight,
+                    Height,
                     OxSH.X2(buttonVerticalMargin)
                 )
             );

@@ -138,8 +138,12 @@ public class OxForm<TFormPanel> :
         get => canMaximize;
         set
         {
+            if (canMaximize.Equals(value))
+                return;
+
             canMaximize = value;
             RestoreButton.Visible = CanMaximize;
+            HeaderToolBar.PlaceButtons();
         }
     }
 
@@ -164,8 +168,12 @@ public class OxForm<TFormPanel> :
         get => canMinimize;
         set
         {
+            if (canMinimize.Equals(value))
+                return;
+
             canMinimize = value;
             MinimizeButton.Visible = CanMinimize;
+            HeaderToolBar.PlaceButtons();
         }
     }
 
@@ -186,8 +194,8 @@ public class OxForm<TFormPanel> :
 
     protected override void OnShown(EventArgs e)
     {
-        base.OnShown(e);
         Realign();
+        base.OnShown(e);
     }
 
     public virtual Bitmap? FormIcon => null;
