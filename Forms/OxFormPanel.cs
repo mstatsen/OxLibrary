@@ -128,7 +128,10 @@ public partial class OxFormPanel :
     {
         if (Form is null)
         {
-            RestoreButton.Icon = OxIcons.Maximize;
+            if (RestoreButton.Icon is null 
+                || !RestoreButton.Icon.Equals(OxIcons.Maximize))
+                RestoreButton.Icon = OxIcons.Maximize;
+
             RestoreButton.ToolTipText = "Maximize window";
         }
         else
@@ -147,7 +150,7 @@ public partial class OxFormPanel :
             || !Initialized)
             return;
 
-        DoWithSuspendedLayout(() =>
+        WithSuspendedLayout(() =>
             {
                 if (!base.HeaderHeight.Equals(HeaderHeight))
                 {
@@ -261,7 +264,7 @@ public partial class OxFormPanel :
 
         try
         {
-            Form.DoWithSuspendedLayout(
+            Form.WithSuspendedLayout(
                 () =>
                 {
                     foreach (Point point in sizePoints)

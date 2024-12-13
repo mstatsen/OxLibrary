@@ -7,7 +7,7 @@ namespace OxLibrary.Interfaces
     {
         short Bottom { get; }
         OxDock Dock { get; set; }
-        void DoWithSuspendedLayout(Action method);
+        void WithSuspendedLayout(Action method);
         short Height { get; set; }
         short Left { get; set; }
         OxPoint Location { get; set; }

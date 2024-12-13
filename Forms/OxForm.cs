@@ -149,7 +149,10 @@ public class OxForm<TFormPanel> :
 
     public void ApplyRestoreButtonIconAndToolTip()
     {
-        RestoreButton.Icon = RestoreIcon;
+        if (RestoreButton.Icon is null
+            || !RestoreButton.Icon.Equals(RestoreIcon))
+            RestoreButton.Icon = RestoreIcon;
+
         RestoreButton.ToolTipText = RestoreToolTip;
     }
 
@@ -334,8 +337,8 @@ public class OxForm<TFormPanel> :
         set => Manager.Dock = value;
     }
 
-    public void DoWithSuspendedLayout(Action method) =>
-        Manager.DoWithSuspendedLayout(method);
+    public void WithSuspendedLayout(Action method) =>
+        Manager.WithSuspendedLayout(method);
 
     public new event OxDockChangedEvent DockChanged
     {

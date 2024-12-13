@@ -24,18 +24,27 @@ namespace OxLibrary.Panels
                 Borders[OxDock.Bottom].Visible = value;
                 ExpandButton.Icon = ExpandButtonIcon;
                 ExpandButton.ToolTipText = ExpandButtonToolTipText;
+                Parent?.SuspendLayout();
 
+                try
+                {
 #pragma warning disable CS0618 // Type or member is obsolete
-                if (value)
-                    ZBounds.RestoreBounds();
-                else ZBounds.Height =
-                        OxSH.Add(
-                            Header.Border.Size, 
-                            HeaderHeight,
-                            Margin.Vertical
-                        );
+                    if (value)
+                        ZBounds.RestoreSize();
+                    else ZBounds.Height =
+                            OxSH.Add(
+                                Header.Border.Size,
+                                HeaderHeight,
+                                Margin.Vertical
+                            );
 #pragma warning restore CS0618 // Type or member is obsolete
-                Parent?.DoWithSuspendedLayout(() => Parent?.Realign());
+                    Parent?.Realign();
+                }
+                finally
+                {
+                    Parent?.ResumeLayout();
+                }
+
             }
             finally
             {

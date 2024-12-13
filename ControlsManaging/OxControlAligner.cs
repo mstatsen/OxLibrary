@@ -1,5 +1,6 @@
 ﻿using OxLibrary.Geometry;
 using OxLibrary.Interfaces;
+using System.Windows.Forms;
 
 namespace OxLibrary;
 
@@ -29,17 +30,22 @@ internal class OxControlAligner
             return;
 
         ControlZone.CopyFrom(OuterControlZone);
-
         Realigning = true;
 
         try
         {
-            if (RealignControls(OxDockType.Docked, CalcedDockedBounds))
-                RealignControls(OxDockType.Undocked, CalcedUndockedBounds);
+            Box.WithSuspendedLayout(
+                () =>
+                {
+                    if (RealignControls(OxDockType.Docked, CalcedDockedBounds))
+                        RealignControls(OxDockType.Undocked, CalcedUndockedBounds);
+
+                    Box.Invalidate();
+                }
+            );
         }
         finally
         {
-            Box.Invalidate();
             Realigning = false;
         }
     }
@@ -149,27 +155,40 @@ internal class OxControlAligner
     {
         foreach (var item in boundsDictionary)
             SetBounds(item.Key, item.Value);
+
+        foreach (IOxControl control in boundsDictionary.Keys)
+            if (control is IOxBox box)
+                box.Realign();
     }
 
     private static void SetBounds(IOxControl control, OxRectangle newBounds)
     {
-        if (control.Dock is OxDock.None)
+/*
+   if (control.Dock is OxDock.None)
         {
-            control.ZBounds.RestoreBounds();
+*/
+            control.ZBounds.RestoreSize();
+
+            if (control.Dock is OxDock.None)
+                control.ZBounds.RestoreLocation();
 
             if (control.ZBounds.Left.Equals(newBounds.X)
                 && control.ZBounds.Top.Equals(newBounds.Y)
                 && control.ZBounds.Width.Equals(newBounds.Width)
                 && control.ZBounds.Height.Equals(newBounds.Height))
                 return;
+            /*
         }
+*/
 
-        control.ZBounds.Location = newBounds.Location;
-        control.ZBounds.Size = newBounds.Size;
-        control.ZBounds.ApplyBoundsToControl();
-
-        if (control is IOxBox box)
-            box.Realign();
+        control.WithSuspendedLayout(
+            () =>
+            {
+                control.ZBounds.Location = newBounds.Location;
+                control.ZBounds.Size = newBounds.Size;
+                control.ZBounds.ApplyBoundsToControl();
+            }
+        );
     }
 
     private void SubstractControlFromControlZone(IOxControl control)

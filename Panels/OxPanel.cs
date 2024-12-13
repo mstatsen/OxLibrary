@@ -15,7 +15,7 @@ public class OxPanel : Panel, IOxPanel
         Colors = new(DefaultColor);
         Initialized = false;
 
-        DoWithSuspendedLayout(
+        WithSuspendedLayout(
             () =>
             {
                 DoubleBuffered = true;
@@ -447,8 +447,8 @@ public class OxPanel : Panel, IOxPanel
         set => Manager.Dock = value;
     }
 
-    public void DoWithSuspendedLayout(Action method) =>
-        Manager.DoWithSuspendedLayout(method);
+    public void WithSuspendedLayout(Action method) =>
+        Manager.WithSuspendedLayout(method);
 
     public new event OxDockChangedEvent DockChanged
     {

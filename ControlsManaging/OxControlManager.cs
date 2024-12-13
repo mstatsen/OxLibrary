@@ -88,7 +88,7 @@ public class OxControlManager : IOxControlManager
     private void ControlDisposedHandler(object? sender, EventArgs e) =>
         OxControlManagers.UnRegisterControl(ManagingControl);
 
-    public void DoWithSuspendedLayout(Action method)
+    public void WithSuspendedLayout(Action method)
     {
         ManagingControl.SuspendLayout();
         IOxBox? dependedFromBox = ManagingControl is IOxDependedBox dependedBox
@@ -267,7 +267,6 @@ public class OxControlManager : IOxControlManager
                 return;
 
             OxDock oldDock = ZBounds.Dock;
-            ManagingControl.Dock = DockStyle.None;
             ZBounds.Dock = value;
             OnDockChanged(new(oldDock, ZBounds.Dock));
         }
@@ -388,9 +387,13 @@ public class OxControlManager : IOxControlManager
                 if (!e.Changed)
                     return;
 
-                if (e.OldValue is OxDock.Fill
-                    || e.NewValue is OxDock.Fill)
-                    ZBounds.RestoreBounds();
+                if (e.OldValue is OxDock.Fill)
+                {
+                    ZBounds.RestoreSize();
+
+                    if (e.NewValue is OxDock.None)
+                        ZBounds.RestoreLocation();
+                }
 
                 OxControl.OnDockChanged(e);
                 InvokeHandlers(OxHandlerType.DockChanged, e);

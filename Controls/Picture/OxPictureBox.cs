@@ -86,8 +86,8 @@ public class OxPictureBox :
         set => Manager.Dock = value;
     }
 
-    public void DoWithSuspendedLayout(Action method) =>
-        Manager.DoWithSuspendedLayout(method);
+    public void WithSuspendedLayout(Action method) =>
+        Manager.WithSuspendedLayout(method);
 
     public new event OxDockChangedEvent DockChanged
     {

@@ -162,7 +162,7 @@ namespace OxLibrary.Panels
 
         private void SetEmptySize()
         {
-            DoWithSuspendedLayout(() =>
+            WithSuspendedLayout(() =>
                 {
                     Size = new();
                 }
