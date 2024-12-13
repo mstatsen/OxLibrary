@@ -21,18 +21,18 @@ public class OxMessage : OxDialog<OxMessagePanel>
     public override Bitmap FormIcon =>
         OxMessageTypeHelper.Icon(MessageType);
 
-    private static Dictionary<OxMessageType, OxMessage> messageForms = new();
+    private static readonly Dictionary<OxMessageType, OxMessage> messagesCache = new();
 
     private static DialogResult ShowMessage(OxMessageType messageType,
         string message, Control owner, OxDialogButton buttons)
     {
-        if (!messageForms.TryGetValue(messageType, out OxMessage? messageForm))
-            messageForms.Add(messageType, new(messageType));
+        if (!messagesCache.TryGetValue(messageType, out OxMessage? messageForm))
+            messagesCache.Add(messageType, new(messageType));
 
-        messageForm = messageForms[messageType];
+        messageForm = messagesCache[messageType];
         messageForm.Message = message;
         messageForm.DialogButtons = buttons;
-        return messageForm.ShowDialog(owner);
+        return messageForm.ShowDialog((IWin32Window)owner);
     }
 
     public static void ShowInfo(string Info, Control owner) =>

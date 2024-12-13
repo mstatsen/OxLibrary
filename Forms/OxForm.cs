@@ -447,11 +447,8 @@ public class OxForm<TFormPanel> :
     protected sealed override void OnParentChanged(EventArgs e) { }
     protected sealed override void OnSizeChanged(EventArgs e) { }
 
-    public OxPanelViewer AsDialog(OxDialogButton buttons = OxDialogButton.OK) =>
-        FormPanel.AsDialog(buttons);
-
-    public DialogResult ShowAsDialog(Control owner, OxDialogButton buttons = OxDialogButton.OK) =>
-        FormPanel.ShowAsDialog(owner, buttons);
+    public DialogResult ShowDialog(Control owner, OxDialogButton buttons = OxDialogButton.OK) =>
+        FormPanel.ShowDialog(owner, buttons);
 
     public void SetBorderWidth(short value) =>
         FormPanel.SetBorderWidth(value);

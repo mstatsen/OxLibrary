@@ -1,5 +1,4 @@
 ﻿using OxLibrary.Forms;
-using OxLibrary.Panels;
 
 namespace OxLibrary.Interfaces
 {
@@ -14,8 +13,6 @@ namespace OxLibrary.Interfaces
     {
         Color DefaultColor { get; }
         bool IsHovered { get; }
-
-        OxPanelViewer AsDialog(OxDialogButton buttons = OxDialogButton.OK);
-        DialogResult ShowAsDialog(Control owner, OxDialogButton buttons = OxDialogButton.OK);
+        DialogResult ShowDialog(Control owner, OxDialogButton buttons = OxDialogButton.OK);
     }
 }

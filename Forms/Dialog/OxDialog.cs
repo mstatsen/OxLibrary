@@ -110,6 +110,12 @@ public class OxDialog<TDialogPanel> : OxForm<TDialogPanel>
         FormPanel.SetFooterButtonText(dialogButton, text);
 
     public IOxPanel Footer => FormPanel.Footer;
+
+    public bool ShowDialogIsSuccess(IWin32Window? owner, DialogResult successResult) =>
+        ShowDialog(owner).Equals(successResult);
+
+    public bool ShowDialogIsOK(IWin32Window? owner) =>
+        ShowDialogIsSuccess(owner, DialogResult.OK);
 }
 
 public class OxDialog : OxDialog<OxDialogPanel>

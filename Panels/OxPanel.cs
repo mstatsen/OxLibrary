@@ -145,17 +145,20 @@ public class OxPanel : Panel, IOxPanel
         Initialized = true;
     }
 
-    public DialogResult ShowAsDialog(Control owner, OxDialogButton buttons = OxDialogButton.OK)
+    public DialogResult ShowDialog(Control owner, OxDialogButton buttons = OxDialogButton.OK)
     {
-        DialogResult result = AsDialog(buttons).ShowDialog(owner);
+        DialogResult result = AsDialog(buttons).ShowDialog((IWin32Window)owner);
         PanelViewer?.Dispose();
         PanelViewer = null;
         return result;
     }
 
+    public bool ShowDialogIsOK(Control owner, OxDialogButton buttons = OxDialogButton.OK) =>
+        ShowDialog(owner, buttons).Equals(DialogResult.OK);
+
     protected OxPanelViewer? PanelViewer;
 
-    public OxPanelViewer AsDialog(OxDialogButton buttons = OxDialogButton.OK)
+    protected OxPanelViewer AsDialog(OxDialogButton buttons = OxDialogButton.OK)
     {
         PrepareDialogCaption(out string? dialogCaption);
         PanelViewer = new OxPanelViewer(this, buttons)
