@@ -71,7 +71,7 @@ public class OxTreeView : TreeView, IOxItemsContainer, IOxControlWithManager
         e.Graphics.FillRectangle(
             e.Node.IsSelected ? SelectedBrush : StandardBrush, 
             e.Bounds);
-        Brush textBrush = Enabled ? Brushes.Black : Brushes.Silver;
+        Brush textBrush = IsEnabled ? Brushes.Black : Brushes.Silver;
         Font nodeFont = new(Font, e.Node.IsSelected ? FontStyle.Bold : FontStyle.Regular);
 
         int textTop = e.Bounds.Y 
@@ -226,19 +226,26 @@ public class OxTreeView : TreeView, IOxItemsContainer, IOxControlWithManager
 
     public void Add(object item) => Nodes.Add(item.ToString()).Tag = item;
 
-    public bool AvailableMoveUp =>
+    public OxBool AvailableMoveUp =>
+        OxB.B(IsAvailableMoveUp);
+
+    public bool IsAvailableMoveUp =>
         SelectedNode is not null
         && (SelectedNode.Parent is null
             ? SelectedIndex > 0
             : SelectedNode.Index > 0);
 
-    public bool AvailableMoveDown =>
+    public OxBool AvailableMoveDown =>
+        OxB.B(IsAvailableMoveDown);
+        
+    public bool IsAvailableMoveDown =>
         SelectedNode is not null
         && (SelectedNode.Parent is null
             ? SelectedIndex > -1 && SelectedIndex < Count - 1
             : SelectedNode.Index < SelectedNode.Parent.Nodes.Count - 1);
 
-    public void Clear() => Nodes.Clear();
+    public void Clear() =>
+        Nodes.Clear();
 
     private void MoveNode(OxUpDown direction)
     {
@@ -266,8 +273,6 @@ public class OxTreeView : TreeView, IOxItemsContainer, IOxControlWithManager
     public void MoveDown() => MoveNode(OxUpDown.Down);
 
     public IOxControl AsControl() => this;
-
-    public bool AvailableChilds => true;
 
     public void AddChild(object item)
     {
@@ -377,6 +382,24 @@ public class OxTreeView : TreeView, IOxItemsContainer, IOxControlWithManager
         remove => Manager.SizeChanged -= value;
     }
 
+    public new event OxBoolChangedEvent AutoSizeChanged
+    {
+        add => Manager.AutoSizeChanged += value;
+        remove => Manager.AutoSizeChanged -= value;
+    }
+
+    public new event OxBoolChangedEvent EnabledChanged
+    {
+        add => Manager.EnabledChanged += value;
+        remove => Manager.EnabledChanged -= value;
+    }
+
+    public new event OxBoolChangedEvent VisibleChanged
+    {
+        add => Manager.VisibleChanged += value;
+        remove => Manager.VisibleChanged -= value;
+    }
+
     public void AddHandler(OxHandlerType type, Delegate handler) =>
         Manager.AddHandler(type, handler);
 
@@ -395,15 +418,59 @@ public class OxTreeView : TreeView, IOxItemsContainer, IOxControlWithManager
     #endregion
 
     #region Hidden base methods
-#pragma warning disable IDE0051 // Remove unused private members
-    private new Size PreferredSize => base.PreferredSize;
-    private new Rectangle DisplayRectangle => base.DisplayRectangle;
-    private new Size GetPreferredSize(Size proposedSize) => base.GetPreferredSize(proposedSize);
-    private new Size LogicalToDeviceUnits(Size value) => base.LogicalToDeviceUnits(value);
-#pragma warning restore IDE0051 // Remove unused private members
+    public OxBool AvailableChilds => OxB.T;
+
+    public bool IsAvailableChilds =>
+        OxB.B(AvailableChilds);
+
+    public new OxBool AutoSize 
+    { 
+        get => Manager.AutoSize;
+        set => Manager.AutoSize = value;
+    }
+
+    public bool IsAutoSize =>
+        Manager.IsAutoSize;
+
+    public new OxBool Enabled
+    {
+        get => Manager.Enabled;
+        set => Manager.Enabled = value;
+    }
+
+    public bool IsEnabled =>
+        Manager.IsEnabled;
+
+    public new OxBool Visible
+    { 
+        get => Manager.Visible;
+        set => Manager.Visible = value;
+    }
+
+    public bool IsVisible =>
+        Manager.IsVisible;
+
+    protected sealed override void OnAutoSizeChanged(EventArgs e) { }
     protected sealed override void OnDockChanged(EventArgs e) { }
+    protected sealed override void OnEnabledChanged(EventArgs e) { }
     protected sealed override void OnLocationChanged(EventArgs e) { }
     protected sealed override void OnParentChanged(EventArgs e) { }
     protected sealed override void OnSizeChanged(EventArgs e) { }
+    protected sealed override void OnVisibleChanged(EventArgs e) { }
+
+    public void OnAutoSizeChanged(OxBoolChangedEventArgs e) { }
+
+    public void OnEnabledChanged(OxBoolChangedEventArgs e) { }
+
+    public void OnVisibleChanged(OxBoolChangedEventArgs e) { }
+
+    public void SetAutoSize(bool value) =>
+        Manager.SetAutoSize(value);
+
+    public void SetEnabled(bool value) =>
+        Manager.SetEnabled(value);
+
+    public void SetVisible(bool value) =>
+        Manager.SetVisible(value);
     #endregion
 }

@@ -3,7 +3,7 @@
     /// <summary>
     /// Helper class for working with short type
     /// </summary>
-    public static class OxSH
+    public static class OxSh
     {
         /// <summary>
         /// convert value to short

@@ -13,7 +13,7 @@ namespace OxLibrary.Panels
             List<OxTabButton> buttonList = new();
 
             foreach (OxTabButton button in TabButtons.Values)
-                if (button.Visible)
+                if (button.IsVisible)
                     buttonList.Add(button);
 
             return buttonList;
@@ -25,7 +25,7 @@ namespace OxLibrary.Panels
             set
             {
                 Header.Dock = value;
-                Header.BorderVisible = Header.Dock is OxDock.Top;
+                Header.SetBorderVisible(Header.Dock is OxDock.Top);
                 SetHeaderPaddings();
                 SetHeaderSize();
                 SetButtonsPostion();
@@ -96,7 +96,7 @@ namespace OxLibrary.Panels
 
         public void AddPage(OxPanel page, Bitmap? icon = null)
         {
-            page.Visible = false;
+            page.Visible = OxB.F;
             page.Parent = this;
 
             if (page.Dock is OxDock.None)
@@ -183,7 +183,7 @@ namespace OxLibrary.Panels
 
             foreach (IOxPanel page in Pages)
                 if (!page.Equals(value))
-                    page.Visible = false;
+                    page.Visible = OxB.F;
 
             activePage = value;
 
@@ -191,7 +191,7 @@ namespace OxLibrary.Panels
             Update();
 
             if (activePage is not null)
-                activePage.Visible = true;
+                activePage.Visible = OxB.T;
 
             if (isDifferentPage)
                 ActivatePage?.Invoke(this, new OxTabControlEventArgs(oldPage, activePage));
@@ -200,7 +200,7 @@ namespace OxLibrary.Panels
         protected override void AfterCreated()
         {
             base.AfterCreated();
-            Borders[OxDock.Top].Visible = false;
+            Borders[OxDock.Top].Visible = OxB.F;
             Text = string.Empty;
             //ContentBox.AutoScroll = true;
             this.AutoScroll = true;
@@ -219,19 +219,19 @@ namespace OxLibrary.Panels
         {
             base.OnSizeChanged(e);
 
-            if (e.Changed)
-                SetTabButtonsVisualParameters();
+            if (!e.IsChanged)
+                return;
 
-            return;
+            SetTabButtonsVisualParameters();
         }
 
         public event OxTabControlEvent? ActivatePage;
         public event OxTabControlEvent? DeactivatePage;
 
         public OxTabControl() : base() =>
-            Header.Title.Visible = false;
+            Header.Title.Visible = OxB.F;
 
-        protected override void OnVisibleChanged(EventArgs e)
+        public override void OnVisibleChanged(OxBoolChangedEventArgs e)
         {
             base.OnVisibleChanged(e);
             SetTabButtonsVisualParameters();

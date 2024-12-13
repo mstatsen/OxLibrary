@@ -8,7 +8,7 @@ public class OxClickFrameList<TClickFrame> : OxPanelList<TClickFrame>
     private TClickFrame? Default()
     {
         foreach (TClickFrame button in this)
-            if (button.Visible && button.Enabled && button.Default)
+            if (button.IsVisible && button.IsEnabled && button.Default)
                 return button;
 
         return null;

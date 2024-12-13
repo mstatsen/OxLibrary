@@ -3,6 +3,8 @@
     public interface IOxWithMargin
     {
         OxBorders Margin { get; }
-        bool BlurredBorder { get; set; }
+        OxBool BlurredBorder { get; set; }
+        bool IsBlurredBorder { get; }
+        void SetBlurredBorder(bool value);
     }
 }

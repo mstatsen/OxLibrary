@@ -59,7 +59,7 @@ public class OxMover
     private void SetWindowState(MouseEventArgs e)
     {
         if (Control is not IOxForm form
-            || !form.CanMaximize)
+            || !form.IsCanMaximize)
             return;
 
         switch (form.WindowState)
@@ -148,13 +148,13 @@ public class OxMover
         }
 
         control.Location = new(
-            OxSH.Add(
+            OxSh.Add(
                 parentLocation.X,
-                OxSH.Half(parentSize.Width - control.Width)
+                OxSh.Half(parentSize.Width - control.Width)
             ),
-            OxSH.Add(
+            OxSh.Add(
                 parentLocation.Y,
-                OxSH.Half(parentSize.Height - control.Height)
+                OxSh.Half(parentSize.Height - control.Height)
             )
         );
         control.Size = new(control.Width, control.Height);

@@ -1,6 +1,4 @@
-﻿
-namespace OxLibrary.Forms;
-
+﻿namespace OxLibrary.Forms;
 public class OxMessage : OxDialog<OxMessagePanel>
 {
     private readonly OxMessageType MessageType;
@@ -24,7 +22,7 @@ public class OxMessage : OxDialog<OxMessagePanel>
     private static readonly Dictionary<OxMessageType, OxMessage> messagesCache = new();
 
     private static DialogResult ShowMessage(OxMessageType messageType,
-        string message, Control owner, OxDialogButton buttons)
+        string message, IWin32Window owner, OxDialogButton buttons)
     {
         if (!messagesCache.TryGetValue(messageType, out OxMessage? messageForm))
             messagesCache.Add(messageType, new(messageType));
@@ -32,10 +30,10 @@ public class OxMessage : OxDialog<OxMessagePanel>
         messageForm = messagesCache[messageType];
         messageForm.Message = message;
         messageForm.DialogButtons = buttons;
-        return messageForm.ShowDialog((IWin32Window)owner);
+        return messageForm.ShowDialog(owner);
     }
 
-    public static void ShowInfo(string Info, Control owner) =>
+    public static void ShowInfo(string Info, IWin32Window owner) =>
         ShowMessage(
             OxMessageType.Info,
             Info,
@@ -43,7 +41,7 @@ public class OxMessage : OxDialog<OxMessagePanel>
             OxDialogButton.OK
         );
 
-    public static DialogResult ShowError(string Error, Control owner, OxDialogButton buttons = OxDialogButton.OK) =>
+    public static DialogResult ShowError(string Error, IWin32Window owner, OxDialogButton buttons = OxDialogButton.OK) =>
         ShowMessage(
             OxMessageType.Error,
             Error,
@@ -51,7 +49,7 @@ public class OxMessage : OxDialog<OxMessagePanel>
             buttons
         );
 
-    public static DialogResult ShowWarning(string Warning, Control owner,
+    public static DialogResult ShowWarning(string Warning, IWin32Window owner,
         OxDialogButton buttons = OxDialogButton.Yes | OxDialogButton.No | OxDialogButton.Cancel) =>
         ShowMessage(
             OxMessageType.Warning,
@@ -60,7 +58,7 @@ public class OxMessage : OxDialog<OxMessagePanel>
             buttons
         );
 
-    public static DialogResult ShowConfirm(string Confirm, Control owner,
+    public static DialogResult ShowConfirm(string Confirm, IWin32Window owner,
         OxDialogButton buttons = OxDialogButton.Yes | OxDialogButton.No) =>
         ShowMessage(
             OxMessageType.Confirmation,
@@ -69,7 +67,7 @@ public class OxMessage : OxDialog<OxMessagePanel>
             buttons
         );
 
-    public static bool Confirmation(string Confirm, Control owner) =>
+    public static bool Confirmation(string Confirm, IWin32Window owner) =>
         ShowConfirm(Confirm, owner) is DialogResult.Yes;
 
     protected override void OnKeyUp(KeyEventArgs e)

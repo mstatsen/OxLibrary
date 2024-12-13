@@ -17,7 +17,7 @@ public class OxPanelList<TPanel> : List<TPanel>
             : default!;
 
     public short Bottom =>
-        OxSH.Short(Last is not null ? Last!.Bottom + 24 : 0);
+        OxSh.Short(Last is not null ? Last!.Bottom + 24 : 0);
 
     public new OxPanelList<TPanel> AddRange(IEnumerable<TPanel> list)
     {
@@ -32,7 +32,7 @@ public class OxPanelList<TPanel> : List<TPanel>
             TPanel? visiblePanel = default;
 
             foreach (TPanel panel in this)
-                if (panel.Visible)
+                if (panel.IsVisible)
                     visiblePanel = panel;
 
             return visiblePanel;
@@ -40,7 +40,7 @@ public class OxPanelList<TPanel> : List<TPanel>
     }
 
     public short Right =>
-        OxSH.Short(Last is not null ? Last!.Right : 0);
+        OxSh.Short(Last is not null ? Last!.Right : 0);
 
     public short VisibleWidth
     {
@@ -48,8 +48,8 @@ public class OxPanelList<TPanel> : List<TPanel>
         {
             short result = 0;
 
-            foreach (TPanel panel in FindAll(p => p.Visible))
-                result += OxSH.Add(panel.Width, panel.Margin.Horizontal);
+            foreach (TPanel panel in FindAll(p => p.IsVisible))
+                result += OxSh.Add(panel.Width, panel.Margin.Horizontal);
 
             return result;
         }
@@ -62,7 +62,7 @@ public class OxPanelList<TPanel> : List<TPanel>
             short result = 0;
 
             foreach (TPanel panel in this)
-                result += OxSH.Add(panel.Width, panel.Margin.Horizontal);
+                result += OxSh.Add(panel.Width, panel.Margin.Horizontal);
 
             return result;
         }
@@ -72,7 +72,7 @@ public class OxPanelList<TPanel> : List<TPanel>
     {
         short maxHeight = 0;
 
-        foreach (TPanel panel in FindAll(p => p.Visible))
+        foreach (TPanel panel in FindAll(p => p.IsVisible))
             maxHeight = Math.Max(maxHeight, panel.Height);
 
         return maxHeight;

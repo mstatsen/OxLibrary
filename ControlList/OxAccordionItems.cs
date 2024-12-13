@@ -17,19 +17,19 @@ public class OxAccordionItems : List<IOxExpandable>
         base.Remove(item);
     }
 
-    private void ItemExpandChanedHandler(IOxExpandable sender, OxBoolEventArgs e)
+    private void ItemExpandChanedHandler(IOxExpandable sender, OxBoolChangedEventArgs e)
     {
-        if (!e.Changed)
+        if (!e.IsChanged)
             return;
 
-        if (e.NewValue)
+        if (e.IsNewValue)
             foreach (IOxExpandable item in this)
-                if (item.Expanded
+                if (item.IsExpanded
                     && !item.Equals(sender))
                     item.Collapse();
 
         if (sender is IOxWithColorHelper withColorHelper)
-            withColorHelper.BaseColor = e.NewValue
+            withColorHelper.BaseColor = e.IsNewValue
                 ? withColorHelper.Colors.HBluer(-2).Browner(1)
                 : withColorHelper.Colors.HBluer(2).Browner(-1);
     }

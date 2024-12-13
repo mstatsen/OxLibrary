@@ -66,7 +66,7 @@ public partial class OxPicture : OxPanel
         set
         {
             Padding.Size = value;
-            PictureSize = OxSH.Sub(Height, Padding.Vertical);
+            PictureSize = OxSh.Sub(Height, Padding.Vertical);
         }
     }
 
@@ -91,8 +91,8 @@ public partial class OxPicture : OxPanel
             return;
         pictureCorrectionProcess = true;
         SetImage(Image);
-        picture.Left = OxSH.CenterOffset(Width, picture.Width);
-        picture.Top = OxSH.CenterOffset(Height, picture.Height);
+        picture.Left = OxSh.CenterOffset(Width, picture.Width);
+        picture.Top = OxSh.CenterOffset(Height, picture.Height);
         pictureCorrectionProcess = false;
     }
 
@@ -119,8 +119,10 @@ public partial class OxPicture : OxPanel
     {
         base.OnSizeChanged(e);
 
-        if (e.Changed)
-            CorrectPicturePosition();
+        if (!e.IsChanged)
+            return;
+        
+        CorrectPicturePosition();
     }
 
     public override void PrepareColors()
@@ -150,8 +152,8 @@ public partial class OxPicture : OxPanel
             return;
         }
 
-        Padding.Vertical = OxSH.Short(Stretch ? 0 : OxSH.CenterOffset(Height, pictureSize));
-        Padding.Horizontal = OxSH.Short(Stretch ? 0 : OxSH.CenterOffset(Width, pictureSize));
+        Padding.Vertical = OxSh.Short(Stretch ? 0 : OxSh.CenterOffset(Height, pictureSize));
+        Padding.Horizontal = OxSh.Short(Stretch ? 0 : OxSh.CenterOffset(Width, pictureSize));
         OxBitmapCalcer bitmapCalcer = new(value, new(pictureSize, pictureSize), Stretch);
         picture.SizeMode = bitmapCalcer.SizeMode;
 
@@ -186,7 +188,7 @@ public partial class OxPicture : OxPanel
         return result;
     }
 
-    protected override void OnEnabledChanged(EventArgs e)
+    public override void OnEnabledChanged(OxBoolChangedEventArgs e)
     {
         base.OnEnabledChanged(e);
         picture.Enabled = Enabled;
@@ -196,7 +198,7 @@ public partial class OxPicture : OxPanel
     private void SetPictureImage() => 
         picture.Image =
             AlwaysEnabled
-            || Enabled
+            || IsEnabled
                 ? EnabledBitmap
                 : DisabledBitmap;
 

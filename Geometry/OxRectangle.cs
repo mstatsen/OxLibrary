@@ -6,18 +6,18 @@ public class OxRectangle
 {
     public static OxRectangle operator -(OxRectangle rect, OxBorders borders) =>
         new(
-            OxSH.Add(rect.X, borders.Left),
-            OxSH.Add(rect.Y, borders.Top),
-            OxSH.Sub(rect.Width, borders.Left, borders.Right),
-            OxSH.Sub(rect.Height, borders.Top, borders.Bottom)
+            OxSh.Add(rect.X, borders.Left),
+            OxSh.Add(rect.Y, borders.Top),
+            OxSh.Sub(rect.Width, borders.Left, borders.Right),
+            OxSh.Sub(rect.Height, borders.Top, borders.Bottom)
         );
 
     public static OxRectangle operator +(OxRectangle rect, OxBorders borders) =>
         new(
-            OxSH.Sub(rect.X, borders.Left),
-            OxSH.Sub(rect.Y, borders.Top),
-            OxSH.Add(rect.Width, borders.Left, borders.Right),
-            OxSH.Add(rect.Height, borders.Top, borders.Bottom)
+            OxSh.Sub(rect.X, borders.Left),
+            OxSh.Sub(rect.Y, borders.Top),
+            OxSh.Add(rect.Width, borders.Left, borders.Right),
+            OxSh.Add(rect.Height, borders.Top, borders.Bottom)
         );
 
     private short x;
@@ -51,8 +51,8 @@ public class OxRectangle
         set => height = value;
     }
 
-    public short Right => OxSH.Add(X, Width);
-    public short Bottom => OxSH.Add(Y, Height);
+    public short Right => OxSh.Add(X, Width);
+    public short Bottom => OxSh.Add(Y, Height);
 
     public OxPoint TopLeft => new(X, Y);
     public OxPoint TopRight => new(Right, Y);
@@ -65,10 +65,10 @@ public class OxRectangle
 
     public OxRectangle(int x, int y, int width, int height)
     { 
-        X = OxSH.Short(x);
-        Y = OxSH.Short(y);
-        Width = OxSH.Short(width);
-        Height = OxSH.Short(height);
+        X = OxSh.Short(x);
+        Y = OxSh.Short(y);
+        Width = OxSh.Short(width);
+        Height = OxSh.Short(height);
     }
 
     public OxRectangle(Rectangle rectangle)

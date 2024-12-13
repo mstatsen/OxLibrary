@@ -4,9 +4,12 @@ namespace OxLibrary.Interfaces
 {
     public interface IOxExpandable
     {
-        bool Expanded { get; set; }
+        OxBool Expanded { get; set; }
+        bool IsExpanded => OxB.B(Expanded);
+        void SetExpanded(bool value) => Expanded = OxB.B(value);
         void Expand();
         void Collapse();
+
         event ExpandChanged ExpandChanged;
     }
 }

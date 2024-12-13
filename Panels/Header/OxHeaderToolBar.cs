@@ -16,8 +16,8 @@ namespace OxLibrary.Panels
 
         public OxIconButton AddButton(OxIconButton button, bool? startGroup = null)
         {
-            button.BorderVisible = false;
-            button.BlurredBorder = false;
+            button.BorderVisible = OxB.F;
+            button.BlurredBorder = OxB.F;
             button.Dock = OxDock.Right;
 
             if (SquareButtons)
@@ -54,7 +54,7 @@ namespace OxLibrary.Panels
         {
             base.OnSizeChanged(e);
 
-            if (e.Changed)
+            if (e.IsChanged)
                 PlaceButtons();
         }
     }

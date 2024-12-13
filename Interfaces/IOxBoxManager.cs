@@ -2,10 +2,12 @@
 
 public interface IOxBoxManager : IOxControlManager
 {
-    bool HandleParentPadding { get; }
+    OxBool HandleParentPadding { get; }
+    bool IsHandleParentPadding => OxB.B(HandleParentPadding);
     OxRectangle InnerControlZone { get; }
     OxRectangle OuterControlZone { get; }
     OxControls OxControls { get; }
     void Realign();
-    bool Realigning { get; }
+    OxBool Realigning { get; }
+    bool IsRealigning => OxB.B(Realigning);
 }

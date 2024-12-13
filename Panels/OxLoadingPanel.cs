@@ -6,13 +6,13 @@ namespace OxLibrary.Panels
     {
         public OxLoadingPanel() : base(new(300, 100))
         {
-            base.SetVisible(false);
+            Visible = OxB.F;
             Borders.Size = 1;
             Dock = OxDock.Fill;
 
             LoadingLabel = new OxLabel
             {
-                AutoSize = false,
+                AutoSize = OxB.F,
                 Parent = this,
                 Dock = OxDock.Fill,
                 TextAlign = ContentAlignment.MiddleCenter,
@@ -26,15 +26,13 @@ namespace OxLibrary.Panels
         public bool UseParentColor { get; set; } = true;
 
         public bool Locked = false;
-        protected override void SetVisible(bool value) { }
-
         public void StartLoading(bool locked = false)
         {
             if (Locked)
                 return;
 
             PrepareColors();
-            base.SetVisible(true);
+            Visible = OxB.T;
             Locked = locked;
             BringToFront();
             Parent?.Update();
@@ -49,7 +47,7 @@ namespace OxLibrary.Panels
                 if (Locked)
                     return;
 
-                base.SetVisible(false);
+                Visible = OxB.F;
                 Locked = false;
             }
             finally

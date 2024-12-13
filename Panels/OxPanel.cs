@@ -11,7 +11,7 @@ public class OxPanel : Panel, IOxPanel
     public OxPanel(OxSize size)
     {
         Manager = OxControlManagers.RegisterBox(this);
-        BorderVisible = false;
+        BorderVisible = OxB.F;
         Colors = new(DefaultColor);
         Initialized = false;
 
@@ -30,7 +30,7 @@ public class OxPanel : Panel, IOxPanel
         );
 
         Initialized = true;
-        Visible = true;
+        Visible = OxBool.True;
     }
 
     protected bool IsVariableWidth =>
@@ -62,7 +62,7 @@ public class OxPanel : Panel, IOxPanel
     {
         base.OnPaint(e);
 
-        if (!BlurredBorder)
+        if (!IsBlurredBorder)
             Margin.Draw(e.Graphics, new(ClientRectangle), MarginColor);
 
         Borders.Draw(e.Graphics, BorderRectangle, BorderColor);
@@ -73,12 +73,6 @@ public class OxPanel : Panel, IOxPanel
     protected virtual void AfterCreated() { }
 
     protected bool Initialized { get; set; } = false;
-
-    protected override void OnEnabledChanged(EventArgs e)
-    {
-        base.OnEnabledChanged(e);
-        PrepareColors();
-    }
 
     public virtual Color DefaultColor => Color.FromArgb(142, 142, 138);
 
@@ -98,26 +92,27 @@ public class OxPanel : Panel, IOxPanel
     protected virtual string GetText() =>
         base.Text;
 
-    public new bool Visible
+    public OxBool Hovered
     {
-        get => base.Visible;
-        set => SetVisible(value);
+        get => OxB.B(IsHovered);
+        set => SetHovered(OxB.B(value));
     }
 
-    protected virtual void SetVisible(bool value) =>
-        base.Visible = value;
-
-    public bool IsHovered
+    public virtual bool IsHovered
     {
         get
         {
             Point thisPoint = PointToClient(Cursor.Position);
-            return (thisPoint.X >= 0)
+            return 
+                (thisPoint.X >= 0)
                 && (thisPoint.X <= Size.Width)
                 && (thisPoint.Y >= 0)
-                && (thisPoint.Y <= Size.Height);
+                && (thisPoint.Y <= Size.Height
+            );
         }
     }
+
+    public virtual void SetHovered(bool value) { }
 
     protected readonly ToolTip ToolTip =
         new()
@@ -178,27 +173,20 @@ public class OxPanel : Panel, IOxPanel
     public new virtual IOxBox? Parent
     {
         get => Manager.Parent;
-        set
-        {
-            Manager.Parent = value;
-            PrepareColors();
-        }
+        set => Manager.Parent = value;
     }
 
-    protected sealed override void OnAutoSizeChanged(EventArgs e) { }
-
-    protected virtual void OnAutoSizeChanged(OxEventArgs e) { }
-
-    private bool autoSize = false;
-    public new bool AutoSize
+    public new OxBool AutoSize
     {
-        get => autoSize;
-        set
-        {
-            autoSize = value;
-            OnAutoSizeChanged((EventArgs)OxEventArgs.Empty);
-        }
+        get => Manager.AutoSize;
+        set => Manager.AutoSize = value;
     }
+
+    public bool IsAutoSize =>
+        Manager.IsAutoSize;
+
+    public void SetAutoSize(bool value) =>
+        Manager.SetAutoSize(value);
 
     #region IOxWithPadding implementaion
     private readonly OxBorders padding = new();
@@ -246,20 +234,23 @@ public class OxPanel : Panel, IOxPanel
     public void SetBorderWidth(OxDock dock, short value) =>
         Borders[dock].Size = value;
 
-    public bool BorderVisible
+    public OxBool BorderVisible
     {
         get => GetBorderVisible();
         set => SetBorderVisible(value);
     }
 
-    protected virtual void SetBorderVisible(bool value) =>
+    protected void SetBorderVisible(OxBool value) =>
         Borders.SetVisible(value);
 
-    protected virtual bool GetBorderVisible() =>
-        Borders.GetVisible();
+    protected virtual OxBool GetBorderVisible() =>
+        Borders.IsVisible;
+
+    public bool IsBorderVisible => OxB.B(BorderVisible);
+    public void SetBorderVisible(bool value) => BorderVisible = OxB.B(value);
 
     protected virtual Color GetBorderColor() =>
-        Enabled
+        IsEnabled
         || !UseDisabledStyles
             ? BaseColor
             : Colors.Lighter(2);
@@ -270,8 +261,8 @@ public class OxPanel : Panel, IOxPanel
 
     public new OxBorders Margin => margin;
 
-    private bool blurredBorder = false;
-    public bool BlurredBorder
+    private OxBool blurredBorder = OxB.F;
+    public OxBool BlurredBorder
     {
         get => blurredBorder;
         set
@@ -284,7 +275,7 @@ public class OxPanel : Panel, IOxPanel
     }
 
     private Color MarginColor =>
-        !BlurredBorder
+        !IsBlurredBorder
         && Parent is not null
             ? Parent.BackColor
             : BackColor;
@@ -297,7 +288,8 @@ public class OxPanel : Panel, IOxPanel
         get => Colors.BaseColor;
         set
         {
-            if (BaseColorChanging)
+            if (Colors.BaseColor.Equals(value)
+                || BaseColorChanging)
                 return;
 
             BaseColorChanging = true;
@@ -308,7 +300,7 @@ public class OxPanel : Panel, IOxPanel
                 PrepareColors();
             }
             finally
-            { 
+            {
                 BaseColorChanging = false;
                 Invalidate();
             }
@@ -318,10 +310,10 @@ public class OxPanel : Panel, IOxPanel
     private bool BaseColorChanging = false;
 
     protected virtual Color GetBackColor() =>
-        Colors.Lighter(Enabled || !useDisabledStyles ? 7 : 8);
+        Colors.Lighter(IsEnabled || !useDisabledStyles ? 7 : 8);
 
     protected virtual Color GetForeColor() =>
-        Colors.Darker(Enabled || !useDisabledStyles ? 7 : -3);
+        Colors.Darker(IsEnabled || !useDisabledStyles ? 7 : -3);
 
     public virtual void PrepareColors()
     {
@@ -347,12 +339,8 @@ public class OxPanel : Panel, IOxPanel
         get => GetIcon();
         set
         {
-            switch (Icon)
-            {
-                case null when value is null:
-                case not null when Icon.Equals(value):
-                    return;
-            }
+            if (!OxHelper.Changed(Icon, value))
+                return;
 
             SetIcon(value);
         }
@@ -363,7 +351,7 @@ public class OxPanel : Panel, IOxPanel
     #endregion
 
     #region Implemention of IOxBox using IOxBoxManager
-    public virtual bool HandleParentPadding => true;
+    public virtual OxBool HandleParentPadding => OxB.T;
 
     public OxRectangle InnerControlZone =>
         Manager.InnerControlZone;
@@ -377,15 +365,19 @@ public class OxPanel : Panel, IOxPanel
     public void Realign() =>
         Manager.Realign();
 
-    public bool Realigning =>
+    public OxBool Realigning =>
         Manager.Realigning;
     #endregion
 
     #region Implemention of IOxControl using IOxControlManager
+
+    public virtual void OnAutoSizeChanged(OxBoolChangedEventArgs e) { }
     public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
+    public virtual void OnEnabledChanged(OxBoolChangedEventArgs e) { }
     public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
     public virtual void OnParentChanged(OxParentChangedEventArgs e) { }
     public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }
+    public virtual void OnVisibleChanged(OxBoolChangedEventArgs e) { }
 
     public new short Width
     {
@@ -447,13 +439,53 @@ public class OxPanel : Panel, IOxPanel
         set => Manager.Dock = value;
     }
 
+    public new OxBool Visible
+    {
+        get => Manager.Visible;
+        set => Manager.Visible = value;
+    }
+
+    public bool IsVisible =>
+        Manager.IsVisible;
+
+    public void SetVisible(bool value) =>
+        Manager.SetVisible(value);
+
+    public new OxBool Enabled
+    {
+        get => Manager.Enabled;
+        set => Manager.Enabled = value;
+    }
+    public bool IsEnabled =>
+        Manager.IsEnabled;
+
+    public void SetEnabled(bool value) =>
+        Manager.SetEnabled(value);
+
+    public bool IsBlurredBorder =>
+        OxB.B(BlurredBorder);
+
+    public void SetBlurredBorder(bool value) => BlurredBorder = OxB.B(value);
+
     public void WithSuspendedLayout(Action method) =>
         Manager.WithSuspendedLayout(method);
+
+    public new event OxBoolChangedEvent AutoSizeChanged
+    {
+        add => Manager.AutoSizeChanged += value;
+        remove => Manager.AutoSizeChanged -= value;
+    }
 
     public new event OxDockChangedEvent DockChanged
     {
         add => Manager.DockChanged += value;
         remove => Manager.DockChanged -= value;
+    }
+
+    public new event OxBoolChangedEvent EnabledChanged
+    {
+        add => Manager.EnabledChanged += value;
+        remove => Manager.EnabledChanged -= value;
     }
 
     public new event OxLocationChangedEvent LocationChanged
@@ -474,6 +506,12 @@ public class OxPanel : Panel, IOxPanel
         remove => Manager.SizeChanged -= value;
     }
 
+    public new event OxBoolChangedEvent VisibleChanged
+    {
+        add => Manager.VisibleChanged += value;
+        remove => Manager.VisibleChanged -= value;
+    }
+
     public void AddHandler(OxHandlerType type, Delegate handler) =>
         Manager.AddHandler(type, handler);
 
@@ -492,9 +530,12 @@ public class OxPanel : Panel, IOxPanel
     #endregion
 
     #region Hidden base methods
+    protected sealed override void OnAutoSizeChanged(EventArgs e) { }
     protected sealed override void OnDockChanged(EventArgs e) { }
+    protected sealed override void OnEnabledChanged(EventArgs e) { }
     protected sealed override void OnLocationChanged(EventArgs e) { }
     protected sealed override void OnParentChanged(EventArgs e) { }
     protected sealed override void OnSizeChanged(EventArgs e) { }
-#endregion
+    protected sealed override void OnVisibleChanged(EventArgs e) { }
+    #endregion
 }

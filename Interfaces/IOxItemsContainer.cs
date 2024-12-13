@@ -2,7 +2,7 @@
 
 namespace OxLibrary.Interfaces;
 
-public delegate bool IsHighPriorityItem(object item);
+public delegate OxBool IsHighPriorityItem(object item);
 
 //TODO: replace inherits from IComonent with IOxControlContainer
 public interface IOxItemsContainer : IComponent
@@ -26,12 +26,16 @@ public interface IOxItemsContainer : IComponent
     int Height { get; set; }
     void MoveUp();
     void MoveDown();
-    bool AvailableMoveUp { get; }
-    bool AvailableMoveDown { get; }
+    OxBool AvailableMoveUp { get; }
+    bool IsAvailableMoveUp { get; }
+    OxBool AvailableMoveDown { get; }
+    bool IsAvailableMoveDown { get; }
     DockStyle Dock { get; set; }
     BorderStyle BorderStyle { get; set; }
     IOxControl AsControl();
-    bool AvailableChilds { get; }
+    OxBool AvailableChilds { get; }
+    bool IsAvailableChilds { get; }
+
     event EventHandler Click;
     event EventHandler DoubleClick;
     event KeyEventHandler KeyUp;

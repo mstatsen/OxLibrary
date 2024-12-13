@@ -15,9 +15,8 @@ public partial class OxFormPanel :
     { 
         get => form;
         set
-        { 
-            if (form is null && value is null
-                || form is not null && form.Equals(value))
+        {
+            if (!OxHelper.Changed(form, value))
                 return;
 
             if (form is not null)
@@ -48,7 +47,7 @@ public partial class OxFormPanel :
         ApplyRestoreButtonIconAndToolTip();
         SetBordersSize();
         SetHeaderFont();
-        BlurredBorder = true;
+        BlurredBorder = OxB.T;
     }
 
     public override OxDock Dock 
@@ -146,7 +145,7 @@ public partial class OxFormPanel :
 
     public override void OnSizeChanged(OxSizeChangedEventArgs e)
     {
-        if (!e.Changed
+        if (!e.IsChanged
             || !Initialized)
             return;
 
@@ -168,20 +167,20 @@ public partial class OxFormPanel :
     {
         base.OnLocationChanged(e);
 
-        if (!e.Changed
+        if (!e.IsChanged
             || Form is null
             || formMover is not null
                 && formMover.Processing)
             return;
 
-        if (e.XChanged)
+        if (e.IsXChanged)
         {
             if (e.NewValue.X > e.OldValue.X)
                 Form.Left += Left;
             else Form.Left -= Left;
         }
 
-        if (e.YChanged)
+        if (e.IsYChanged)
         {
             if (e.NewValue.Y > e.OldValue.Y)
                 Form.Top += Top;
@@ -221,7 +220,7 @@ public partial class OxFormPanel :
     private void ResizeHandler(object? sender, MouseEventArgs e)
     {
         if (Form is null
-            || !Form.Sizable
+            || !Form.IsSizable
             || ResizeProcessing)
             return;
 
@@ -240,8 +239,8 @@ public partial class OxFormPanel :
         OxPoint oldSize = new(Width, Height);
         OxPoint newSize = new(oldSize.X, oldSize.Y);
         OxPoint delta = new(
-            OxSH.Sub(newLastMousePosition.X, LastMousePosition.X),
-            OxSH.Sub(newLastMousePosition.Y, LastMousePosition.Y)
+            OxSh.Sub(newLastMousePosition.X, LastMousePosition.X),
+            OxSh.Sub(newLastMousePosition.Y, LastMousePosition.Y)
         );
 
         if (OxDirectionHelper.ContainsRight(LastDirection))
@@ -257,8 +256,8 @@ public partial class OxFormPanel :
             newSize.X -= delta.Y;
 
         LastMousePosition = newLastMousePosition;
-        newSize.X = OxSH.Max(newSize.X, Form.MinimumSize.Width);
-        newSize.Y = OxSH.Max(newSize.Y, Form.MinimumSize.Height);
+        newSize.X = OxSh.Max(newSize.X, Form.MinimumSize.Width);
+        newSize.Y = OxSh.Max(newSize.Y, Form.MinimumSize.Height);
         List<Point> sizePoints = OxMover.WayPoints(oldSize, newSize, 30);
         ResizeProcessing = true;
 

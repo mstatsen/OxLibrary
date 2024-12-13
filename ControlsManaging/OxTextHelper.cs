@@ -39,7 +39,7 @@ namespace OxLibrary
 
             if (!text.Equals(string.Empty)
                 && calcedWidth < 0)
-                calcedWidth = OxSH.Revert(calcedWidth);
+                calcedWidth = OxSh.Revert(calcedWidth);
 
             return calcedWidth;
         }

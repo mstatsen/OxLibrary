@@ -20,14 +20,14 @@ public class OxDialogFooter : OxOneBorderPanel
     public event EventHandler? ButtonsPlacing;
 
     private short ButtonHeight =>
-        OxSH.Sub(
+        OxSh.Sub(
             Height, 
-            OxSH.X2(buttonVerticalMargin)
+            OxSh.X2(buttonVerticalMargin)
         );
 
     public OxDialogFooter() : base(26)
     {
-        BlurredBorder = true;
+        BlurredBorder = OxB.T;
 
         foreach (OxDialogButton button in OxDialogButtonHelper.List())
             CreateButton(button);
@@ -59,7 +59,7 @@ public class OxDialogFooter : OxOneBorderPanel
     {
         base.OnDockChanged(e);
 
-        if (e.Changed)
+        if (e.IsChanged)
             PlaceButtons();
     }
 
@@ -67,7 +67,7 @@ public class OxDialogFooter : OxOneBorderPanel
     {
         base.OnSizeChanged(e);
 
-        if (e.Changed)
+        if (e.IsChanged)
             PlaceButtons();
     }
 
@@ -97,10 +97,16 @@ public class OxDialogFooter : OxOneBorderPanel
         }
     }
 
-    public bool ButtonVisible(OxDialogButton button) =>
+    public OxBool ButtonVisible(OxDialogButton button) =>
+        OxB.B(IsButtonVisible(button));
+
+    public bool IsButtonVisible(OxDialogButton button) =>
         (DialogButtons & button).Equals(button);
 
-    public void SetButtonEnabled(OxDialogButton dialogButton, bool enabled)
+    public void SetButtonEnabled(OxDialogButton dialogButton, bool enabled) =>
+        SetButtonEnabled(dialogButton, OxB.B(enabled));
+
+    public void SetButtonEnabled(OxDialogButton dialogButton, OxBool enabled)
     {
         if (buttonsDictionary.TryGetValue(dialogButton, out var button))
             button.Enabled = enabled;
@@ -113,8 +119,8 @@ public class OxDialogFooter : OxOneBorderPanel
             short calcedWidth = 0;
 
             foreach (OxDialogButton button in buttonsDictionary.Keys)
-                if (ButtonVisible(button))
-                    calcedWidth += OxSH.Add(
+                if (IsButtonVisible(button))
+                    calcedWidth += OxSh.Add(
                         OxDialogButtonHelper.Width(button), 
                         DialogButtonSpace
                     );
@@ -137,7 +143,7 @@ public class OxDialogFooter : OxOneBorderPanel
             dialogButtons = value;
 
             foreach (var item in buttonsDictionary)
-                item.Value.Visible = (dialogButtons & item.Key).Equals(item.Key);
+                item.Value.SetVisible((dialogButtons & item.Key).Equals(item.Key));
 
             PlaceButtons();
         }
@@ -157,9 +163,9 @@ public class OxDialogFooter : OxOneBorderPanel
             Visible = ButtonVisible(dialogButton),
             Size = new(
                 OxDialogButtonHelper.Width(dialogButton),
-                OxSH.Sub(
+                OxSh.Sub(
                     ButtonHeight,
-                    OxSH.X2(buttonVerticalMargin)
+                    OxSh.X2(buttonVerticalMargin)
                 )
             )
         };
@@ -189,12 +195,12 @@ public class OxDialogFooter : OxOneBorderPanel
                 HorizontalAlign.Left =>
                     fullButtonsWidth,
                 HorizontalAlign.Center =>
-                    OxSH.Sub(
+                    OxSh.Sub(
                         Width, 
-                        OxSH.CenterOffset(Width, fullButtonsWidth)
+                        OxSh.CenterOffset(Width, fullButtonsWidth)
                     ),
                 _ =>
-                    OxSH.Sub(Width, DialogButtonStartSpace)
+                    OxSh.Sub(Width, DialogButtonStartSpace)
             };
 
         int buttonIndex = 0;
@@ -202,15 +208,15 @@ public class OxDialogFooter : OxOneBorderPanel
         foreach (var item in realButtons)
         {
             short dialogButtonWidth = OxDialogButtonHelper.Width(item.Key);
-            item.Value.Left = OxSH.Sub(rightOffset, dialogButtonWidth);
+            item.Value.Left = OxSh.Sub(rightOffset, dialogButtonWidth);
             item.Value.Size = new(
                 dialogButtonWidth,
-                OxSH.Sub(
+                OxSh.Sub(
                     Height,
-                    OxSH.X2(buttonVerticalMargin)
+                    OxSh.X2(buttonVerticalMargin)
                 )
             );
-            rightOffset = OxSH.Sub(item.Value.Left, DialogButtonSpace);
+            rightOffset = OxSh.Sub(item.Value.Left, DialogButtonSpace);
             buttonIndex++;
         }
 

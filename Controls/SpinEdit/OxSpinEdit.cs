@@ -72,11 +72,10 @@ namespace OxLibrary.Controls
 
         private void EnableButtons()
         {
-            DecreaseButton.Visible = ShowStepButtons && !TextBox.ReadOnly && (Value > minimum);
-            IncreaseButton.Visible = ShowStepButtons && !TextBox.ReadOnly && (Value < maximum);
-
-            Borders[OxDock.Left].Visible = !ShowStepButtons || TextBox.ReadOnly || (Value <= minimum);
-            Borders[OxDock.Right].Visible = !ShowStepButtons || TextBox.ReadOnly || (Value >= maximum);
+            DecreaseButton.SetVisible(ShowStepButtons && !TextBox.ReadOnly && (Value > minimum));
+            IncreaseButton.SetVisible(ShowStepButtons && !TextBox.ReadOnly && (Value < maximum));
+            Borders[OxDock.Left].SetVisible(!ShowStepButtons || TextBox.ReadOnly || (Value <= minimum));
+            Borders[OxDock.Right].SetVisible(!ShowStepButtons || TextBox.ReadOnly || (Value >= maximum));
         }
 
         public int Minimum
@@ -183,7 +182,7 @@ namespace OxLibrary.Controls
         }
 
         protected override Color GetBorderColor() =>
-            Enabled
+            IsEnabled
                 ? Colors.Darker(8)
                 : Colors.Lighter(2);
 

@@ -12,22 +12,28 @@ public class OxBorder
     }
 
     private short size = 0;
-    private bool visible = true;
+    private OxBool visible = OxB.T;
 
     public short Size
     {
-        get => OxSH.Short(visible ? size : 0);
+        get => OxSh.Short(OxB.B(visible) ? size : 0);
         set => size = value;
     }
 
-    public bool Visible
+    public OxBool Visible
     {
         get => visible;
         set => visible = value;
     }
 
-    public bool IsEmpty =>
-        Size is 0;
+    public bool IsVisible =>
+        OxB.B(Visible);
+
+    public void SetVisible(bool value) =>
+        Visible = OxB.B(value);
+
+    public OxBool IsEmpty =>
+        OxB.B(Size is 0);
 
     public override bool Equals(object? obj) => 
         obj is OxBorder otherBorder

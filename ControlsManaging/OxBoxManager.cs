@@ -28,9 +28,12 @@ public class OxBoxManager :
         InnerControlZone.CopyFrom(Aligner.ControlZone);
     }
 
-    public bool Realigning =>
+    public OxBool Realigning =>
         Aligner.Realigning;
 #pragma warning restore CS0618 // Type or member is obsolete
+
+    public bool IsRealigning =>
+        OxB.B(Realigning);
 
     protected override void SetHandlers()
     {
@@ -83,8 +86,16 @@ public class OxBoxManager :
 
     protected override void RealignParent()
     {
+        if (OxB.B(ParentChanging))
+            return;
+
         if (Parent is null)
+        {
+            if (IsRealigning)
+                return;
+
             Realign();
+        }
         else
             base.RealignParent();
     }
@@ -126,5 +137,5 @@ public class OxBoxManager :
         }
     }
 
-    public bool HandleParentPadding => Box.HandleParentPadding;
+    public OxBool HandleParentPadding => Box.HandleParentPadding;
 }

@@ -10,12 +10,12 @@ public class OxHeader : OxOneBorderPanel, IOxHeader
     private readonly OxPicture icon = new()
     {
         Dock = OxDock.Left,
-        Visible = false
+        Visible = OxB.F
     };
 
     private readonly OxLabel title = new()
     {
-        AutoSize = false,
+        AutoSize = OxB.F,
         Dock = OxDock.Fill,
         Text = string.Empty,
         Font = new(
@@ -73,7 +73,7 @@ public class OxHeader : OxOneBorderPanel, IOxHeader
             value is not null 
                 ? value.Trim() 
                 : string.Empty;
-        title.Visible = !title.Text.Equals(string.Empty);
+        title.SetVisible(!title.Text.Equals(string.Empty));
     }
 
     public ContentAlignment TitleAlign
@@ -94,7 +94,7 @@ public class OxHeader : OxOneBorderPanel, IOxHeader
     protected override void SetIcon(Bitmap? value)
     {
         icon.Image = value;
-        icon.Visible = icon.Image is not null;
+        icon.SetVisible(icon.Image is not null);
     }
 
     protected override void PrepareInnerComponents()
@@ -117,7 +117,7 @@ public class OxHeader : OxOneBorderPanel, IOxHeader
     {
         base.OnSizeChanged(e);
 
-        if (!e.Changed)
+        if (!e.IsChanged)
             return;
 
         icon.Width = icon.Height;

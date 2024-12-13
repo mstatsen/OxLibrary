@@ -14,7 +14,9 @@ public class OxForm<TFormPanel> :
     
 {
     public TFormPanel FormPanel { get; internal set; }
-    public OxHeader Header => FormPanel.Header;
+    public OxHeader Header =>
+        FormPanel.Header;
+
     public short HeaderHeight
     {
         get => FormPanel.HeaderHeight;
@@ -130,10 +132,10 @@ public class OxForm<TFormPanel> :
         FormPanel.Size = new(Width, Height);
     }
 
-    private bool canMaximize = true;
-    private bool canMinimize = true;
+    private OxBool canMaximize = OxB.T;
+    private OxBool canMinimize = OxB.T;
 
-    public bool CanMaximize
+    public OxBool CanMaximize
     {
         get => canMaximize;
         set
@@ -146,6 +148,12 @@ public class OxForm<TFormPanel> :
             HeaderToolBar.PlaceButtons();
         }
     }
+
+    public bool IsCanMaximize =>
+        OxB.B(CanMaximize);
+
+    public void SetCanMaximize(bool value) =>
+        CanMaximize = OxB.B(value);
 
     public void ApplyRestoreButtonIconAndToolTip()
     {
@@ -166,7 +174,7 @@ public class OxForm<TFormPanel> :
             ? "Restore window"
             : "Maximize window";
 
-    public bool CanMinimize
+    public OxBool CanMinimize
     {
         get => canMinimize;
         set
@@ -180,9 +188,15 @@ public class OxForm<TFormPanel> :
         }
     }
 
-    private bool sizable = true;
+    public bool IsCanMinimize =>
+       OxB.B(CanMinimize);
+    public void SetCanMinimize(bool value) =>
+        CanMinimize = OxB.B(value);
 
-    public bool Sizable
+
+    private OxBool sizable = OxB.T;
+
+    public OxBool Sizable
     {
         get => sizable;
         set
@@ -192,8 +206,13 @@ public class OxForm<TFormPanel> :
         }
     }
 
+    public bool IsSizable =>
+        OxB.B(Sizable);
+    public void SetSizable(bool value) =>
+        Sizable = OxB.B(value);
+
     private void SetMargins() =>
-        Margin.Size = OxSH.Short(Sizable ? 1 : 0);
+        Margin.Size = OxSh.Short(IsSizable ? 1 : 0);
 
     protected override void OnShown(EventArgs e)
     {
@@ -241,7 +260,7 @@ public class OxForm<TFormPanel> :
     public virtual void PrepareColors() { }
 
     #region Implemention of IOxBox using OxFormPanel
-    public bool HandleParentPadding => false;
+    public OxBool HandleParentPadding => OxB.F;
 
     public OxRectangle InnerControlZone =>
         Manager.InnerControlZone;
@@ -255,7 +274,7 @@ public class OxForm<TFormPanel> :
     public void Realign() =>
         Manager.Realign();
 
-    public bool Realigning =>
+    public OxBool Realigning =>
         Manager.Realigning;
     #endregion
 
@@ -364,6 +383,24 @@ public class OxForm<TFormPanel> :
         remove => Manager.SizeChanged -= value;
     }
 
+    public new event OxBoolChangedEvent AutoSizeChanged
+    {
+        add => Manager.AutoSizeChanged += value;
+        remove => Manager.AutoSizeChanged -= value;
+    }
+
+    public new event OxBoolChangedEvent EnabledChanged
+    {
+        add => Manager.EnabledChanged += value;
+        remove => Manager.EnabledChanged -= value;
+    }
+
+    public new event OxBoolChangedEvent VisibleChanged
+    {
+        add => Manager.VisibleChanged += value;
+        remove => Manager.VisibleChanged -= value;
+    }
+
     #region Internal used properties and methods
     [Obsolete("ZBounds it is used only for internal needs")]
     public OxZBounds ZBounds =>
@@ -373,32 +410,31 @@ public class OxForm<TFormPanel> :
     #endregion
 
     #region Hidden base methods
-#pragma warning disable IDE0051 // Remove unused private members
-    private new Size PreferredSize =>
-        base.PreferredSize;
-
-    private new Rectangle DisplayRectangle =>
-        base.DisplayRectangle;
-
     public new OxBorders Padding =>
         FormPanel.Padding;
             
-    public bool HeaderVisible
+    public OxBool HeaderVisible
     {
         get => FormPanel.HeaderVisible;
         set => FormPanel.HeaderVisible = value;
     }
 
+    public bool IsHeaderVisible =>
+        FormPanel.IsHeaderVisible;
+
+    public void SetHeaderVisible(bool value) =>
+        FormPanel.SetHeaderVisible(value);
+
     public Color DefaultColor =>
         FormPanel.DefaultColor;
 
-    public bool IsHovered =>
-        FormPanel.IsHovered;
+    public OxBool Hovered =>
+        FormPanel.Hovered;
 
     public new OxBorders Margin =>
         FormPanel.Margin;
 
-    public bool BlurredBorder
+    public OxBool BlurredBorder
     { 
         get => FormPanel.BlurredBorder;
         set => FormPanel.BlurredBorder = value;
@@ -412,7 +448,7 @@ public class OxForm<TFormPanel> :
         get => FormPanel.BorderColor;
         set => FormPanel.BorderColor = value;
     }
-    public bool BorderVisible
+    public OxBool BorderVisible
     { 
         get => FormPanel.BorderVisible;
         set => FormPanel.BorderVisible = value;
@@ -439,16 +475,49 @@ public class OxForm<TFormPanel> :
     public IOxBox DependedFrom =>
         FormPanel;
 
-    private new Size GetPreferredSize(Size proposedSize) =>
-        base.GetPreferredSize(proposedSize);
+    public bool IsHovered =>
+        FormPanel.IsHovered;
 
-    private new Size LogicalToDeviceUnits(Size value) =>
-        base.LogicalToDeviceUnits(value);
-#pragma warning restore IDE0051 // Remove unused private members
+    public new OxBool AutoSize 
+    {
+        get => FormPanel.AutoSize;
+        set => FormPanel.AutoSize = value;
+    }
+
+    public bool IsAutoSize =>
+        FormPanel.IsAutoSize;
+
+    public new OxBool Enabled
+    {
+        get => FormPanel.Enabled;
+        set => FormPanel.Enabled = value;
+    }
+
+    public bool IsEnabled =>
+        FormPanel.IsEnabled;
+
+    public new OxBool Visible
+    {
+        get => FormPanel.Visible;
+        set => FormPanel.Visible = value;
+    }
+
+    public bool IsVisible =>
+        FormPanel.IsVisible;
+
+    public bool IsBlurredBorder =>
+        FormPanel.IsBlurredBorder;
+
+    public bool IsBorderVisible =>
+        FormPanel.IsBorderVisible;
+
+    protected sealed override void OnAutoSizeChanged(EventArgs e) { }
     protected sealed override void OnDockChanged(EventArgs e) { }
+    protected sealed override void OnEnabledChanged(EventArgs e) { }
     protected sealed override void OnLocationChanged(EventArgs e) { }
     protected sealed override void OnParentChanged(EventArgs e) { }
     protected sealed override void OnSizeChanged(EventArgs e) { }
+    protected sealed override void OnVisibleChanged(EventArgs e) { }
 
     public DialogResult ShowDialog(Control owner, OxDialogButton buttons = OxDialogButton.OK) =>
         FormPanel.ShowDialog(owner, buttons);
@@ -467,6 +536,33 @@ public class OxForm<TFormPanel> :
 
     public void RemoveHandler(OxHandlerType type, Delegate handler) =>
         Manager.RemoveHandler(type, handler);
+
+    public void SetHovered(bool value) =>
+        FormPanel.SetHovered(value);
+
+    public void OnAutoSizeChanged(OxBoolChangedEventArgs e) =>
+        FormPanel.OnAutoSizeChanged(e);
+
+    public void OnEnabledChanged(OxBoolChangedEventArgs e) =>
+        FormPanel.OnEnabledChanged(e);
+
+    public void OnVisibleChanged(OxBoolChangedEventArgs e) =>
+        FormPanel.OnVisibleChanged(e);
+
+    public void SetAutoSize(bool value) =>
+        FormPanel.SetAutoSize(value);
+
+    public void SetEnabled(bool value) =>
+        FormPanel.SetEnabled(value);
+
+    public void SetVisible(bool value) =>
+        FormPanel.SetVisible(value);
+
+    public void SetBlurredBorder(bool value) =>
+        FormPanel.SetBlurredBorder(value);
+
+    public void SetBorderVisible(bool value) =>
+        FormPanel.SetBorderVisible(value);
     #endregion
 }
 

@@ -4,13 +4,13 @@ namespace OxLibrary.Panels
 {
     public class OxOneBorderPanel : OxPanel
     {
-        protected override bool GetBorderVisible() =>
+        protected override OxBool GetBorderVisible() =>
             Border.Visible;
 
         public OxOneBorderPanel(short height) : base(new(1, height)) { }
         public OxOneBorderPanel() : this(1) { }
 
-        public override bool HandleParentPadding => false;
+        public override OxBool HandleParentPadding => OxB.F;
 
         public OxBorder Border =>
             Borders[OxDockHelper.Opposite(Dock)];
@@ -19,11 +19,11 @@ namespace OxLibrary.Panels
         {
             base.OnDockChanged(e);
 
-            if (e.Changed)
-            {
-                Borders[OxDockHelper.Opposite(e.OldValue)].Visible = false;
-                Borders[OxDockHelper.Opposite(e.NewValue)].Visible = true;
-            }
+            if (!e.IsChanged)
+                return;
+            
+            Borders[OxDockHelper.Opposite(e.OldValue)].SetVisible(false);
+            Borders[OxDockHelper.Opposite(e.NewValue)].SetVisible(true);
         }
     }
 }

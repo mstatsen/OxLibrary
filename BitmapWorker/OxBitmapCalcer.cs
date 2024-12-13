@@ -14,8 +14,8 @@ namespace OxLibrary.BitmapWorker
 
         private void CalcParams()
         {
-            ImageSize.Width = OxSH.Short(Image.Width);
-            ImageSize.Height = OxSH.Short(Image.Height);
+            ImageSize.Width = OxSh.Short(Image.Width);
+            ImageSize.Height = OxSh.Short(Image.Height);
 
             if (Stretch && NeedZoom())
                 CalcForZoom();
@@ -69,15 +69,15 @@ namespace OxLibrary.BitmapWorker
 
             if (zoom > 1)
             {
-                ImageSize.Width = OxSH.Div(ImageSize.Width, zoom);
-                ImageSize.Height = OxSH.Div(ImageSize.Height, zoom);
+                ImageSize.Width = OxSh.Div(ImageSize.Width, zoom);
+                ImageSize.Height = OxSh.Div(ImageSize.Height, zoom);
             }
         }
 
         private void AlignByCenter()
         {
-            ImageBox.X = OxSH.CenterOffset(ImageBox.Width, ImageSize.Width);
-            ImageBox.Y = OxSH.CenterOffset(ImageBox.Height, ImageSize.Height);
+            ImageBox.X = OxSh.CenterOffset(ImageBox.Width, ImageSize.Width);
+            ImageBox.Y = OxSh.CenterOffset(ImageBox.Height, ImageSize.Height);
         }
 
         private Bitmap GetBitmap(OxSize imageSize, OxRectangle coordinates)

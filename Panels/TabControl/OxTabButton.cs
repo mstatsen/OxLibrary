@@ -127,27 +127,29 @@ namespace OxLibrary.Panels
                     break;
             }
 
-            Borders[startDock].Visible =
+            Borders[startDock].SetVisible(
                 Active
-                || IsFirstPage;
+                || IsFirstPage
+            );
 
-            Borders[endDock].Visible =
+            Borders[endDock].SetVisible(
                 Active
                 || IsLastPage
-                || !IsPrevButton(TabControl.ActiveTabButton);
+                || !IsPrevButton(TabControl.ActiveTabButton)
+            );
 
             Margin[TabControl.TabPosition].Size =
-                OxSH.Short(
+                OxSh.Short(
                     !Active
                         ? OxDockHelper.IsVertical(TabControl.TabPosition)
                             ? 4 
                             : 24
                         : 0
                 );
-            Borders[TabControl.TabPosition].Visible = true;
+            Borders[TabControl.TabPosition].Visible = OxB.T;
             OxDock oppositeDock = OxDockHelper.Opposite(TabControl.TabPosition);
             Margin[oppositeDock].Size = 0;
-            Borders[oppositeDock].Visible = false;
+            Borders[oppositeDock].Visible = OxB.F;
             Text += string.Empty; //for recalc label size
         }
 

@@ -12,25 +12,25 @@ public class OxZBounds
 
     public short Left 
     { 
-        get => OxSH.Short(Control.Left);
+        get => OxSh.Short(Control.Left);
         set => Control.Left = value;
     }
 
     public short Top
     {
-        get => OxSH.Short(Control.Top);
+        get => OxSh.Short(Control.Top);
         set => Control.Top = value;
     }
 
     public short Width
     {
-        get => OxSH.Short(Control.Width);
+        get => OxSh.Short(Control.Width);
         set => Control.Width = value;
     }
 
     public short Height
     {
-        get => OxSH.Short(Control.Height);
+        get => OxSh.Short(Control.Height);
         set => Control.Height = value;
     }
 

@@ -7,9 +7,9 @@ namespace OxLibrary.Panels
 {
     public class OxCard : OxFrameWithHeader, IOxCard
     {
-        private bool expanded = true;
+        private OxBool expanded = OxB.True;
 
-        private void SetExpanded(bool value)
+        private void SetExpanded(OxBool value)
         {
             bool changed = !expanded.Equals(value);
             expanded = value;
@@ -29,10 +29,10 @@ namespace OxLibrary.Panels
                 try
                 {
 #pragma warning disable CS0618 // Type or member is obsolete
-                    if (value)
+                    if (OxB.B(value))
                         ZBounds.RestoreSize();
                     else ZBounds.Height =
-                            OxSH.Add(
+                            OxSh.Add(
                                 Header.Border.Size,
                                 HeaderHeight,
                                 Margin.Vertical
@@ -48,19 +48,22 @@ namespace OxLibrary.Panels
             }
             finally
             {
-                ExpandChanged?.Invoke(this, new(!Expanded, Expanded));
+                ExpandChanged?.Invoke(this, new(Expanded, Expanded));
             }
         }
 
-        public bool Expanded
+        public void SetExpanded(bool value) =>
+            SetExpanded(OxB.B(value));
+
+        public OxBool Expanded
         {
             get => expanded;
             set => SetExpanded(value);
         }
 
         private bool Expandable => IsVariableHeight;
-        public void Expand() => Expanded = true;
-        public void Collapse() => Expanded = false;
+        public void Expand() => Expanded = OxB.T;
+        public void Collapse() => Expanded = OxB.F;
 
         public event ExpandChanged? ExpandChanged;
 
@@ -75,7 +78,7 @@ namespace OxLibrary.Panels
         }
 
         private void ExpandButtonClickHandler(object? sender, EventArgs e) =>
-            Expanded = !Expanded;
+            Expanded = OxB.Not(Expanded);
 
         private readonly OxIconButton ExpandButton = new(OxIcons.Up, 20)
         {
@@ -83,9 +86,9 @@ namespace OxLibrary.Panels
             ToolTipText = "Collapse"
         };
 
-        private bool expandButtonVisible = true;
+        private OxBool expandButtonVisible = OxB.True;
 
-        public bool ExpandButtonVisible
+        public OxBool ExpandButtonVisible
         {
             get => expandButtonVisible;
             set
@@ -96,12 +99,12 @@ namespace OxLibrary.Panels
         }
 
         private Bitmap ExpandButtonIcon =>
-            expanded 
+            OxB.B(expanded)
                 ? OxIcons.Up 
                 : OxIcons.Down;
 
         public string ExpandButtonToolTipText =>
-            expanded 
+            OxB.B(expanded)
                 ? "Collapse" 
                 : "Expand";
 
@@ -115,21 +118,33 @@ namespace OxLibrary.Panels
         protected override void PrepareDialog(OxPanelViewer dialog)
         {
             base.PrepareDialog(dialog);
-            ExpandButton.Visible = false;
-            Header.ToolBar.Visible = Header.ToolBar.Buttons.Count > 1;
+            ExpandButton.Visible = OxB.F;
+            Header.ToolBar.Visible = OxB.B(Header.ToolBar.Buttons.Count > 1);
         }
 
         public override void PutBack(OxPanelViewer dialog)
         {
             base.PutBack(dialog);
-            ExpandButton.Visible = true;
-            Header.ToolBar.Visible = true;
+            ExpandButton.Visible = OxB.T;
+            Header.ToolBar.Visible = OxB.T;
         }
 
-        protected override void OnVisibleChanged(EventArgs e)
+        public override void OnVisibleChanged(OxBoolChangedEventArgs e)
         {
             base.OnVisibleChanged(e);
             ExpandButton.Visible = ExpandButtonVisible;
         }
+
+        public void SetExpandButtonVisible(OxBool value) =>
+            ExpandButtonVisible = value;
+
+        public void SetExpandButtonVisible(bool value) =>
+            SetExpandButtonVisible(OxB.B(value));
+
+        public bool IsExpandButtonVisible =>
+            OxB.B(expandButtonVisible);
+
+        public bool IsExpanded =>
+            OxB.B(Expanded);
     }
 }

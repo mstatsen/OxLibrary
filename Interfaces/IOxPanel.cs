@@ -12,7 +12,9 @@ namespace OxLibrary.Interfaces
         IOxWithColorHelper
     {
         Color DefaultColor { get; }
+        OxBool Hovered { get; }
         bool IsHovered { get; }
+        void SetHovered(bool value);
         DialogResult ShowDialog(Control owner, OxDialogButton buttons = OxDialogButton.OK);
     }
 }

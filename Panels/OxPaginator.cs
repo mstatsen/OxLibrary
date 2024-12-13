@@ -8,7 +8,7 @@ namespace OxLibrary.Panels
     {
         private static readonly short PageButtonWidth = 28;
         private static readonly short PageButtonHeight = 20;
-        private static readonly short NavigateButtonWidth = OxSH.X2(PageButtonWidth);
+        private static readonly short NavigateButtonWidth = OxSh.X2(PageButtonWidth);
         private static readonly short ButtonSpace = 3;
         private static readonly short MaximumPageButtonsCount = 10;
 
@@ -20,7 +20,7 @@ namespace OxLibrary.Panels
         private readonly OxPanel buttonsPanel = new();
         private readonly OxLabel itemsCountLabel = new()
         {
-            AutoSize = false,
+            AutoSize = OxB.F,
             Dock = OxDock.Right,
             Width = 120,
             TextAlign = ContentAlignment.MiddleRight,
@@ -94,28 +94,31 @@ namespace OxLibrary.Panels
             if (Buttons.Count > 0)
             {
                 OxTaggedButton lastPageButton = Buttons[^1];
-                FakeNextButton.Visible =
+                FakeNextButton.SetVisible(
                     lastPageButton is not null
-                    && lastPageButton.Visible
-                    && !lastPageButton.Tag.Equals(PageCount);
-                FakePrevButton.Visible = Buttons[0].Tag is not 1;
+                    && lastPageButton.IsVisible
+                    && !lastPageButton.Tag.Equals(PageCount)
+                );
+                FakePrevButton.SetVisible(Buttons[0].Tag is not 1);
             }
             else
             {
-                FakeNextButton.Visible = false;
-                FakePrevButton.Visible = false;
+                FakeNextButton.Visible = OxB.F;
+                FakePrevButton.Visible = OxB.F;
             }
         }
 
         private void SetButtonsVisible()
         {
-            PrevButton.Visible = 
+            PrevButton.SetVisible(
                 objectCount > 0 
-                && currentPage is not 1;
+                && currentPage is not 1
+            );
             FirstButton.Visible = PrevButton.Visible;
-            NextButton.Visible = 
+            NextButton.SetVisible(
                 objectCount > 0 
-                && !currentPage.Equals(PageCount);
+                && !currentPage.Equals(PageCount)
+            );
             LastButton.Visible = NextButton.Visible;
         }
 
@@ -139,10 +142,10 @@ namespace OxLibrary.Panels
 
         private void SetButtonSize(OxTaggedButton button)
         {
-            short freezeSize = OxSH.Short(button.FreezeHovered ? 8 : 0);
+            short freezeSize = OxSh.Short(button.FreezeHovered ? 8 : 0);
             button.Size = new(
-                OxSH.Add(PageButtonWidth, freezeSize),
-                OxSH.Add(PageButtonHeight, freezeSize)
+                OxSh.Add(PageButtonWidth, freezeSize),
+                OxSh.Add(PageButtonHeight, freezeSize)
             );
         }
 
@@ -169,7 +172,7 @@ namespace OxLibrary.Panels
         private static short PlaceButton(OxPanel button, short left)
         {
             button.Left = left;
-            return OxSH.Add(button.Right, ButtonSpace);
+            return OxSh.Add(button.Right, ButtonSpace);
         }
 
         private void PlaceButtons()
@@ -191,10 +194,10 @@ namespace OxLibrary.Panels
         }
 
         private short PageCount =>
-            OxSH.Ceiling((decimal)objectCount / pageSize);
+            OxSh.Ceiling((decimal)objectCount / pageSize);
 
         private short ButtonCount =>
-            OxSH.Min(PageCount, MaximumPageButtonsCount);
+            OxSh.Min(PageCount, MaximumPageButtonsCount);
 
         private void RenumerateButtons()
         {
@@ -209,7 +212,7 @@ namespace OxLibrary.Panels
                     buttonIndex = CurrentPage;
                 else
                 if (Buttons[^1].Tag < CurrentPage)
-                    buttonIndex = OxSH.Sub(CurrentPage, MaximumPageButtonsCount, 1);
+                    buttonIndex = OxSh.Sub(CurrentPage, MaximumPageButtonsCount, 1);
             }
 
             foreach (OxTaggedButton button in Buttons)
@@ -242,13 +245,13 @@ namespace OxLibrary.Panels
         }
 
         private void ButtonClickHandler(object? sender, EventArgs e) =>
-            CurrentPage = OxSH.Short(sender is OxTaggedButton taggedButton ? taggedButton.Tag : 0);
+            CurrentPage = OxSh.Short(sender is OxTaggedButton taggedButton ? taggedButton.Tag : 0);
 
         private static OxButton CreateNavigateButton(Bitmap icon, string toolTipText)
         {
             OxButton button = new(string.Empty, icon)
             {
-                Visible = false,
+                Visible = OxB.F,
                 HandHoverCursor = true,
                 ToolTipText = toolTipText,
                 Size = new(NavigateButtonWidth, PageButtonHeight)
@@ -271,7 +274,7 @@ namespace OxLibrary.Panels
                 Parent = button,
                 Dock = OxDock.Fill,
                 Text = "...",
-                AutoSize = false,
+                AutoSize = OxB.F,
                 TextAlign = textAlign,
                 Font = OxStyles.Font(FontStyle.Bold)
             };
@@ -305,7 +308,7 @@ namespace OxLibrary.Panels
 
         public override void OnSizeChanged(OxSizeChangedEventArgs e)
         {
-            if (!e.Changed)
+            if (!e.IsChanged)
                 return;
 
             base.OnSizeChanged(e);
@@ -314,7 +317,7 @@ namespace OxLibrary.Panels
         }
 
         private void SetButtonTop(OxPanel button) =>
-            button.Top = OxSH.CenterOffset(buttonsPanel.Height, button.Height);
+            button.Top = OxSh.CenterOffset(buttonsPanel.Height, button.Height);
 
         private void SetButtonTop(OxTaggedButton button) =>
             SetButtonTop((OxPanel)button);
@@ -331,7 +334,7 @@ namespace OxLibrary.Panels
         }
 
         private void SetButtonsPanelLeft() =>
-            buttonsPanel.Left = OxSH.CenterOffset(Width, buttonsPanel.Width);
+            buttonsPanel.Left = OxSh.CenterOffset(Width, buttonsPanel.Width);
 
         private void SetButtonBaseColor(OxTaggedButton button) => 
             button.BaseColor = BaseColor;

@@ -6,7 +6,9 @@ namespace OxLibrary.Interfaces
     {
         OxHeader Header { get; }
         short HeaderHeight { get; set; }
-        bool HeaderVisible { get; set; }
+        OxBool HeaderVisible { get; set; }
+        bool IsHeaderVisible { get; }
+        void SetHeaderVisible(bool value);
         OxHeaderToolBar HeaderToolBar { get; }
     }
 }

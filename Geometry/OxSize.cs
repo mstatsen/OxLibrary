@@ -67,8 +67,8 @@ public class OxSize
 
         try
         {
-            Width = OxSH.Max(width, 0);
-            Height = OxSH.Max(height, 0);
+            Width = OxSh.Max(width, 0);
+            Height = OxSh.Max(height, 0);
         }
         finally
         {

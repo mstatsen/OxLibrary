@@ -16,10 +16,14 @@ public class OxPictureBox :
     }
 
     #region Implemention of IOxControl using IOxControlManager
+    public virtual void OnAutoSizeChanged(OxBoolChangedEventArgs e) { }
     public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
+    public virtual void OnEnabledChanged(OxBoolChangedEventArgs e) { }
     public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
     public virtual void OnParentChanged(OxParentChangedEventArgs e) { }
     public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }
+    public virtual void OnVisibleChanged(OxBoolChangedEventArgs e) { }
+
     public new IOxBox? Parent
     {
         get => Manager.Parent;
@@ -113,6 +117,24 @@ public class OxPictureBox :
         remove => Manager.SizeChanged -= value;
     }
 
+    public new event OxBoolChangedEvent AutoSizeChanged
+    {
+        add => Manager.AutoSizeChanged += value;
+        remove => Manager.AutoSizeChanged -= value;
+    }
+
+    public new event OxBoolChangedEvent EnabledChanged
+    {
+        add => Manager.EnabledChanged += value;
+        remove => Manager.EnabledChanged -= value;
+    }
+
+    public new event OxBoolChangedEvent VisibleChanged
+    {
+        add => Manager.VisibleChanged += value;
+        remove => Manager.VisibleChanged -= value;
+    }
+
     public void AddHandler(OxHandlerType type, Delegate handler) =>
         Manager.AddHandler(type, handler);
 
@@ -126,14 +148,53 @@ public class OxPictureBox :
     [Obsolete("ZBounds it is used only for internal needs")]
     public OxZBounds ZBounds =>
         Manager.ZBounds;
+
+    public new OxBool AutoSize 
+    {
+        get => Manager.AutoSize;
+        set => Manager.AutoSize = value;
+    }
+
+    public bool IsAutoSize =>
+        Manager.IsAutoSize;
+
+    public void SetAutoSize(bool value) =>
+        Manager.SetAutoSize(value);
+
+    public new OxBool Enabled
+    {
+        get => Manager.Enabled;
+        set => Manager.Enabled = value;
+    }
+
+    public bool IsEnabled =>
+        Manager.IsEnabled;
+
+    public void SetEnabled(bool value) =>
+        Manager.SetEnabled(value);
+
+    public new OxBool Visible 
+    { 
+        get => Manager.Visible;
+        set => Manager.Visible = value;
+    }
+
+    public bool IsVisible =>
+        Manager.IsVisible;
+
+    public void SetVisible(bool value) =>
+        Manager.SetVisible(value);
     #endregion
 
     #endregion
 
     #region Hidden base methods
+    protected sealed override void OnAutoSizeChanged(EventArgs e) { }
     protected sealed override void OnDockChanged(EventArgs e) { }
+    protected sealed override void OnEnabledChanged(EventArgs e) { }
     protected sealed override void OnLocationChanged(EventArgs e) { }
     protected sealed override void OnParentChanged(EventArgs e) { }
     protected sealed override void OnSizeChanged(EventArgs e) { }
+    protected sealed override void OnVisibleChanged(EventArgs e) { }
     #endregion
 }

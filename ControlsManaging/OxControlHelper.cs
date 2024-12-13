@@ -2,14 +2,15 @@
 using OxLibrary.Geometry;
 using OxLibrary.Interfaces;
 using OxLibrary.Panels;
+using System.Runtime.InteropServices;
 
 namespace OxLibrary;
 
 public static class OxControlHelper
 {
     private static short BaseLine(IOxControl control) =>
-        OxSH.Div(
-            OxSH.Mul(
+        OxSh.Div(
+            OxSh.Mul(
                 control.Font.GetHeight(),
                 control.Font.FontFamily.GetCellAscent(control.Font.Style)
             ),
@@ -27,16 +28,16 @@ public static class OxControlHelper
             aligningControl switch
             {
                 OxPanel =>
-                    OxSH.Sub(
+                    OxSh.Sub(
                         baseControl.Top, 
-                        OxSH.CenterOffset(aligningControl.Height, baseControl.Height)
+                        OxSh.CenterOffset(aligningControl.Height, baseControl.Height)
                     ),
                 _ =>
                     baseControl is null
                         ? aligningControl.Top
-                        : OxSH.Add(
+                        : OxSh.Add(
                             baseControl!.Top,
-                            OxSH.Sub(
+                            OxSh.Sub(
                                 BaseLine(baseControl), 
                                 BaseLine(aligningControl)),
                             baseControl is not OxLabel ? 2 : 0
@@ -62,4 +63,9 @@ public static class OxControlHelper
                 ? GetControlUnderMouse(foundControl, desktopPoint)
                 : foundControl;
     }
+
+    [DllImport("user32.dll")]
+    private static extern bool HideCaret(IntPtr hWnd);
+    public static void HideTextCursor(IntPtr handle) =>
+        HideCaret(handle);
 }

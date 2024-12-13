@@ -7,18 +7,18 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
 {
     public static OxBorders operator +(OxBorders left, OxBorders right) =>
         new(
-            OxSH.Add(left.Top, right.Top),
-            OxSH.Add(left.Left, right.Left),
-            OxSH.Add(left.Bottom, right.Bottom),
-            OxSH.Add(left.Right, right.Right)
+            OxSh.Add(left.Top, right.Top),
+            OxSh.Add(left.Left, right.Left),
+            OxSh.Add(left.Bottom, right.Bottom),
+            OxSh.Add(left.Right, right.Right)
         );
 
     public static OxBorders operator -(OxBorders left, OxBorders right) =>
         new(
-            OxSH.Sub(left.Top, right.Top),
-            OxSH.Sub(left.Left, right.Left),
-            OxSH.Sub(left.Bottom, right.Bottom),
-            OxSH.Sub(left.Right, right.Right)
+            OxSh.Sub(left.Top, right.Top),
+            OxSh.Sub(left.Left, right.Left),
+            OxSh.Sub(left.Bottom, right.Bottom),
+            OxSh.Sub(left.Right, right.Right)
         );
 
     public void Draw(Graphics g, OxRectangle bounds, Color color)
@@ -29,7 +29,7 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
 
         foreach (var border in this)
         {
-            if (border.Value.IsEmpty)
+            if (OxB.B(border.Value.IsEmpty))
                 continue;
 
             OxRectangle borderBounds = new(bounds);
@@ -37,10 +37,10 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
             switch (border.Key)
             {
                 case OxDock.Right:
-                    borderBounds.X = OxSH.Sub(borderBounds.Right, border.Value.Size);
+                    borderBounds.X = OxSh.Sub(borderBounds.Right, border.Value.Size);
                     break;
                 case OxDock.Bottom:
-                    borderBounds.Y = OxSH.Sub(borderBounds.Bottom, border.Value.Size);
+                    borderBounds.Y = OxSh.Sub(borderBounds.Bottom, border.Value.Size);
                     break;
             }
 
@@ -77,7 +77,7 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
             return false;
 
         OxBorders oldBorders = new(this);
-        this[dock].Size = OxSH.Short(size);
+        this[dock].Size = OxSh.Short(size);
         NotifyAboutSizeChanged(oldBorders);
         return true;
     }
@@ -127,7 +127,7 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
 
     public short Horizontal
     {
-        get => OxSH.Add(Left, Right);
+        get => OxSh.Add(Left, Right);
         set
         {
             Left = value;
@@ -143,7 +143,7 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
 
     public short Vertical
     {
-        get => OxSH.Add(Top, Bottom);
+        get => OxSh.Add(Top, Bottom);
         set
         {
             Top = value;
@@ -182,18 +182,18 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
 
     public void SetSize(int top, int left, int bottom, int right)
     {
-        Top = OxSH.Short(top);
-        Left = OxSH.Short(left);
-        Bottom = OxSH.Short(bottom);
-        Right = OxSH.Short(right);
+        Top = OxSh.Short(top);
+        Left = OxSh.Short(left);
+        Bottom = OxSh.Short(bottom);
+        Right = OxSh.Short(right);
     }
 
-    public bool Visible(OxDock dock) => 
+    public OxBool Visible(OxDock dock) => 
         this[dock].Visible;
 
-    public bool SetVisible(OxDock dock, bool visible)
+    public OxBool SetVisible(OxDock dock, OxBool visible)
     {
-        bool visibleChanged = !this[dock].Visible.Equals(visible);
+        bool visibleChanged = !this[dock].IsVisible.Equals(visible);
 
         if (visibleChanged)
         {
@@ -202,31 +202,36 @@ public class OxBorders : Dictionary<OxDock, OxBorder>
             NotifyAboutSizeChanged(oldBorders);
         }
 
-        return visibleChanged;
+        return OxB.B(visibleChanged);
     }
 
-    public void SetVisible(bool visible)
+    public void SetVisible(OxBool value)
     {
         OxBorders oldBorders = new(this);
 
         foreach (OxDock dock in Keys)
-            SetVisible(dock, visible);
+            SetVisible(dock, value);
 
         NotifyAboutSizeChanged(oldBorders);
     }
 
-    public bool GetVisible() =>
-        this[OxDock.Top].Visible
-        || this[OxDock.Left].Visible
-        || this[OxDock.Bottom].Visible
-        || this[OxDock.Right].Visible;
+    public void SetVisible(bool value) =>
+        SetVisible(OxB.B(value));
+
+    public OxBool IsVisible =>
+        OxB.B(
+               this[OxDock.Top].IsVisible
+            || this[OxDock.Left].IsVisible
+            || this[OxDock.Bottom].IsVisible
+            || this[OxDock.Right].IsVisible
+        );
 
     public bool IsEmpty
     {
         get 
         {
             foreach (OxDock dock in Keys)
-                if (!this[dock].IsEmpty)
+                if (!OxB.B(this[dock].IsEmpty))
                     return false;
 
             return true;

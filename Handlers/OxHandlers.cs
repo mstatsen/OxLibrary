@@ -1,5 +1,4 @@
 ﻿using OxLibrary.Interfaces;
-using OxLibrary.Panels;
 
 namespace OxLibrary.Handlers;
 
@@ -8,10 +7,11 @@ public delegate void OxActionClick<TAction>(
     object sender,
     OxActionEventArgs<TAction> e)
     where TAction : notnull, Enum;
+public delegate void OxBoolChangedEvent(object sender, OxBoolChangedEventArgs e);
 public delegate void OxBordersChangedEvent(object sender, OxBordersChangedEventArgs e);
 public delegate void OxControlEvent(IOxBox sender, OxControlEventArgs e);
 public delegate void OxDockChangedEvent(object sender, OxDockChangedEventArgs e);
-public delegate void ExpandChanged(IOxExpandable sender, OxBoolEventArgs e);
+public delegate void ExpandChanged(IOxExpandable sender, OxBoolChangedEventArgs e);
 public delegate void OxLocationChangedEvent(object sender, OxLocationChangedEventArgs e);
 public delegate void OxPaginatorEventHandler(object sender, OxPaginatorEventArgs e);
 public delegate void OxParentChangedEvent(object sender, OxParentChangedEventArgs e);

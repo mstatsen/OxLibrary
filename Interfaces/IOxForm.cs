@@ -4,9 +4,15 @@ public interface IOxForm :
     IOxFormPanelBase
 {
     FormWindowState WindowState { get; set; }
-    bool CanMaximize { get; set; }
-    bool CanMinimize { get; set; }
-    bool Sizable { get; }
+    OxBool CanMaximize { get; set; }
+    bool IsCanMaximize { get; }
+    void SetCanMaximize(bool value);
+    OxBool CanMinimize { get; set; }
+    bool IsCanMinimize { get; }
+    void SetCanMinimize(bool value);
+    OxBool Sizable { get; set; }
+    bool IsSizable { get; }
+    void SetSizable(bool value);
     Bitmap? FormIcon { get; }
     DialogResult DialogResult { get; set; }
     void SetState(FormWindowState state);

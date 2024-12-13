@@ -2,7 +2,8 @@
 
 public class OxEventArgs : EventArgs
 {
-    public virtual bool Changed => true;
+    public OxBool Changed => OxB.B(IsChanged);
+    public virtual bool IsChanged => true;
     public new static readonly OxEventArgs Empty = new();
 }
 
@@ -17,11 +18,8 @@ public class OxEventArgs<TValue> : OxEventArgs
         NewValue = newValue;
     }
 
-    public override bool Changed =>
-        (OldValue is null
-            && NewValue is not null)
-        || (OldValue is not null
-            && !OldValue.Equals(NewValue));
+    public override bool IsChanged =>
+        OxHelper.Changed(OldValue, NewValue);
 
     public static readonly new OxEventArgs<TValue> Empty = new(default, default);
 }

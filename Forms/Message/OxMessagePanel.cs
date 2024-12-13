@@ -40,17 +40,17 @@ public class OxMessagePanel : OxDialogPanel
 
     private void RecalcSize()
     {
-        short calcedWidth = OxSH.Max(
+        short calcedWidth = OxSh.Max(
             Footer.ButtonsWidth, 
-            OxSH.Min(OxTextHelper.CalcedWidth(MessageBox), 768)
+            OxSh.Min(OxTextHelper.CalcedWidth(MessageBox), 768)
         );
         short calcedMessageHeight = OxTextHelper.CalcedHeight(MessageBox, calcedWidth);
         Padding.Horizontal = MinPadding;
         calcedWidth += Padding.Horizontal;
         Padding.Vertical = MinPadding;
         short calcedHeight =
-            OxSH.Min(
-                OxSH.Add(
+            OxSh.Min(
+                OxSh.Add(
                     HeaderHeight,
                     Padding.Vertical,
                     calcedMessageHeight,

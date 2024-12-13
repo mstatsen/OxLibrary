@@ -6,9 +6,15 @@ public class OxLocationChangedEventArgs : OxNotNullEventArgs<OxPoint>
         base(new(oldLocation), new(newLocation))
     { }
 
-    public bool XChanged =>
+    public OxBool XChanged =>
+        OxB.B(IsXChanged);
+
+    public bool IsXChanged =>
         !OldValue.X.Equals(NewValue!.X);
 
-    public bool YChanged =>
+    public OxBool YChanged =>
+        OxB.B(IsYChanged);
+
+    public bool IsYChanged =>
         !OldValue.Y.Equals(NewValue!.Y);
 }

@@ -31,12 +31,12 @@ public partial class OxListBox : ListBox, IOxItemsContainer, IOxControlWithManag
     }
 
     private bool IsHighPriorityItem(object item) =>
-        CheckIsHighPriorityItem is null
-        || CheckIsHighPriorityItem.Invoke(item);
+        CheckIsHighPriorityItem is not null
+        && OxB.B(CheckIsHighPriorityItem.Invoke(item));
 
     private bool IsMandatoryItem(object item) =>
-        CheckIsMandatoryItem is null
-        || CheckIsMandatoryItem.Invoke(item);
+        CheckIsMandatoryItem is not null
+        && OxB.B(CheckIsMandatoryItem.Invoke(item));
 
     private void DrawItemHadler(object? sender, DrawItemEventArgs e)
     {
@@ -75,7 +75,7 @@ public partial class OxListBox : ListBox, IOxItemsContainer, IOxControlWithManag
         e.Graphics.DrawString(
             itemText,
             itemFont,
-            Enabled ? Brushes.Black : Brushes.Silver,
+            IsEnabled ? Brushes.Black : Brushes.Silver,
             textBounds, 
             StringFormat.GenericDefault);
         e.DrawFocusRectangle();
@@ -120,27 +120,51 @@ public partial class OxListBox : ListBox, IOxItemsContainer, IOxControlWithManag
         }
     }
 
-    public bool AvailableMoveUp => SelectedIndex > 0;
+    public OxBool AvailableMoveUp =>
+        OxB.B(IsAvailableMoveUp);
 
-    public bool AvailableMoveDown => (SelectedIndex > -1)
-            && (SelectedIndex < Count - 1);
+    public bool IsAvailableMoveUp =>
+        SelectedIndex > 0;
 
-    public void RemoveAt(int index) => Items.RemoveAt(index);
-    public void RemoveCurrent() => Items.RemoveAt(SelectedIndex);
+    public OxBool AvailableMoveDown =>
+        OxB.B(IsAvailableMoveDown);
 
-    public void Add(object item) => Items.Add(item);
-    public void AddChild(object item) => Items.Add(item);
-    public void Clear() => Items.Clear();
+    public bool IsAvailableMoveDown =>
+        (SelectedIndex > -1)
+        && (SelectedIndex < Count - 1);
 
-    public IOxControl AsControl() => this;
+    public void RemoveAt(int index) =>
+        Items.RemoveAt(index);
 
-    public bool AvailableChilds => false;
+    public void RemoveCurrent() =>
+        Items.RemoveAt(SelectedIndex);
+
+    public void Add(object item) =>
+        Items.Add(item);
+
+    public void AddChild(object item) =>
+        Items.Add(item);
+
+    public void Clear() =>
+        Items.Clear();
+
+    public IOxControl AsControl() =>
+        this;
+
+    public OxBool AvailableChilds =>
+        OxB.B(IsAvailableChilds);
+
+    public bool IsAvailableChilds =>
+        false;
 
     #region Implemention of IOxControl using IOxControlManager
+    public virtual void OnAutoSizeChanged(OxBoolChangedEventArgs e) { }
     public virtual void OnDockChanged(OxDockChangedEventArgs e) { }
+    public virtual void OnEnabledChanged(OxBoolChangedEventArgs e) { }
     public virtual void OnLocationChanged(OxLocationChangedEventArgs e) { }
     public virtual void OnParentChanged(OxParentChangedEventArgs e) { }
     public virtual void OnSizeChanged(OxSizeChangedEventArgs e) { }
+    public virtual void OnVisibleChanged(OxBoolChangedEventArgs e) { }
     public new IOxBox? Parent
     {
         get => Manager.Parent;
@@ -201,19 +225,65 @@ public partial class OxListBox : ListBox, IOxItemsContainer, IOxControlWithManag
         set => Manager.MaximumSize = value;
     }
 
-    public new virtual OxDock Dock
+    public new OxBool AutoSize
+    {
+        get => Manager.AutoSize;
+        set => Manager.AutoSize = value;
+    }
+    public void SetAutoSize(bool value) =>
+        Manager.SetAutoSize(value);
+
+    public bool IsAutoSize =>
+        Manager.IsAutoSize;
+
+    public new OxBool Enabled
+    {
+        get => Manager.Enabled;
+        set => Manager.Enabled = value;
+    }
+    public void SetEnabled(bool value) =>
+        Manager.SetEnabled(value);
+
+    public bool IsEnabled =>
+        Manager.IsEnabled;
+
+    public new OxDock Dock
     {
         get => Manager.Dock;
         set => Manager.Dock = value;
     }
 
+    public new OxBool Visible
+    {
+        get => Manager.Visible;
+        set => Manager.Visible = value;
+    }
+
+    public bool IsVisible =>
+        Manager.IsVisible;
+
+    public void SetVisible(bool value) =>
+        Manager.SetVisible(value);
+
     public void WithSuspendedLayout(Action method) =>
         Manager.WithSuspendedLayout(method);
+
+    event OxBoolChangedEvent IOxControlManager.AutoSizeChanged
+    {
+        add => Manager.AutoSizeChanged += value;
+        remove => Manager.AutoSizeChanged -= value;
+    }
 
     public new event OxDockChangedEvent DockChanged
     {
         add => Manager.DockChanged += value;
         remove => Manager.DockChanged -= value;
+    }
+
+    event OxBoolChangedEvent IOxControlManager.EnabledChanged
+    {
+        add => Manager.EnabledChanged += value;
+        remove => Manager.EnabledChanged -= value;
     }
 
     public new event OxLocationChangedEvent LocationChanged
@@ -234,6 +304,12 @@ public partial class OxListBox : ListBox, IOxItemsContainer, IOxControlWithManag
         remove => Manager.SizeChanged -= value;
     }
 
+    event OxBoolChangedEvent IOxControlManager.VisibleChanged
+    {
+        add => Manager.VisibleChanged += value;
+        remove => Manager.VisibleChanged -= value;
+    }
+
     public void AddHandler(OxHandlerType type, Delegate handler) =>
         Manager.AddHandler(type, handler);
 
@@ -252,18 +328,12 @@ public partial class OxListBox : ListBox, IOxItemsContainer, IOxControlWithManag
     #endregion
 
     #region Hidden base methods
-#pragma warning disable IDE0051 // Remove unused private members
-    private new Size PreferredSize => base.PreferredSize;
-    private new Rectangle DisplayRectangle => base.DisplayRectangle;
-    private new Size GetPreferredSize(Size proposedSize) => base.GetPreferredSize(proposedSize);
-    private new Size LogicalToDeviceUnits(Size value) => base.LogicalToDeviceUnits(value);
-    private new Control GetChildAtPoint(Point pt, GetChildAtPointSkip skipValue) =>
-        base.GetChildAtPoint(pt, skipValue);
-
-#pragma warning restore IDE0051 // Remove unused private members
+    protected sealed override void OnAutoSizeChanged(EventArgs e) { }
     protected sealed override void OnDockChanged(EventArgs e) { }
+    protected sealed override void OnEnabledChanged(EventArgs e) { }
     protected sealed override void OnLocationChanged(EventArgs e) { }
     protected sealed override void OnParentChanged(EventArgs e) { }
     protected sealed override void OnSizeChanged(EventArgs e) { }
+    protected sealed override void OnVisibleChanged(EventArgs e) { }
     #endregion
 }

@@ -1,5 +1,4 @@
 ﻿using OxLibrary.Interfaces;
-using OxLibrary.Panels;
 
 namespace OxLibrary.Forms;
 
@@ -11,9 +10,9 @@ public class OxDialog<TDialogPanel> : OxForm<TDialogPanel>
 {
     public OxDialog() : base()
     {
-        Sizable = false;
-        CanMaximize = false;
-        CanMinimize = false;
+        Sizable = OxB.F;
+        CanMaximize = OxB.F;
+        CanMinimize = OxB.F;
         ShowInTaskbar = false;
     }
 

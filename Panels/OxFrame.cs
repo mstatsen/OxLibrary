@@ -5,7 +5,7 @@
         public OxFrame() : this(OxSize.Empty) { }
         public OxFrame(OxSize size) : base(size)
         {
-            BorderVisible = true;
+            BorderVisible = OxB.T;
             SetBorderWidth(1);
         }
     }

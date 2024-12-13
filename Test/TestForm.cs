@@ -39,12 +39,12 @@ namespace OxLibrary.Test
             toolBarButton.Height = 36;
             toolbar.Parent = this;
             toolbar.Margin.Left = 1;
-            toolbar.BorderVisible = true;
+            toolbar.SetBorderVisible(true);
             toolbar.Padding.Left = 4;
 
             card = new OxCard
             {
-                BlurredBorder = false,
+                BlurredBorder = OxB.F,
                 Parent = this,
                 Name = "LeftCard",
                 Text = "Left docked card",
@@ -59,7 +59,7 @@ namespace OxLibrary.Test
 
             frame = new OxFrameWithHeader
             {
-                BlurredBorder = true,
+                BlurredBorder = OxB.T,
                 Parent = this,
                 Name = "FillFrame",
                 Text = "Fill-docked frame with header",
@@ -85,7 +85,7 @@ namespace OxLibrary.Test
             };
             //setMarginButton.Width = 140;
             setMarginButton.Click += Button_Click;
-            setMarginButton.AutoSize = true;
+            setMarginButton.AutoSize = OxB.T;
             //setMarginButton.Top = OxWh.Add(bluredCheckBox.Bottom, 8);
 
             hideCardButton = new OxButton("Hide card", OxIcons.Eye)
@@ -177,14 +177,14 @@ namespace OxLibrary.Test
 
         private void HideCardButton_Click(object? sender, EventArgs e)
         {
-            card.Visible = !card.Visible;
-            hideCardButton.Text = card.Visible ? "Hide card" : "Show card";
-            hideCardButton.AutoSize = !hideCardButton.AutoSize;
+            card.Visible = OxB.Not(card.Visible);
+            hideCardButton.Text = card.IsVisible ? "Hide card" : "Show card";
+            hideCardButton.AutoSize = OxB.Not(hideCardButton.AutoSize);
         }
 
         private void ToolBarButton_Click(object? sender, EventArgs e)
         {
-            setMarginButton.Enabled = !setMarginButton.Enabled;
+            setMarginButton.Enabled = OxB.Not(setMarginButton.Enabled);
         }
 
         private void Button_Click(object? sender, EventArgs e)

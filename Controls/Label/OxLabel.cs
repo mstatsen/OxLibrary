@@ -1,7 +1,6 @@
 ﻿using OxLibrary.Geometry;
 using OxLibrary.Handlers;
 using OxLibrary.Interfaces;
-using System.ComponentModel.DataAnnotations;
 
 namespace OxLibrary.Controls;
 
@@ -15,42 +14,33 @@ public class OxLabel :
     {
         Manager = OxControlManagers.RegisterControl(this);
         DoubleBuffered = true;
-        AutoSize = true;
+        AutoSize = OxB.T;
         HideIfEmpty = true;
         Font = OxStyles.DefaultFont;
     }
 
-    private bool cutByParentWidth = false;
-    public bool CutByParentWidth
+    private OxBool cutByParentWidth = OxB.F;
+    public OxBool CutByParentWidth
     { 
         get => cutByParentWidth;
         set
         {
             cutByParentWidth = value;
 
-            if (value)
-                AutoSize = false;
+            if (OxB.B(value))
+                AutoSize = OxB.F;
 
             RecalcText();
         } 
     }
 
+    public bool IsCutByParentWidth =>
+        OxB.B(CutByParentWidth);
+
     protected override void OnFontChanged(EventArgs e)
     {
         base.OnFontChanged(e);
         RecalcText();
-    }
-
-    protected override void OnAutoSizeChanged(EventArgs e)
-    {
-        base.OnAutoSizeChanged(e);
-
-        if (!AutoSize)
-            return;
-        
-        cutByParentWidth = false;
-        RecalcText();
-        
     }
 
     private void RecalcText()
@@ -60,24 +50,24 @@ public class OxLabel :
         RecalcVisible();
 
         if (Text.Equals(string.Empty)
-            || !cutByParentWidth
+            || !IsCutByParentWidth
             || Parent is null)
         {
             base.Text = Text;
             return;
         }
             
-        short labelRight = OxSH.Add(Left, OxTextHelper.Width(calcedText, Font));
+        short labelRight = OxSh.Add(Left, OxTextHelper.Width(calcedText, Font));
 
         while (labelRight >=  Parent.OuterControlZone.Right
             && calcedText.Length > 4)
         {
             calcedText = $"{calcedText.Remove(calcedText.Length - 4)}...";
-            labelRight = OxSH.Add(Left, OxTextHelper.Width(calcedText, Font));
+            labelRight = OxSh.Add(Left, OxTextHelper.Width(calcedText, Font));
         }
 
         base.Text = calcedText;
-        Width = OxSH.Sub(labelRight, Left);
+        Width = OxSh.Sub(labelRight, Left);
     }
 
     private string text = string.Empty;
@@ -106,26 +96,16 @@ public class OxLabel :
     private bool internalVisible = true;
     private bool needSaveInternalVisible = true;
 
-    public new bool Visible
-    { 
-        get => base.Visible;
-        set
-        {
-            base.Visible = internalVisible && value;
-
-            if (needSaveInternalVisible)
-                internalVisible = value;
-        }
-    }
-
     private void RecalcVisible()
     {
         needSaveInternalVisible = false;
 
         try
         {
-            Visible = !hideIfEmpty
-                || !Text.Equals(string.Empty);
+            SetVisible(
+                !hideIfEmpty
+                || !Text.Equals(string.Empty)
+            );
         }
         finally
         {
@@ -134,25 +114,35 @@ public class OxLabel :
     }
 
     #region Implemention of IOxControl using IOxControlManager
-    public virtual void OnDockChanged(OxDockChangedEventArgs e) 
+    public virtual void OnAutoSizeChanged(OxBoolChangedEventArgs e)
     {
-        RecalcText();
-    }
-    
-    public virtual void OnLocationChanged(OxLocationChangedEventArgs e) 
-    {
-        RecalcText();
-    }
+        base.OnAutoSizeChanged(e);
 
-    public virtual void OnParentChanged(OxParentChangedEventArgs e) 
-    {
-        RecalcText();
-    }
+        if (!e.IsChanged ||
+            !IsAutoSize)
+            return;
 
-    public virtual void OnSizeChanged(OxSizeChangedEventArgs e) 
-    {
+        cutByParentWidth = OxB.F;
         RecalcText();
     }
+        
+
+    public virtual void OnDockChanged(OxDockChangedEventArgs e)  =>
+        RecalcText();
+
+    public virtual void OnEnabledChanged(OxBoolChangedEventArgs e) { }
+
+    public virtual void OnLocationChanged(OxLocationChangedEventArgs e) =>
+        RecalcText();
+
+    public virtual void OnParentChanged(OxParentChangedEventArgs e) =>
+        RecalcText();
+
+    public virtual void OnSizeChanged(OxSizeChangedEventArgs e) =>
+        RecalcText();
+
+    public virtual void OnVisibleChanged(OxBoolChangedEventArgs e) =>
+        RecalcText();
 
     public new IOxBox? Parent
     {
@@ -215,19 +205,74 @@ public class OxLabel :
         set => Manager.MaximumSize = value;
     }
 
+    public new OxBool AutoSize
+    {
+        get => Manager.AutoSize;
+        set => Manager.AutoSize = value;
+    }
+
+    public bool IsAutoSize =>
+        Manager.IsAutoSize;
+
+    public void SetAutoSize(bool value) =>
+        Manager.SetAutoSize(value);
+
     public new virtual OxDock Dock
     {
         get => Manager.Dock;
         set => Manager.Dock = value;
     }
 
+    public new OxBool Enabled
+    {
+        get => Manager.Enabled;
+        set => Manager.Enabled = value;
+    }
+
+    public bool IsEnabled =>
+        Manager.IsEnabled;
+
+    public void SetEnabled(bool value) =>
+        Manager.SetEnabled(value);
+
+    public new OxBool Visible
+    {
+        get => Manager.Visible;
+        set => Manager.Visible = value;
+    }
+
+    public bool IsVisible =>
+        Manager.IsVisible;
+
+    public void SetVisible(bool value)
+    {
+        bool calcvalue = internalVisible && value;
+
+        if (needSaveInternalVisible)
+            internalVisible = value;
+
+        Manager.SetVisible(calcvalue);
+    }
+
     public void WithSuspendedLayout(Action method) =>
         Manager.WithSuspendedLayout(method);
+
+    public new event OxBoolChangedEvent AutoSizeChanged
+    {
+        add => Manager.AutoSizeChanged += value;
+        remove => Manager.AutoSizeChanged -= value;
+    }
 
     public new event OxDockChangedEvent DockChanged
     {
         add => Manager.DockChanged += value;
         remove => Manager.DockChanged -= value;
+    }
+
+    public new event OxBoolChangedEvent EnabledChanged
+    {
+        add => Manager.EnabledChanged += value;
+        remove => Manager.EnabledChanged -= value;
     }
 
     public new event OxLocationChangedEvent LocationChanged
@@ -248,6 +293,12 @@ public class OxLabel :
         remove => Manager.SizeChanged -= value;
     }
 
+    public new event OxBoolChangedEvent VisibleChanged
+    {
+        add => Manager.VisibleChanged += value;
+        remove => Manager.VisibleChanged -= value;
+    }
+
     public void AddHandler(OxHandlerType type, Delegate handler) =>
         Manager.AddHandler(type, handler);
 
@@ -266,9 +317,13 @@ public class OxLabel :
     #endregion
 
     #region Hidden base methods
+    protected sealed override void OnAutoSizeChanged(EventArgs e) { }
     protected sealed override void OnDockChanged(EventArgs e) { }
+    protected sealed override void OnEnabledChanged(EventArgs e) { }
     protected sealed override void OnLocationChanged(EventArgs e) { }
     protected sealed override void OnParentChanged(EventArgs e) { }
     protected sealed override void OnSizeChanged(EventArgs e) { }
+
+    protected sealed override void OnVisibleChanged(EventArgs e) { }
     #endregion
 }

@@ -2,5 +2,7 @@
 
 public interface IOxCard : IOxFrameWithHeader, IOxExpandable
 {
-    bool ExpandButtonVisible { get; set; }
+    OxBool ExpandButtonVisible { get; set; }
+    bool IsExpandButtonVisible => OxB.B(ExpandButtonVisible);
+    void SetExpandButtonVisible(bool value);
 }

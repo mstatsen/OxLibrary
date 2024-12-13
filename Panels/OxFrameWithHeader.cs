@@ -25,11 +25,17 @@ namespace OxLibrary.Panels
 
         public OxHeader Header { get; } = new();
 
-        public bool HeaderVisible 
+        public OxBool HeaderVisible 
         {
             get => Header.Visible;
             set => Header.Visible = value;
         }
+
+        public bool IsHeaderVisible =>
+            Header.IsVisible;
+
+        public void SetHeaderVisible(bool value) =>
+            Header.SetVisible(value);
 
         protected override string GetText() =>
             Header.Text;

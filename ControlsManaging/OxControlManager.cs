@@ -22,26 +22,28 @@ public class OxControlManager : IOxControlManager
 
     public bool IncreaceIfFocused { get; set; } = false;
 
-    private void BordersSizeChangedHandler(object sender, OxBordersChangedEventArgs e) =>
-        RealignParent();
+    private void BordersSizeChangedHandler(object sender, OxBordersChangedEventArgs e)
+    {
+        if (e.IsChanged)
+            RealignParent();
+    }
 
     private void MarginSizeChangedHandler(object sender, OxBordersChangedEventArgs e)
     {
-        if (!e.Changed)
+        if (!e.IsChanged)
             return;
 
         if (OxDockHelper.IsVariableWidth(Dock))
-            Width = OxSH.Sub(ZBounds.Width, e.OldValue.Horizontal);
+            Width = OxSh.Sub(ZBounds.Width, e.OldValue.Horizontal);
 
         if (OxDockHelper.IsVariableHeight(Dock))
-            Height = OxSH.Sub(ZBounds.Height, e.OldValue.Vertical);
+            Height = OxSh.Sub(ZBounds.Height, e.OldValue.Vertical);
 
         RealignParent();
     }
 
     protected virtual void SetHandlers()
     {
-        OxControl.VisibleChanged += VisibleChangedHandler;
         OxControl.GotFocus += GotFocusHandler;
         OxControl.LostFocus += LostFocusHandler;
 
@@ -79,11 +81,15 @@ public class OxControlManager : IOxControlManager
         }
     }
 
-    private void VisibleChangedHandler(object? sender, EventArgs e) =>
-        RealignParent();
+    protected virtual void RealignParent()
+    {
+        if (Parent is null
+            || OxB.B(ParentChanging)
+            || Parent.IsRealigning)
+            return;
 
-    protected virtual void RealignParent() =>
-        Parent?.Realign();
+        Parent.Realign();
+    }
 
     private void ControlDisposedHandler(object? sender, EventArgs e) =>
         OxControlManagers.UnRegisterControl(ManagingControl);
@@ -107,6 +113,65 @@ public class OxControlManager : IOxControlManager
             ManagingControl.ResumeLayout();
         }
     }
+
+    public OxBool Visible
+    {
+        get => OxB.B(IsVisible);
+        set => SetVisible(OxB.B(value));
+    }
+
+    public void SetVisible(bool value)
+    {
+        if (Visible.Equals(value))
+            return;
+
+        ManagingControl.Visible = value;
+        OnVisibleChanged(new(!value, value));
+    }
+
+    public OxBool Enabled
+    {
+        get => OxB.B(IsEnabled);
+        set => SetEnabled(OxB.B(value));
+    }
+
+    public void SetEnabled(bool value)
+    {
+        if (Enabled.Equals(value))
+            return;
+
+        ManagingControl.Visible = value;
+        OnEnabledChanged(new(!value, value));
+        PrepareColors();
+    }
+
+    public OxBool AutoSize 
+    {
+        get => OxB.B(IsAutoSize);
+        set => SetAutoSize(OxB.B(value));
+    }
+    public bool IsAutoSize => ManagingControl.AutoSize;
+    public void SetAutoSize(bool value)
+    {
+        if (ManagingControl.AutoSize.Equals(value))
+            return;
+
+        ManagingControl.AutoSize = value;
+        OnAutoSizeChanged(new(!value, value));
+    }
+
+    private void OnAutoSizeChanged(OxBoolChangedEventArgs e)
+    {
+        if (!e.IsChanged)
+            return;
+
+        OxControl.OnAutoSizeChanged(e);
+        InvokeHandlers(OxHandlerType.AutoSizeChanged, e);
+        RealignParent();
+    }
+
+    public bool IsEnabled => ManagingControl.Enabled;
+    public bool IsVisible => ManagingControl.Visible;
 
     public OxZBounds ZBounds { get; }
 
@@ -145,19 +210,19 @@ public class OxControlManager : IOxControlManager
         if (Dock is not OxDock.None
             && OxControl is not IOxDependedBox
             && OxControl is IOxWithMargin controlWithMargin)
-            calcedValue = OxSH.Add(value, controlWithMargin.Margin.ByDockVariable(variable));
+            calcedValue = OxSh.Add(value, controlWithMargin.Margin.ByDockVariable(variable));
 
         if (!ParentOuterControlZone.IsEmpty)
         {
             if (Dock is OxDock.Right)
-                ZBounds.Left = OxSH.Sub(ParentOuterControlZone.Right, calcedValue);
+                ZBounds.Left = OxSh.Sub(ParentOuterControlZone.Right, calcedValue);
             else
                 if (Dock is OxDock.Bottom)
-                ZBounds.Top = OxSH.Sub(ParentOuterControlZone.Bottom, calcedValue);
+                ZBounds.Top = OxSh.Sub(ParentOuterControlZone.Bottom, calcedValue);
 
-            calcedValue = OxSH.Min(
+            calcedValue = OxSh.Min(
                 calcedValue,
-                OxSH.Sub(
+                OxSh.Sub(
                     ParentOuterControlZone.LastByDockVariable(variable),
                     Location.ByDockVariable(variable)
                 )
@@ -170,13 +235,13 @@ public class OxControlManager : IOxControlManager
     }
 
     public short Bottom =>
-        OxSH.Sub(
+        OxSh.Sub(
             ManagingControl.Bottom,
             ParentOuterControlZone.Y
         );
 
     public short Right =>
-        OxSH.Sub(
+        OxSh.Sub(
             ManagingControl.Right,
             ParentOuterControlZone.X
         );
@@ -194,7 +259,7 @@ public class OxControlManager : IOxControlManager
     }
 
     private short GetLocationPart(OxDockVariable variable) =>
-        OxSH.Sub(
+        OxSh.Sub(
             ZBounds.GetLocationPart(variable),
             ParentInnerControlZone.FirstByDockVariable(variable)
         );
@@ -209,7 +274,7 @@ public class OxControlManager : IOxControlManager
         ZBounds.SaveLocation(variable);
         ZBounds.SetLocationPart(
             variable,
-            OxSH.Add(
+            OxSh.Add(
                 value,
                 ParentInnerControlZone.FirstByDockVariable(variable)
             )
@@ -228,10 +293,22 @@ public class OxControlManager : IOxControlManager
     public void RemoveHandler(OxHandlerType type, Delegate handler) =>
         Handlers.Remove(type, handler);
 
+    public event OxBoolChangedEvent AutoSizeChanged
+    {
+        add => AddHandler(OxHandlerType.AutoSizeChanged, value);
+        remove => RemoveHandler(OxHandlerType.AutoSizeChanged, value);
+    }
+
     public event OxDockChangedEvent DockChanged
     {
         add => AddHandler(OxHandlerType.DockChanged, value);
         remove => RemoveHandler(OxHandlerType.DockChanged, value);
+    }
+
+    public event OxBoolChangedEvent EnabledChanged
+    {
+        add => AddHandler(OxHandlerType.EnabledChanged, value);
+        remove => RemoveHandler(OxHandlerType.EnabledChanged, value);
     }
 
     public event OxLocationChangedEvent LocationChanged
@@ -250,6 +327,12 @@ public class OxControlManager : IOxControlManager
     {
         add => AddHandler(OxHandlerType.SizeChanged, value);
         remove => RemoveHandler(OxHandlerType.SizeChanged, value);
+    }
+
+    public event OxBoolChangedEvent VisibleChanged
+    {
+        add => AddHandler(OxHandlerType.VisibleChanged, value);
+        remove => RemoveHandler(OxHandlerType.VisibleChanged, value);
     }
 
     public OxDock Dock
@@ -284,18 +367,27 @@ public class OxControlManager : IOxControlManager
             ? OxRectangle.Empty
             : Parent.InnerControlZone;
 
+    protected OxBool ParentChanging = OxB.F;
+
     public IOxBox? Parent
     {
         get => (IOxBox?)ManagingControl.Parent;
         set
         {
-            if (value is null && Parent is null
-                || value is not null && value.Equals(Parent))
+            if (OxHelper.Equals(Parent, value))
                 return;
 
-            IOxBox? oldParent = Parent;
-            ManagingControl.Parent = (Control?)value;
-            OnParentChanged(new(oldParent, Parent));
+            ParentChanging = OxB.T;
+            try
+            {
+                IOxBox? oldParent = Parent;
+                ManagingControl.Parent = (Control?)value;
+                OnParentChanged(new(oldParent, Parent));
+            }
+            finally
+            {
+                ParentChanging = OxB.T;
+            }
         }
     }
 
@@ -305,10 +397,10 @@ public class OxControlManager : IOxControlManager
         set
         {
             if (!Width.Equals(value.Width))
-                Width = (value.Width);
+                Width = value.Width;
 
             if (!Height.Equals(value.Height))
-                Height = (value.Height);
+                Height = value.Height;
         }
     }
 
@@ -384,7 +476,7 @@ public class OxControlManager : IOxControlManager
         ZBounds.WithoutSave(
             () =>
             {
-                if (!e.Changed)
+                if (!e.IsChanged)
                     return;
 
                 if (e.OldValue is OxDock.Fill)
@@ -401,9 +493,18 @@ public class OxControlManager : IOxControlManager
             }
         );
 
-    internal void OnLocationChanged(OxLocationChangedEventArgs e)
+    private void OnEnabledChanged(OxBoolChangedEventArgs e)
     {
-        if (!e.Changed)
+        if (!e.IsChanged)
+            return;
+
+        OxControl.OnEnabledChanged(e);
+        InvokeHandlers(OxHandlerType.EnabledChanged, e);
+    }
+
+    private void OnLocationChanged(OxLocationChangedEventArgs e)
+    {
+        if (!e.IsChanged)
             return;
 
         OxControl.OnLocationChanged(e);
@@ -412,17 +513,35 @@ public class OxControlManager : IOxControlManager
 
     private void OnParentChanged(OxParentChangedEventArgs e)
     {
-        if (!e.Changed)
+        if (!e.IsChanged)
             return;
 
+        e.OldValue?.Realign();
         OxControl.OnParentChanged(e);
         InvokeHandlers(OxHandlerType.ParentChanged, e);
         e.NewValue?.Realign();
+        PrepareColors();
     }
 
-    internal void OnSizeChanged(OxSizeChangedEventArgs e)
+    private void PrepareColors()
     {
-        if (!e.Changed)
+        if (OxControl is IOxWithColorHelper withColorHelper)
+            withColorHelper.PrepareColors();
+    }
+
+    private void OnVisibleChanged(OxBoolChangedEventArgs e)
+    {
+        if (!e.IsChanged)
+            return;
+
+        OxControl.OnVisibleChanged(e);
+        InvokeHandlers(OxHandlerType.VisibleChanged, e);
+        RealignParent();
+    }
+
+    private void OnSizeChanged(OxSizeChangedEventArgs e)
+    {
+        if (!e.IsChanged)
             return;
 
         if (OxControl is IOxDependedBox dependedBox)

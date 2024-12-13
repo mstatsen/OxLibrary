@@ -32,7 +32,7 @@ public class OxButtonEdit : OxPanel
         Button.Parent = this;
         Button.BaseColor = BaseColor;
         Button.Size = new(
-            OxSH.Min(26, TextBox.Height - 4),
+            OxSh.Min(26, TextBox.Height - 4),
             TextBox.Height
         );
         Button.Borders.Left = 0;
@@ -48,7 +48,7 @@ public class OxButtonEdit : OxPanel
     public string? Value
     {
         get => TextBox.Text;
-        set => TextBox.Text = value;
+        set => TextBox.Text = OxTextHelper.ToString(value);
     }
 
     private void PrepareTextBox()
@@ -63,12 +63,12 @@ public class OxButtonEdit : OxPanel
     {
         base.OnSizeChanged(e);
 
-        if (e.Changed)
-        {
-            short calcedButtonWidth = OxSH.Min(22, TextBox.Height - 4);
-            Button.Size = new(calcedButtonWidth, OxSH.Sub(Height, 2));
-            Button.Width = calcedButtonWidth;
-        }
+        if (!e.IsChanged)
+            return;
+
+        short calcedButtonWidth = OxSh.Min(22, TextBox.Height - 4);
+        Button.Size = new(calcedButtonWidth, OxSh.Sub(Height, 2));
+        Button.Width = calcedButtonWidth;
     }
 
     public override void PrepareColors()
@@ -84,7 +84,7 @@ public class OxButtonEdit : OxPanel
     public bool IsEmpty => 
         TextBox.Text.Trim().Equals(string.Empty);
 
-    public bool ReadOnly
+    public OxBool ReadOnly
     {
         get => Button.Visible;
         set => Button.Visible = value;

@@ -33,7 +33,12 @@ public class OxColorHelper
         get => baseColor;
         set
         {
-            baseColor = Color.FromArgb(value.R, value.G, value.B);
+            Color calcedBaseColor = Color.FromArgb(value.R, value.G, value.B);
+
+            if (baseColor.Equals(calcedBaseColor))
+                return;
+
+            baseColor = calcedBaseColor;
             BaseColorChanged?.Invoke(this, EventArgs.Empty);
         }
     }

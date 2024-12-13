@@ -2,7 +2,6 @@
 using OxLibrary.ControlList;
 using OxLibrary.Panels;
 using System.Drawing.Imaging;
-using OxLibrary.Geometry;
 
 namespace OxLibrary.Controls;
 
@@ -17,14 +16,14 @@ public class OxPictureContainer : OxClickFrame
         Text = SelectText,
         ForeColor = Color.Silver,
         Cursor = Cursors.Hand,
-        AutoSize = false
+        AutoSize = OxB.F
     };
 
     private readonly OxClickFrameList Buttons = new();
     public readonly Dictionary<OxPictureAction, OxClickFrame> Actions = new();
     private readonly OxPanel buttonsParent = new()
     { 
-        Visible = false,
+        Visible = OxB.F,
         BackColor = Color.Transparent,
         Dock = OxDock.Bottom
     };
@@ -37,7 +36,7 @@ public class OxPictureContainer : OxClickFrame
         {
             if (Image is null)
             {
-                buttonsParent.Visible = false;
+                buttonsParent.SetVisible(false);
                 return;
             }
 
@@ -132,7 +131,7 @@ public class OxPictureContainer : OxClickFrame
         SaveFileDialog dialog = new()
         { 
             FileName = "Unknown",
-            Filter = "PNG picture |  *.png; "
+            Filter = "PNG picture | *.png; "
         };
 
         if (dialog.ShowDialog(this) is DialogResult.OK)
@@ -146,7 +145,7 @@ public class OxPictureContainer : OxClickFrame
     private readonly OxPicture picture = new()
     {
         Dock = OxDock.Fill,
-        Visible = false,
+        Visible = OxB.F,
         Stretch = true,
         PicturePadding = 0,
         Cursor = Cursors.Hand,
@@ -219,7 +218,7 @@ public class OxPictureContainer : OxClickFrame
 
     protected override void MouseEnterHandler(object? sender, EventArgs e)
     {
-        if (Hovered)
+        if (IsHovered)
             return;
 
         base.MouseEnterHandler(sender, e);
@@ -232,7 +231,7 @@ public class OxPictureContainer : OxClickFrame
 
     protected override void MouseLeaveHandler(object? sender, EventArgs e)
     {
-        if (!Hovered)
+        if (!IsHovered)
             return;
 
         base.MouseLeaveHandler(sender, e);
@@ -240,7 +239,7 @@ public class OxPictureContainer : OxClickFrame
         if (buttonsParent.IsHovered)
             return;
 
-        buttonsParent.Visible = false;
+        buttonsParent.SetVisible(false);
     }
 
     public override void PrepareColors()
@@ -257,8 +256,8 @@ public class OxPictureContainer : OxClickFrame
         set
         {
             sourceImage = value;
-            label.Visible = sourceImage is null;
-            picture.Visible = sourceImage is not null;
+            label.SetVisible(sourceImage is null);
+            picture.SetVisible(sourceImage is not null);
             picture.Image = sourceImage;
             PlaceButtons();
         }
@@ -267,15 +266,19 @@ public class OxPictureContainer : OxClickFrame
     protected override void SetReadOnly(bool value) 
     {
         base.SetReadOnly(value);
-        label.Enabled = true;
+        label.Enabled = OxB.T;
     }
 
-    protected override void OnEnabledChanged(EventArgs e)
+    public override void OnEnabledChanged(OxBoolChangedEventArgs e)
     {
         base.OnEnabledChanged(e);
+
+        if (!e.IsChanged)
+            return;
+
         label.Enabled = Enabled;
 
-        if (!Enabled)
-            buttonsParent.Visible = false;
+        if (!IsEnabled)
+            buttonsParent.Visible = OxB.F;
     }
 }

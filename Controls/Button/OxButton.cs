@@ -9,8 +9,8 @@ public class OxButton : OxIconButton
     {
         Dock = OxDock.Left,
         TextAlign = ContentAlignment.MiddleLeft,
-        AutoSize = false,
-        CutByParentWidth = true
+        AutoSize = OxB.F,
+        CutByParentWidth = OxB.T
     };
 
     private readonly short AutoSizePadding = 4;
@@ -26,19 +26,19 @@ public class OxButton : OxIconButton
         MinimumSize = OxSize.Empty;
     }
 
-    protected override void OnAutoSizeChanged(OxEventArgs e)
+    public override void OnAutoSizeChanged(OxBoolChangedEventArgs e)
     {
         base.OnAutoSizeChanged(e);
-        Label.CutByParentWidth = !AutoSize;
+        Label.CutByParentWidth = OxB.Not(AutoSize);
         RecalcComponents();
     }
 
     protected override void SetIcon(Bitmap? value)
     {
         base.SetIcon(value);
-        Picture.Visible = value is not null;
+        Picture.SetVisible(value is not null);
         Label.TextAlign = 
-            Picture.Visible
+            Picture.IsVisible
                 ? ContentAlignment.MiddleLeft 
                 : ContentAlignment.MiddleCenter;
     }
@@ -64,35 +64,35 @@ public class OxButton : OxIconButton
     protected override void SetText(string value)
     {
         base.SetText(value);
-        Label.Visible = value != string.Empty;
+        Label.SetVisible(value != string.Empty);
         RecalcComponents();
     }
 
     private void RecalcComponents()
     {
-        if (AutoSize)
+        if (IsAutoSize)
         {
             Padding.Left = AutoSizePadding;
             short textWidth = OxTextHelper.Width(Text, Label.Font);
-            textWidth += OxSH.X2(AutoSizePadding);
+            textWidth += OxSh.X2(AutoSizePadding);
             textWidth += Borders.Horizontal;
-            Width = OxSH.Add(RealPictureWidth, textWidth);
+            Width = OxSh.Add(RealPictureWidth, textWidth);
             Label.Width = textWidth;
         }
 
         Label.Text = Text;
 
-        if (!AutoSize)
+        if (!IsAutoSize)
         {
-            short calcedWidth = OxSH.Add(RealPictureWidth, RealLabelWidth);
+            short calcedWidth = OxSh.Add(RealPictureWidth, RealLabelWidth);
 
             if (calcedWidth > Width)
             {
-                Label.Width = OxSH.Sub(Width, RealPictureWidth);
+                Label.Width = OxSh.Sub(Width, RealPictureWidth);
                 calcedWidth = Width;
             }
 
-            Padding.Left = OxSH.CenterOffset(Width, calcedWidth);
+            Padding.Left = OxSh.CenterOffset(Width, calcedWidth);
         }
     }
 
@@ -116,8 +116,10 @@ public class OxButton : OxIconButton
     {
         base.OnSizeChanged(e);
 
-        if (e.Changed)
-            RecalcComponents();
+        if (!e.IsChanged)
+            return;
+
+        RecalcComponents();
     }
 
     protected override void SetToolTipText(string value)

@@ -1,4 +1,5 @@
-﻿using OxLibrary.Panels;
+﻿using OxLibrary.Handlers;
+using OxLibrary.Panels;
 
 namespace OxLibrary.Controls;
 
@@ -47,7 +48,7 @@ public class OxIconButton : OxClickFrame
         SetClickHandler(Picture);
     }
 
-    protected override void OnEnabledChanged(EventArgs e)
+    public override void OnEnabledChanged(OxBoolChangedEventArgs e)
     {
         base.OnEnabledChanged(e);
         Picture.Enabled = Enabled;

@@ -60,7 +60,7 @@ public class OxDialogPanel : OxFormPanel
 
     public override void OnSizeChanged(OxSizeChangedEventArgs e)
     {
-        if (!e.Changed)
+        if (!e.IsChanged)
             return;
 
         Form?.ClearConstraints();

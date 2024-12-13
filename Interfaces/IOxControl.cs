@@ -4,21 +4,21 @@ namespace OxLibrary.Interfaces
 {
     public interface IOxControl : IOxControlManager
     {
+        void OnAutoSizeChanged(OxBoolChangedEventArgs e);
         void OnDockChanged(OxDockChangedEventArgs e);
+        void OnEnabledChanged(OxBoolChangedEventArgs e);
         void OnLocationChanged(OxLocationChangedEventArgs e);
         void OnParentChanged(OxParentChangedEventArgs e);
         void OnSizeChanged(OxSizeChangedEventArgs e);
+        void OnVisibleChanged(OxBoolChangedEventArgs e);
 
         #region Inherited from Control
         AnchorStyles Anchor { get; set; }
-        bool AutoSize { get; set; }
         Color BackColor { get; set; }
-        bool Enabled { get; set; }
         Color ForeColor { get; set; }
         Font Font { get; set; }
         object? Tag { get; set; }
         string Text { get; set; }
-        bool Visible { get; set; }
         void Invalidate();
         Point PointToScreen(Point p);
         void ResumeLayout();
@@ -32,7 +32,6 @@ namespace OxLibrary.Interfaces
         event ControlEventHandler ControlRemoved;
         event EventHandler GotFocus;
         event EventHandler LostFocus;
-        event EventHandler VisibleChanged;
         event EventHandler TextChanged;
         event EventHandler BackColorChanged;
         event EventHandler FontChanged;

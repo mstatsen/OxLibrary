@@ -27,7 +27,7 @@ namespace OxLibrary.Controls
 
             foreach (OxPanel separator in Separators.Values)
             {
-                if (!separator.Visible)
+                if (!separator.IsVisible)
                     continue;
 
                 calcedWidth += separator.Width;
@@ -48,7 +48,7 @@ namespace OxLibrary.Controls
         protected virtual short ButtonMargin => 1;
         protected virtual short GroupsSeparatorWidth => 1;
         protected virtual short GroupSeparatorMargin => 2;
-        public override bool HandleParentPadding => false;
+        public override OxBool HandleParentPadding => OxB.T;
 
         protected bool PlacingButtons { get; private set; } = false;
 
@@ -74,7 +74,7 @@ namespace OxLibrary.Controls
 
                 foreach (TButton button in buttons)
                 {
-                    if (!button.Visible)
+                    if (!button.IsVisible)
                     {
                         HideSeparator(button);
                         continue;
@@ -127,7 +127,7 @@ namespace OxLibrary.Controls
         private void HideSeparator(TButton startButton)
         {
             if (Separators.TryGetValue(startButton, out var separator))
-                separator.Visible = false;
+                separator.Visible = OxB.F;
         }
 
         private OxPanel CreateSeparator(TButton startButton)
@@ -146,7 +146,7 @@ namespace OxLibrary.Controls
                 Separators.Add(startButton, separator);
             }
 
-            separator.Visible = true;
+            separator.Visible = OxB.T;
             return separator;
         }
 
@@ -207,7 +207,7 @@ namespace OxLibrary.Controls
                 separator.BaseColor = Colors.Darker(7);
         }
 
-        protected override void OnEnabledChanged(EventArgs e)
+        public override void OnEnabledChanged(OxBoolChangedEventArgs e)
         { 
             base.OnEnabledChanged(e);
 
@@ -218,7 +218,13 @@ namespace OxLibrary.Controls
         public bool ExecuteDefault() =>
             Buttons.ExecuteDefault();
 
-        public bool AllowEditingActions
+        public bool IsAllowEditingActions =>
+            OxB.B(AllowEditingActions);
+
+        public void SetAllowEditingActions(bool value) =>
+            AllowEditingActions = OxB.B(value);
+
+        public OxBool AllowEditingActions
         {
             get
             {
@@ -226,7 +232,7 @@ namespace OxLibrary.Controls
                     if (OxToolbarActionHelper.ActionForExistItems(action.Key))
                         return action.Value.Enabled;
 
-                return true;
+                return OxB.T;
             }
             set
             {

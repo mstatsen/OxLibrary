@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Geometry;
+using OxLibrary.Handlers;
 using OxLibrary.Interfaces;
 
 namespace OxLibrary.Panels
@@ -36,16 +37,14 @@ namespace OxLibrary.Panels
             }
         }
 
-        public bool Hovered
+        public override bool IsHovered => hovered;
+        public override void SetHovered(bool value)
         {
-            get => hovered;
-            set
-            {
-                hovered = value;
-                SetBaseColor();
-                HoveredChanged?.Invoke(this, EventArgs.Empty);
-            }
+            hovered = value;
+            SetBaseColor();
+            HoveredChanged?.Invoke(this, EventArgs.Empty);
         }
+
 
         public override void PrepareColors()
         {
@@ -55,14 +54,14 @@ namespace OxLibrary.Panels
                 Colors.BaseColor = BaseColor;
         }
 
-        protected override void OnEnabledChanged(EventArgs e)
+        public override void OnEnabledChanged(OxBoolChangedEventArgs e)
         {
             base.OnEnabledChanged(e);
-            Hovered = false;
+            Hovered = OxB.F;
         }
 
         protected override Color GetForeColor() =>
-            Colors.Darker(Enabled || !UseDisabledStyles ? 7 : -4);
+            Colors.Darker(IsEnabled || !UseDisabledStyles ? 7 : -4);
 
         private bool ClickFrameBaseColorProcess = false;
 
@@ -75,13 +74,13 @@ namespace OxLibrary.Panels
             try
             {
                 BaseColor =
-                    (Enabled && !ReadOnly)
+                    (IsEnabled && !IsReadOnly)
                     || !UseDisabledStyles
                         ? hovered
                             || FreezeHovered
                                 ? HoveredColor
                                 : Colors.BaseColor
-                        : Colors.Lighter(ReadOnly ? 1 : 0);
+                        : Colors.Lighter(IsReadOnly ? 1 : 0);
             }
             finally
             { 
@@ -121,16 +120,18 @@ namespace OxLibrary.Panels
             SetHoverHandlers(this);
         }
 
-        private bool readOnly = false;
+        private OxBool readOnly = OxB.F;
 
-        public bool ReadOnly 
+        public OxBool ReadOnly 
         { 
-            get => readOnly;
-            set => SetReadOnly(value);
+            get => OxB.B(IsReadOnly);
+            set => SetReadOnly(OxB.B(value));
         }
 
         protected virtual void SetReadOnly(bool value) => 
-            readOnly = value;
+            readOnly = OxB.B(value);
+
+        protected virtual bool IsReadOnly => OxB.B(readOnly);
 
         protected override void AfterCreated()
         {
@@ -141,10 +142,10 @@ namespace OxLibrary.Panels
 
         protected override Color GetBorderColor() => 
             (fixedBorderColor || hovered)
-            && !ReadOnly
+            && !IsReadOnly
                 ? Colors.Darker(3)
                 : HiddenBorder 
-                    || !Enabled
+                    || !IsEnabled
                     ? Colors.Lighter(7)
                     : base.GetBorderColor();
 
@@ -165,40 +166,40 @@ namespace OxLibrary.Panels
 
         protected virtual void MouseEnterHandler(object? sender, EventArgs e)
         {
-            if (!Enabled
+            if (!IsEnabled
                 || hovered)
                 return;
             
-            Hovered = true;
+            Hovered = OxB.T;
 
             if (HandHoverCursor)
                 Cursor = Cursors.Hand;
 
             if (IncreaceIfHovered)
             {
-                Left -= OxSH.Half(HoveredIncreaseSize);
-                Top -= OxSH.Half(HoveredIncreaseSize);
+                Left -= OxSh.Half(HoveredIncreaseSize);
+                Top -= OxSh.Half(HoveredIncreaseSize);
                 Height += HoveredIncreaseSize;
                 Width += HoveredIncreaseSize;
             }
         }
 
-        protected override Cursor DefaultCursor => Enabled ? Cursors.Default : Cursors.No;
+        protected override Cursor DefaultCursor => IsEnabled ? Cursors.Default : Cursors.No;
 
         protected virtual void MouseLeaveHandler(object? sender, EventArgs e)
         {
             if (!hovered)
                 return;
 
-            Hovered = false;
+            Hovered = OxB.F;
 
             if (HandHoverCursor)
                 Cursor = Cursors.Default;
 
             if (IncreaceIfHovered)
             {
-                Left += OxSH.Half(HoveredIncreaseSize);
-                Top += OxSH.Half(HoveredIncreaseSize);
+                Left += OxSh.Half(HoveredIncreaseSize);
+                Top += OxSh.Half(HoveredIncreaseSize);
                 Height -= HoveredIncreaseSize;
                 Width -= HoveredIncreaseSize;
             }
