@@ -70,7 +70,10 @@ public class OxHandlers : Dictionary<OxHandlerType, List<Delegate>>
         if (!TryGetValue(type, out List<Delegate>? list))
             return;
 
-        foreach (Delegate handler in list)
+        List<Delegate> invokeList = new();
+        invokeList.AddRange(list);
+
+        foreach (Delegate handler in invokeList)
         {
             if (args is OxChangingEventArgs changingEventArgs
                 && changingEventArgs.Cancel)

@@ -132,7 +132,9 @@ namespace OxLibrary.Panels
         public override void OnVisibleChanged(OxBoolChangedEventArgs e)
         {
             base.OnVisibleChanged(e);
-            ExpandButton.Visible = ExpandButtonVisible;
+
+            if (e.IsChanged)
+                ExpandButton.Visible = ExpandButtonVisible;
         }
 
         public void SetExpandButtonVisible(OxBool value) =>

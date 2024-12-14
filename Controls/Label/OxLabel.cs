@@ -125,24 +125,35 @@ public class OxLabel :
         cutByParentWidth = OxB.F;
         RecalcText();
     }
-        
 
-    public virtual void OnDockChanged(OxDockChangedEventArgs e)  =>
-        RecalcText();
+
+    public virtual void OnDockChanged(OxDockChangedEventArgs e)
+    {
+        if (e.IsChanged)
+            RecalcText();
+    }
 
     public virtual void OnEnabledChanged(OxBoolChangedEventArgs e) { }
 
-    public virtual void OnLocationChanged(OxLocationChangedEventArgs e) =>
-        RecalcText();
+    public virtual void OnLocationChanged(OxLocationChangedEventArgs e)
+    {
+        if (e.IsChanged)
+            RecalcText();
+    }
 
-    public virtual void OnParentChanged(OxParentChangedEventArgs e) =>
-        RecalcText();
+    public virtual void OnParentChanged(OxParentChangedEventArgs e)
+    {
+        if (e.IsChanged)
+            RecalcText();
+    }
 
-    public virtual void OnSizeChanged(OxSizeChangedEventArgs e) =>
-        RecalcText();
+    public virtual void OnSizeChanged(OxSizeChangedEventArgs e)
+    {
+        if (e.IsChanged)
+            RecalcText();
+    }
 
-    public virtual void OnVisibleChanged(OxBoolChangedEventArgs e) =>
-        RecalcText();
+    public virtual void OnVisibleChanged(OxBoolChangedEventArgs e) { }
 
     public new IOxBox? Parent
     {
@@ -246,12 +257,15 @@ public class OxLabel :
 
     public void SetVisible(bool value)
     {
-        bool calcvalue = internalVisible && value;
+        bool calcValue = internalVisible && value;
 
         if (needSaveInternalVisible)
             internalVisible = value;
 
-        Manager.SetVisible(calcvalue);
+        if (IsVisible.Equals(calcValue))
+            return;
+
+        Manager.SetVisible(calcValue);
     }
 
     public void WithSuspendedLayout(Action method) =>

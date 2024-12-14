@@ -97,19 +97,26 @@ public class OxControlManager : IOxControlManager
     public void WithSuspendedLayout(Action method)
     {
         ManagingControl.SuspendLayout();
-        IOxBox? dependedFromBox = ManagingControl is IOxDependedBox dependedBox
-            ? dependedBox.DependedFrom
-            : null;
-
-        dependedFromBox?.SuspendLayout();
 
         try
         {
-            method();
+            IOxBox? dependedFromBox = ManagingControl is IOxDependedBox dependedBox
+                ? dependedBox.DependedFrom
+                : null; 
+
+            dependedFromBox?.SuspendLayout();
+
+            try
+            {
+                method();
+            }
+            finally
+            {
+                dependedFromBox?.ResumeLayout();
+            }
         }
         finally
         {
-            dependedFromBox?.ResumeLayout();
             ManagingControl.ResumeLayout();
         }
     }
@@ -386,7 +393,7 @@ public class OxControlManager : IOxControlManager
             }
             finally
             {
-                ParentChanging = OxB.T;
+                ParentChanging = OxB.F;
             }
         }
     }
@@ -468,9 +475,6 @@ public class OxControlManager : IOxControlManager
                 ManagingControl.Bounds = value.Rectangle;
         }
     }
-
-    public OxSize PreferredSize =>
-        new(ManagingControl.Size);
 
     private void OnDockChanged(OxDockChangedEventArgs e) => 
         ZBounds.WithoutSave(

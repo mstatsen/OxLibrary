@@ -63,10 +63,7 @@ namespace OxLibrary.Controls
             try
             {
                 foreach (TButton button in buttons)
-                {
-                    button.VisibleChanged -= ButtonVisibleChangedHandler;
                     button.Parent = null;
-                }
 
                 PrepareButtonsSizes();
 
@@ -110,10 +107,7 @@ namespace OxLibrary.Controls
                 RecalcWidth();
 
                 foreach (TButton button in buttons)
-                {
-                    button.VisibleChanged += ButtonVisibleChangedHandler;
                     button.Parent = this;
-                }
             }
             finally
             {
@@ -266,6 +260,13 @@ namespace OxLibrary.Controls
             return button;
         }
 
+        public void RemoveButton(TButton button)
+        {
+            button.VisibleChanged -= ButtonVisibleChangedHandler;
+            button.Parent = null;
+            Buttons.Remove(button);
+        }
+
         public TButton AddButton(TButton button, bool? beginGroup = null, bool InsertAsFirst = false)
         {
             if (!Buttons.Contains(button))
@@ -274,6 +275,8 @@ namespace OxLibrary.Controls
                     Buttons.Insert(0, button);
                 else
                     Buttons.Add(button);
+
+                button.VisibleChanged += ButtonVisibleChangedHandler;
             }
 
             if (beginGroup is bool boolBeginGroup)
