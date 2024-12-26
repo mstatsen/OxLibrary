@@ -55,7 +55,7 @@ namespace OxLibrary.Test
             };
             card.Margin.Size = 10;
             card.Padding.Size = 18;
-            card.HeaderHeight = 40;
+            card.HeaderHeight = 28;
 
             frame = new OxFrameWithHeader
             {

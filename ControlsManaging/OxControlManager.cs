@@ -213,11 +213,12 @@ public class OxControlManager : IOxControlManager
 
         OxSize oldSize = new(Size);
         short calcedValue = value;
+        calcedValue = OxSh.Mul(calcedValue, OxControlHelper.DPIMultiplier(ManagingControl));
 
         if (Dock is not OxDock.None
             && OxControl is not IOxDependedBox
             && OxControl is IOxWithMargin controlWithMargin)
-            calcedValue = OxSh.Add(value, controlWithMargin.Margin.ByDockVariable(variable));
+            calcedValue = OxSh.Add(calcedValue, controlWithMargin.Margin.ByDockVariable(variable));
 
         if (!ParentOuterControlZone.IsEmpty)
         {

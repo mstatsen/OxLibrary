@@ -47,8 +47,16 @@ public static class OxControlHelper
         return aligningControl;
     }
 
-    public static OxSize ScreenSize(Control control) =>
-        new(Screen.GetWorkingArea(control).Size);
+    public static OxSize CurrentScreenSize(Control control) =>
+        new(OxSh.Div(Screen.GetWorkingArea(control).Size.Width, DPIMultiplier(control)),
+            OxSh.Div(Screen.GetWorkingArea(control).Size.Height, DPIMultiplier(control)));
+
+    /// <summary>
+    /// OxLibrary recalc all values for 1920 x 1080 rectangle of screen area by returns multiplier of this method
+    /// </summary>
+    /// <returns></returns>
+    public static double DPIMultiplier(Control control) =>
+        control.DeviceDpi / 96F;
 
     public static Control? GetControlUnderMouse(Control topControl) =>
         GetControlUnderMouse(topControl, Cursor.Position);

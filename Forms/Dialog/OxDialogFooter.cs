@@ -158,7 +158,7 @@ public class OxDialogFooter : OxOneBorderPanel
         {
             Parent = this,
             Top = buttonVerticalMargin,
-            Font = OxStyles.Font(OxStyles.DefaultFontSize + 0.5f, FontStyle.Bold),
+            Font = OxStyles.Font(OxStyles.DefaultFontSize + 0.5f , FontStyle.Bold),
             Anchor = AnchorStyles.Top | AnchorStyles.Right,
             Visible = ButtonVisible(dialogButton),
             Size = new(

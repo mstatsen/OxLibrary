@@ -93,7 +93,7 @@ public class OxForm<TFormPanel> :
 
     public void SetState(FormWindowState state)
     {
-        MaximumSize = OxControlHelper.ScreenSize(this);
+        MaximumSize = OxControlHelper.CurrentScreenSize(this);
         OxSize wantedMinimumSize = WantedMinimumSize;
         MinimumSize = new(
             Math.Min(wantedMinimumSize.Width, MaximumSize.Width),
