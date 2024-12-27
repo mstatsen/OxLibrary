@@ -48,8 +48,10 @@ public static class OxControlHelper
     }
 
     public static OxSize CurrentScreenSize(Control control) =>
-        new(OxSh.Div(Screen.GetWorkingArea(control).Size.Width, DPIMultiplier(control)),
-            OxSh.Div(Screen.GetWorkingArea(control).Size.Height, DPIMultiplier(control)));
+        new(
+            Screen.GetWorkingArea(control).Size.Width,
+            Screen.GetWorkingArea(control).Size.Height
+        );
 
     /// <summary>
     /// OxLibrary recalc all values for 1920 x 1080 rectangle of screen area by returns multiplier of this method

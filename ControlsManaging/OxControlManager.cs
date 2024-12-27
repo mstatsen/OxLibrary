@@ -213,7 +213,7 @@ public class OxControlManager : IOxControlManager
 
         OxSize oldSize = new(Size);
         short calcedValue = value;
-        calcedValue = OxSh.Mul(calcedValue, OxControlHelper.DPIMultiplier(ManagingControl));
+        //calcedValue = OxSh.Mul(calcedValue, OxControlHelper.DPIMultiplier(ManagingControl));
 
         if (Dock is not OxDock.None
             && OxControl is not IOxDependedBox

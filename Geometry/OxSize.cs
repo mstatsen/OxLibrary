@@ -108,5 +108,11 @@ public class OxSize
         Width is 0
         && Height is 0;
 
+    public OxSize ToDPI(Control control) =>
+        new(
+            OxSh.ToDPI(control, Width), 
+            OxSh.ToDPI(control, Height)
+        );
+
     public static readonly OxSize Empty = new(0, 0);
 }

@@ -47,13 +47,14 @@ public partial class OxPicture : OxPanel
 
     public OxPicture()
     {
+        pictureSize = ToDPI(16);
         BackColor = Color.Transparent;
         Width = 24;
         Height = 24;
         Padding.Size = 0;
     }
 
-    private short pictureSize = 16;
+    private short pictureSize;
     public short PictureSize
     {
         get => pictureSize;

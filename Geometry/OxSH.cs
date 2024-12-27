@@ -80,6 +80,9 @@
         public static short Mul(int value1, double value2) =>
             Short(value1 * value2);
 
+        public static short ToDPI(Control control, int value1) =>
+            Short(value1 * OxControlHelper.DPIMultiplier(control));
+
         /// <returns>value1 * value2</returns>
         public static short Mul(double value1, int value2) =>
             Short(value1 * value2);

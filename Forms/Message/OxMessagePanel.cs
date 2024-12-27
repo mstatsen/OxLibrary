@@ -36,13 +36,13 @@ public class OxMessagePanel : OxDialogPanel
         MessageBox.SelectionLength = 0;
     }
 
-    private readonly short MinPadding = 20;
+    private short MinPadding => ToDPI(20);
 
     private void RecalcSize()
     {
         short calcedWidth = OxSh.Max(
             Footer.ButtonsWidth, 
-            OxSh.Min(OxTextHelper.CalcedWidth(MessageBox), 768)
+            OxSh.Min(OxTextHelper.CalcedWidth(MessageBox), ToDPI(768))
         );
         short calcedMessageHeight = OxTextHelper.CalcedHeight(MessageBox, calcedWidth);
         Padding.Horizontal = MinPadding;
@@ -74,12 +74,12 @@ public class OxMessagePanel : OxDialogPanel
                 : MessageBox.ScrollBars = ScrollBars.None;
     }
 
-    protected override short HeaderHeight => 30;
+    protected override short HeaderHeight => ToDPI(30);
 
     protected override void PrepareInnerComponents()
     {
         base.PrepareInnerComponents();
-        FooterHeight = 34;
+        FooterHeight = ToDPI(34);
         FooterButtonsAlign = HorizontalAlign.Center;
         MessageBox.Parent = this;
     }

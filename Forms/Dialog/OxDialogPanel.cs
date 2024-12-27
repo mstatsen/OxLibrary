@@ -20,10 +20,8 @@ public class OxDialogPanel : OxFormPanel
         set => Footer.DialogButtons = value;
     }
 
-    public OxDialogPanel() : base()
-    {
-        Size = new(480, 360);
-    }
+    public OxDialogPanel() : base() => 
+        Size = new OxSize(480, 360).ToDPI(this);
 
     protected override void PrepareInnerComponents()
     {

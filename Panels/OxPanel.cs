@@ -1,4 +1,5 @@
 ﻿using OxLibrary.Forms;
+using OxLibrary.Geometry;
 using OxLibrary.Handlers;
 using OxLibrary.Interfaces;
 
@@ -21,7 +22,7 @@ public class OxPanel : Panel, IOxPanel
                 DoubleBuffered = true;
 
                 if (!size.Equals(OxSize.Empty))
-                    Size = new(size);
+                    Size = size.ToDPI(this);
 
                 PrepareInnerComponents();
                 SetHandlers();
@@ -520,6 +521,8 @@ public class OxPanel : Panel, IOxPanel
 
     public void RemoveHandler(OxHandlerType type, Delegate handler) =>
         Manager.RemoveHandler(type, handler);
+
+    public short ToDPI(int size) => OxSh.ToDPI(this, size);
 
     #region Internal used properties and methods
     [Obsolete("ZBounds it is used only for internal needs")]

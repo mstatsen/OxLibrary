@@ -41,7 +41,7 @@ namespace OxLibrary.Controls
         {
             base.AfterCreated();
             SetToolBarPaddings();
-            Size = new(Width, DefaultToolBarHeight);
+            Size = new(Width, ToDPI(DefaultToolBarHeight));
         }
 
         private readonly Dictionary<TButton, OxPanel> Separators = new();

@@ -1,5 +1,6 @@
 ﻿using OxLibrary.Controls;
 using OxLibrary.Forms;
+using OxLibrary.Geometry;
 using OxLibrary.Panels;
 
 namespace OxLibrary.Test
@@ -55,7 +56,7 @@ namespace OxLibrary.Test
             };
             card.Margin.Size = 10;
             card.Padding.Size = 18;
-            card.HeaderHeight = 28;
+            card.HeaderHeight = OxSh.ToDPI(card, 28);
 
             frame = new OxFrameWithHeader
             {
@@ -93,8 +94,8 @@ namespace OxLibrary.Test
                 Parent = frame,
                 Top = (short)(setMarginButton.Bottom + 8),
                 Left = setMarginButton.Left,
-                Height = 24,
-                Width = 140
+                Height = OxSh.ToDPI(this, 24),
+                Width = OxSh.ToDPI(this, 140)
             };
             hideCardButton.Click += HideCardButton_Click;
 

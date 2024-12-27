@@ -66,7 +66,7 @@ public partial class OxFormPanel :
     private void SetBordersSize() => 
         Borders.Size = 1;
 
-    protected new virtual short HeaderHeight => 34;
+    protected new virtual short HeaderHeight => OxSh.ToDPI(this, 34);
 
     protected override void PrepareInnerComponents()
     {
@@ -94,7 +94,7 @@ public partial class OxFormPanel :
         foreach (OxIconButton button in Header.Buttons)
         {
             button.Parent = null;
-            button.Size = new(44, 28);
+            button.Size = new(button.ToDPI(44), button.ToDPI(28));
         }
 
         Header.ToolBar.Buttons.Clear();
