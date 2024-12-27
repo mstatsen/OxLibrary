@@ -139,7 +139,7 @@ namespace OxLibrary.Test
                 Top = (short)(buttonEdit.Bottom + 8),
                 Multiline = true,
                 WordWrap = true,
-                Height = 40
+                Height = OxSh.ToDPI(this, 40)
             };
            
         }

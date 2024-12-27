@@ -21,7 +21,7 @@ public class OxButton : OxIconButton
     public OxButton() : base() { }
     public OxButton(string text, Bitmap? icon) : base(icon, DefaultHeight)
     {
-        Size = new(DefaultWidth, DefaultHeight);
+        Size = new OxSize(DefaultWidth, DefaultHeight).ToDPI(this);
         Text = text;
         MinimumSize = OxSize.Empty;
     }
@@ -46,7 +46,7 @@ public class OxButton : OxIconButton
     protected override void PrepareInnerComponents()
     {
         base.PrepareInnerComponents();
-        Picture.Width = 16;
+        Picture.Width = OxSh.ToDPI(this, 16);
         Picture.Dock = OxDock.Left;
         Picture.Stretch = true;
         Label.Parent = this;
